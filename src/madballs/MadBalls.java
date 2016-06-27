@@ -5,12 +5,12 @@
  */
 package madballs;
 
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.net.Socket;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.layout.StackPane;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
 /**
@@ -18,23 +18,29 @@ import javafx.stage.Stage;
  * @author Caval
  */
 public class MadBalls extends Application {
+    public static Socket socket;
+    public static ObjectOutputStream out;
+    public static ObjectInputStream in;
+    public static Player nextPlayer;
     
     @Override
     public void start(Stage primaryStage) {
-        Button btn = new Button();
-        btn.setText("Say 'Hello World'");
-        btn.setOnAction(new EventHandler<ActionEvent>() {
-            
-            @Override
-            public void handle(ActionEvent event) {
-                System.out.println("Hello World!");
-            }
-        });
         
-        StackPane root = new StackPane();
-        root.getChildren().add(btn);
         
-        Scene scene = new Scene(root, 300, 250);
+        Pane root = new Pane();
+        Environment environment = new Environment(root);
+        Player thisPlayer = new Player();
+        thisPlayer.generateBall(environment, 100, 100);
+        nextPlayer = new Player();
+        nextPlayer.generateBall(environment, 200, 200);
+        
+        Client.initClient();
+//        Server.initServer();
+        
+        Scene scene = new Scene(root, 600, 500);
+        
+        scene.setOnKeyPressed(thisPlayer.ball.getMoveBehaviour().keyHandler);
+        scene.setOnKeyReleased(thisPlayer.ball.getMoveBehaviour().keyHandler);
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);
@@ -47,5 +53,4 @@ public class MadBalls extends Application {
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
