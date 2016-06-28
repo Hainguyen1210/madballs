@@ -3,13 +3,14 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs;
+package madballs.Collision;
+
+import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public abstract class Projectile {
-    private MoveBehaviour moveBehaviour;
-    private Weapon sourceWeapon;
+public interface CollisionPassiveBehaviour {
+    public void getAffected(GameObject source, GameObject target, ComboCollisionEffect effect);
 }

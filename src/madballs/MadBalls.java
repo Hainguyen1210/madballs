@@ -18,29 +18,29 @@ import javafx.stage.Stage;
  * @author Caval
  */
 public class MadBalls extends Application {
-    public static Socket socket;
-    public static ObjectOutputStream out;
-    public static ObjectInputStream in;
-    public static Player nextPlayer;
+    public static final double RESOLUTION_X = 1280;
+    public static final double RESOLUTION_Y = 720;
+    
+    private static Environment gameEnvironment;
+
+    public static Environment getGameEnvironment() {
+        return gameEnvironment;
+    }
     
     @Override
     public void start(Stage primaryStage) {
         
         
         Pane root = new Pane();
-        Environment environment = new Environment(root);
-        Player thisPlayer = new Player();
-        thisPlayer.generateBall(environment, 100, 100);
-        nextPlayer = new Player();
-        nextPlayer.generateBall(environment, 200, 200);
+        gameEnvironment = new Environment(root);
         
-        Client.initClient();
-//        Server.initServer();
+//        Client.initClient();
+        Server.initServer();
         
         Scene scene = new Scene(root, 600, 500);
         
-        scene.setOnKeyPressed(thisPlayer.ball.getMoveBehaviour().keyHandler);
-        scene.setOnKeyReleased(thisPlayer.ball.getMoveBehaviour().keyHandler);
+//        scene.setOnKeyPressed(thisPlayer.ball.getMoveBehaviour().keyHandler);
+//        scene.setOnKeyReleased(thisPlayer.ball.getMoveBehaviour().keyHandler);
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);

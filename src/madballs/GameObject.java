@@ -5,11 +5,15 @@
  */
 package madballs;
 
+import madballs.Collision.CollisionPassiveBehaviour;
+import madballs.Collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.scene.Group;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 
 /**
@@ -19,24 +23,78 @@ import javafx.scene.shape.Shape;
 public abstract class GameObject {
     private Shape hitBox;
     private ImageView image = new ImageView();
+    private Group display = new Group(hitBox, image);
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
     
     private DoubleProperty translateX = new SimpleDoubleProperty(100);
     private DoubleProperty translateY = new SimpleDoubleProperty(100);
-    private double damage;
     private double oldX, oldY;
+    private double minX, minY, maxX, maxY;
+    private DoubleProperty hp = new SimpleDoubleProperty(100);
     private MoveBehaviour moveBehaviour;
+    private Environment environment;
     
     public GameObject(Environment environment, double x, double y){
-        hitBox = new Circle(25, Paint.valueOf("red"));
+        calculateBoundaries();
         translateX.set(x);
         translateY.set(y);
-        hitBox.translateXProperty().bind(translateX);
-        hitBox.translateYProperty().bind(translateY);
-        image.translateXProperty().bind(translateX);
-        image.translateYProperty().bind(translateY);
-        environment.registerGameObj(this);
+        display.translateXProperty().bind(translateX);
+        display.translateYProperty().bind(translateY);
+        
+        this.environment = environment;
+        environment.registerGameObj(this, true);
+    }
+    
+    /**
+     * create a new GameObject inside a created Obj
+     * @param owner 
+     */
+    public GameObject(GameObject owner){
+        display.translateXProperty().bind(owner.translateX);
+        display.translateYProperty().bind(owner.translateY);
+        owner.display.getChildren().add(display);
+        
+        environment.registerGameObj(this, false);
+    }
+    
+    /**
+     * calculate the min and max coordinates that the obj can reach
+     */
+    private void calculateBoundaries(){
+        if (hitBox instanceof Circle){
+            double radius = ((Circle) hitBox).getRadius();
+            minX = radius;
+            minY = radius;
+            maxX = MadBalls.RESOLUTION_X - radius;
+            maxY = MadBalls.RESOLUTION_Y - radius;
+        }
+        else if (hitBox instanceof Rectangle){
+            minX = 0;
+            minY = 0;
+            maxX = MadBalls.RESOLUTION_X - ((Rectangle)hitBox).getWidth();
+            maxY = MadBalls.RESOLUTION_Y - ((Rectangle)hitBox).getHeight();
+        }
+    }
+
+    public Environment getEnvironment() {
+        return environment;
+    }
+
+    public double getMinX() {
+        return minX;
+    }
+
+    public double getMinY() {
+        return minY;
+    }
+
+    public double getMaxX() {
+        return maxX;
+    }
+
+    public double getMaxY() {
+        return maxY;
     }
 
     public double getTranslateX() {
@@ -54,6 +112,10 @@ public abstract class GameObject {
     public ImageView getImage() {
         return image;
     }
+
+    public Group getDisplay() {
+        return display;
+    }
     
     public CollisionEffect getCollisionEffect(){
         return collisionEffect;
@@ -67,6 +129,22 @@ public abstract class GameObject {
         return moveBehaviour;
     }
 
+    public double getHp() {
+        return hp.get();
+    }
+
+    public void setHitBox(Shape hitBox) {
+        this.hitBox = hitBox;
+    }
+
+    public void setImage(ImageView image) {
+        this.image = image;
+    }
+
+    public void setHp(double hp) {
+        this.hp.set(hp);
+    }
+
     public void setTranslateX(double newX) {
         translateX.set(newX);
     }
@@ -77,6 +155,14 @@ public abstract class GameObject {
 
     public void setMoveBehaviour(MoveBehaviour moveBehaviour) {
         this.moveBehaviour = moveBehaviour;
+    }
+
+    public void setCollisionEffect(CollisionEffect collisionEffect) {
+        this.collisionEffect = collisionEffect;
+    }
+
+    public void setCollisionPassiveBehaviour(CollisionPassiveBehaviour collisionPassiveBehaviour) {
+        this.collisionPassiveBehaviour = collisionPassiveBehaviour;
     }
     
     public void sufferPushBack(){
@@ -109,6 +195,8 @@ public abstract class GameObject {
     }
     
     public void onCollision(GameObject target){
-        collisionEffect.affect(target, damage);
+        collisionEffect.affect(this, target);
     }
+    
+    public abstract void update(long now);
 }

@@ -35,37 +35,14 @@ public class Server {
                             try {       
                                 // listen for client over socket
                                 Socket socket = listener.accept();
-                                MadBalls.socket = socket;
-                                MadBalls.out = new ObjectOutputStream(socket.getOutputStream());
-                                MadBalls.in = new ObjectInputStream(socket.getInputStream());
+//                                MadBalls.socket = socket;
+//                                MadBalls.out = new ObjectOutputStream(socket.getOutputStream());
+//                                MadBalls.in = new ObjectInputStream(socket.getInputStream());
                                     
                                 // maintain the socket connection
                                 while(true){
                                     try {
-                                        String input = (String)MadBalls.in.readObject();
-                                        String[] inputs = input.split(" ");
-                                        if (inputs[0].equals("x")){
-                                            if (inputs[1].equals("0")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityX(0);
-                                            }
-                                            else if (inputs[1].equals("-")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityX(-100);
-                                            }
-                                            else if (inputs[1].equals("+")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityX(100);
-                                            }
-                                        }
-                                        else if (inputs[0].equals("y")){
-                                            if (inputs[1].equals("0")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityY(0);
-                                            }
-                                            else if (inputs[1].equals("-")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityY(-100);
-                                            }
-                                            else if (inputs[1].equals("+")){
-                                                MadBalls.nextPlayer.ball.getMoveBehaviour().setVelocityY(100);
-                                            }
-                                        }
+                                        
                                     }
                                     finally {
                                         
