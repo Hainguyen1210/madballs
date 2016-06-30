@@ -5,20 +5,21 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public class InvulnerableBehaviour extends ComboCollisionPassiveBehaviour{
+public class InvulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     public InvulnerableBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 
     @Override
-    public void getAffected(GameObject source, GameObject target, ComboCollisionEffect effect) {
+    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         
     }
     

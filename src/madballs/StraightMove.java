@@ -10,6 +10,7 @@ package madballs;
  * @author Caval
  */
 public class StraightMove extends MoveBehaviour{
+    private double movedDistance = 0;
 
     public StraightMove(GameObject obj, double speed) {
         super(obj, speed);
@@ -18,32 +19,50 @@ public class StraightMove extends MoveBehaviour{
     @Override
     void calculateNewCordinate(long now) {
         // get the time elapsed and update lastUpdateTime
-        if (getLastUpdateTime() == 0) setLastUpdateTime(MadBalls.getGameEnvironment().getLastUpdateTime());
-        final double elapsedSeconds = (now - getLastUpdateTime()) / 1_000_000_000 ;
-        setLastUpdateTime(now);
+        if (getLastMoveTime() == 0) setLastMoveTime(MadBalls.getGameEnvironment().getLastUpdateTime());
+//        if (now - getLastMoveTime() < 5000000) return;
+        
+        
+//        System.out.println(now - getLastUpdateTime());
+        final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;
+//        System.out.println(elapsedSeconds);
+        setLastMoveTime(now);
         
         // return if the obj has reached its target
-        final double oldX = getObject().getTranslateX();
-        if (getTargetX() != -1 && oldX == getTargetX()){
-            return;
-        }
         
         // calculate new coordinates
+        final double oldX = getObject().getTranslateX();
         final double deltaX = elapsedSeconds * getVelocityX();
-        final double newX = Math.max(getObject().getMinX(), Math.min(getObject().getMaxX(), oldX + deltaX));
+        final double newX = oldX + deltaX;
         setNewX(newX);
         
         final double oldY = getObject().getTranslateY();
         final double deltaY = elapsedSeconds * getVelocityY();
-        final double newY = Math.max(getObject().getMinY(), Math.min(getObject().getMaxY(), oldY + deltaY));
+        final double newY = oldY + deltaY;
         setNewY(newY);
         
+        movedDistance += getSpeed() * elapsedSeconds;
         
         // set the coordinate to the target if the obj has passed the target
-        if (getTargetX() != -1 && newX >= getTargetX()){
-            setNewX(getTargetX());
-            setNewY(getTargetY());
-        }
+//        if (getTargetX() != -1 && newX >= getTargetX()){
+//            setNewX(getTargetX());
+//            setNewY(getTargetY());
+//        }
+    }
+
+    public double getMovedDistance() {
+        return movedDistance;
+    }
+    
+    
+    @Override
+    public void move(long now){
+        GameObject obj = getObject();
+        calculateNewCordinate(now);
+        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());
+        if (obj.getTranslateY() != getNewY()) obj.setOldY(obj.getTranslateY());
+        obj.setTranslateX(getNewX());
+        obj.setTranslateY(getNewY());
     }
     
 }

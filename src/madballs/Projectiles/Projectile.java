@@ -5,7 +5,9 @@
  */
 package madballs.Projectiles;
 
-import madballs.Environment;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 import madballs.MoveBehaviour;
 import madballs.StraightMove;
@@ -19,9 +21,11 @@ public class Projectile extends GameObject{
     private MoveBehaviour moveBehaviour;
     private Weapon sourceWeapon;    
 
-    public Projectile(Weapon sourceWeapon) {
+    public Projectile(Weapon sourceWeapon, Shape hitBox, Image image) {
         super(sourceWeapon.getEnvironment(), sourceWeapon.getTranslateX(), sourceWeapon.getTranslateY());
         this.sourceWeapon = sourceWeapon;
+        setHitBox(hitBox);
+        setImage(new ImageView(image));
         
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());
         setCollisionPassiveBehaviour(sourceWeapon.getCollisionPassiveBehaviour());
@@ -29,16 +33,21 @@ public class Projectile extends GameObject{
         setMoveBehaviour(new StraightMove(this, sourceWeapon.getProjectileSpeed()));
         if (sourceWeapon.getRange() != -1){
             double angle = Math.toRadians(sourceWeapon.getDisplay().getRotate());
-            double targetX = sourceWeapon.getTranslateX() + Math.cos(sourceWeapon.getRange());
-            double targetY = sourceWeapon.getTranslateY() + Math.sin(sourceWeapon.getRange());
-            moveBehaviour.setTargetX(targetX);
-            moveBehaviour.setTargetY(targetY);
+            
             moveBehaviour.setDirection(angle);
         }
     }
 
     @Override
     public void update(long now) {
-        
+        moveBehaviour.move(now);
+        if (getTranslateX() == moveBehaviour.getTargetX()){
+            getEnvironment().removeGameObj(this);
+        }
+    }
+
+    @Override
+    public void setDisplayComponents() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 }

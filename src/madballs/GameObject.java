@@ -5,42 +5,43 @@
  */
 package madballs;
 
+import javafx.beans.binding.Bindings;
 import madballs.Collision.CollisionPassiveBehaviour;
 import madballs.Collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.image.ImageView;
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
-import javafx.scene.shape.Rectangle;
+import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
+import javafx.scene.transform.Rotate;
 
 /**
  *
  * @author Caval
  */
 public abstract class GameObject {
+    private GameObject owner, child;
     private Shape hitBox;
-    private ImageView image = new ImageView();
-    private Group display = new Group(hitBox, image);
+    private ImageView imageView = new ImageView();
+    private Pane display;
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
     
     private DoubleProperty translateX = new SimpleDoubleProperty(100);
     private DoubleProperty translateY = new SimpleDoubleProperty(100);
+    private Rotate rotation;
     private double oldX, oldY;
-    private double minX, minY, maxX, maxY;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
     private MoveBehaviour moveBehaviour;
     private Environment environment;
     
     public GameObject(Environment environment, double x, double y){
-        calculateBoundaries();
+        setDisplay();
         translateX.set(x);
         translateY.set(y);
-        display.translateXProperty().bind(translateX);
-        display.translateYProperty().bind(translateY);
+        rotation = new Rotate();
+        display.getTransforms().add(rotation);
         
         this.environment = environment;
         environment.registerGameObj(this, true);
@@ -49,52 +50,28 @@ public abstract class GameObject {
     /**
      * create a new GameObject inside a created Obj
      * @param owner 
+     * @param x the varied X coordinate compared to the owner (child's X = owner's X + x)
+     * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
-    public GameObject(GameObject owner){
-        display.translateXProperty().bind(owner.translateX);
-        display.translateYProperty().bind(owner.translateY);
-        owner.display.getChildren().add(display);
+    public GameObject(GameObject owner, double x, double y){
+        setDisplay();
+        owner.child = this;
+        this.owner = owner;
         
-        environment.registerGameObj(this, false);
-    }
-    
-    /**
-     * calculate the min and max coordinates that the obj can reach
-     */
-    private void calculateBoundaries(){
-        if (hitBox instanceof Circle){
-            double radius = ((Circle) hitBox).getRadius();
-            minX = radius;
-            minY = radius;
-            maxX = MadBalls.RESOLUTION_X - radius;
-            maxY = MadBalls.RESOLUTION_Y - radius;
-        }
-        else if (hitBox instanceof Rectangle){
-            minX = 0;
-            minY = 0;
-            maxX = MadBalls.RESOLUTION_X - ((Rectangle)hitBox).getWidth();
-            maxY = MadBalls.RESOLUTION_Y - ((Rectangle)hitBox).getHeight();
-        }
+        translateX.bind(Bindings.add(x, owner.translateX));
+        translateY.bind(Bindings.add(y, owner.translateY));
+        
+        rotation = new Rotate(0 , -x , -y);
+        display.getTransforms().add(rotation);
+        environment = owner.getEnvironment();
+        environment.registerGameObj(this, true);
+        
+        
+        hitBox.setStyle("-fx-fill: red");
     }
 
     public Environment getEnvironment() {
         return environment;
-    }
-
-    public double getMinX() {
-        return minX;
-    }
-
-    public double getMinY() {
-        return minY;
-    }
-
-    public double getMaxX() {
-        return maxX;
-    }
-
-    public double getMaxY() {
-        return maxY;
     }
 
     public double getTranslateX() {
@@ -104,17 +81,41 @@ public abstract class GameObject {
     public double getTranslateY() {
         return translateY.get();
     }
+
+    public double getOldX() {
+        return oldX;
+    }
+
+    public void setOldX(double oldX) {
+        this.oldX = oldX;
+    }
+
+    public double getOldY() {
+        return oldY;
+    }
+
+    public void setOldY(double oldY) {
+        this.oldY = oldY;
+    }
     
     public Shape getHitBox(){
         return hitBox;
     }
     
     public ImageView getImage() {
-        return image;
+        return imageView;
     }
 
-    public Group getDisplay() {
+    public Pane getDisplay() {
         return display;
+    }
+    
+    public void setRotate(double direction){
+        double angle = Math.toDegrees(direction);
+        rotation.setAngle(angle);
+        System.out.println(angle);
+        if (child != null) child.rotation.setAngle(angle);
+        if (owner != null) owner.rotation.setAngle(angle);
     }
     
     public CollisionEffect getCollisionEffect(){
@@ -138,7 +139,7 @@ public abstract class GameObject {
     }
 
     public void setImage(ImageView image) {
-        this.image = image;
+        this.imageView = image;
     }
 
     public void setHp(double hp) {
@@ -157,17 +158,42 @@ public abstract class GameObject {
         this.moveBehaviour = moveBehaviour;
     }
 
-    public void setCollisionEffect(CollisionEffect collisionEffect) {
+    final public void setCollisionEffect(CollisionEffect collisionEffect) {
         this.collisionEffect = collisionEffect;
     }
 
-    public void setCollisionPassiveBehaviour(CollisionPassiveBehaviour collisionPassiveBehaviour) {
+    final public void setCollisionPassiveBehaviour(CollisionPassiveBehaviour collisionPassiveBehaviour) {
         this.collisionPassiveBehaviour = collisionPassiveBehaviour;
     }
+
+    public GameObject getOwner() {
+        return owner;
+    }
+
+    public GameObject getChild() {
+        return child;
+    }
     
-    public void sufferPushBack(){
-        translateX.set(oldX);
-        translateY.set(oldY);
+    /**
+     * check whether this obj has the specific owner
+     * @param owner
+     * @return 
+     */
+    public boolean hasOwner(GameObject owner){
+        if (this.owner == null) return false;
+        if (this.owner == owner) return true;
+        return this.owner.hasOwner(owner);
+    }
+    
+    /**
+     * check whether this obj has the specific child
+     * @param child
+     * @return 
+     */
+    public boolean hasChild(GameObject child){
+        if (this.child == null) return false;
+        if (this.child == child) return true;
+        return this.child.hasChild(child);
     }
     
     /**
@@ -176,9 +202,9 @@ public abstract class GameObject {
      * @param target
      * @return 
      */
-    public boolean hasCollidedWith(GameObject target){
+    public Shape getCollisionShapeWith(GameObject target){
        Shape intersect = Shape.intersect(hitBox, target.getHitBox());
-       return intersect.getBoundsInLocal().getWidth() != -1;
+       return intersect;
     }
     
     /**
@@ -187,16 +213,51 @@ public abstract class GameObject {
      * @param target 
      */
     public void checkCollisionWith(GameObject target){
-       if (hasCollidedWith(target)){
-           // let the collision effects affect the two collided objects
-           onCollision(target);
-           target.onCollision(this);
-       } 
+        Shape collisionShape = getCollisionShapeWith(target);
+        if (collisionShape.getBoundsInLocal().getWidth() != -1){
+//            System.out.println("collide");
+            // let the collision effects affect the two collided objects
+            onCollision(target, collisionShape);
+            target.onCollision(this, collisionShape);
+        } 
     }
     
-    public void onCollision(GameObject target){
-        collisionEffect.affect(this, target);
+    /**
+     * the action the obj makes upon collision
+     * @param target
+     * @param collisionShape 
+     */
+    public void onCollision(GameObject target, Shape collisionShape){
+        collisionEffect.affect(this, target, collisionShape);
     }
     
+    /**
+     * put all the display component inside the display HBox
+     */
+    public void setDisplay(){
+        setDisplayComponents();
+        display = new Pane(hitBox, imageView);
+        display.setPrefSize(0, 0);
+        display.translateXProperty().bind(translateX);
+        display.translateYProperty().bind(translateY);
+    }
+    
+    /**
+     * get the shape united by all children shapes
+     * @return 
+     */
+    public Shape getUnionShape(){
+        return Shape.union(hitBox, child.getUnionShape());
+    }
+    
+    /**
+     * the obj must implement this method to set its hit box and image
+     */
+    public abstract void setDisplayComponents();
+    
+    /**
+     * the obj must implement this method to update with the environment's animation timer
+     * @param now 
+     */
     public abstract void update(long now);
 }

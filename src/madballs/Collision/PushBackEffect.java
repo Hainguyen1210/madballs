@@ -5,22 +5,29 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public class PushBackEffect extends ComboCollisionEffect{
+public class PushBackEffect extends StackedCollisionEffect{
+    private double pushBackAmount;
 
-    public PushBackEffect(CollisionEffect effect) {
+    public PushBackEffect(StackedCollisionEffect effect, double pushBackAmount) {
         super(effect);
+        this.pushBackAmount = pushBackAmount;
     }
 
     @Override
-    public void affect(GameObject source, GameObject target) {
-        target.getCollisionPassiveBehaviour().getAffected(source, target, this);
-        super.affect(source, target);
+    public void affect(GameObject source, GameObject target, Shape collisionShape) {
+        target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
+        super.affect(source, target, collisionShape);
+    }
+    
+    public double getPushBackAmount(){
+        return pushBackAmount;
     }
     
 }

@@ -5,20 +5,21 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public class NullEffect extends ComboCollisionEffect{
+public class NullEffect extends StackedCollisionEffect{
     
-    public NullEffect(CollisionEffect effect) {
+    public NullEffect(StackedCollisionEffect effect) {
         super(effect);
     }
     
     @Override
-    public void affect(GameObject source, GameObject target) {
+    public void affect(GameObject source, GameObject target, Shape collisionShape) {
         
     }
 }

@@ -5,6 +5,7 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
@@ -12,5 +13,5 @@ import madballs.GameObject;
  * @author Caval
  */
 public interface CollisionPassiveBehaviour {
-    public void getAffected(GameObject source, GameObject target, ComboCollisionEffect effect);
+    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
 }

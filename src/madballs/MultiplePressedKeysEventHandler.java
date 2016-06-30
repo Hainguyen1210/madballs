@@ -23,7 +23,7 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
      
     public void handle(final KeyEvent event) {
         final KeyCode code = event.getCode();
-        System.out.println("type" + event.getEventType());
+//        System.out.println("type" + event.getEventType());
         if (KeyEvent.KEY_PRESSED.equals(event.getEventType())) {
             buffer.add(code);
         } else if (KeyEvent.KEY_RELEASED.equals(event.getEventType())) {
@@ -40,6 +40,9 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
     public class MultiKeyEvent {
         public boolean isPressed(final KeyCode key) {
             return buffer.contains(key);
+        }
+        public boolean isKeyFree(){
+            return buffer.size() == 0;
         }
     }
 }

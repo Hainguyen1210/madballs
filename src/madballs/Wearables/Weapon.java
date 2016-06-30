@@ -5,8 +5,12 @@
  */
 package madballs.Wearables;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.image.Image;
+import javafx.scene.shape.Circle;
 import madballs.Projectiles.Projectile;
 import madballs.*;
 import madballs.Collision.CollisionEffect;
@@ -17,9 +21,13 @@ import madballs.Collision.CollisionPassiveBehaviour;
  * @author Caval
  */
 public abstract class Weapon extends GameObject{
+    private Image projectileImage;
+    private double projectileHitBoxSize;
+    
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
+    private BooleanProperty isAttacking = new SimpleBooleanProperty(false);
     private Ball owner;
     private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
 
@@ -35,7 +43,7 @@ public abstract class Weapon extends GameObject{
         return damage;
     }
 
-    public void setDamage(double damage) {
+    final public void setDamage(double damage) {
         this.damage = damage;
     }
     
@@ -52,7 +60,7 @@ public abstract class Weapon extends GameObject{
         return fireRate;
     }
 
-    public void setFireRate(double fireRate) {
+    final public void setFireRate(double fireRate) {
         this.fireRate = fireRate;
     }
 
@@ -60,7 +68,7 @@ public abstract class Weapon extends GameObject{
         return range;
     }
 
-    public void setRange(double range) {
+    final public void setRange(double range) {
         this.range = range;
     }
 
@@ -68,7 +76,7 @@ public abstract class Weapon extends GameObject{
         return ammo;
     }
 
-    public void setAmmo(double ammo) {
+    final public void setAmmo(double ammo) {
         this.ammo = ammo;
     }
 
@@ -76,20 +84,21 @@ public abstract class Weapon extends GameObject{
         return projectileSpeed;
     }
 
-    public void setProjectileSpeed(double projectileSpeed) {
+    final public void setProjectileSpeed(double projectileSpeed) {
         this.projectileSpeed = projectileSpeed;
     }
 
-    public Weapon(Ball owner) {
-        super(owner);
+    public Weapon(Ball owner, double x, double y) {
+        super(owner, x, y);
         this.owner = owner;
+        setMoveBehaviour(new RotateBehaviour(owner, -1));
     }
 
     public CollisionEffect getProjectileCollisionEffect() {
         return projectileCollisionEffect;
     }
 
-    public void setProjectileCollisionEffect(CollisionEffect projectileCollisionEffect) {
+    final public void setProjectileCollisionEffect(CollisionEffect projectileCollisionEffect) {
         this.projectileCollisionEffect = projectileCollisionEffect;
     }
 
@@ -97,15 +106,31 @@ public abstract class Weapon extends GameObject{
         return projectileCollisionBehaviour;
     }
 
-    public void setProjectileCollisionBehaviour(CollisionPassiveBehaviour projectileCollisionBehaviour) {
+    final public void setProjectileCollisionBehaviour(CollisionPassiveBehaviour projectileCollisionBehaviour) {
         this.projectileCollisionBehaviour = projectileCollisionBehaviour;
+    }
+
+    public Image getProjectileImage() {
+        return projectileImage;
+    }
+
+    final public void setProjectileImage(Image projectileImage) {
+        this.projectileImage = projectileImage;
+    }
+
+    public double getProjectileHitBoxSize() {
+        return projectileHitBoxSize;
+    }
+
+    final public void setProjectileHitBoxSize(double size) {
+        this.projectileHitBoxSize = size;
     }
     
     public void attack(long now){
         if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
         
-        if (now - getLastShotTime() > 1 / fireRate){
-            new Projectile(this);
+        if (isAttacking.get() && (now - getLastShotTime() > 1 / fireRate)){
+            new Projectile(this, new Circle(projectileHitBoxSize), projectileImage);
             setLastShotTime(now);
         }
     };

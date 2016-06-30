@@ -5,13 +5,11 @@
  */
 package madballs;
 
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.Socket;
 import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import madballs.Map.Map;
 
 /**
  *
@@ -32,15 +30,35 @@ public class MadBalls extends Application {
         
         
         Pane root = new Pane();
-        gameEnvironment = new Environment(root);
+        int[][] mapArray = new int[16][9];
+        for (int i = 0; i < 16; i++){
+            mapArray[i][0] = 1;
+            mapArray[i][8] = 1;
+        }
+        for (int i = 1; i < 8; i++){
+            mapArray[0][i] = 1;
+            mapArray[15][i] = 1;
+        }
+        
+        
+        Map map = new Map(RESOLUTION_X, RESOLUTION_Y, mapArray);
+        
+        gameEnvironment = new Environment(root, map);
         
 //        Client.initClient();
-        Server.initServer();
+//        Server.initServer();
         
-        Scene scene = new Scene(root, 600, 500);
+        Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         
-//        scene.setOnKeyPressed(thisPlayer.ball.getMoveBehaviour().keyHandler);
-//        scene.setOnKeyReleased(thisPlayer.ball.getMoveBehaviour().keyHandler);
+        Ball ball = new Ball(gameEnvironment, 200, 200);
+        
+        
+        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
+        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
+        scene.setOnMousePressed(ball.getWeapon().getMoveBehaviour().mouseHandler);
+        scene.setOnMouseReleased(ball.getWeapon().getMoveBehaviour().mouseHandler);
+        scene.setOnMouseMoved(ball.getWeapon().getMoveBehaviour().mouseHandler);
+        scene.setOnMouseDragged(ball.getWeapon().getMoveBehaviour().mouseHandler);
         
         primaryStage.setTitle("Hello World!");
         primaryStage.setScene(scene);

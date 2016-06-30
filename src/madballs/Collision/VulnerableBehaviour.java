@@ -5,24 +5,23 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public class VulnerableBehaviour extends ComboCollisionPassiveBehaviour{
+public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     public VulnerableBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 
     @Override
-    public void getAffected(GameObject source, GameObject target, ComboCollisionEffect effect) {
-        if (effect.isInstanceOf(DamageEffect.class)) {
-            target.setHp(target.getHp() - ((DamageEffect)effect).getDamage());
-        }
-        super.getAffected(source, target, effect);
+    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        target.setHp(target.getHp() - effect.getDamage());
+        super.getAffected(source, target, effect, collisionShape);
     }
     
 }

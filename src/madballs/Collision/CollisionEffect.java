@@ -5,6 +5,7 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
@@ -12,5 +13,5 @@ import madballs.GameObject;
  * @author Caval
  */
 public interface CollisionEffect {
-    public void affect(GameObject source, GameObject target);
+    public void affect(GameObject source, GameObject target, Shape collisionShape);
 }

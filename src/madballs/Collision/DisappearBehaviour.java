@@ -5,24 +5,25 @@
  */
 package madballs.Collision;
 
+import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
  *
  * @author Caval
  */
-public class DisappearBehaviour extends ComboCollisionPassiveBehaviour{
+public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{
 
     public DisappearBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 
     @Override
-    public void getAffected(GameObject source, GameObject target, ComboCollisionEffect effect) {
-        if (effect.isInstanceOf(PushBackEffect.class)) {
+    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        if (effect.hasCollisionEffect(PushBackEffect.class)) {
             target.getEnvironment().removeGameObj(target);
         }
-        super.getAffected(source, target, effect);
+        super.getAffected(source, target, effect, collisionShape);
     }
     
 }

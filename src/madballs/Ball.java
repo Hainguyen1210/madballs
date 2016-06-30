@@ -7,8 +7,9 @@ package madballs;
 
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.VulnerableBehaviour;
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import madballs.Collision.PushableBehaviour;
+import madballs.Wearables.Pistol;
 import madballs.Wearables.Weapon;
 
 /**
@@ -20,22 +21,34 @@ public class Ball extends GameObject{
 
     public Ball(Environment environment, double a, double b) {
         super(environment, a , b);
-        setMoveBehaviour(new StraightMove(this, 100));
-        setCollisionEffect(new PushBackEffect(null));
-        setCollisionPassiveBehaviour(new VulnerableBehaviour(null));
+        setMoveBehaviour(new StraightMove(this, 200));
+        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
         
-        setDisplay();
+        weapon = new Pistol(this);
+    }
+
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
+    public void setWeapon(Weapon weapon) {
+        this.weapon = weapon;
     }
     
     /**
      * set the hitBox and image of the Ball
      */
-    private void setDisplay(){
-        setHitBox(new Circle(25, Paint.valueOf("red")));
+    @Override
+    public void setDisplayComponents(){
+        setHitBox(new Circle(20));
     }
 
     @Override
     public void update(long now) {
         getMoveBehaviour().move(now);
+        if (getMoveBehaviour().needUpdate() && weapon != null) {
+            if (weapon.getMoveBehaviour() != null) weapon.getMoveBehaviour().move(now);
+        }
     }
 }
