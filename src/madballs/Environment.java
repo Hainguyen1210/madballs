@@ -21,11 +21,10 @@ import madballs.Map.Map;
 public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
-    public Pane root;
+    private Pane root;
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
-    public static Environment environment;
 
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
@@ -74,7 +73,6 @@ public class Environment {
     }
     
     public Environment(Pane display, Map map){
-        environment = this;
         this.root = display;
         this.map = map;
         quadtree = new Quadtree(0, new Rectangle(0, 0, MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y));
