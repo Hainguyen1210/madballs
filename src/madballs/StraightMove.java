@@ -10,7 +10,6 @@ package madballs;
  * @author Caval
  */
 public class StraightMove extends MoveBehaviour{
-    private double movedDistance = 0;
 
     public StraightMove(GameObject obj, double speed) {
         super(obj, speed);
@@ -22,13 +21,8 @@ public class StraightMove extends MoveBehaviour{
         if (getLastMoveTime() == 0) setLastMoveTime(MadBalls.getGameEnvironment().getLastUpdateTime());
 //        if (now - getLastMoveTime() < 5000000) return;
         
-        
-//        System.out.println(now - getLastUpdateTime());
         final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;
-//        System.out.println(elapsedSeconds);
         setLastMoveTime(now);
-        
-        // return if the obj has reached its target
         
         // calculate new coordinates
         final double oldX = getObject().getTranslateX();
@@ -47,17 +41,13 @@ public class StraightMove extends MoveBehaviour{
         }
         setNewY(newY);
         
-        movedDistance += getSpeed() * elapsedSeconds;
+        setMovedDistance(getMovedDistance() + getSpeed() * elapsedSeconds);
         
         // set the coordinate to the target if the obj has passed the target
 //        if (getTargetX() != -1 && newX >= getTargetX()){
 //            setNewX(getTargetX());
 //            setNewY(getTargetY());
 //        }
-    }
-
-    public double getMovedDistance() {
-        return movedDistance;
     }
     
     

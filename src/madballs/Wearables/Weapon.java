@@ -151,7 +151,7 @@ public abstract class Weapon extends GameObject{
     }
     
     public void attack(long now){
-        if ((now - getLastShotTime()) / 1_000_000_000.0 / fireRate  >  1){
+        if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
             if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
             new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
             setLastShotTime(now);

@@ -6,10 +6,12 @@
 package madballs;
 
 import java.util.ArrayList;
+import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import madballs.Map.Map;
 
 /**
@@ -19,11 +21,18 @@ import madballs.Map.Map;
 public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
-    private Pane root;
+    public Pane root;
     private Map map;
+    private Ground ground;
+    private Quadtree quadtree;
+    public static Environment environment;
 
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
+    }
+
+    public Ground getGround() {
+        return ground;
     }
     
     final AnimationTimer animation = new AnimationTimer() {
@@ -38,18 +47,23 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        // create the arraylist storing the checked collidables
-//        ArrayList<GameObject> checked = new ArrayList<>();
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>();
         copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
+        
+        quadtree.clear();
+        
+        for (GameObject obj : copiedGameObjects){
+            obj.update(now);
+            obj.updateBoundsRectangle();
+            quadtree.insert(obj);
+        }
+        List<GameObject> collidableObjects = new ArrayList();
         // loop through all the collidables in the environment
         for (GameObject checking : copiedGameObjects){
-//            if (!checked.contains(checking)) {
+            collidableObjects.clear();
+            quadtree.retrieve(collidableObjects, checking.getBoundsRectangle());
                 for (GameObject target : copiedGameObjects){
-                    checking.update(now);
                     if (target != checking && !target.hasChild(checking) && !target.hasOwner(checking)){
-//                        System.out.println(checking instanceof Weapon);
-//                        System.out.println(target instanceof  Obstacle);
                         checking.checkCollisionWith(target);
                     }
                 }
@@ -60,11 +74,14 @@ public class Environment {
     }
     
     public Environment(Pane display, Map map){
+        environment = this;
         this.root = display;
-        
-        
-        gameObjects = new ArrayList<>();
         this.map = map;
+        quadtree = new Quadtree(0, new Rectangle(0, 0, MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y));
+        gameObjects = new ArrayList<>();
+        ground = new Ground(this, 0, 0);
+        
+        
         for (int i = 15; i >= 0; i --){
             for (int j = 0; j < 9; j++){
                 if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, i * 50, j * 50, 50, 50);

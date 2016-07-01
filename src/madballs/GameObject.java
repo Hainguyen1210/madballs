@@ -10,9 +10,11 @@ import madballs.Collision.CollisionPassiveBehaviour;
 import madballs.Collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.geometry.Bounds;
+import javafx.scene.Group;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 
@@ -24,7 +26,8 @@ public abstract class GameObject {
     private GameObject owner, child;
     private Shape hitBox;
     private ImageView imageView = new ImageView();
-    private Pane display;
+    private Group display;
+    private Rectangle boundsRectangle;
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
     
@@ -129,7 +132,7 @@ public abstract class GameObject {
         return imageView;
     }
 
-    public Pane getDisplay() {
+    public Group getDisplay() {
         return display;
     }
     
@@ -279,20 +282,29 @@ public abstract class GameObject {
      */
     public void setDisplay(){
         setDisplayComponents();
-        display = new Pane(hitBox, imageView);
-        display.setPrefSize(0, 0);
+        display = new Group(hitBox, imageView);
+//        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
         display.getTransforms().add(rotation);
+//        for (Node child : display.getChildren()){
+//            child.translateXProperty().bind(translateX);
+//            child.translateYProperty().bind(translateY);
+//            child.getTransforms().add(rotation);
+//        }
         environment.registerGameObj(this, true);
     }
     
     /**
-     * get the shape united by all children shapes
-     * @return 
+     * update the rectangle shape representing the bounds of the game obj
      */
-    public Shape getUnionShape(){
-        return Shape.union(hitBox, child.getUnionShape());
+    public void updateBoundsRectangle(){
+        Bounds bounds = display.getBoundsInParent();
+        boundsRectangle = new Rectangle(bounds.getMinX(), bounds.getMinY(), bounds.getWidth(), bounds.getHeight());
+    }
+    
+    public Rectangle getBoundsRectangle(){
+        return boundsRectangle;
     }
     
     /**

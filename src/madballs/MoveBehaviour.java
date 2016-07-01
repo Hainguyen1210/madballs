@@ -29,6 +29,7 @@ public abstract class MoveBehaviour {
     private double targetX = -1;
     private double targetY = -1;
     private double newX, newY;
+    private double movedDistance = 0;
     private GameObject obj;
     
     final MultiplePressedKeysEventHandler keyHandler = 
@@ -180,6 +181,14 @@ public abstract class MoveBehaviour {
 
     public double getNewY() {
         return newY;
+    }
+
+    public double getMovedDistance() {
+        return movedDistance;
+    }
+
+    public void setMovedDistance(double movedDistance) {
+        this.movedDistance = movedDistance;
     }
     /**
      * method for the move behavior to calculate the result coordinate of the obj after the move

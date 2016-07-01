@@ -20,12 +20,13 @@ public class Projectile extends GameObject{
 
     public Projectile(Weapon sourceWeapon, Shape hitBox, Image image) {
         super(sourceWeapon.getEnvironment(), 0, 0, false);
-//        super(sourceWeapon.getEnvironment(), 400, 400, false);
+        
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
         setImage(image);
         setDisplay();
         
+        // calculate the spawning location of the projectile based on the real coordinate of the weapon
         double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() * 2;
         double rotateDirection = Math.toRadians(sourceWeapon.getRotateAngle());
         double[] realCoordinate = sourceWeapon.getRealCoordinate();
@@ -34,23 +35,21 @@ public class Projectile extends GameObject{
         setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
         setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
         
+        
+        // set collision characteristics and move behaviour
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());
         setCollisionPassiveBehaviour(sourceWeapon.getProjectileCollisionBehaviour());
         
         setMoveBehaviour(new StraightMove(this, sourceWeapon.getProjectileSpeed()));
-        if (sourceWeapon.getRange() != -1){
-            double angle = Math.toRadians(sourceWeapon.getRotateAngle());
-//            System.out.println(getMoveBehaviour() == null);
-            getMoveBehaviour().setDirection(angle);
-        }
+        getMoveBehaviour().setDirection(Math.toRadians(sourceWeapon.getRotateAngle()));
     }
 
     @Override
     public void update(long now) {
         getMoveBehaviour().move(now);
-//        if (getTranslateX() == getMoveBehaviour().getTargetX()){
-//            getEnvironment().removeGameObj(this);
-//        }
+        if (getMoveBehaviour().getMovedDistance() >= sourceWeapon.getRange()){
+            getEnvironment().getGround().onCollision(this, getHitBox());
+        }
     }
 
     @Override
