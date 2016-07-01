@@ -42,47 +42,66 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
                 Shape intersect = collisionShape;
                 double intersectWidth = intersect.getBoundsInLocal().getWidth();
                 double intersectHeight = intersect.getBoundsInLocal().getHeight();
-                
-                if (collidedTarget.getMoveBehaviour() instanceof RotateBehaviour){
-//                    double pushBackDirection = Math.atan2(, target.getTranslateX() - originTarget.getTranslateX());
-                    double pushBackedX = target.getTranslateX() + 3 * (Math.abs(target.getRotateAngle()) > 90 ? 1 : -1);
-                    double pushBackedY = target.getTranslateY() + 3 * (target.getRotateAngle() < 0 ? 1 : -1);
-//                    System.out.println(3 * ((target.getTranslateY() > collidedTarget.getTranslateY()) ? 1 : -1));
-//                    System.out.println(Math.sin(pushBackDirection) * 5);
-                    target.setOldX(pushBackedX);
-                    target.setOldY(pushBackedY);
-//                    System.out.println(pushBackY);
+                double currentDirection = Math.toRadians(target.getRotateAngle());
+                target.setRotate(target.getOldDirection());
+//                target.setTranslateX(target.getOldX());
+//                target.setTranslateY(target.getOldY());
+//                if (collidedTarget.getMoveBehaviour() instanceof RotateBehaviour){
+////                    double pushBackDirection = Math.atan2(, target.getTranslateX() - originTarget.getTranslateX());
+//                    double pushBackedX = target.getTranslateX() + 1 * (Math.abs(target.getRotateAngle()) > 90 ? 1 : -1);
+//                    double pushBackedY = target.getTranslateY() + 1 * (target.getRotateAngle() < 0 ? 1 : -1);
+//                    
+////                    System.out.println(3 * ((target.getTranslateY() > collidedTarget.getTranslateY()) ? 1 : -1));
+////                    System.out.println(Math.sin(pushBackDirection) * 5);
+////                    target.setOldX(pushBackedX);
+////                    target.setOldY(pushBackedY);
+////                    target.setTranslateX(pushBackedX);
+////                    target.setTranslateY(pushBackedY);
+//                    
 //                    while (intersect.getBoundsInLocal().getWidth() != -1){
-////                        target.setTranslateX(target.getTranslateX() + pushBackX);
-//                        target.setTranslateY(target.getTranslateY() + pushBackY);
+//                        pushBackedX += Math.abs(target.getRotateAngle()) > 90 ? 1 : -1;
+//                        pushBackedY += target.getRotateAngle() < 0 ? 1 : -1;
+//                        target.setOldX(pushBackedX);
+//                        target.setOldY(pushBackedY);
+//                        target.setTranslateX(pushBackedX);
+//                        target.setTranslateY(pushBackedY);
 //                        
-//                        intersect = Shape.intersect(source.getHitBox(), originTarget.getHitBox());
+//                        intersect = Shape.intersect(source.getHitBox(), collidedTarget.getHitBox());
 //                    }
+//                    return;
+//                }
+                if (Shape.intersect(source.getHitBox(), collidedTarget.getHitBox()).getBoundsInLocal().getWidth() == -1){
+                    return;
                 }
-                
+                else {
+                    target.setRotate(currentDirection);
+                }
                 boolean isXReversed = false;
                 if (intersectWidth < intersectHeight){
-                    target.setTranslateX(target.getOldX());
+                    target.setTranslateX(target.getOwnerOldX());
                     isXReversed = true;
                 }
                 else if (intersectWidth > intersectHeight){
-                    target.setTranslateY(target.getOldY());
+                    target.setTranslateY(target.getOwnerOldY());
                 }
                 else {
-                    target.setTranslateX(target.getOldX());
-                    target.setTranslateY(target.getOldY());
+                    target.setTranslateX(target.getOwnerOldX());
+                    target.setTranslateY(target.getOwnerOldY());
                 }
                 
                 intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
                 if (intersect.getBoundsInLocal().getWidth() != -1 ){
                     if (isXReversed) {
-                        target.setTranslateY(target.getOldY());
+                        target.setTranslateY(target.getOwnerOldY());
                     }
                     else {
-                        target.setTranslateX(target.getOldX());
+                        target.setTranslateX(target.getOwnerOldX());
                     }
                 }
                 
+                if (Shape.intersect(source.getHitBox(), collidedTarget.getHitBox()).getBoundsInLocal().getWidth() != -1){
+                    target.setRotate(target.getOldDirection());
+                }
 //                // check if there is still intersection after reversing the translateX
 //                target.setTranslateX(target.getOldX());
 //                if (intersect.getBoundsInLocal().getWidth() == -1 ) return;

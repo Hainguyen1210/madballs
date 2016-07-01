@@ -35,6 +35,7 @@ public abstract class GameObject {
     private DoubleProperty translateY = new SimpleDoubleProperty(100);
     private Rotate rotation;
     private double oldX, oldY;
+    private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
     private MoveBehaviour moveBehaviour;
     private Environment environment;
@@ -115,6 +116,20 @@ public abstract class GameObject {
     public void setOldX(double oldX) {
         this.oldX = oldX;
     }
+    
+    public void setOwnerOldX(double oldX) {
+        if (owner != null){
+            owner.setOwnerOldX(oldX);
+        }
+        setOldX(oldX);
+    }
+    
+    public void setOwnerOldY(double oldY) {
+        if (owner != null){
+            owner.setOwnerOldY(oldY);
+        }
+        setOldY(oldY);
+    }
 
     public double getOldY() {
         return oldY;
@@ -122,6 +137,20 @@ public abstract class GameObject {
 
     public void setOldY(double oldY) {
         this.oldY = oldY;
+    }
+    
+    public double getOwnerOldX(){
+        if (owner != null){
+            return owner.getOwnerOldX();
+        }
+        return oldX;
+    }
+    
+    public double getOwnerOldY(){
+        if (owner != null){
+            return owner.getOwnerOldY();
+        }
+        return oldY;
     }
     
     public Shape getHitBox(){
@@ -152,6 +181,20 @@ public abstract class GameObject {
     
     public Rotate getRotate(){
         return rotation;
+    }
+    
+    public double getOldDirection(){
+        if (owner != null){
+            return owner.getOldDirection();
+        }
+        return oldDirection;
+    }
+    
+    public void setOldDirection(double oldDirection) {
+        if (owner != null){
+            owner.setOldDirection(oldDirection);
+        }
+        this.oldDirection = oldDirection;
     }
     
     public CollisionEffect getCollisionEffect(){
@@ -258,14 +301,16 @@ public abstract class GameObject {
      * and act accordingly
      * @param target 
      */
-    public void checkCollisionWith(GameObject target){
+    public boolean checkCollisionWith(GameObject target){
         Shape collisionShape = getCollisionShapeWith(target);
         if (collisionShape.getBoundsInLocal().getWidth() != -1){
 //            System.out.println("collide");
             // let the collision effects affect the two collided objects
             onCollision(target, collisionShape);
             target.onCollision(this, collisionShape);
-        } 
+            return true;
+        }
+        return false;
     }
     
     /**

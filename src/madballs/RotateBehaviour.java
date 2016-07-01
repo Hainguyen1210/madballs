@@ -29,7 +29,7 @@ public class RotateBehaviour extends MoveBehaviour{
             double[] realCoordinate = getObject().getRealCoordinate();
             double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
             if (newDirection != getDirection()) {
-                setOldDirection(getDirection());
+//                setOldDirection(getDirection());
                 setDirection(newDirection);
                 getObject().setRotate(getDirection());
                 setLastMoveTime(now);

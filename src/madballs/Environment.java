@@ -57,18 +57,29 @@ public class Environment {
             quadtree.insert(obj);
         }
         List<GameObject> collidableObjects = new ArrayList();
-        ArrayList<GameObject> checked = new ArrayList<>();
+//        ArrayList<GameObject> checked = new ArrayList<>();
+        ArrayList<GameObject> uncollidedObjects = new ArrayList<>();
         
+//        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking.getBoundsRectangle());
                 for (GameObject target : collidableObjects){
-                    if (target != checking && !checked.contains(checking)
+                    if (target != checking
                             && !target.hasChild(checking) && !target.hasOwner(checking)){
-                        checking.checkCollisionWith(target);
+                        if (!checking.checkCollisionWith(target)) {
+                            uncollidedObjects.add(target);
+                            uncollidedObjects.add(checking);
+                        }
                     }
                 }
-                checked.add(checking);
+//                checked.add(checking);
+        }
+        
+        for (GameObject uncollided : uncollidedObjects){
+            uncollided.setOldDirection(Math.toRadians(uncollided.getRotateAngle()));
+            uncollided.setOwnerOldX(uncollided.getOwnerTranslateX());
+            uncollided.setOwnerOldY(uncollided.getOwnerTranslateY());
         }
     }
     
