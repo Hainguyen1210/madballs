@@ -5,11 +5,10 @@
  */
 package madballs.Wearables;
 
-import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.image.Image;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Projectiles.Projectile;
 import madballs.*;
@@ -23,11 +22,12 @@ import madballs.Collision.CollisionPassiveBehaviour;
 public abstract class Weapon extends GameObject{
     private Image projectileImage;
     private double projectileHitBoxSize;
+    private Paint projectileColor;
     
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
-    private BooleanProperty isAttacking = new SimpleBooleanProperty(false);
+    private double height, width;
     private Ball owner;
     private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
 
@@ -45,6 +45,30 @@ public abstract class Weapon extends GameObject{
 
     final public void setDamage(double damage) {
         this.damage = damage;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
+    public void setHeight(double height) {
+        this.height = height;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public void setWidth(double width) {
+        this.width = width;
+    }
+
+    public Paint getProjectileColor() {
+        return projectileColor;
+    }
+
+    public void setProjectileColor(Paint projectileColor) {
+        this.projectileColor = projectileColor;
     }
     
     
@@ -89,9 +113,9 @@ public abstract class Weapon extends GameObject{
     }
 
     public Weapon(Ball owner, double x, double y) {
-        super(owner, x, y);
+        super(owner, x, y, true);
         this.owner = owner;
-        setMoveBehaviour(new RotateBehaviour(owner, -1));
+        setMoveBehaviour(new RotateBehaviour(this, -1));
     }
 
     public CollisionEffect getProjectileCollisionEffect() {
@@ -127,16 +151,18 @@ public abstract class Weapon extends GameObject{
     }
     
     public void attack(long now){
-        if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-        
-        if (isAttacking.get() && (now - getLastShotTime() > 1 / fireRate)){
-            new Projectile(this, new Circle(projectileHitBoxSize), projectileImage);
+        if ((now - getLastShotTime()) / 1_000_000_000.0 / fireRate  >  1){
+            if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
+            new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
             setLastShotTime(now);
         }
     };
     
     @Override
     public void update(long now) {
-        attack(now);
+//        System.out.println(owner.getTranslateY());
+//        System.out.println(getTranslateY());
+        if (getMoveBehaviour().isMousePressed()) attack(now);
+        getMoveBehaviour().move(now);
     }
 }

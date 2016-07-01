@@ -34,11 +34,17 @@ public class StraightMove extends MoveBehaviour{
         final double oldX = getObject().getTranslateX();
         final double deltaX = elapsedSeconds * getVelocityX();
         final double newX = oldX + deltaX;
+        if (getObject().getTranslateX() != newX) {
+            getObject().setOldX(oldX - 0.5 * Math.signum(deltaX));
+        }
         setNewX(newX);
         
         final double oldY = getObject().getTranslateY();
         final double deltaY = elapsedSeconds * getVelocityY();
         final double newY = oldY + deltaY;
+        if (getObject().getTranslateY() != newY) {
+            getObject().setOldY(oldY - 0.5 * Math.signum(deltaY));
+        }
         setNewY(newY);
         
         movedDistance += getSpeed() * elapsedSeconds;
@@ -59,8 +65,8 @@ public class StraightMove extends MoveBehaviour{
     public void move(long now){
         GameObject obj = getObject();
         calculateNewCordinate(now);
-        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());
-        if (obj.getTranslateY() != getNewY()) obj.setOldY(obj.getTranslateY());
+//        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());
+//        if (obj.getTranslateY() != getNewY()) obj.setOldY(obj.getTranslateY());
         obj.setTranslateX(getNewX());
         obj.setTranslateY(getNewY());
     }

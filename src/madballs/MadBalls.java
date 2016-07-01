@@ -31,7 +31,7 @@ public class MadBalls extends Application {
         
         Pane root = new Pane();
         int[][] mapArray = new int[16][9];
-        for (int i = 0; i < 16; i++){
+        for (int i = 0; i < 14; i++){
             mapArray[i][0] = 1;
             mapArray[i][8] = 1;
         }

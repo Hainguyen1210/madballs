@@ -5,6 +5,8 @@
  */
 package madballs;
 
+import madballs.Wearables.Weapon;
+
 /**
  *
  * @author Caval
@@ -22,13 +24,17 @@ public class RotateBehaviour extends MoveBehaviour{
 
     @Override
     public void move(long now) {
-        double newDirection = Math.atan2(getTargetY() - getObject().getTranslateY(), getTargetX() - getObject().getTranslateX());
-        if (newDirection != getDirection()) {
-            setOldDirection(getDirection());
-            setDirection(newDirection);
+        if (getLastMoveTime() == 0) setLastMoveTime(MadBalls.getGameEnvironment().getLastUpdateTime());
+        if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
+            double[] realCoordinate = getObject().getRealCoordinate();
+            double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
+            if (newDirection != getDirection()) {
+                setOldDirection(getDirection());
+                setDirection(newDirection);
+                getObject().setRotate(getDirection());
+                setLastMoveTime(now);
+            }
         }
-        getObject().setRotate(getDirection());
-        setNeedUpdate(false);
     }
     
 }

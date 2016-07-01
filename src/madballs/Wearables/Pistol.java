@@ -5,6 +5,7 @@
  */
 package madballs.Wearables;
 
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import madballs.Ball;
 import madballs.Collision.DamageEffect;
@@ -20,7 +21,7 @@ import madballs.Collision.PushableBehaviour;
  */
 public class Pistol extends Weapon{
     private final double WIDTH = 20;
-    private final double HEIGHT = 10;
+    private final double HEIGHT = 5;
 
     public Pistol(Ball owner) {
         super(owner, 
@@ -38,13 +39,16 @@ public class Pistol extends Weapon{
         setProjectileSpeed(500);
         
         setProjectileHitBoxSize(3);
+        setProjectileColor(Paint.valueOf("red"));
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new DisappearBehaviour(null));
     }
 
     @Override
     public void setDisplayComponents() {
-        setHitBox(new Rectangle(WIDTH, HEIGHT));
+        setWidth(WIDTH);
+        setHeight(HEIGHT);
+        setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
     }
     
 }

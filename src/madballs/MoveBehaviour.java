@@ -5,8 +5,10 @@
  */
 package madballs;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.input.KeyCode;
@@ -19,10 +21,11 @@ public abstract class MoveBehaviour {
     private DoubleProperty velocityX = new SimpleDoubleProperty();
     private DoubleProperty velocityY = new SimpleDoubleProperty();
     private LongProperty lastMoveTime = new SimpleLongProperty(0);
-    private boolean needUpdate = true;
+    private BooleanProperty isMousePressed = new SimpleBooleanProperty(false);
     private double speed;
     private double direction = -1;
     private double oldDirection = -1;
+    private boolean isPaused = false;
     private double targetX = -1;
     private double targetY = -1;
     private double newX, newY;
@@ -32,7 +35,6 @@ public abstract class MoveBehaviour {
         new MultiplePressedKeysEventHandler(new MultiplePressedKeysEventHandler.MultiKeyEventHandler() {
             
             public void handle(MultiplePressedKeysEventHandler.MultiKeyEvent ke) {
-                needUpdate = true;
 //                try {
                     if (!((ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) && (ke.isPressed(KeyCode.RIGHT) || ke.isPressed(KeyCode.D)))) {
                         velocityX.set(0);
@@ -65,28 +67,25 @@ public abstract class MoveBehaviour {
 //                catch (IOException ex){
 //                    
 //                }
-                if (ke.isKeyFree()) needUpdate = false;
             }
         });
     
     final MouseKeyEventHandler mouseHandler = new MouseKeyEventHandler(new MouseKeyEventHandler.MouseEventHandler() {
         @Override
         public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
-            targetX = event.getMouseX();
-            targetY = event.getMouseY();  
-            double newDirection = Math.atan2(getTargetY() - getObject().getTranslateY(), getTargetX() - getObject().getTranslateX());
-            if (newDirection != getDirection()) {
-                setOldDirection(getDirection());
-                setDirection(newDirection);
-            }
-            getObject().setRotate(getDirection());
-            setNeedUpdate(false);
+                targetX = event.getMouseX();
+                targetY = event.getMouseY();
+                isMousePressed.set(event.isPressed());
             }
     });
     
     public MoveBehaviour(GameObject obj, double speed){
         this.obj = obj;
         this.speed = speed;
+    }
+
+    public boolean isMousePressed() {
+        return isMousePressed.get();
     }
     
     public GameObject getObject(){
@@ -125,14 +124,6 @@ public abstract class MoveBehaviour {
         this.velocityY.set(velocityY);
     }
 
-    public boolean needUpdate() {
-        return needUpdate;
-    }
-
-    public void setNeedUpdate(boolean isMoving) {
-        this.needUpdate = isMoving;
-    }
-
     public double getDirection() {
         return direction;
     }
@@ -157,6 +148,14 @@ public abstract class MoveBehaviour {
 
     public void setSpeed(double speed) {
         this.speed = speed;
+    }
+
+    public boolean isPaused() {
+        return isPaused;
+    }
+
+    public void setPaused(boolean isPaused) {
+        this.isPaused = isPaused;
     }
 
     public double getTargetX() {

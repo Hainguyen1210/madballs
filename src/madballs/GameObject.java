@@ -10,7 +10,7 @@ import madballs.Collision.CollisionPassiveBehaviour;
 import madballs.Collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.scene.Node;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Shape;
@@ -36,15 +36,14 @@ public abstract class GameObject {
     private MoveBehaviour moveBehaviour;
     private Environment environment;
     
-    public GameObject(Environment environment, double x, double y){
-        setDisplay();
+    public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
         translateX.set(x);
         translateY.set(y);
-        rotation = new Rotate();
-        display.getTransforms().add(rotation);
+        rotation = new Rotate(0);
         
         this.environment = environment;
-        environment.registerGameObj(this, true);
+        
+        if (isSettingDisplay) setDisplay();
     }
     
     /**
@@ -53,8 +52,7 @@ public abstract class GameObject {
      * @param x the varied X coordinate compared to the owner (child's X = owner's X + x)
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
-    public GameObject(GameObject owner, double x, double y){
-        setDisplay();
+    public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
         owner.child = this;
         this.owner = owner;
         
@@ -62,12 +60,10 @@ public abstract class GameObject {
         translateY.bind(Bindings.add(y, owner.translateY));
         
         rotation = new Rotate(0 , -x , -y);
-        display.getTransforms().add(rotation);
+        rotation.angleProperty().bind(owner.rotation.angleProperty());
         environment = owner.getEnvironment();
-        environment.registerGameObj(this, true);
         
-        
-        hitBox.setStyle("-fx-fill: red");
+        if (isSettingDisplay) setDisplay();
     }
 
     public Environment getEnvironment() {
@@ -80,6 +76,33 @@ public abstract class GameObject {
 
     public double getTranslateY() {
         return translateY.get();
+    }
+    
+    public double getOwnerTranslateX() {
+        if (owner != null) {
+            return owner.getOwnerTranslateX();
+        }
+        else {
+            return getTranslateX();
+        }
+    }
+
+    public double getOwnerTranslateY() {
+        if (owner != null) {
+            return owner.getOwnerTranslateY();
+        }
+        else {
+            return getTranslateY();
+        }
+    }
+    
+    public double[] getRealCoordinate(){
+        double rotateDirection = Math.toRadians(getRotateAngle());
+        double xFromPivot = -getRotate().getPivotX();
+        double yFromPivot = -getRotate().getPivotY();
+        double realX = getOwnerTranslateX() + yFromPivot * Math.cos(rotateDirection) - xFromPivot * Math.sin(rotateDirection);
+        double realY = getOwnerTranslateY() + yFromPivot * Math.sin(rotateDirection) + xFromPivot * Math.cos(rotateDirection);
+        return new double[] {realX, realY};
     }
 
     public double getOldX() {
@@ -112,10 +135,20 @@ public abstract class GameObject {
     
     public void setRotate(double direction){
         double angle = Math.toDegrees(direction);
-        rotation.setAngle(angle);
-        System.out.println(angle);
-        if (child != null) child.rotation.setAngle(angle);
-        if (owner != null) owner.rotation.setAngle(angle);
+        if (owner != null) {
+            owner.rotation.setAngle(angle);
+        }
+        else {
+            rotation.setAngle(angle);
+        }
+    }
+    
+    public double getRotateAngle(){
+        return rotation.getAngle();
+    }
+    
+    public Rotate getRotate(){
+        return rotation;
     }
     
     public CollisionEffect getCollisionEffect(){
@@ -138,8 +171,8 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(ImageView image) {
-        this.imageView = image;
+    public void setImage(Image image) {
+        this.imageView.setImage(image);
     }
 
     public void setHp(double hp) {
@@ -147,11 +180,21 @@ public abstract class GameObject {
     }
 
     public void setTranslateX(double newX) {
-        translateX.set(newX);
+        if (owner != null) {
+            owner.setTranslateX(newX);
+        }
+        else {
+            translateX.set(newX);
+        }
     }
 
     public void setTranslateY(double newY) {
-        translateY.set(newY);
+        if (owner != null) {
+            owner.setTranslateY(newY);
+        }
+        else {
+            translateY.set(newY);
+        }
     }
 
     public void setMoveBehaviour(MoveBehaviour moveBehaviour) {
@@ -240,6 +283,8 @@ public abstract class GameObject {
         display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
+        display.getTransforms().add(rotation);
+        environment.registerGameObj(this, true);
     }
     
     /**

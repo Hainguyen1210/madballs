@@ -40,11 +40,12 @@ public class Environment {
     private void update(long now){
         // create the arraylist storing the checked collidables
 //        ArrayList<GameObject> checked = new ArrayList<>();
-        
+        ArrayList<GameObject> copiedGameObjects = new ArrayList<>();
+        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         // loop through all the collidables in the environment
-        for (GameObject checking : gameObjects){
+        for (GameObject checking : copiedGameObjects){
 //            if (!checked.contains(checking)) {
-                for (GameObject target : gameObjects){
+                for (GameObject target : copiedGameObjects){
                     checking.update(now);
                     if (target != checking && !target.hasChild(checking) && !target.hasOwner(checking)){
 //                        System.out.println(checking instanceof Weapon);
@@ -69,6 +70,7 @@ public class Environment {
                 if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, i * 50, j * 50, 50, 50);
             }
         }
+//        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);
         
         
         animation.start();

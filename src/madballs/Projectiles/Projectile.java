@@ -6,10 +6,8 @@
 package madballs.Projectiles;
 
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
-import madballs.MoveBehaviour;
 import madballs.StraightMove;
 import madballs.Wearables.Weapon;
 
@@ -18,36 +16,45 @@ import madballs.Wearables.Weapon;
  * @author Caval
  */
 public class Projectile extends GameObject{
-    private MoveBehaviour moveBehaviour;
     private Weapon sourceWeapon;    
 
     public Projectile(Weapon sourceWeapon, Shape hitBox, Image image) {
-        super(sourceWeapon.getEnvironment(), sourceWeapon.getTranslateX(), sourceWeapon.getTranslateY());
+        super(sourceWeapon.getEnvironment(), 0, 0, false);
+//        super(sourceWeapon.getEnvironment(), 400, 400, false);
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
-        setImage(new ImageView(image));
+        setImage(image);
+        setDisplay();
+        
+        double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() * 2;
+        double rotateDirection = Math.toRadians(sourceWeapon.getRotateAngle());
+        double[] realCoordinate = sourceWeapon.getRealCoordinate();
+        double realX = realCoordinate[0];
+        double realY = realCoordinate[1];
+        setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
+        setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
         
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());
-        setCollisionPassiveBehaviour(sourceWeapon.getCollisionPassiveBehaviour());
+        setCollisionPassiveBehaviour(sourceWeapon.getProjectileCollisionBehaviour());
         
         setMoveBehaviour(new StraightMove(this, sourceWeapon.getProjectileSpeed()));
         if (sourceWeapon.getRange() != -1){
-            double angle = Math.toRadians(sourceWeapon.getDisplay().getRotate());
-            
-            moveBehaviour.setDirection(angle);
+            double angle = Math.toRadians(sourceWeapon.getRotateAngle());
+//            System.out.println(getMoveBehaviour() == null);
+            getMoveBehaviour().setDirection(angle);
         }
     }
 
     @Override
     public void update(long now) {
-        moveBehaviour.move(now);
-        if (getTranslateX() == moveBehaviour.getTargetX()){
-            getEnvironment().removeGameObj(this);
-        }
+        getMoveBehaviour().move(now);
+//        if (getTranslateX() == getMoveBehaviour().getTargetX()){
+//            getEnvironment().removeGameObj(this);
+//        }
     }
 
     @Override
     public void setDisplayComponents() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+//        getHitBox().setFill(Paint.valueOf("yellow"));
     }
 }

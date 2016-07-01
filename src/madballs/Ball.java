@@ -20,7 +20,7 @@ public class Ball extends GameObject{
     private Weapon weapon;
 
     public Ball(Environment environment, double a, double b) {
-        super(environment, a , b);
+        super(environment, a , b, true);
         setMoveBehaviour(new StraightMove(this, 200));
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
@@ -47,8 +47,5 @@ public class Ball extends GameObject{
     @Override
     public void update(long now) {
         getMoveBehaviour().move(now);
-        if (getMoveBehaviour().needUpdate() && weapon != null) {
-            if (weapon.getMoveBehaviour() != null) weapon.getMoveBehaviour().move(now);
-        }
     }
 }
