@@ -58,7 +58,7 @@ public class Environment {
         }
         List<GameObject> collidableObjects = new ArrayList();
 //        ArrayList<GameObject> checked = new ArrayList<>();
-        ArrayList<GameObject> uncollidedObjects = new ArrayList<>();
+//        ArrayList<GameObject> collidedObjects = new ArrayList<>();
         
 //        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
@@ -67,20 +67,37 @@ public class Environment {
                 for (GameObject target : collidableObjects){
                     if (target != checking
                             && !target.hasChild(checking) && !target.hasOwner(checking)){
-                        if (!checking.checkCollisionWith(target)) {
-                            uncollidedObjects.add(target);
-                            uncollidedObjects.add(checking);
-                        }
+                        checking.checkCollisionWith(target);
+//                        if (checking.checkCollisionWith(target)) {
+//                            collidedObjects.add(target);
+//                            collidedObjects.add(checking);
+//                            GameObject owner = target.getOwner();
+//                            while (owner != null){
+//                                collidedObjects.add(owner);
+//                                owner = owner.getOwner();
+//                            }
+//                            owner = checking.getOwner();
+//                            while (owner != null){
+//                                collidedObjects.add(owner);
+//                                owner = owner.getOwner();
+//                            }
+//                        }
                     }
                 }
 //                checked.add(checking);
         }
         
-        for (GameObject uncollided : uncollidedObjects){
-            uncollided.setOldDirection(Math.toRadians(uncollided.getRotateAngle()));
-            uncollided.setOwnerOldX(uncollided.getOwnerTranslateX());
-            uncollided.setOwnerOldY(uncollided.getOwnerTranslateY());
-        }
+//        for (GameObject obj : copiedGameObjects){
+//            if (collidedObjects.contains(obj)) return;
+////            obj.setOldDirection(Math.toRadians(obj.getRotateAngle()));
+////            if (obj instanceof Ball) {
+////                System.out.println("");
+////                System.out.println(obj.getLastStableX());
+////                System.out.println(obj.getOldX());
+////            }
+//            obj.setLastStableX(obj.getTranslateX());
+//            obj.setLastStableY(obj.getTranslateY());
+//        }
     }
     
     public Environment(Pane display, Map map){

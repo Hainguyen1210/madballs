@@ -31,11 +31,11 @@ public class Obstacle extends GameObject{
 
     @Override
     public void setDisplayComponents() {
-        Rectangle rect = new Rectangle(49, 49, Paint.valueOf("green"));
+//        Rectangle rect = new Rectangle(49, 49, Paint.valueOf("green"));
 //        rect.setArcHeight(15);
 //        rect.setArcWidth(15);
-        setHitBox(rect);
-//        setHitBox(new Circle(25, Paint.valueOf("green")));
+//        setHitBox(rect);
+        setHitBox(new Circle(25, Paint.valueOf("green")));
     }
 
     @Override

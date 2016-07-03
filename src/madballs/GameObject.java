@@ -43,7 +43,10 @@ public abstract class GameObject {
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
         translateX.set(x);
         translateY.set(y);
+        oldX = x;
+        oldY = y;
         rotation = new Rotate(0);
+        oldDirection = 0;
         
         this.environment = environment;
         
@@ -108,7 +111,29 @@ public abstract class GameObject {
         double realY = getOwnerTranslateY() + yFromPivot * Math.sin(rotateDirection) + xFromPivot * Math.cos(rotateDirection);
         return new double[] {realX, realY};
     }
+    
+    public double getOldY() {
+        return oldY;
+    }
 
+    public void setOldY(double oldY) {
+        this.oldY = oldY;
+    }
+    
+    public void setOwnerOldY(double oldY) {
+        if (owner != null){
+            owner.setOwnerOldY(oldY);
+        }
+        setOldY(oldY);
+    }
+    
+    public double getOwnerOldY(){
+        if (owner != null){
+            return owner.getOwnerOldY();
+        }
+        return oldY;
+    }
+    
     public double getOldX() {
         return oldX;
     }
@@ -124,33 +149,11 @@ public abstract class GameObject {
         setOldX(oldX);
     }
     
-    public void setOwnerOldY(double oldY) {
-        if (owner != null){
-            owner.setOwnerOldY(oldY);
-        }
-        setOldY(oldY);
-    }
-
-    public double getOldY() {
-        return oldY;
-    }
-
-    public void setOldY(double oldY) {
-        this.oldY = oldY;
-    }
-    
     public double getOwnerOldX(){
         if (owner != null){
             return owner.getOwnerOldX();
         }
         return oldX;
-    }
-    
-    public double getOwnerOldY(){
-        if (owner != null){
-            return owner.getOwnerOldY();
-        }
-        return oldY;
     }
     
     public Shape getHitBox(){

@@ -21,7 +21,7 @@ public class Ball extends GameObject{
 
     public Ball(Environment environment, double a, double b) {
         super(environment, a , b, true);
-        setMoveBehaviour(new StraightMove(this, 200));
+        setMoveBehaviour(new StraightMove(this, 150));
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
         

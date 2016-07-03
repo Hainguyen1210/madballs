@@ -28,17 +28,17 @@ public class StraightMove extends MoveBehaviour{
         final double oldX = getObject().getTranslateX();
         final double deltaX = elapsedSeconds * getVelocityX();
         final double newX = oldX + deltaX;
-//        if (getObject().getTranslateX() != newX) {
-//            getObject().setOldX(oldX - 0.75 * Math.signum(deltaX));
-//        }
+        if (getObject().getTranslateX() != newX) {
+            getObject().setOldX(oldX - 0.1 * Math.signum(deltaX));
+        }
         setNewX(newX);
         
         final double oldY = getObject().getTranslateY();
         final double deltaY = elapsedSeconds * getVelocityY();
         final double newY = oldY + deltaY;
-//        if (getObject().getTranslateY() != newY) {
-//            getObject().setOldY(oldY - 0.75 * Math.signum(deltaY));
-//        }
+        if (getObject().getTranslateY() != newY) {
+            getObject().setOldY(oldY - 0.1 * Math.signum(deltaY));
+        }
         setNewY(newY);
         
         setMovedDistance(getMovedDistance() + getSpeed() * elapsedSeconds);

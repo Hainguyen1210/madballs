@@ -24,7 +24,6 @@ public abstract class MoveBehaviour {
     private BooleanProperty isMousePressed = new SimpleBooleanProperty(false);
     private double speed;
     private double direction = -1;
-    private double oldDirection = -1;
     private boolean isPaused = false;
     private double targetX = -1;
     private double targetY = -1;
@@ -133,14 +132,6 @@ public abstract class MoveBehaviour {
         this.direction = direction;
         setVelocityX(Math.cos(direction) * speed);
         setVelocityY(Math.sin(direction) * speed);
-    }
-
-    public double getOldDirection() {
-        return oldDirection;
-    }
-
-    public void setOldDirection(double oldDirection) {
-        this.oldDirection = oldDirection;
     }
 
     public double getSpeed() {

@@ -5,10 +5,8 @@
  */
 package madballs;
 
-import madballs.Wearables.Weapon;
-
 /**
- *
+ * do not use the variable direction of MoveBehaviour class, use the obj's Rotate angle instead
  * @author Caval
  */
 public class RotateBehaviour extends MoveBehaviour{
@@ -28,10 +26,13 @@ public class RotateBehaviour extends MoveBehaviour{
         if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
             double[] realCoordinate = getObject().getRealCoordinate();
             double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
-            if (newDirection != getDirection()) {
-//                setOldDirection(getDirection());
-                setDirection(newDirection);
-                getObject().setRotate(getDirection());
+            double currentRotateDirection = Math.toRadians(getObject().getRotateAngle());
+            if (newDirection != currentRotateDirection) {
+//                System.out.println("");
+//                System.out.println(getDirection());
+//                System.out.println(newDirection);
+                getObject().setOldDirection(currentRotateDirection);
+                getObject().setRotate(newDirection);
                 setLastMoveTime(now);
             }
         }
