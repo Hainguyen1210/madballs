@@ -18,16 +18,25 @@ import madballs.Wearables.Weapon;
  */
 public class Ball extends GameObject{
     private Weapon weapon;
+    private int speed = 200;
+
 
     public Ball(Environment environment, double a, double b) {
         super(environment, a , b, true);
-        setMoveBehaviour(new StraightMove(this, 150));
+        setMoveBehaviour(new StraightMove(this, speed));
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
         
         weapon = new Pistol(this);
     }
 
+    public void setSpeed(int speed) {
+      this.speed = speed;
+    }
+
+    public int getSpeed() {
+      return speed;
+    }
     public Weapon getWeapon() {
         return weapon;
     }

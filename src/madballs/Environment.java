@@ -62,6 +62,7 @@ public class Environment {
         
 //        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
+          if (checking instanceof Obstacle) continue;
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking.getBoundsRectangle());
                 for (GameObject target : collidableObjects){
