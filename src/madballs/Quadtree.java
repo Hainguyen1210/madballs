@@ -7,7 +7,7 @@ package madballs;
 
 import java.util.ArrayList;
 import java.util.List;
-import javafx.scene.paint.Paint;
+import javafx.geometry.Bounds;
 import javafx.scene.shape.Rectangle;
 
 /**
@@ -69,18 +69,19 @@ public class Quadtree {
     * object cannot completely fit within a child node and is part
     * of the parent node
     */
-    private int getIndex(Rectangle pRect) {
+    private int getIndex(GameObject obj) {
+        Bounds objBounds = obj.getDisplay().getBoundsInParent();
         int index = -1;
         double verticalMidpoint = bounds.getX() + (bounds.getWidth() / 2);
         double horizontalMidpoint = bounds.getY() + (bounds.getHeight() / 2);
 
         // Object can completely fit within the top quadrants
-        boolean topQuadrant = (pRect.getY() < horizontalMidpoint && pRect.getY() + pRect.getHeight() < horizontalMidpoint);
+        boolean topQuadrant = (objBounds.getMinY() < horizontalMidpoint && objBounds.getMaxY() < horizontalMidpoint);
         // Object can completely fit within the bottom quadrants
-        boolean bottomQuadrant = (pRect.getY() > horizontalMidpoint);
+        boolean bottomQuadrant = (objBounds.getMinY() > horizontalMidpoint);
 
         // Object can completely fit within the left quadrants
-        if (pRect.getX() < verticalMidpoint && pRect.getX() + pRect.getWidth() < verticalMidpoint) {
+        if (objBounds.getMinX() < verticalMidpoint && objBounds.getMaxX() < verticalMidpoint) {
             if (topQuadrant) {
               index = 1;
             }
@@ -89,7 +90,7 @@ public class Quadtree {
             }
         }
         // Object can completely fit within the right quadrants
-        else if (pRect.getX() > verticalMidpoint) {
+        else if (objBounds.getMinX() > verticalMidpoint) {
             if (topQuadrant) {
               index = 0;
             }
@@ -107,9 +108,8 @@ public class Quadtree {
     * objects to their corresponding nodes.
     */
     public void insert(GameObject obj) {
-      Rectangle pRect = obj.getBoundsRectangle();
       if (nodes[0] != null) {
-        int index = getIndex(pRect);
+        int index = getIndex(obj);
 
         if (index != -1) {
           nodes[index].insert(obj);
@@ -127,7 +127,7 @@ public class Quadtree {
 
         int i = 0;
         while (i < objects.size()) {
-          int index = getIndex(objects.get(i).getBoundsRectangle());
+          int index = getIndex(objects.get(i));
           if (index != -1) {
             nodes[index].insert(objects.remove(i));
           }
@@ -141,14 +141,19 @@ public class Quadtree {
     /*
     * Return all objects that could collide with the given object
     */
-    public List<GameObject> retrieve(List<GameObject> returnObjects, Rectangle pRect) {
-      int index = getIndex(pRect);
+    public List<GameObject> retrieve(List<GameObject> returnObjects, GameObject obj) {
+      int index = getIndex(obj);
       if (index != -1 && nodes[0] != null) {
-        nodes[index].retrieve(returnObjects, pRect);
+        nodes[index].retrieve(returnObjects, obj);
       }
-
+      else if (index == -1 && nodes[0] != null){
+        for (int i = 0; i < 4; i++){
+            nodes[i].retrieve(returnObjects, obj);
+        }  
+      }
       returnObjects.addAll(objects);
-
+      
+//      System.out.println("x: " + bounds.getX() + "; y: " + bounds.getY() + "; w: " + bounds.getWidth() + "; h: " + bounds.getHeight());
       return returnObjects;
     }
 }

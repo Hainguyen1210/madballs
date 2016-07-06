@@ -27,7 +27,7 @@ public class Projectile extends GameObject{
         setDisplay();
         
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
-        double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() * 2;
+        double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() / 2 + 5;
         double rotateDirection = Math.toRadians(sourceWeapon.getRotateAngle());
         double[] realCoordinate = sourceWeapon.getRealCoordinate();
         double realX = realCoordinate[0];

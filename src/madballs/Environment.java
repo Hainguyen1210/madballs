@@ -53,7 +53,7 @@ public class Environment {
         
         for (GameObject obj : copiedGameObjects){
             obj.update(now);
-            obj.updateBoundsRectangle();
+//            obj.updateBoundsRectangle();
             quadtree.insert(obj);
         }
         List<GameObject> collidableObjects = new ArrayList();
@@ -62,12 +62,14 @@ public class Environment {
         
 //        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
+            if (checking instanceof Obstacle) continue;
             collidableObjects.clear();
-            quadtree.retrieve(collidableObjects, checking.getBoundsRectangle());
-                for (GameObject target : collidableObjects){
-                    if (target != checking
-                            && !target.hasChild(checking) && !target.hasOwner(checking)){
-                        checking.checkCollisionWith(target);
+            quadtree.retrieve(collidableObjects, checking);
+            for (GameObject target : collidableObjects){
+//                if (checking instanceof Ball)System.out.println(target.getClass() + " x: " + target.getDisplay().getBoundsInParent().getMinX() + "; y: " + target.getDisplay().getBoundsInParent().getMinY());
+                if (target != checking
+                        && !target.hasChild(checking) && !target.hasOwner(checking)){
+                    checking.checkCollisionWith(target);
 //                        if (checking.checkCollisionWith(target)) {
 //                            collidedObjects.add(target);
 //                            collidedObjects.add(checking);
@@ -82,8 +84,8 @@ public class Environment {
 //                                owner = owner.getOwner();
 //                            }
 //                        }
-                    }
                 }
+            }
 //                checked.add(checking);
         }
         
@@ -103,14 +105,14 @@ public class Environment {
     public Environment(Pane display, Map map){
         this.root = display;
         this.map = map;
-        quadtree = new Quadtree(0, new Rectangle(0, 0, MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y));
+        quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
         ground = new Ground(this, 0, 0);
         
         
         for (int i = 15; i >= 0; i --){
             for (int j = 0; j < 9; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, i * 50, j * 50, 50, 50);
+                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, i * 50 + 25, j * 50 + 25, 50, 50);
             }
         }
 //        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);
