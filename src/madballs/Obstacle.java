@@ -35,7 +35,7 @@ public class Obstacle extends GameObject{
 //        rect.setArcHeight(15);
 //        rect.setArcWidth(15);
 //        setHitBox(rect);
-        setHitBox(new Circle(25, Paint.valueOf("green")));
+        setHitBox(new Rectangle(length, height, Paint.valueOf("green")));
     }
 
     @Override

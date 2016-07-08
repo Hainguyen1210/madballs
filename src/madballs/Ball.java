@@ -50,7 +50,7 @@ public class Ball extends GameObject{
      */
     @Override
     public void setDisplayComponents(){
-        setHitBox(new Circle(20));
+        setHitBox(new Circle(15));
     }
 
     @Override

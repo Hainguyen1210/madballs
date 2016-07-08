@@ -30,18 +30,8 @@ public class MadBalls extends Application {
         
         
         Pane root = new Pane();
-        int[][] mapArray = new int[16][9];
-        for (int i = 0; i < 14; i++){
-            mapArray[i][0] = 1;
-            mapArray[i][8] = 1;
-        }
-        for (int i = 1; i < 8; i++){
-            mapArray[0][i] = 1;
-            mapArray[15][i] = 1;
-        }
         
-        
-        Map map = new Map(RESOLUTION_X, RESOLUTION_Y, mapArray);
+        Map map = new Map(RESOLUTION_X, RESOLUTION_Y);
         
         gameEnvironment = new Environment(root, map);
         
@@ -50,7 +40,7 @@ public class MadBalls extends Application {
         
         Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         
-        Ball ball = new Ball(gameEnvironment, 200, 200);
+        Ball ball = new Ball(gameEnvironment, 80, 80);
         
         
         scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);

@@ -101,6 +101,7 @@ public class Environment {
 //        }
     }
     
+
     public Environment(Pane display, Map map){
         this.root = display;
         this.map = map;
@@ -108,10 +109,10 @@ public class Environment {
         gameObjects = new ArrayList<>();
         ground = new Ground(this, 0, 0);
         
-        
-        for (int i = 15; i >= 0; i --){
-            for (int j = 0; j < 9; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, i * 50, j * 50, 50, 50);
+        //add the obstacles 
+        for (int i = 0; i < 30; i++){
+            for (int j = 0; j < 30; j++){
+                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, j * 1000/29, i * 1000/29, 30, 30); 
             }
         }
 //        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);
