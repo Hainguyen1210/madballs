@@ -12,6 +12,7 @@ import madballs.Collision.DamageEffect;
 import madballs.Collision.DisappearBehaviour;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.PushableBehaviour;
+import madballs.Collision.WeaponIgnoredBehaviour;
 
 /**
  *
@@ -33,13 +34,13 @@ public class Pistol extends Weapon{
         setDamage(5);
         setAmmo(-1);
         setFireRate(5);
-        setRange(500);
+        setRange(300);
         setProjectileSpeed(150);
         setProjectileHitBoxSize(30);
         setProjectileColor(Paint.valueOf("red"));
         
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-        setProjectileCollisionBehaviour(new DisappearBehaviour(null));
+        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     @Override
