@@ -8,20 +8,25 @@ package madballs.Collision;
 import javafx.scene.shape.Shape;
 import madballs.Ball;
 import madballs.GameObject;
+import madballs.Item.Item;
+import madballs.Item.Spawner;
+import madballs.Obstacle;
 
 /**
  *
- * @author chim-
+ * @author haing
  */
-public class BallOnlyBehaviour extends StackedCollisionPassiveBehaviour{
-    
-    public BallOnlyBehaviour(CollisionPassiveBehaviour behaviour) {
-        super(behaviour);
-    }
-    @Override
+public class MakeUpItem extends StackedCollisionPassiveBehaviour{
+  
+  public MakeUpItem(CollisionPassiveBehaviour behaviour) {
+    super(behaviour);
+  }
+  
+  @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (source instanceof  Ball) {
-            super.getAffected(source, target, effect, collisionShape);
+        if (source instanceof Obstacle) {
+          Spawner spawner = new Spawner(source.getEnvironment());
+          spawner.randomSpawn();
         }
     }
 }

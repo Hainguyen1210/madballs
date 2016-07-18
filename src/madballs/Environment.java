@@ -12,6 +12,9 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
+import madballs.Item.Item;
+import madballs.Item.Spawner;
+import madballs.Item.SpeedBoost;
 import madballs.Map.Map;
 
 /**
@@ -21,11 +24,13 @@ import madballs.Map.Map;
 public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
+    private LongProperty lastItemSpawnTime = new SimpleLongProperty(0);
+    private Spawner spawner;
     private Pane root;
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
-
+    
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
     }
@@ -46,6 +51,12 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
+      //spawn items
+      if((now - lastItemSpawnTime.get()) / 1000000000.0 > 3){
+        lastItemSpawnTime.set(now);
+        spawner.randomSpawn();
+      }
+      
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         
@@ -67,8 +78,8 @@ public class Environment {
             quadtree.retrieve(collidableObjects, checking);
             for (GameObject target : collidableObjects){
 //                if (checking instanceof Ball)System.out.println(target.getClass() + " x: " + target.getDisplay().getBoundsInParent().getMinX() + "; y: " + target.getDisplay().getBoundsInParent().getMinY());
-                if (target != checking
-                        && !target.hasChild(checking) && !target.hasOwner(checking)){
+//  if(checking instanceof Item){System.out.println("CHECKING ITEM");}
+                if (target != checking && !target.hasChild(checking) && !target.hasOwner(checking)){
                     checking.checkCollisionWith(target);
 //                        if (checking.checkCollisionWith(target)) {
 //                            collidedObjects.add(target);
@@ -101,9 +112,14 @@ public class Environment {
 //            obj.setLastStableY(obj.getTranslateY());
 //        }
     }
+
+  public Map getMap() {
+    return map;
+  }
     
 
     public Environment(Pane display, Map map){
+      this.spawner = new Spawner(this);
         this.root = display;
         this.map = map;
         quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
@@ -113,7 +129,9 @@ public class Environment {
         //add the obstacles 
         for (int i = 0; i < 30; i++){
             for (int j = 0; j < 30; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, j * 35, i * 35, 30, 30); 
+                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, 
+                        j * map.getLENGTH()/30, i * map.getHEIGHT()/20,
+                        30, 30); 
             }
         }
 //        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);

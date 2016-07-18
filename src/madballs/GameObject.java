@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import madballs.Item.Item;
 
 /**
  *
@@ -309,6 +310,7 @@ public abstract class GameObject {
         if (collisionShape.getBoundsInLocal().getWidth() != -1){
 //            System.out.println("collide");
             // let the collision effects affect the two collided objects
+            if(this instanceof Item && target instanceof Obstacle){  System.out.println(" Item checked Obstacle");  }
             onCollision(target, collisionShape);
             target.onCollision(this, collisionShape);
             return true;
