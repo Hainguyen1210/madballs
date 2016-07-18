@@ -13,18 +13,15 @@ import madballs.Wearables.Weapon;
  *
  * @author Caval
  */
-public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{
-
-    public DisappearBehaviour(CollisionPassiveBehaviour behaviour) {
+public class WeaponIgnoredBehaviour extends StackedCollisionPassiveBehaviour{
+    
+    public WeaponIgnoredBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
-
+    
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-//        System.out.println(source.getClass);
-        if (effect.hasCollisionEffect(PushBackEffect.class)) {
-            target.getEnvironment().removeGameObj(target);
-        }
+        if (source instanceof  Weapon) return;
         super.getAffected(source, target, effect, collisionShape);
     }
     

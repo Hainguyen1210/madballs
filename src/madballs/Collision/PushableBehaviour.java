@@ -41,9 +41,9 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
                 Shape intersect = collisionShape;
                 double intersectWidth = intersect.getBoundsInLocal().getWidth();
                 double intersectHeight = intersect.getBoundsInLocal().getHeight();
-                System.out.println("");
-                System.out.println(intersectWidth);
-                System.out.println(intersectHeight);
+//                System.out.println("");
+//                System.out.println(intersectWidth);
+//                System.out.println(intersectHeight);
                 double currentDirection = Math.toRadians(target.getRotateAngle());
                 double oldX = target.getOwnerOldX();
                 double oldY = target.getOwnerOldY();

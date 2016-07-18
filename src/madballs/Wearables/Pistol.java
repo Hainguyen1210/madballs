@@ -10,10 +10,9 @@ import javafx.scene.shape.Rectangle;
 import madballs.Ball;
 import madballs.Collision.DamageEffect;
 import madballs.Collision.DisappearBehaviour;
-import madballs.Collision.InvulnerableBehaviour;
-import madballs.Collision.NullEffect;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.PushableBehaviour;
+import madballs.Collision.WeaponIgnoredBehaviour;
 
 /**
  *
@@ -34,14 +33,14 @@ public class Pistol extends Weapon{
         
         setDamage(5);
         setAmmo(-1);
-        setFireRate(50);
-        setRange(500);
-        setProjectileSpeed(500);
-        
-        setProjectileHitBoxSize(3);
+        setFireRate(5);
+        setRange(300);
+        setProjectileSpeed(150);
+        setProjectileHitBoxSize(30);
         setProjectileColor(Paint.valueOf("red"));
+        
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-        setProjectileCollisionBehaviour(new DisappearBehaviour(null));
+        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     @Override

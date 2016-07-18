@@ -46,14 +46,14 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        ArrayList<GameObject> copiedGameObjects = new ArrayList<>();
-        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
+        ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
+//        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         
         quadtree.clear();
         
         for (GameObject obj : copiedGameObjects){
             obj.update(now);
-            obj.updateBoundsRectangle();
+//            obj.updateBoundsRectangle();
             quadtree.insert(obj);
         }
         List<GameObject> collidableObjects = new ArrayList();
@@ -62,13 +62,14 @@ public class Environment {
         
 //        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
-          if (checking instanceof Obstacle) continue;
+            if (checking instanceof Obstacle) continue;
             collidableObjects.clear();
-            quadtree.retrieve(collidableObjects, checking.getBoundsRectangle());
-                for (GameObject target : collidableObjects){
-                    if (target != checking
-                            && !target.hasChild(checking) && !target.hasOwner(checking)){
-                        checking.checkCollisionWith(target);
+            quadtree.retrieve(collidableObjects, checking);
+            for (GameObject target : collidableObjects){
+//                if (checking instanceof Ball)System.out.println(target.getClass() + " x: " + target.getDisplay().getBoundsInParent().getMinX() + "; y: " + target.getDisplay().getBoundsInParent().getMinY());
+                if (target != checking
+                        && !target.hasChild(checking) && !target.hasOwner(checking)){
+                    checking.checkCollisionWith(target);
 //                        if (checking.checkCollisionWith(target)) {
 //                            collidedObjects.add(target);
 //                            collidedObjects.add(checking);
@@ -83,8 +84,8 @@ public class Environment {
 //                                owner = owner.getOwner();
 //                            }
 //                        }
-                    }
                 }
+            }
 //                checked.add(checking);
         }
         
@@ -105,14 +106,14 @@ public class Environment {
     public Environment(Pane display, Map map){
         this.root = display;
         this.map = map;
-        quadtree = new Quadtree(0, new Rectangle(0, 0, MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y));
+        quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
         ground = new Ground(this, 0, 0);
         
         //add the obstacles 
         for (int i = 0; i < 30; i++){
             for (int j = 0; j < 30; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, j * 1000/29, i * 1000/29, 30, 30); 
+                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, j * 35, i * 35, 30, 30); 
             }
         }
 //        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);
