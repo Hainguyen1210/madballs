@@ -46,8 +46,8 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        ArrayList<GameObject> copiedGameObjects = new ArrayList<>();
-        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
+        ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
+//        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         
         quadtree.clear();
         
