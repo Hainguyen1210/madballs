@@ -24,7 +24,6 @@ import madballs.Map.Map;
 public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
-    private LongProperty lastItemSpawnTime = new SimpleLongProperty(0);
     private Spawner spawner;
     private Pane root;
     private Map map;
@@ -55,10 +54,8 @@ public class Environment {
      */
     private void update(long now){
       //spawn items
-      if((now - lastItemSpawnTime.get()) / 1000000000.0 > 3){
-        lastItemSpawnTime.set(now);
-        spawner.randomSpawn();
-      }
+      spawner.spawn(now);
+      
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));

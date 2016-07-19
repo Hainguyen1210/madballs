@@ -26,15 +26,18 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
   }
-  public void randomSpawn(long now){
+  
+  public void spawn(long now){
     if((now - lastItemSpawnTime.get()) / 1000000000.0 > 3){
       lastItemSpawnTime.set(now);
-      
+      randomSpawn();
+    }
+  }
+  public void randomSpawn(){
       Map map = environment.getMap();
       int X = random.nextInt((int) map.getLENGTH());
       int Y = random.nextInt((int) map.getHEIGHT());
       Item item = new SpeedBoost(environment, X, Y, false);
       System.out.println(X + " " + Y);
-    }
   }
 }
