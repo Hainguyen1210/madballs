@@ -31,10 +31,13 @@ public class Environment {
     private Ground ground;
     private Quadtree quadtree;
     
+    public Spawner getSpawner() {
+      return spawner;
+    }
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
     }
-
+    
     public Ground getGround() {
         return ground;
     }

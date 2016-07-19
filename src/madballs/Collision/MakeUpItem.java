@@ -6,7 +6,6 @@
 package madballs.Collision;
 
 import javafx.scene.shape.Shape;
-import madballs.Ball;
 import madballs.GameObject;
 import madballs.Item.Item;
 import madballs.Item.Spawner;
@@ -24,9 +23,17 @@ public class MakeUpItem extends StackedCollisionPassiveBehaviour{
   
   @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (source instanceof Obstacle) {
-          Spawner spawner = new Spawner(source.getEnvironment());
-          spawner.randomSpawn();
+      Item item = null;
+        if (source instanceof Obstacle){
+          if(target instanceof Item){
+            item = (Item) target;
+            if(item.isSpawned == false){
+              Spawner spawner = source.getEnvironment().getSpawner();
+              spawner.randomSpawn();
+              item.isSpawned = true;
+            }
+            
+          }
         }
     }
 }

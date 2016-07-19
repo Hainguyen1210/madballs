@@ -26,6 +26,7 @@ public abstract class Item extends GameObject{
   private ImageView image;
   private int size;
   private Paint color;
+  public boolean isSpawned = false;
 
   public ImageView getImage() {
     return image;
