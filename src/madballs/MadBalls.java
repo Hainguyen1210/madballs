@@ -50,7 +50,7 @@ public class MadBalls extends Application {
         scene.setOnMouseMoved(ball.getWeapon().getMoveBehaviour().mouseHandler);
         scene.setOnMouseDragged(ball.getWeapon().getMoveBehaviour().mouseHandler);
         
-        primaryStage.setTitle("Hello World!");
+        primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(scene);
         primaryStage.show();
     }

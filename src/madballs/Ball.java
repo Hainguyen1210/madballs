@@ -11,6 +11,7 @@ import javafx.scene.shape.Circle;
 import madballs.Collision.PushableBehaviour;
 import madballs.Wearables.Pistol;
 import madballs.Wearables.Weapon;
+import madballs.Wearables.Awp;
 
 /**
  *
@@ -27,7 +28,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
         
-        weapon = new Pistol(this);
+        weapon = new Awp(this);
     }
 
     public void setSpeed(int speed) {
