@@ -98,8 +98,8 @@ public class TestMove extends Application {
                 while (!((destY >= 0 && destY < 100) || (destY >= 380 && destX < 480))){
                     destY = rand.nextInt(450);
                 }
-                System.out.println("destX: " + destX);
-                System.out.println("destY: " + destY);
+//                System.out.println("destX: " + destX);
+//                System.out.println("destY: " + destY);
                 Shape obstacle = new Rectangle(20, 20);
                 obstacle.setFill(Paint.valueOf("green"));
                 obstacle.setTranslateX(destX);

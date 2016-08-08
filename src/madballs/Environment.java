@@ -54,7 +54,7 @@ public class Environment {
       //spawn items
       if((now - lastItemSpawnTime.get()) / 1000000000.0 > 3){
         lastItemSpawnTime.set(now);
-        spawner.randomSpawn();
+//        spawner.randomSpawn();
       }
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
@@ -68,7 +68,7 @@ public class Environment {
             quadtree.insert(obj);
         }
         List<GameObject> collidableObjects = new ArrayList();
-//        ArrayList<GameObject> checked = new ArrayList<>();
+        ArrayList<GameObject> checked = new ArrayList<>();
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
         
 //        boolean isUncollided = false;
@@ -79,7 +79,7 @@ public class Environment {
             for (GameObject target : collidableObjects){
 //                if (checking instanceof Ball)System.out.println(target.getClass() + " x: " + target.getDisplay().getBoundsInParent().getMinX() + "; y: " + target.getDisplay().getBoundsInParent().getMinY());
 //  if(checking instanceof Item){System.out.println("CHECKING ITEM");}
-                if (target != checking && !target.hasChild(checking) && !target.hasOwner(checking)){
+                if (target != checking && !checked.contains(target) && !target.hasChild(checking) && !target.hasOwner(checking)){
                     checking.checkCollisionWith(target);
 //                        if (checking.checkCollisionWith(target)) {
 //                            collidedObjects.add(target);
@@ -97,7 +97,7 @@ public class Environment {
 //                        }
                 }
             }
-//                checked.add(checking);
+                checked.add(checking);
         }
         
 //        for (GameObject obj : copiedGameObjects){

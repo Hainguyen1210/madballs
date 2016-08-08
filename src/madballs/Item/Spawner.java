@@ -26,6 +26,6 @@ public class Spawner {
     int X = random.nextInt((int) map.getLENGTH());
     int Y = random.nextInt((int) map.getHEIGHT());
     Item item = new SpeedBoost(environment, X, Y, false);
-    System.out.println(X + " " + Y);
+//    System.out.println(X + " " + Y);
   }
 }

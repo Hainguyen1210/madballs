@@ -31,12 +31,12 @@ public class Pistol extends Weapon{
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
         
-        setDamage(5);
+        setDamage(100);
         setAmmo(-1);
         setFireRate(5);
-        setRange(300);
-        setProjectileSpeed(150);
-        setProjectileHitBoxSize(30);
+        setRange(1000);
+        setProjectileSpeed(800);
+        setProjectileHitBoxSize(1);
         setProjectileColor(Paint.valueOf("red"));
         
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

@@ -41,6 +41,7 @@ public class MadBalls extends Application {
         Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         
         Ball ball = new Ball(gameEnvironment, 80, 80);
+        Ball enemyBall = new Ball(gameEnvironment, 150, 80);
         
         
         scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);

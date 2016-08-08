@@ -15,6 +15,7 @@ import madballs.Collision.DisappearBehaviour;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.PushableBehaviour;
 import madballs.Collision.MakeUpItem;
+import madballs.Collision.NullEffect;
 import madballs.Environment;
 import madballs.GameObject;
 
@@ -50,7 +51,7 @@ public abstract class Item extends GameObject{
   public Item(Environment environment, double x, double y, boolean isSettingDisplay) {
       super(environment, x, y, isSettingDisplay);
       setDisplay();
-      setCollisionEffect(new PushBackEffect(null, 50));
+      setCollisionEffect(new NullEffect(null));
       setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new MakeUpItem(null))));
   }
 

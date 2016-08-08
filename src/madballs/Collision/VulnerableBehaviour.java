@@ -20,7 +20,13 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        target.setHp(target.getHp() - effect.getDamage());
+        if (effect.hasCollisionEffect(DamageEffect.class)){
+            target.setHpValue(target.getHpValue() - effect.getDamage());
+            System.out.println(target.getHpValue());
+            if (target.getHpValue() <= 0){
+                target.die();
+            }
+        }
         super.getAffected(source, target, effect, collisionShape);
     }
     

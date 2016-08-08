@@ -213,7 +213,7 @@ public abstract class GameObject {
         return moveBehaviour;
     }
 
-    public double getHp() {
+    public double getHpValue() {
         return hp.get();
     }
 
@@ -224,8 +224,12 @@ public abstract class GameObject {
     public void setImage(Image image) {
         this.imageView.setImage(image);
     }
+    
+    public DoubleProperty getHp(){
+        return hp;
+    }
 
-    public void setHp(double hp) {
+    public void setHpValue(double hp) {
         this.hp.set(hp);
     }
 
@@ -310,7 +314,7 @@ public abstract class GameObject {
         if (collisionShape.getBoundsInLocal().getWidth() != -1){
 //            System.out.println("collide");
             // let the collision effects affect the two collided objects
-            if(this instanceof Item && target instanceof Obstacle){  System.out.println(" Item checked Obstacle");  }
+//            if(this instanceof Item && target instanceof Obstacle){  System.out.println(" Item checked Obstacle");  }
             onCollision(target, collisionShape);
             target.onCollision(this, collisionShape);
             return true;
@@ -355,6 +359,16 @@ public abstract class GameObject {
     
     public Rectangle getBoundsRectangle(){
         return boundsRectangle;
+    }
+    
+    public void die(){
+        getEnvironment().removeGameObj(this);
+        if (child != null) {
+            child.die();
+        }
+        if (owner != null) {
+            owner.child = null;
+        }
     }
     
     /**

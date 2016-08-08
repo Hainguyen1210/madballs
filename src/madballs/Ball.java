@@ -5,6 +5,11 @@
  */
 package madballs;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
+import javafx.scene.control.Label;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.VulnerableBehaviour;
 import javafx.scene.shape.Circle;
@@ -41,8 +46,13 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public void setWeapon(Weapon weapon) {
-        this.weapon = weapon;
+    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
+        try {
+            
+            this.weapon = weaponClass.getDeclaredConstructor(getClass()).newInstance(this);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**
