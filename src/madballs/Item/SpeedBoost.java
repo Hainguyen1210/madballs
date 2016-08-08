@@ -7,6 +7,7 @@ package madballs.Item;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import madballs.Collision.NullEffect;
 import madballs.Environment;
 
 /**
@@ -16,7 +17,7 @@ import madballs.Environment;
 public class SpeedBoost extends Item{
   public SpeedBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
     super(environment, x, y, isSettingDisplay);
-    
+    setCollisionEffect(new NullEffect(null));
   }
 
   @Override

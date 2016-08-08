@@ -8,6 +8,7 @@ package madballs.Collision;
 import javafx.scene.shape.Shape;
 import madballs.Ball;
 import madballs.GameObject;
+import madballs.Wearables.Weapon;
 
 /**
  *
@@ -23,8 +24,11 @@ public class GetWeaponEffect extends StackedCollisionPassiveBehaviour{
   @Override
   public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
 //        System.out.println(source.getClass);
+        System.out.println("111111111");
       if (effect.hasCollisionEffect(GiveWeaponEffect.class)) {
-          ((Ball)target).setWeapon(((GiveWeaponEffect)effect).getWeaponClass());
+        Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
+        if(weapon != null) ((Ball)target).setWeapon(weapon);
+        System.out.println("Get weapon " + weapon);
       }
       super.getAffected(source, target, effect, collisionShape);
   }

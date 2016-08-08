@@ -117,6 +117,10 @@ public abstract class Weapon extends GameObject{
         this.owner = owner;
         setMoveBehaviour(new RotateBehaviour(this, -1));
     }
+    public Weapon(Environment environment, double x, double y) {
+        super(environment, x, y, true);
+        setMoveBehaviour(new RotateBehaviour(this, -1));
+    }
 
     public CollisionEffect getProjectileCollisionEffect() {
         return projectileCollisionEffect;

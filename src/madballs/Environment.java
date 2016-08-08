@@ -10,11 +10,10 @@ import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import madballs.Item.Item;
 import madballs.Item.Spawner;
-import madballs.Item.SpeedBoost;
 import madballs.Map.Map;
 
 /**
@@ -29,6 +28,7 @@ public class Environment {
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
+    private Scene scene;
     
     public Spawner getSpawner() {
       return spawner;
@@ -117,7 +117,8 @@ public class Environment {
   }
     
 
-    public Environment(Pane display, Map map){
+    public Environment(Pane display, Map map, Scene scene){
+      this.scene = scene;
       this.spawner = new Spawner(this);
         this.root = display;
         this.map = map;

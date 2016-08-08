@@ -13,6 +13,7 @@ import madballs.Collision.DisappearBehaviour;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.PushableBehaviour;
 import madballs.Collision.WeaponIgnoredBehaviour;
+import madballs.Environment;
 
 public class Awp extends Weapon{
     private final double WIDTH = 50;
@@ -22,6 +23,24 @@ public class Awp extends Weapon{
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+        
+        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionPassiveBehaviour(new PushableBehaviour(null));
+        
+        setDamage(35);
+        setAmmo(-1);
+        setFireRate(1);
+        setRange(800);
+        setProjectileSpeed(800);
+        setProjectileHitBoxSize(5);
+        setProjectileColor(Paint.valueOf("yellow"));
+        
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
+    }
+    
+    public Awp(Environment environment, int X, int Y) {
+        super(environment, X, Y);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

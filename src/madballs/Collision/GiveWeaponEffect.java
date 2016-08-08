@@ -14,19 +14,21 @@ import madballs.Wearables.Weapon;
  * @author haing
  */
 public class GiveWeaponEffect extends StackedCollisionEffect{
-  private Class<Weapon> weaponClass;
+  private Weapon weapon;
   
-  public Class<Weapon> getWeaponClass(){
-    return weaponClass;
+  public Weapon getWeapon(){
+    return weapon;
   }
   
-  public GiveWeaponEffect(StackedCollisionEffect effect, Class<Weapon> weaponClass) {
+  public GiveWeaponEffect(StackedCollisionEffect effect, Weapon weapon) {
     super(effect);
-    this.weaponClass = weaponClass;
+    this.weapon = weapon;
   }
   
   @Override
   public void affect(GameObject source, GameObject target, Shape collisionShape) {
+    
+        System.out.println("111111111");
       target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
       super.affect(source, target, collisionShape);
   }

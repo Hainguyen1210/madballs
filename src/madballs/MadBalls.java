@@ -33,12 +33,12 @@ public class MadBalls extends Application {
         
         Map map = new Map(RESOLUTION_X, RESOLUTION_Y);
         
-        gameEnvironment = new Environment(root, map);
+        Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         
+        gameEnvironment = new Environment(root, map, scene);
 //        Client.initClient();
 //        Server.initServer();
         
-        Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         
         Ball ball = new Ball(gameEnvironment, 80, 80);
         Ball enemyBall = new Ball(gameEnvironment, 150, 80);

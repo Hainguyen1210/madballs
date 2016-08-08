@@ -47,13 +47,9 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
-        try {
-            
-            this.weapon = weaponClass.getDeclaredConstructor(getClass()).newInstance(this);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setWeapon(Weapon weapon) {
+      this.weapon.die();
+      this.weapon = weapon;
     }
     
     /**
