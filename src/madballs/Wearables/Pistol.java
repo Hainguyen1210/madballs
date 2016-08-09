@@ -20,7 +20,7 @@ import madballs.GameObject;
  */
 public class Pistol extends Weapon{
     private final double WIDTH = 20;
-    private final double HEIGHT = 5;
+    private final double HEIGHT = 7;
 
     public Pistol(GameObject owner) {
         super(owner, 
@@ -31,12 +31,12 @@ public class Pistol extends Weapon{
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
         
-        setDamage(100);
+        setDamage(10);
         setAmmo(-1);
-        setFireRate(5);
+        setFireRate(3);
         setRange(1000);
         setProjectileSpeed(800);
-        setProjectileHitBoxSize(1);
+        setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
         
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

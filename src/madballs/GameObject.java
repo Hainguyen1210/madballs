@@ -37,7 +37,7 @@ public abstract class GameObject {
     private Rotate rotation;
     private double oldX, oldY;
     private double oldDirection;
-    private DoubleProperty hp = new SimpleDoubleProperty(100);
+    private DoubleProperty hp = new SimpleDoubleProperty(50);
     private MoveBehaviour moveBehaviour;
     private Environment environment;
     
