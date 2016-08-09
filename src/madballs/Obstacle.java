@@ -8,8 +8,8 @@ package madballs;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import madballs.Collision.InvulnerableBehaviour;
-import madballs.Collision.PushBackEffect;
+import madballs.collision.InvulnerableBehaviour;
+import madballs.collision.PushBackEffect;
 
 /**
  *

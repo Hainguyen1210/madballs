@@ -9,7 +9,10 @@ import javafx.application.Application;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import madballs.Map.Map;
+import madballs.map.Map;
+import madballs.multiplayer.Client;
+import madballs.multiplayer.MultiplayerHandler;
+import madballs.multiplayer.Server;
 
 /**
  *
@@ -20,6 +23,14 @@ public class MadBalls extends Application {
     public static final double RESOLUTION_Y = 720;
     
     private static Environment gameEnvironment;
+    private static Navigation navigation;
+    private static MultiplayerHandler multiplayerHandler;
+    
+    private static Scene scene;
+    
+    public static Scene getScene(){
+        return scene;
+    }
 
     public static Environment getGameEnvironment() {
         return gameEnvironment;
@@ -28,28 +39,24 @@ public class MadBalls extends Application {
     @Override
     public void start(Stage primaryStage) {
         
-        
+        navigation = new Navigation();
         Pane root = new Pane();
         
-        Map map = new Map(RESOLUTION_X, RESOLUTION_Y);
-        
-        gameEnvironment = new Environment(root, map);
-        
+        scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
+        gameEnvironment = new Environment(root);
 //        Client.initClient();
-//        Server.initServer();
-        
-        Scene scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
-        
-        Ball ball = new Ball(gameEnvironment, 80, 80);
-        Ball enemyBall = new Ball(gameEnvironment, 150, 80);
         
         
-        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
-        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
-        scene.setOnMousePressed(ball.getWeapon().getMoveBehaviour().mouseHandler);
-        scene.setOnMouseReleased(ball.getWeapon().getMoveBehaviour().mouseHandler);
-        scene.setOnMouseMoved(ball.getWeapon().getMoveBehaviour().mouseHandler);
-        scene.setOnMouseDragged(ball.getWeapon().getMoveBehaviour().mouseHandler);
+        boolean isHost = navigation.getConfirmation("", "Start game", "Do you want to host?");
+        if (isHost){
+            multiplayerHandler = new Server();
+            Map map = new Map(RESOLUTION_X, RESOLUTION_Y, -1);
+            gameEnvironment.loadMap(map);
+        }
+        else {
+            multiplayerHandler = new Client();
+        }
+        multiplayerHandler.init();
         
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(scene);

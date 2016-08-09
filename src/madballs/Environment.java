@@ -10,12 +10,11 @@ import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
-import madballs.Item.Item;
-import madballs.Item.Spawner;
-import madballs.Item.SpeedBoost;
-import madballs.Map.Map;
+import madballs.item.Spawner;
+import madballs.map.Map;
 
 /**
  *
@@ -24,14 +23,14 @@ import madballs.Map.Map;
 public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
-    private Spawner spawner;
+    private Spawner itemSpawner;
     private Pane root;
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
     
-    public Spawner getSpawner() {
-      return spawner;
+    public Spawner getItemSpawner() {
+      return itemSpawner;
     }
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
@@ -54,7 +53,7 @@ public class Environment {
      */
     private void update(long now){
       //spawn items
-      spawner.spawn(now);
+      itemSpawner.spawn(now);
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
@@ -117,26 +116,29 @@ public class Environment {
   }
     
 
-    public Environment(Pane display, Map map){
-      this.spawner = new Spawner(this);
+    public Environment(Pane display){
+        this.itemSpawner = new Spawner(this);
         this.root = display;
-        this.map = map;
+        
         quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
         ground = new Ground(this, 0, 0);
         
+//        animation.start();
+    }
+    
+    public void loadMap(Map map){
+        this.map = map;
         //add the obstacles 
         for (int i = 0; i < 30; i++){
             for (int j = 0; j < 30; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) new Obstacle(this, 
+                if (map.getMAP_ARRAY()[i][j] == 1) {
+                    new Obstacle(this, 
                         j * map.getLENGTH()/30, i * map.getHEIGHT()/20,
                         30, 30); 
+                }
             }
         }
-//        new Obstacle(this, 15 * 50, 8 * 50, 50, 50);
-        
-        
-        animation.start();
     }
     
     /**

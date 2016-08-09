@@ -8,15 +8,12 @@ package madballs;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.binding.Bindings;
-import javafx.scene.control.Label;
-import madballs.Collision.PushBackEffect;
-import madballs.Collision.VulnerableBehaviour;
+import madballs.collision.PushBackEffect;
+import madballs.collision.VulnerableBehaviour;
 import javafx.scene.shape.Circle;
-import madballs.Collision.PushableBehaviour;
-import madballs.Wearables.Pistol;
-import madballs.Wearables.Weapon;
-import madballs.Wearables.Awp;
+import madballs.collision.PushableBehaviour;
+import madballs.wearables.Weapon;
+import madballs.wearables.Awp;
 
 /**
  *
@@ -27,8 +24,8 @@ public class Ball extends GameObject{
     private int speed = 200;
 
 
-    public Ball(Environment environment, double a, double b) {
-        super(environment, a , b, true);
+    public Ball(Environment environment, double x, double y) {
+        super(environment, x , y, true);
         setMoveBehaviour(new StraightMove(this, speed));
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));

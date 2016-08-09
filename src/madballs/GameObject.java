@@ -6,8 +6,8 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
-import madballs.Collision.CollisionPassiveBehaviour;
-import madballs.Collision.CollisionEffect;
+import madballs.collision.CollisionPassiveBehaviour;
+import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.geometry.Bounds;
@@ -17,7 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import madballs.Item.Item;
+import madballs.item.Item;
 
 /**
  *
