@@ -28,17 +28,8 @@ public abstract class Weapon extends GameObject{
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
-    private Ball owner;
     private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
-
-    public Ball getOwner() {
-        return owner;
-    }
-
-    public void setOwner(Ball owner) {
-        this.owner = owner;
-    }
-
+    
     public double getDamage() {
         return damage;
     }
@@ -112,11 +103,14 @@ public abstract class Weapon extends GameObject{
         this.projectileSpeed = projectileSpeed;
     }
 
-    public Weapon(Ball owner, double x, double y) {
+    public Weapon(GameObject owner, double x, double y) {
         super(owner, x, y, true);
-        this.owner = owner;
         setMoveBehaviour(new RotateBehaviour(this, -1));
     }
+//    public Weapon(Environment environment, double x, double y) {
+//        super(environment, x, y, true);
+//        setMoveBehaviour(new RotateBehaviour(this, -1));
+//    }
 
     public CollisionEffect getProjectileCollisionEffect() {
         return projectileCollisionEffect;

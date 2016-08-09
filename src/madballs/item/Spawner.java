@@ -31,18 +31,36 @@ public class Spawner {
   }
   
   public void spawn(long now){
-    if((now - lastItemSpawnTime.get()) / 1000000000.0 > 3){
+    if((now - lastItemSpawnTime.get()) / 1000000000.0 > 5){
       lastItemSpawnTime.set(now);
       randomSpawn();
     }
   }
   public void randomSpawn(){
-    
     Map map = environment.getMap();
     int X = random.nextInt((int) map.getLENGTH());
     int Y = random.nextInt((int) map.getHEIGHT());
-//      Item item = new SpeedBoost(environment, X, Y, false);
-
-//    System.out.println(X + " " + Y);
+    int itemOrWeapon = random.nextInt(2);
+    if(itemOrWeapon == 0){
+      System.out.println("Weapon spawned");
+      spawnWeapon(X, Y);
+    } else {
+      System.out.println("Item spawned");
+      spawnItem(X, Y);
+    }
+  }
+  
+  public void spawnWeapon(int X, int Y){
+    Class<Weapon> weaponType = weapons[random.nextInt(weapons.length)];
+    
+    Weapon weapon = null;
+//    System.out.println("asfasdfasf" + weaponType.getName());
+    WeaponItem weaponItem = new WeaponItem(environment, X, Y, false, weaponType.getName());
+    
+    
+      System.out.println(weaponType);
+  }
+  public void spawnItem(int X, int Y){
+    Item item = new SpeedBoost(environment, X, Y, false);
   }
 }

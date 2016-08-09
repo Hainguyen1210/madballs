@@ -45,10 +45,12 @@ public abstract class MultiplayerHandler {
     }
     
     public void handleData(Data data){
+        System.out.println("get");
         if (data.getType().equals("spawn")){
             spawn((SpawnData)data);
         }
         else if (data.getType().equals("choose_map")){
+            System.out.println("map");
             Map map = new Map(MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y, ((MapData)data).getMapNumber());
             Platform.runLater(new Runnable() {
                 @Override

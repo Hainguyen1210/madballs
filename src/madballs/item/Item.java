@@ -52,7 +52,7 @@ public abstract class Item extends GameObject{
   public Item(Environment environment, double x, double y, boolean isSettingDisplay) {
       super(environment, x, y, isSettingDisplay);
       setDisplay();
-      setCollisionEffect(new NullEffect(null));
+//      setCollisionEffect(new NullEffect(null));
       setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new MakeUpItem(null))));
   }
 

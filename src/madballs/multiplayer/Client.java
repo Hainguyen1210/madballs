@@ -34,6 +34,7 @@ public class Client extends MultiplayerHandler{
                                 // maintain the socket connection
                                 while(true){
                                     try {
+                                        System.out.println("handle");
                                         handleData(getLocalPlayer().readData());
                                     }
                                     finally {

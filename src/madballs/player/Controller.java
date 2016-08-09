@@ -5,7 +5,6 @@
  */
 package madballs.player;
 
-import javafx.scene.Scene;
 import javafx.scene.input.KeyCode;
 import madballs.MoveBehaviour;
 

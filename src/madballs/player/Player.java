@@ -118,6 +118,7 @@ public class Player {
     });
     
     public void bindInput(Scene scene){
+//        System.out.println("123");
 //        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
 //        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
 //        scene.setOnMousePressed(ball.getWeapon().getMoveBehaviour().mouseHandler);
@@ -141,6 +142,7 @@ public class Player {
                     protected Void call() throws Exception {
                         try {
                             out.writeObject(data);
+                            System.out.println("sent");
                         } catch (IOException ex) {
                             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -154,10 +156,16 @@ public class Player {
     
     public Data readData(){
         try {
-            return (Data)in.readObject();
+            System.out.println("2");
+            Data data = null;
+            in.readObject();
+            System.out.println("3");
+            return data;
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (Exception ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

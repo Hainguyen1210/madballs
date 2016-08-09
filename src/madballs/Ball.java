@@ -15,6 +15,8 @@ import madballs.collision.PushableBehaviour;
 import madballs.wearables.Weapon;
 import madballs.wearables.Awp;
 
+import madballs.Collision.GetWeaponBehaviour;
+
 /**
  *
  * @author Caval
@@ -28,7 +30,7 @@ public class Ball extends GameObject{
         super(environment, x , y, true);
         setMoveBehaviour(new StraightMove(this, speed));
         setCollisionEffect(new PushBackEffect(null, -1));
-        setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
+        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(null))));
         
         weapon = new Awp(this);
     }
@@ -44,13 +46,13 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
-        try {
-            
-            this.weapon = weaponClass.getDeclaredConstructor(getClass()).newInstance(this);
-        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
-        }
+    public void setWeapon(Weapon weapon) {
+      try {
+        this.weapon.die();
+        weapon.getClass().getDeclaredConstructor(GameObject.class).newInstance(this);
+      } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
     
     /**

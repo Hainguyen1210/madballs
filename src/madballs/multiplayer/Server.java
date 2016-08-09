@@ -14,7 +14,6 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import madballs.MadBalls;
-import madballs.map.SpawnLocation;
 import madballs.player.Player;
 
 /**
@@ -92,8 +91,8 @@ public class Server extends MultiplayerHandler{
         sendInfoToNewPlayer(newPlayer);
         newPlayer.setPlayerNum(playerIndex++);
         newPlayer.setSpawnLocation(MadBalls.getGameEnvironment().getMap().getPlayerSpawnLocation(2));
-        getPlayers().add(newPlayer);
         anounceNewPlayer(newPlayer);
+        getPlayers().add(newPlayer);
         
         Platform.runLater(new Runnable() {
             @Override
@@ -106,10 +105,11 @@ public class Server extends MultiplayerHandler{
     }
     
     public void sendInfoToNewPlayer(Player newPlayer){
+        newPlayer.sendData(new MapData(MadBalls.getGameEnvironment().getMap().getMapNumber()));
         for (Player player : getPlayers()){
+            System.out.println("1");
             newPlayer.sendData(new SpawnData(player.getSpawnLocation()));
         }
-        newPlayer.sendData(new MapData(MadBalls.getGameEnvironment().getMap().getMapNumber()));
     }
     
     public void anounceNewPlayer(Player newPlayer){

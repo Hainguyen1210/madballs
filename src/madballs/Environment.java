@@ -28,6 +28,7 @@ public class Environment {
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
+    private Scene scene;
     
     public Spawner getItemSpawner() {
       return itemSpawner;
