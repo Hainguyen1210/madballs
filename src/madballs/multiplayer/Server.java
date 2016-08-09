@@ -49,7 +49,6 @@ public class Server extends MultiplayerHandler{
                                     try {
                                         Socket socket = listener.accept();
                                         addNewPlayer(socket);
-                                        
                                     }
                                     finally {
                                         
@@ -77,7 +76,9 @@ public class Server extends MultiplayerHandler{
                     @Override
                     protected Void call() throws Exception {
                         while (true) {
+                            System.out.println("ok");
                             handleData(player.readData());
+                            player.sendData(new Data("hihi"));
                         }
                     }
                 };
@@ -88,6 +89,7 @@ public class Server extends MultiplayerHandler{
     
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
+        newPlayer.sendData(new Data("hehe"));
         sendInfoToNewPlayer(newPlayer);
         newPlayer.setPlayerNum(playerIndex++);
         newPlayer.setSpawnLocation(MadBalls.getGameEnvironment().getMap().getPlayerSpawnLocation(2));
@@ -101,7 +103,7 @@ public class Server extends MultiplayerHandler{
             }
         });
         
-//        waitAndHandleData(newPlayer);
+        waitAndHandleData(newPlayer);
     }
     
     public void sendInfoToNewPlayer(Player newPlayer){

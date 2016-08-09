@@ -15,7 +15,7 @@ import madballs.collision.PushableBehaviour;
 import madballs.wearables.Weapon;
 import madballs.wearables.Awp;
 
-import madballs.Collision.GetWeaponBehaviour;
+import madballs.collision.GetWeaponBehaviour;
 
 /**
  *

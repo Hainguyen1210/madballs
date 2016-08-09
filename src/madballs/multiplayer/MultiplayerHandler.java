@@ -45,7 +45,7 @@ public abstract class MultiplayerHandler {
     }
     
     public void handleData(Data data){
-        System.out.println("get");
+        System.out.println(data.getType());
         if (data.getType().equals("spawn")){
             spawn((SpawnData)data);
         }

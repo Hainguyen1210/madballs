@@ -5,6 +5,7 @@
  */
 package madballs.player;
 
+import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -157,15 +158,12 @@ public class Player {
     public Data readData(){
         try {
             System.out.println("2");
-            Data data = null;
-            in.readObject();
-            System.out.println("3");
-            return data;
-        } catch (IOException ex) {
+            return (Data) in.readObject();
+        } catch (EOFException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex) {
+        } catch (IOException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (Exception ex){
+        } catch (ClassNotFoundException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;
