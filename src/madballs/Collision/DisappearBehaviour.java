@@ -23,7 +23,7 @@ public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
 //        System.out.println(source.getClass);
         if (effect.hasCollisionEffect(PushBackEffect.class)) {
-            target.getEnvironment().removeGameObj(target);
+            target.die();
         }
         super.getAffected(source, target, effect, collisionShape);
     }

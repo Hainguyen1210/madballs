@@ -16,6 +16,8 @@ import madballs.Collision.DisappearBehaviour;
 import madballs.Collision.GiveWeaponEffect;
 import madballs.Collision.MakeUpItem;
 import madballs.Environment;
+import madballs.Wearables.Awp;
+import madballs.Wearables.Pistol;
 import madballs.Wearables.Weapon;
 
 /**
@@ -23,13 +25,18 @@ import madballs.Wearables.Weapon;
  * @author haing
  */
 public class WeaponItem extends Item{
-//  private Weapon weapon;
+  private Weapon weapon;
   
-
-  public WeaponItem(Environment environment, double x, double y, boolean isSettingDisplay, Weapon weapon) {
+  public WeaponItem(Environment environment, double x, double y, boolean isSettingDisplay, String weaponClassStr) {
     super(environment, x, y, isSettingDisplay);
+    if(weaponClassStr.equals("madballs.Wearables.Awp")){
+      weapon = new Awp(this);
+    } else if (weaponClassStr.equals("madballs.Wearables.Pistol")){
+      weapon = new Pistol(this);
+    }
       setCollisionEffect(new GiveWeaponEffect(null, weapon));
   }
+ 
 
   @Override
   public void setDisplayComponents() {

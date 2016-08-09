@@ -7,13 +7,12 @@ package madballs.Wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.Ball;
 import madballs.Collision.DamageEffect;
 import madballs.Collision.DisappearBehaviour;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.PushableBehaviour;
 import madballs.Collision.WeaponIgnoredBehaviour;
-import madballs.Environment;
+import madballs.GameObject;
 
 /**
  *
@@ -23,7 +22,7 @@ public class Pistol extends Weapon{
     private final double WIDTH = 20;
     private final double HEIGHT = 5;
 
-    public Pistol(Ball owner) {
+    public Pistol(GameObject owner) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
@@ -45,24 +44,24 @@ public class Pistol extends Weapon{
     }
 
     
-    public Pistol(Environment environment, int X, int Y) {
-        super(environment, X, Y);
-        
-        setCollisionEffect(new PushBackEffect(null, -1));
-        setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
-        
-        setDamage(100);
-        setAmmo(-1);
-        setFireRate(5);
-        setRange(1000);
-        setProjectileSpeed(800);
-        setProjectileHitBoxSize(1);
-        setProjectileColor(Paint.valueOf("red"));
-        
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-    }
+//    public Pistol(Environment environment, int X, int Y) {
+//        super(environment, X, Y);
+//        
+//        setCollisionEffect(new PushBackEffect(null, -1));
+//        setCollisionPassiveBehaviour(new PushableBehaviour(null));
+//        
+//        
+//        setDamage(100);
+//        setAmmo(-1);
+//        setFireRate(5);
+//        setRange(1000);
+//        setProjectileSpeed(800);
+//        setProjectileHitBoxSize(1);
+//        setProjectileColor(Paint.valueOf("red"));
+//        
+//        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+//        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
+//    }
 
     
     @Override

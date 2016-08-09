@@ -13,6 +13,7 @@ import javafx.scene.control.Label;
 import madballs.Collision.PushBackEffect;
 import madballs.Collision.VulnerableBehaviour;
 import javafx.scene.shape.Circle;
+import madballs.Collision.GetWeaponBehaviour;
 import madballs.Collision.PushableBehaviour;
 import madballs.Wearables.Pistol;
 import madballs.Wearables.Weapon;
@@ -31,7 +32,7 @@ public class Ball extends GameObject{
         super(environment, a , b, true);
         setMoveBehaviour(new StraightMove(this, speed));
         setCollisionEffect(new PushBackEffect(null, -1));
-        setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(null)));
+        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(null))));
         
         weapon = new Awp(this);
     }
@@ -48,8 +49,12 @@ public class Ball extends GameObject{
     }
 
     public void setWeapon(Weapon weapon) {
-      this.weapon.die();
-      this.weapon = weapon;
+      try {
+        this.weapon.die();
+        weapon.getClass().getDeclaredConstructor(GameObject.class).newInstance(this);
+      } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+        Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+      }
     }
     
     /**

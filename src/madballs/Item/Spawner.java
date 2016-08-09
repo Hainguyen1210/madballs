@@ -55,14 +55,12 @@ public class Spawner {
   
   public void spawnWeapon(int X, int Y){
     Class<Weapon> weaponType = weapons[random.nextInt(weapons.length)];
+    
     Weapon weapon = null;
-    switch (weaponType.getName()) {
-      case "Pistol":
-        weapon = new Pistol(environment, X, Y); break;
-      case "Awp":
-        weapon = new Awp(environment, X, Y); break;
-    }
-    WeaponItem weaponItem = new WeaponItem(environment, X, Y, false, weapon);
+//    System.out.println("asfasdfasf" + weaponType.getName());
+    WeaponItem weaponItem = new WeaponItem(environment, X, Y, false, weaponType.getName());
+    
+    
       System.out.println(weaponType);
   }
   public void spawnItem(int X, int Y){
