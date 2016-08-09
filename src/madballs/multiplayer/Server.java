@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import madballs.MadBalls;
 import madballs.player.Player;
 
@@ -42,6 +44,7 @@ public class Server extends MultiplayerHandler{
                                     public void run() {
                                         getLocalPlayer().generateBall(MadBalls.getGameEnvironment());
                                         getLocalPlayer().bindInput(MadBalls.getScene());
+                                        MadBalls.getGameEnvironment().startAnimation();
                                     }
                                 });                                
                                 // listen for client over socket
@@ -68,6 +71,9 @@ public class Server extends MultiplayerHandler{
         getService().start();
     }
     
+    
+    
+    
     public void waitAndHandleData(Player player){
         Service<Void> service = new Service<Void>() {
             @Override
@@ -75,10 +81,14 @@ public class Server extends MultiplayerHandler{
                 return new Task<Void>() {
                     @Override
                     protected Void call() throws Exception {
-                        while (true) {
-                            System.out.println("ok");
-                            handleData(player.readData());
-                            player.sendData(new Data("hihi"));
+                        while (true){
+                            try {
+                                handleData(player.readData());
+                            }
+                            catch (Exception ex) {
+                                System.out.println("12");
+                                Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
+                            }
                         }
                     }
                 };
@@ -89,12 +99,11 @@ public class Server extends MultiplayerHandler{
     
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
-        newPlayer.sendData(new Data("hehe"));
         sendInfoToNewPlayer(newPlayer);
         newPlayer.setPlayerNum(playerIndex++);
         newPlayer.setSpawnLocation(MadBalls.getGameEnvironment().getMap().getPlayerSpawnLocation(2));
-        anounceNewPlayer(newPlayer);
         getPlayers().add(newPlayer);
+        anounceNewPlayer(newPlayer);        
         
         Platform.runLater(new Runnable() {
             @Override

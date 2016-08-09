@@ -29,14 +29,14 @@ public class Client extends MultiplayerHandler{
                             // connect socket
 //                            System.out.println("why");
                             Socket socket = new Socket("127.0.0.1", 8099);
-                            Player localPLayer = new Player(socket, false);
-                            localPLayer.sendData(new Data("haha"));
+                            setLocalPlayer(new Player(socket, false));
                                     
                                 // maintain the socket connection
                                 while(true){
                                     try {
                                         System.out.println("handle");
-                                        handleData(localPLayer.readData());
+                                        handleData(getLocalPlayer().readData());
+                                        getLocalPlayer().sendData(new Data("haha"));
                                     }
                                     finally {
                                         

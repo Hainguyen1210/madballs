@@ -135,29 +135,17 @@ public class Player {
     }
     
     public void sendData(Data data){
-        Service<Void> service = new Service<Void>() {
-            @Override
-            protected Task<Void> createTask() {
-                return new Task<Void>() {
-                    @Override
-                    protected Void call() throws Exception {
-                        try {
-                            out.writeObject(data);
-                            System.out.println("sent");
-                        } catch (IOException ex) {
-                            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-                        }
-                        return null;
-                    }
-                };
-            }
-        };
-        service.start();
+        try {
+            out.writeObject(data);
+            out.flush();
+            System.out.println("sent");
+        } catch (IOException ex) {
+            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     public Data readData(){
         try {
-            System.out.println("2");
             return (Data) in.readObject();
         } catch (EOFException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);

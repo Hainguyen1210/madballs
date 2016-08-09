@@ -8,7 +8,6 @@ package madballs.multiplayer;
 import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
-import madballs.Environment;
 import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
@@ -46,7 +45,10 @@ public abstract class MultiplayerHandler {
     
     public void handleData(Data data){
         System.out.println(data.getType());
-        if (data.getType().equals("spawn")){
+        if (data.getType().equals("start")){
+            MadBalls.getGameEnvironment().startAnimation();
+        }
+        else if (data.getType().equals("spawn")){
             spawn((SpawnData)data);
         }
         else if (data.getType().equals("choose_map")){

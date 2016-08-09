@@ -36,6 +36,10 @@ public class MadBalls extends Application {
         return gameEnvironment;
     }
     
+    public static MultiplayerHandler getMultiplayerHandler(){
+        return multiplayerHandler;
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         

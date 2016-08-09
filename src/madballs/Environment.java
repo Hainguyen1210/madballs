@@ -45,14 +45,19 @@ public class Environment {
         @Override
         public void handle(long now) {
             lastUpdateTime.set(now);
-            update(now);
+            if (MadBalls.getMultiplayerHandler().getLocalPlayer().isHost()){
+                hostUpdate(now);
+            }
+            else {
+                clientUpdate(now);
+            }
         }
     };
     
     /**
      * check through all game objs in the environment to see which obj has collided with one another
      */
-    private void update(long now){
+    private void hostUpdate(long now){
       //spawn items
       itemSpawner.spawn(now);
       
@@ -111,6 +116,10 @@ public class Environment {
 //            obj.setLastStableY(obj.getTranslateY());
 //        }
     }
+    
+    public void clientUpdate(long now){
+        
+    }
 
   public Map getMap() {
     return map;
@@ -140,6 +149,10 @@ public class Environment {
                 }
             }
         }
+    }
+    
+    public void startAnimation(){
+        animation.start();
     }
     
     /**
