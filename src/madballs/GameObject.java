@@ -39,7 +39,6 @@ public abstract class GameObject {
     private DoubleProperty hp = new SimpleDoubleProperty(100);
     
     private StateLoader stateLoader;
-    
     private MoveBehaviour moveBehaviour;
     private Environment environment;
     

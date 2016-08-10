@@ -10,6 +10,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
 import madballs.MadBalls;
+import madballs.Item.DamageBoost;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.SpawnData;
@@ -74,6 +75,10 @@ public class Spawner {
       if (MadBalls.isHost()){
         MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "item", 1)));
       }
-    Item item = new SpeedBoost(environment, X, Y, false);
+//    Item item = new SpeedBoost(environment, X, Y, false);
+//    Item item = new HealBoost(environment, X, Y, false);
+//    Item item = new FireRateBoost(environment, X, Y, false);
+//    Item item = new DamageBoost(environment, X, Y, false);
+    Item item = new DamageBoost(environment, X, Y, false);
   }
 }

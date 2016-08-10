@@ -20,6 +20,7 @@ public class DamageEffect extends StackedCollisionEffect{
         this.damage = amount;
     }
 
+    @Override
     public double getDamage() {
         return damage;
     }
