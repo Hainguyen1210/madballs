@@ -5,6 +5,8 @@
  */
 package madballs;
 
+import madballs.multiplayer.MoveData;
+
 /**
  *
  * @author Caval
@@ -29,7 +31,7 @@ public class StraightMove extends MoveBehaviour{
         final double deltaX = elapsedSeconds * getVelocityX();
         final double newX = oldX + deltaX;
         if (getObject().getTranslateX() != newX) {
-            getObject().setOldX(oldX - 0.1 * Math.signum(deltaX));
+            getObject().setOldX(oldX);
         }
         setNewX(newX);
         
@@ -37,11 +39,13 @@ public class StraightMove extends MoveBehaviour{
         final double deltaY = elapsedSeconds * getVelocityY();
         final double newY = oldY + deltaY;
         if (getObject().getTranslateY() != newY) {
-            getObject().setOldY(oldY - 0.1 * Math.signum(deltaY));
+            getObject().setOldY(oldY);
         }
         setNewY(newY);
         
         setMovedDistance(getMovedDistance() + getSpeed() * elapsedSeconds);
+        
+//        MadBalls.getMultiplayerHandler().sendData(new MoveData(getObject().getIndex(), now, oldX, newX, oldY, newY, getMovedDistance()));
         
         // set the coordinate to the target if the obj has passed the target
 //        if (getTargetX() != -1 && newX >= getTargetX()){

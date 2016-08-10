@@ -9,7 +9,10 @@ import java.util.Random;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
+import madballs.MadBalls;
 import madballs.map.Map;
+import madballs.map.SpawnLocation;
+import madballs.multiplayer.SpawnData;
 import madballs.wearables.Awp;
 import madballs.wearables.Pistol;
 import madballs.wearables.Weapon;
@@ -43,15 +46,22 @@ public class Spawner {
     int itemOrWeapon = random.nextInt(2);
     if(itemOrWeapon == 0){
       System.out.println("Weapon spawned");
-      spawnWeapon(X, Y);
+      spawnWeapon(X, Y, -1);
     } else {
       System.out.println("Item spawned");
       spawnItem(X, Y);
     }
   }
   
-  public void spawnWeapon(int X, int Y){
-    Class<Weapon> weaponType = weapons[random.nextInt(weapons.length)];
+  public void spawnWeapon(int X, int Y, int weaponIndex){
+      if (weaponIndex < 0){
+          weaponIndex = random.nextInt(weapons.length);
+        
+      }
+      Class<Weapon> weaponType = weapons[weaponIndex];
+      if (MadBalls.isHost()){
+          MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "weapon", weaponIndex)));
+      }
     
     Weapon weapon = null;
 //    System.out.println("asfasdfasf" + weaponType.getName());
@@ -61,6 +71,9 @@ public class Spawner {
       System.out.println(weaponType);
   }
   public void spawnItem(int X, int Y){
+      if (MadBalls.isHost()){
+        MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "item", 1)));
+      }
     Item item = new SpeedBoost(environment, X, Y, false);
   }
 }

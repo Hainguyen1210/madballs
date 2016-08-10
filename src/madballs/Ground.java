@@ -27,7 +27,7 @@ public class Ground extends GameObject{
     }
 
     @Override
-    public void update(long now) {
+    public void updateUnique(long now) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     

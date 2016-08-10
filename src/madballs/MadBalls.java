@@ -40,6 +40,10 @@ public class MadBalls extends Application {
         return multiplayerHandler;
     }
     
+    public static boolean isHost(){
+        return multiplayerHandler.getLocalPlayer().isHost();
+    }
+    
     @Override
     public void start(Stage primaryStage) {
         

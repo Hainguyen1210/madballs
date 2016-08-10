@@ -49,7 +49,7 @@ public class Ball extends GameObject{
     public void setWeapon(Weapon weapon) {
       try {
         this.weapon.die();
-        weapon.getClass().getDeclaredConstructor(GameObject.class).newInstance(this);
+          this.weapon = weapon.getClass().getDeclaredConstructor(GameObject.class).newInstance(this);
       } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
         Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
       }
@@ -64,7 +64,7 @@ public class Ball extends GameObject{
     }
 
     @Override
-    public void update(long now) {
+    public void updateUnique(long now) {
         getMoveBehaviour().move(now);
     }
 }

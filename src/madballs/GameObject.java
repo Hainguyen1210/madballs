@@ -17,7 +17,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import madballs.item.Item;
 
 /**
  *
@@ -38,10 +37,23 @@ public abstract class GameObject {
     private double oldX, oldY;
     private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
+    
+    private StateLoader stateLoader;
+    
     private MoveBehaviour moveBehaviour;
     private Environment environment;
     
+    public StateLoader getStateLoader(){
+        return stateLoader;
+    }
+    
+    public int getIndex(){
+        return environment.getObjectIndex(this);
+    }
+    
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
+        System.out.println("1" + this.getClass());
+        stateLoader = new StateLoader(this);
         translateX.set(x);
         translateY.set(y);
         oldX = x;
@@ -61,6 +73,8 @@ public abstract class GameObject {
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
     public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
+        System.out.println("2" + this.getClass());
+        stateLoader = new StateLoader(this);
         owner.child = this;
         this.owner = owner;
         
@@ -371,6 +385,11 @@ public abstract class GameObject {
         }
     }
     
+    public void update(long now){
+        stateLoader.update();
+        updateUnique(now);
+    }
+    
     /**
      * the obj must implement this method to set its hit box and image
      */
@@ -380,5 +399,5 @@ public abstract class GameObject {
      * the obj must implement this method to update with the environment's animation timer
      * @param now 
      */
-    public abstract void update(long now);
+    public abstract void updateUnique(long now);
 }

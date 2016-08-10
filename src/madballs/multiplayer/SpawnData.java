@@ -40,4 +40,5 @@ public class SpawnData extends Data{
         this.typeNumber = spawnLocation.getTypeNumber();
     }
     
+    
 }

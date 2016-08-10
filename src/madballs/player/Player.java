@@ -14,11 +14,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.concurrent.Service;
-import javafx.concurrent.Task;
 import javafx.scene.Scene;
 import madballs.Ball;
 import madballs.Environment;
+import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 
@@ -138,7 +137,8 @@ public class Player {
         try {
             out.writeObject(data);
             out.flush();
-            System.out.println("sent");
+            System.out.println("sent " + data.getType());
+            System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }

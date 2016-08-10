@@ -153,7 +153,7 @@ public abstract class Weapon extends GameObject{
     };
     
     @Override
-    public void update(long now) {
+    public void updateUnique(long now) {
 //        System.out.println(owner.getTranslateY());
 //        System.out.println(getTranslateY());
         if (getMoveBehaviour().isMousePressed()) attack(now);

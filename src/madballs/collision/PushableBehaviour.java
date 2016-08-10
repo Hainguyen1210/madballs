@@ -7,8 +7,10 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.projectiles.Projectile;
 import madballs.RotateBehaviour;
+import madballs.multiplayer.MoveData;
 
 /**
  *
@@ -31,99 +33,70 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
         super.getAffected(source, target, effect, collisionShape);
         if (effect.hasCollisionEffect(PushBackEffect.class)){
             double pushBackAmount = effect.getPushBackAmount();
-//
-//            GameObject collidedTarget = target;
-//            while (target.getOwner() != null){
-//                target = target.getOwner();
-//            }
 
             if (pushBackAmount < 0){
-                Shape intersect = collisionShape;
-                double intersectWidth = intersect.getBoundsInLocal().getWidth();
-                double intersectHeight = intersect.getBoundsInLocal().getHeight();
-//                System.out.println("");
-//                System.out.println(intersectWidth);
-//                System.out.println(intersectHeight);
-                double currentDirection = Math.toRadians(target.getRotateAngle());
-                double oldX = target.getOwnerOldX();
-                double oldY = target.getOwnerOldY();
-                target.setRotate(target.getOldDirection());
-//                target.setTranslateX(target.getOldX());
-//                target.setTranslateY(target.getOldY());
-//                if (collidedTarget.getMoveBehaviour() instanceof RotateBehaviour){
-////                    double pushBackDirection = Math.atan2(, target.getTranslateX() - originTarget.getTranslateX());
-//                    double pushBackedX = target.getTranslateX() + 1 * (Math.abs(target.getRotateAngle()) > 90 ? 1 : -1);
-//                    double pushBackedY = target.getTranslateY() + 1 * (target.getRotateAngle() < 0 ? 1 : -1);
-//                    
-////                    System.out.println(3 * ((target.getTranslateY() > collidedTarget.getTranslateY()) ? 1 : -1));
-////                    System.out.println(Math.sin(pushBackDirection) * 5);
-////                    target.setOldX(pushBackedX);
-////                    target.setOldY(pushBackedY);
-////                    target.setTranslateX(pushBackedX);
-////                    target.setTranslateY(pushBackedY);
-//                    
-//                    while (intersect.getBoundsInLocal().getWidth() != -1){
-//                        pushBackedX += Math.abs(target.getRotateAngle()) > 90 ? 1 : -1;
-//                        pushBackedY += target.getRotateAngle() < 0 ? 1 : -1;
-//                        target.setOldX(pushBackedX);
-//                        target.setOldY(pushBackedY);
-//                        target.setTranslateX(pushBackedX);
-//                        target.setTranslateY(pushBackedY);
-//                        
-//                        intersect = Shape.intersect(source.getHitBox(), collidedTarget.getHitBox());
-//                    }
-//                    return;
-//                }
-                if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() == -1){
-                    return;
-                }
-                else {
-                    target.setRotate(currentDirection);
-                }
-                boolean isXReversed = false;
-//                target.setTranslateX(oldX);
-//                target.setTranslateY(oldY);
-                if (intersectWidth == intersectHeight){
-                    target.setTranslateX(oldX);
-                    target.setTranslateY(oldY);
-                }
-                else {
-                    if (intersectWidth < intersectHeight){
-                        target.setTranslateX(oldX);
-                        isXReversed = true;
+                for (int i = 0; i < 1; i ++){
+                    Shape intersect = collisionShape;
+                    double intersectWidth = intersect.getBoundsInLocal().getWidth();
+                    double intersectHeight = intersect.getBoundsInLocal().getHeight();
+
+                    double currentDirection = Math.toRadians(target.getRotateAngle());
+                    double oldX = target.getOwnerOldX();
+                    double oldY = target.getOwnerOldY();
+                    target.setRotate(target.getOldDirection());
+
+                    if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() == -1){
+                        break;
                     }
-                    else if (intersectWidth > intersectHeight){
-                        target.setTranslateY(oldY);                        
+                    else {
+                        target.setRotate(currentDirection);
+                    }
+                    boolean isXReversed = false;
+                    if (intersectWidth == intersectHeight){
+                        target.setTranslateX(oldX);
+                        target.setTranslateY(oldY);
+                    }
+                    else {
+                        if (intersectWidth < intersectHeight){
+                            target.setTranslateX(oldX);
+                            isXReversed = true;
+                        }
+                        else if (intersectWidth > intersectHeight){
+                            target.setTranslateY(oldY);                        
+                        }
+
+                        intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
+                        if (intersect.getBoundsInLocal().getWidth() != -1 ){
+                            if (isXReversed) {
+                                target.setTranslateY(oldY);
+                            }
+                            else {
+                                target.setTranslateX(oldX);
+                            }
+                        }
                     }
 
-                    intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
-                    if (intersect.getBoundsInLocal().getWidth() != -1 ){
-                        if (isXReversed) {
-                            target.setTranslateY(oldY);
-                        }
-                        else {
-                            target.setTranslateX(oldX);
-                        }
+                    if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() != -1){
+                        target.setRotate(target.getOldDirection());
                     }
                 }
-//                target.setOwnerOldX(target.getTranslateX());
-//                target.setOwnerOldY(target.getTranslateY());
+                MadBalls.getMultiplayerHandler().sendData(
+                        new MoveData(
+                                target.getIndex(), 
+                                target.getMoveBehaviour().getLastMoveTime(), 
+                                Math.toRadians(target.getRotateAngle()),
+                                target.getOldDirection()));
+                MadBalls.getMultiplayerHandler().sendData(
+                        new MoveData(
+                                target.getIndex(), 
+                                target.getMoveBehaviour().getLastMoveTime(), 
+                                target.getOwnerOldX(),
+                                target.getOwnerTranslateX(),
+                                target.getOwnerOldY(),
+                                target.getOwnerTranslateY(),
+                                target.getMoveBehaviour().getMovedDistance()
+                        ));
                 
-                if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() != -1){
-                    target.setRotate(target.getOldDirection());
-                }
-//                // check if there is still intersection after reversing the translateX
-//                target.setTranslateX(target.getOldX());
-//                if (intersect.getBoundsInLocal().getWidth() == -1 ) return;
-//                
-//                // check if there is still intersection after reversing the translateY
-//                target.setTranslateX(newX);
-//                target.setTranslateY(target.getOldY());
-//                intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
-//                if (intersect.getBoundsInLocal().getWidth() == -1) return;
-//                
-//                // reverse both X, Y
-//                target.setTranslateX(target.getOldX());
             }
             else if (pushBackAmount > 0){
                 

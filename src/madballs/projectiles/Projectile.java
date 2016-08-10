@@ -45,7 +45,7 @@ public class Projectile extends GameObject{
     }
 
     @Override
-    public void update(long now) {
+    public void updateUnique(long now) {
         getMoveBehaviour().move(now);
         if (getMoveBehaviour().getMovedDistance() >= sourceWeapon.getRange()){
             getEnvironment().getGround().onCollision(this, getHitBox());

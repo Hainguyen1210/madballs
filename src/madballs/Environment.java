@@ -29,12 +29,29 @@ public class Environment {
     private Ground ground;
     private Quadtree quadtree;
     private Scene scene;
+    private int updateIndex = 0;
+    
+    public int gameNumObjects(){
+        return gameObjects.size();
+    }
+    
+    public GameObject getObject(int index){
+        return gameObjects.get(index);
+    }
+    
+    public int getObjectIndex(GameObject object){
+        return gameObjects.indexOf(object);
+    }
     
     public Spawner getItemSpawner() {
       return itemSpawner;
     }
     public long getLastUpdateTime() {
         return lastUpdateTime.get();
+    }
+    
+    public int getUpdateIndex(){
+        return updateIndex;
     }
     
     public Ground getGround() {
@@ -45,21 +62,15 @@ public class Environment {
         @Override
         public void handle(long now) {
             lastUpdateTime.set(now);
-            if (MadBalls.getMultiplayerHandler().getLocalPlayer().isHost()){
-                hostUpdate(now);
-            }
-            else {
-                clientUpdate(now);
-            }
+            update(now);
         }
     };
     
     /**
      * check through all game objs in the environment to see which obj has collided with one another
      */
-    private void hostUpdate(long now){
-      //spawn items
-      itemSpawner.spawn(now);
+    private void update(long now){
+        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
@@ -69,8 +80,11 @@ public class Environment {
         for (GameObject obj : copiedGameObjects){
             obj.update(now);
 //            obj.updateBoundsRectangle();
-            quadtree.insert(obj);
+            if (isHost)quadtree.insert(obj);
         }
+        if (!isHost) return;
+        //spawn items
+//        itemSpawner.spawn(now);
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
@@ -103,6 +117,7 @@ public class Environment {
             }
                 checked.add(checking);
         }
+        updateIndex++;
         
 //        for (GameObject obj : copiedGameObjects){
 //            if (collidedObjects.contains(obj)) return;
@@ -115,10 +130,6 @@ public class Environment {
 //            obj.setLastStableX(obj.getTranslateX());
 //            obj.setLastStableY(obj.getTranslateY());
 //        }
-    }
-    
-    public void clientUpdate(long now){
-        
     }
 
   public Map getMap() {

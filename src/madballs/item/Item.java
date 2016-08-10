@@ -5,17 +5,11 @@
  */
 package madballs.item;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import madballs.collision.Ball_n_WallBehaviour;
 import madballs.collision.DisappearBehaviour;
-import madballs.collision.PushBackEffect;
-import madballs.collision.PushableBehaviour;
 import madballs.collision.MakeUpItem;
-import madballs.collision.NullEffect;
 import madballs.Environment;
 import madballs.GameObject;
 
@@ -57,7 +51,7 @@ public abstract class Item extends GameObject{
   }
 
   @Override
-  public void update(long now) {
+  public void updateUnique(long now) {
 
   }
 

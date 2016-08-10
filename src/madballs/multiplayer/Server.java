@@ -13,8 +13,6 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.EventHandler;
 import madballs.MadBalls;
 import madballs.player.Player;
 
@@ -44,7 +42,6 @@ public class Server extends MultiplayerHandler{
                                     public void run() {
                                         getLocalPlayer().generateBall(MadBalls.getGameEnvironment());
                                         getLocalPlayer().bindInput(MadBalls.getScene());
-                                        MadBalls.getGameEnvironment().startAnimation();
                                     }
                                 });                                
                                 // listen for client over socket
@@ -83,7 +80,7 @@ public class Server extends MultiplayerHandler{
                     protected Void call() throws Exception {
                         while (true){
                             try {
-                                handleData(player.readData());
+                                handleData(player, player.readData());
                             }
                             catch (Exception ex) {
                                 System.out.println("12");
@@ -99,11 +96,11 @@ public class Server extends MultiplayerHandler{
     
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
-        sendInfoToNewPlayer(newPlayer);
         newPlayer.setPlayerNum(playerIndex++);
         newPlayer.setSpawnLocation(MadBalls.getGameEnvironment().getMap().getPlayerSpawnLocation(2));
-        getPlayers().add(newPlayer);
-        anounceNewPlayer(newPlayer);        
+        sendInfoToNewPlayer(newPlayer);
+        anounceNewPlayer(newPlayer);
+        getPlayers().add(newPlayer);   
         
         Platform.runLater(new Runnable() {
             @Override
@@ -117,6 +114,7 @@ public class Server extends MultiplayerHandler{
     
     public void sendInfoToNewPlayer(Player newPlayer){
         newPlayer.sendData(new MapData(MadBalls.getGameEnvironment().getMap().getMapNumber()));
+        newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation()));
         for (Player player : getPlayers()){
             System.out.println("1");
             newPlayer.sendData(new SpawnData(player.getSpawnLocation()));
@@ -124,10 +122,28 @@ public class Server extends MultiplayerHandler{
     }
     
     public void anounceNewPlayer(Player newPlayer){
+        sendData(new SpawnData(newPlayer.getSpawnLocation()));
+    }
+
+    @Override
+    public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
-                player.sendData(new SpawnData(newPlayer.getSpawnLocation()));
+                player.sendData(data);
             }
+        }
+    }
+    
+    public void handleData(Player player, Data data){
+        super.handleData(data);
+        if (data.getType().equals("ready")){
+            player.sendData(new Data("start"));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    MadBalls.getGameEnvironment().startAnimation();
+                }
+            });
         }
     }
 }

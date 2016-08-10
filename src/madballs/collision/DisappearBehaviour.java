@@ -7,7 +7,6 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
-import madballs.wearables.Weapon;
 
 /**
  *

@@ -6,11 +6,8 @@
 package madballs.multiplayer;
 
 import java.util.ArrayList;
-import javafx.application.Platform;
 import javafx.concurrent.Service;
 import madballs.MadBalls;
-import madballs.map.Map;
-import madballs.map.SpawnLocation;
 import madballs.player.Player;
 
 /**
@@ -45,39 +42,9 @@ public abstract class MultiplayerHandler {
     
     public void handleData(Data data){
         System.out.println(data.getType());
-        if (data.getType().equals("start")){
-            MadBalls.getGameEnvironment().startAnimation();
-        }
-        else if (data.getType().equals("spawn")){
-            spawn((SpawnData)data);
-        }
-        else if (data.getType().equals("choose_map")){
-            System.out.println("map");
-            Map map = new Map(MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y, ((MapData)data).getMapNumber());
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    MadBalls.getGameEnvironment().loadMap(map);
-                }
-            });
-        }
+        System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
     }
     
-    private void spawn(SpawnData data){
-        if (data.getSpawntype().equals("player")){
-            Player newPlayer = new Player(null, false);
-            newPlayer.setTeamNum(data.getTypeNum());
-            newPlayer.setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
-            players.add(newPlayer);
-
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    newPlayer.generateBall(MadBalls.getGameEnvironment());
-                }
-            });
-        }
-    }
-    
+    public abstract void sendData(Data data);
     public abstract void init();
 }

@@ -39,7 +39,7 @@ public class Obstacle extends GameObject{
     }
 
     @Override
-    public void update(long now) {
+    public void updateUnique(long now) {
         
     }
     
