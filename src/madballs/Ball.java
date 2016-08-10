@@ -8,40 +8,47 @@ package madballs;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import madballs.collision.PushBackEffect;
-import madballs.collision.VulnerableBehaviour;
 import javafx.scene.shape.Circle;
-import madballs.collision.PushableBehaviour;
-import madballs.wearables.Weapon;
-import madballs.wearables.Awp;
-
+import madballs.collision.BoostReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
-
+import madballs.collision.PushBackEffect;
+import madballs.collision.PushableBehaviour;
+import madballs.collision.VulnerableBehaviour;
+import madballs.effectState.EffectState;
+import madballs.wearables.Pistol;
+import madballs.wearables.Weapon;
 /**
  *
  * @author Caval
  */
 public class Ball extends GameObject{
     private Weapon weapon;
-    private int speed = 200;
+    private final int SPEED = 200;
+    private EffectState effectState;
+
+    public EffectState getEffectState() {
+        return effectState;
+    }
+
+    public void setEffectState(EffectState effectState) {
+        this.effectState = effectState;
+    }
+    
+    public void addEffectState(EffectState effectState) {
+        effectState.setWrappedEffectState(this.effectState);
+        this.effectState = effectState;
+    }
 
 
     public Ball(Environment environment, double x, double y) {
         super(environment, x , y, true);
-        setMoveBehaviour(new StraightMove(this, speed));
+        setMoveBehaviour(new StraightMove(this, SPEED));
         setCollisionEffect(new PushBackEffect(null, -1));
-        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(null))));
+        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BoostReceivableBehaviour(null)))));
         
-        weapon = new Awp(this);
+        weapon = new Pistol(this);
     }
-
-    public void setSpeed(int speed) {
-      this.speed = speed;
-    }
-
-    public int getSpeed() {
-      return speed;
-    }
+    
     public Weapon getWeapon() {
         return weapon;
     }
@@ -65,6 +72,7 @@ public class Ball extends GameObject{
 
     @Override
     public void update(long now) {
+        if (effectState != null) effectState.update(now);
         getMoveBehaviour().move(now);
     }
 }

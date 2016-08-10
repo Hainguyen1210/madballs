@@ -27,8 +27,7 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
   
   @Override
   public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-//        System.out.println(source.getClass);
-//        System.out.println("222222222222");
+
       if (effect.hasCollisionEffect(GiveWeaponEffect.class)) {
         Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
         if(weapon != null) ((Ball)target).setWeapon(weapon);

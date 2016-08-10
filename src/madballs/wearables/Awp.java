@@ -26,7 +26,7 @@ public class Awp extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
-        setDamage(100);
+        setDamage(50);
         setAmmo(-1);
         setFireRate(1);
         setRange(800);
