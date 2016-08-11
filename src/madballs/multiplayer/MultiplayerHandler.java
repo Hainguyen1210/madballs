@@ -18,6 +18,15 @@ public abstract class MultiplayerHandler {
     private Service<Void> service;
     private Player localPlayer;
     private ArrayList<Player> players = new ArrayList<>();
+    private boolean isHost;
+    
+    public MultiplayerHandler(boolean isHost){
+        this.isHost = isHost;
+    }
+
+    public boolean isHost() {
+        return isHost;
+    }
     
     public ArrayList<Player> getPlayers(){
         return players;
@@ -41,8 +50,8 @@ public abstract class MultiplayerHandler {
     }
     
     public void handleData(Data data){
-        System.out.println(data.getType());
-        System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
+//        System.out.println(data.getType());
+//        System.out.println(MadBalls.getGameEnvironment().getNumObjects());
     }
     
     public abstract void sendData(Data data);

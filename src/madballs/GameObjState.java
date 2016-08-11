@@ -6,20 +6,52 @@
 package madballs;
 
 import java.io.Serializable;
+import madballs.collision.CollisionEffect;
+import madballs.collision.CollisionPassiveBehaviour;
+import madballs.wearables.Weapon;
 
 /**
  *
  * @author caval
  */
 public class GameObjState implements Serializable{
+    private CollisionEffect collisionEffect;
+    private CollisionPassiveBehaviour collisionPassiveBehaviour;
     private double translateX;
     private double translateY;
     private double oldX, oldY;
+    private double targetX, targetY;
     private double direction;
     private double oldDirection;
     private double hp;
+    private boolean isDead;
+    private double speed;
     private int objectIndex;
     private int updateIndex;
+
+    public double getTargetX() {
+        return targetX;
+    }
+
+    public double getTargetY() {
+        return targetY;
+    }
+
+    public double getSpeed() {
+        return speed;
+    }
+
+    public CollisionEffect getCollisionEffect() {
+        return collisionEffect;
+    }
+
+    public CollisionPassiveBehaviour getCollisionPassiveBehaviour() {
+        return collisionPassiveBehaviour;
+    }
+
+    public boolean isDead() {
+        return isDead;
+    }
     
     public int getObjectIndex(){
         return objectIndex;
@@ -71,6 +103,8 @@ public class GameObjState implements Serializable{
     }
     
     public GameObjState(GameObject obj){
+        collisionEffect = obj.getCollisionEffect();
+        collisionPassiveBehaviour = obj.getCollisionPassiveBehaviour();
         updateIndex = obj.getEnvironment().getUpdateIndex();
         translateX = obj.getTranslateX();
         translateY = obj.getTranslateY();
@@ -80,5 +114,14 @@ public class GameObjState implements Serializable{
         oldDirection = obj.getOldDirection();
         hp = obj.getHpValue();
         objectIndex = obj.getIndex();
+        isDead = obj.isDead();
+        if (obj.getMoveBehaviour() != null){
+            speed = obj.getMoveBehaviour().getSpeed();
+            if (obj.getMoveBehaviour() instanceof RotateBehaviour){
+                RotateBehaviour rotateBehaviour = (RotateBehaviour) obj.getMoveBehaviour();
+                targetX = rotateBehaviour.getTargetX();
+                targetY = rotateBehaviour.getTargetY();
+            }
+        }
     }
 }

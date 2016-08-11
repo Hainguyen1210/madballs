@@ -7,6 +7,8 @@ package madballs.player;
 
 import javafx.scene.input.KeyCode;
 import madballs.MoveBehaviour;
+import madballs.RotateBehaviour;
+import madballs.StraightMove;
 
 /**
  *
@@ -20,7 +22,7 @@ public class Controller {
     }
     
     public void handleKey(MultiplePressedKeysEventHandler.MultiKeyEvent ke){
-        MoveBehaviour ballMoveBehaviour = player.getBall().getMoveBehaviour();
+        StraightMove ballMoveBehaviour = (StraightMove) player.getBall().getMoveBehaviour();
 //                try {
         if (!((ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) && (ke.isPressed(KeyCode.RIGHT) || ke.isPressed(KeyCode.D)))) {
             ballMoveBehaviour.setVelocityX(0);
@@ -56,9 +58,7 @@ public class Controller {
     }
     
     public void handleMouse(MouseKeyEventHandler.MouseKeyEvent event){
-        MoveBehaviour weaponRotateBehaviour = player.getBall().getWeapon().getMoveBehaviour();
-        System.out.println("ahihi");
-        System.out.println(player.getBall().getWeapon().getClass());
+        RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
         weaponRotateBehaviour.setTargetX(event.getMouseX());
         weaponRotateBehaviour.setTargetY(event.getMouseY());
         weaponRotateBehaviour.setMousePressed(event.isPressed());

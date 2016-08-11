@@ -7,10 +7,6 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
-import madballs.MadBalls;
-import madballs.projectiles.Projectile;
-import madballs.RotateBehaviour;
-import madballs.multiplayer.MoveData;
 
 /**
  *
@@ -27,10 +23,9 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
     public PushableBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
-    
+
     @Override
-    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        super.getAffected(source, target, effect, collisionShape);
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (effect.hasCollisionEffect(PushBackEffect.class)){
             double pushBackAmount = effect.getPushBackAmount();
 
@@ -80,23 +75,6 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
                         target.setRotate(target.getOldDirection());
                     }
                 }
-                MadBalls.getMultiplayerHandler().sendData(
-                        new MoveData(
-                                target.getIndex(), 
-                                target.getMoveBehaviour().getLastMoveTime(), 
-                                Math.toRadians(target.getRotateAngle()),
-                                target.getOldDirection()));
-                MadBalls.getMultiplayerHandler().sendData(
-                        new MoveData(
-                                target.getIndex(), 
-                                target.getMoveBehaviour().getLastMoveTime(), 
-                                target.getOwnerOldX(),
-                                target.getOwnerTranslateX(),
-                                target.getOwnerOldY(),
-                                target.getOwnerTranslateY(),
-                                target.getMoveBehaviour().getMovedDistance()
-                        ));
-                
             }
             else if (pushBackAmount > 0){
                 

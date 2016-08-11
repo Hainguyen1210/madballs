@@ -24,5 +24,10 @@ public class WeaponIgnoredBehaviour extends StackedCollisionPassiveBehaviour{
         if (source instanceof  Weapon) return;
         super.getAffected(source, target, effect, collisionShape);
     }
+
+    @Override
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        
+    }
     
 }

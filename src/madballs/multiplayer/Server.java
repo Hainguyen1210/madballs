@@ -22,6 +22,10 @@ import madballs.player.Player;
  */
 public class Server extends MultiplayerHandler{
     private int playerIndex = 0;
+
+    public Server() {
+        super(true);
+    }
     
     public void init(){
         setService(new Service<Void>() {
@@ -100,7 +104,7 @@ public class Server extends MultiplayerHandler{
         newPlayer.setSpawnLocation(MadBalls.getGameEnvironment().getMap().getPlayerSpawnLocation(2));
         sendInfoToNewPlayer(newPlayer);
         anounceNewPlayer(newPlayer);
-        getPlayers().add(newPlayer);   
+        getPlayers().add(newPlayer);
         
         Platform.runLater(new Runnable() {
             @Override
@@ -114,15 +118,15 @@ public class Server extends MultiplayerHandler{
     
     public void sendInfoToNewPlayer(Player newPlayer){
         newPlayer.sendData(new MapData(MadBalls.getGameEnvironment().getMap().getMapNumber()));
-        newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation()));
         for (Player player : getPlayers()){
             System.out.println("1");
-            newPlayer.sendData(new SpawnData(player.getSpawnLocation()));
+            newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false));
         }
     }
     
     public void anounceNewPlayer(Player newPlayer){
-        sendData(new SpawnData(newPlayer.getSpawnLocation()));
+        sendData(new SpawnData(newPlayer.getSpawnLocation(), false));
+        newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation(), true));
     }
 
     @Override

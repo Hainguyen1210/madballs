@@ -19,12 +19,10 @@ public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{
     }
 
     @Override
-    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-//        System.out.println(source.getClass);
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (effect.hasCollisionEffect(PushBackEffect.class)) {
             target.die();
         }
-        super.getAffected(source, target, effect, collisionShape);
     }
     
 }

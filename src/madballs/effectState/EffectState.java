@@ -62,13 +62,8 @@ public abstract class EffectState {
         EffectState parent = originEffectState;
         while (checking != null){
             if (checking == this){ 
-                if (parent == this) {
-                    return checking.wrappedEffectState;
-                }
-                else {
-                    parent.setWrappedEffectState(checking.wrappedEffectState);
-                    return parent;
-                }
+                parent.setWrappedEffectState(checking.wrappedEffectState);
+                return originEffectState;
             }
             parent = checking;
             checking = parent.wrappedEffectState;

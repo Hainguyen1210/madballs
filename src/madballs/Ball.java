@@ -53,13 +53,13 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public void setWeapon(Weapon weapon) {
-      try {
-        this.weapon.die();
-          this.weapon = weapon.getClass().getDeclaredConstructor(GameObject.class).newInstance(this);
-      } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-        Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
-      }
+    public void setWeapon(Class<Weapon> weaponClass) {
+        try {
+            this.weapon.die();
+            this.weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
     
     /**

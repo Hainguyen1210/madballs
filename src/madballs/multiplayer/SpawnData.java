@@ -32,13 +32,19 @@ public class SpawnData extends Data{
         return spawnType;
     }
     
-    public SpawnData(SpawnLocation spawnLocation) {
+    public SpawnData(double x, double y, String spawnType, int typeNumber) {
+        super("spawn");
+        this.x = x;
+        this.y = y;
+        this.spawnType = spawnType;
+        this.typeNumber = typeNumber;
+    }
+    
+    public SpawnData(SpawnLocation spawnLocation, boolean isLocal) {
         super("spawn");
         this.x = spawnLocation.getX();
         this.y = spawnLocation.getY();
-        this.spawnType = spawnLocation.getType();
+        this.spawnType = spawnLocation.getType() + (isLocal ? "_local" : "");
         this.typeNumber = spawnLocation.getTypeNumber();
     }
-    
-    
 }

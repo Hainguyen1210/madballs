@@ -5,6 +5,7 @@
  */
 package madballs.collision;
 
+import java.io.Serializable;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
@@ -12,17 +13,20 @@ import madballs.GameObject;
  *
  * @author Caval
  */
-public class StackedCollisionPassiveBehaviour implements CollisionPassiveBehaviour{
+public abstract class StackedCollisionPassiveBehaviour implements CollisionPassiveBehaviour, Serializable{
     private CollisionPassiveBehaviour wrappedBehaviour;
 
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        uniqueGetAffected(source, target, effect, collisionShape);
         if (wrappedBehaviour != null) wrappedBehaviour.getAffected(source, target, effect, collisionShape);
     }
     
     public StackedCollisionPassiveBehaviour(CollisionPassiveBehaviour behaviour) {
         wrappedBehaviour = behaviour;
     }
+    
+    public abstract void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
     
     /**
      * the recursive method to check whether this combo behaviour contains a specific behaviour

@@ -19,20 +19,18 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
   public GetWeaponBehaviour(CollisionPassiveBehaviour behaviour) {
     super(behaviour);
   }
-  
-  
-  @Override
-  public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-      if (effect.hasCollisionEffect(GiveWeaponEffect.class)) {
-        Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
-        if(weapon != null) ((Ball)target).setWeapon(weapon);
-        System.out.println("Get weapon " + weapon);
-        GameObject owner = source.getOwner();
-        if (owner != null) {
-            owner.die();
+
+    @Override
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        if (effect.hasCollisionEffect(GiveWeaponEffect.class)) {
+            Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
+            if(weapon != null) ((Ball)target).setWeapon((Class<Weapon>) weapon.getClass());
+            System.out.println("Get weapon " + weapon);
+            GameObject owner = source.getOwner();
+            if (owner != null) {
+                owner.die();
+            }
         }
-      }
-      super.getAffected(source, target, effect, collisionShape);
-  }
+    }
 
 }

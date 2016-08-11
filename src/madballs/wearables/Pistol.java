@@ -32,7 +32,7 @@ public class Pistol extends Weapon{
         
         setDamage(10);
         setAmmo(-1);
-        setFireRate(3);
+        setFireRate(1);
         setRange(1000);
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);

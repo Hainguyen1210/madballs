@@ -22,5 +22,10 @@ public class InvulnerableBehaviour extends StackedCollisionPassiveBehaviour{
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         
     }
+
+    @Override
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        
+    }
     
 }

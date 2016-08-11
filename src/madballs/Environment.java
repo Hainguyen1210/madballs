@@ -31,7 +31,7 @@ public class Environment {
     private Scene scene;
     private int updateIndex = 0;
     
-    public int gameNumObjects(){
+    public int getNumObjects(){
         return gameObjects.size();
     }
     
@@ -70,19 +70,31 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
+//        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
+        ArrayList<GameObject> deadGameObjects = new ArrayList<>();
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
-        
         quadtree.clear();
         
         for (GameObject obj : copiedGameObjects){
             obj.update(now);
 //            obj.updateBoundsRectangle();
-            if (isHost)quadtree.insert(obj);
+            if (obj.isDead()) {
+                deadGameObjects.add(obj);
+            }
+            else {
+                quadtree.insert(obj);
+            }
         }
-        if (!isHost) return;
+        
+        for (GameObject obj : deadGameObjects){
+            removeGameObj(obj);
+            copiedGameObjects.remove(obj);
+        }
+        
+//        copiedGameObjects = new ArrayList<>(gameObjects);
+//        if (!isHost) return;
         //spawn items
 //        itemSpawner.spawn(now);
         List<GameObject> collidableObjects = new ArrayList();
@@ -91,7 +103,7 @@ public class Environment {
         
 //        boolean isUncollided = false;
         for (GameObject checking : copiedGameObjects){
-            if (checking instanceof Obstacle) continue;
+            if (checking.isDead() || checking instanceof Obstacle) continue;
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking);
             for (GameObject target : collidableObjects){
@@ -172,6 +184,7 @@ public class Environment {
      */
     public void registerGameObj(GameObject obj, boolean shouldAddDisplay){
         gameObjects.add(obj);
+//        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) root.getChildren().add(obj.getDisplay());
     }
     

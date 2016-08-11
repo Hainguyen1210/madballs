@@ -41,7 +41,7 @@ public class MadBalls extends Application {
     }
     
     public static boolean isHost(){
-        return multiplayerHandler.getLocalPlayer().isHost();
+        return multiplayerHandler.isHost();
     }
     
     @Override

@@ -17,6 +17,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import madballs.wearables.Weapon;
 
 /**
  *
@@ -37,6 +38,7 @@ public abstract class GameObject {
     private double oldX, oldY;
     private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
+    private boolean isDead = false;
     
     private StateLoader stateLoader;
     private MoveBehaviour moveBehaviour;
@@ -44,6 +46,10 @@ public abstract class GameObject {
     
     public StateLoader getStateLoader(){
         return stateLoader;
+    }
+    
+    public boolean isDead(){
+        return isDead;
     }
     
     public int getIndex(){
@@ -234,8 +240,8 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(Image image) {
-        this.imageView.setImage(image);
+    public void setImage(String imageName) {
+//        this.imageView.setImage(image);
     }
     
     public DoubleProperty getHp(){
@@ -348,8 +354,7 @@ public abstract class GameObject {
      * put all the display component inside the display HBox
      */
     public void setDisplay(){
-        setDisplayComponents();
-        display = new Group(hitBox, imageView);
+        display = new Group();
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
@@ -359,6 +364,8 @@ public abstract class GameObject {
 //            child.translateYProperty().bind(translateY);
 //            child.getTransforms().add(rotation);
 //        }
+        setDisplayComponents();
+        display.getChildren().addAll(hitBox, imageView);
         environment.registerGameObj(this, true);
     }
     
@@ -374,19 +381,29 @@ public abstract class GameObject {
         return boundsRectangle;
     }
     
-    public void die(){
-        getEnvironment().removeGameObj(this);
-        if (child != null) {
-            child.die();
-        }
+    public void setDead(){
+//        System.out.println("remove " + getClass() + getIndex());
+        isDead = true;
         if (owner != null) {
             owner.child = null;
         }
     }
     
+    public void die(){
+        if (MadBalls.isHost()){
+//            System.out.println("die " + getClass());
+            setDead();
+            if (child != null) {
+                child.die();
+            }
+        }
+    }
+    
     public void update(long now){
         stateLoader.update();
-        updateUnique(now);
+        if (!isDead) {
+            updateUnique(now);
+        }
     }
     
     /**

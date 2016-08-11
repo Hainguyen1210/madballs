@@ -25,4 +25,9 @@ public class Ball_n_WallBehaviour extends StackedCollisionPassiveBehaviour{
             super.getAffected(source, target, effect, collisionShape);
         }
     }
+
+    @Override
+    public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        
+    }
 }

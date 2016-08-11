@@ -31,7 +31,7 @@ public class Player {
     private Socket socket;
     private ObjectOutputStream out;
     private ObjectInputStream in;
-    private final BooleanProperty isHost = new SimpleBooleanProperty(false);
+    private boolean isLocal;
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
@@ -56,13 +56,13 @@ public class Player {
         return in;
     }
     
-    public boolean isHost(){
-        return isHost.get();
+    public boolean isLocal(){
+        return isLocal;
     }
     
-    public Player(Socket socket, boolean isHost){
+    public Player(Socket socket, boolean isLocal){
         controller = new Controller(this);
-        this.isHost.set(isHost);
+        this.isLocal = isLocal;
         this.socket = socket;
         if (socket != null){
             try {
@@ -102,8 +102,9 @@ public class Player {
         new MultiplePressedKeysEventHandler(new MultiplePressedKeysEventHandler.MultiKeyEventHandler() {
             
             public void handle(MultiplePressedKeysEventHandler.MultiKeyEvent ke) {
-                if (isHost()){
-                    controller.handleKey(ke);
+                controller.handleKey(ke);
+                if (socket != null){
+                    
                 }
             }
         });
@@ -111,8 +112,9 @@ public class Player {
     final MouseKeyEventHandler mouseHandler = new MouseKeyEventHandler(new MouseKeyEventHandler.MouseEventHandler() {
         @Override
         public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
-            if (isHost()){
-                controller.handleMouse(event);
+            controller.handleMouse(event);
+            if (socket != null){
+                
             }
         }
     });
@@ -137,8 +139,8 @@ public class Player {
         try {
             out.writeObject(data);
             out.flush();
-            System.out.println("sent " + data.getType());
-            System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
+//            System.out.println("sent " + data.getType());
+//            System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }

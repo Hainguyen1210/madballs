@@ -5,6 +5,7 @@
  */
 package madballs.collision;
 
+import java.io.Serializable;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
@@ -12,7 +13,7 @@ import madballs.GameObject;
  *
  * @author Caval
  */
-public class StackedCollisionEffect implements CollisionEffect{
+public abstract class StackedCollisionEffect implements CollisionEffect, Serializable{
     StackedCollisionEffect wrappedEffect;
 
     
@@ -26,6 +27,7 @@ public class StackedCollisionEffect implements CollisionEffect{
     
     @Override
     public void affect(GameObject source, GameObject target, Shape collisionShape) {
+        target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
         if (wrappedEffect != null) wrappedEffect.affect(source, target, collisionShape);
     }
     

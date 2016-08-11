@@ -19,12 +19,6 @@ public class PushBackEffect extends StackedCollisionEffect{
         super(effect);
         this.pushBackAmount = pushBackAmount;
     }
-
-    @Override
-    public void affect(GameObject source, GameObject target, Shape collisionShape) {
-        target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
-        super.affect(source, target, collisionShape);
-    }
     
     public double getPushBackAmount(){
         return pushBackAmount;

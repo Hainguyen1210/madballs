@@ -61,7 +61,7 @@ public class Spawner {
       }
       Class<Weapon> weaponType = weapons[weaponIndex];
       if (MadBalls.isHost()){
-          MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "weapon", weaponIndex)));
+          MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "weapon", weaponIndex), false));
       }
     
     Weapon weapon = null;
@@ -73,7 +73,7 @@ public class Spawner {
   }
   public void spawnItem(int X, int Y){
       if (MadBalls.isHost()){
-        MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "item", 1)));
+        MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "item", 1), false));
       }
 //    Item item = new SpeedBoost(environment, X, Y, false);
 //    Item item = new HealBoost(environment, X, Y, false);

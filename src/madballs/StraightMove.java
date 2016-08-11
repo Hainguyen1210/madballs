@@ -5,14 +5,61 @@
  */
 package madballs;
 
-import madballs.multiplayer.MoveData;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 
 /**
  *
  * @author Caval
  */
 public class StraightMove extends MoveBehaviour{
+    private final DoubleProperty velocityX = new SimpleDoubleProperty();
+    private final DoubleProperty velocityY = new SimpleDoubleProperty();
+    private double newX, newY;
+    private double direction;
+    
+    public double getNewDirection() {
+        return direction;
+    }
 
+    public void setNewDirection(double direction) {
+        this.direction = direction;
+        setVelocityX(Math.cos(direction) * getSpeed());
+        setVelocityY(Math.sin(direction) * getSpeed());
+    }
+
+    public double getVelocityX() {
+        return velocityX.get();
+    }
+
+    public double getVelocityY() {
+        return velocityY.get();
+    }
+
+    public void setNewX(double newX) {
+        this.newX = newX;
+    }
+
+    public void setNewY(double newY) {
+        this.newY = newY;
+    }
+
+    public double getNewX() {
+        return newX;
+    }
+
+    public double getNewY() {
+        return newY;
+    }
+
+    public void setVelocityX(double velocityX) {
+        this.velocityX.set(velocityX);
+    }
+
+    public void setVelocityY(double velocityY) {
+        this.velocityY.set(velocityY);
+    }
+    
     public StraightMove(GameObject obj, double speed) {
         super(obj, speed);
     }

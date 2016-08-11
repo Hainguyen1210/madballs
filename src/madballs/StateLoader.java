@@ -41,7 +41,9 @@ public class StateLoader {
     
     public void update(){
         GameObjState newState = new GameObjState(gameObject);
+//        System.out.println("is host" + MadBalls.isHost());
         if (MadBalls.isHost()){
+//            System.out.println(MadBalls.getGameEnvironment().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
         }
         else {
@@ -72,6 +74,13 @@ public class StateLoader {
     }
     
     public void loadState(GameObjState state){
+        if (state.isDead()){
+            System.out.println("dead");
+            gameObject.setDead();
+            return;
+        }
+        gameObject.setCollisionEffect(state.getCollisionEffect());
+        gameObject.setCollisionPassiveBehaviour(state.getCollisionPassiveBehaviour());
         if (gameObject.getOwner() == null){
             gameObject.setTranslateX(state.getTranslateX());
             gameObject.setTranslateY(state.getTranslateY());
@@ -79,6 +88,15 @@ public class StateLoader {
             gameObject.setOldY(state.getOldY());
             gameObject.setRotate(state.getDirection());
             gameObject.setOldDirection(state.getOldDirection());
+        }
+        if (gameObject.getMoveBehaviour() != null){
+            MoveBehaviour moveBehaviour = gameObject.getMoveBehaviour();
+            if (gameObject.getMoveBehaviour() instanceof RotateBehaviour){
+                RotateBehaviour rotateBehaviour = (RotateBehaviour) moveBehaviour;
+                rotateBehaviour.setTargetX(state.getTargetX());
+                rotateBehaviour.setTargetY(state.getTargetY());
+            }
+            moveBehaviour.setSpeed(state.getSpeed());
         }
     }
     

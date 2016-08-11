@@ -7,20 +7,21 @@ package madballs.wearables;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.projectiles.Projectile;
 import madballs.*;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
+import madballs.multiplayer.FireData;
+import madballs.multiplayer.SpawnData;
 
 /**
  *
  * @author Caval
  */
 public abstract class Weapon extends GameObject{
-    private Image projectileImage;
+    private String projectileImageName;
     private double projectileHitBoxSize;
     private Paint projectileColor;
     
@@ -128,12 +129,12 @@ public abstract class Weapon extends GameObject{
         this.projectileCollisionBehaviour = projectileCollisionBehaviour;
     }
 
-    public Image getProjectileImage() {
-        return projectileImage;
+    public String getProjectileImageName() {
+        return projectileImageName;
     }
 
-    final public void setProjectileImage(Image projectileImage) {
-        this.projectileImage = projectileImage;
+    public void setProjectileImageName(String projectileImageName) {
+        this.projectileImageName = projectileImageName;
     }
 
     public double getProjectileHitBoxSize() {
@@ -144,12 +145,20 @@ public abstract class Weapon extends GameObject{
         this.projectileHitBoxSize = size;
     }
     
+    public void forceFire(){
+        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+    }
+    
     public void attack(long now){
         if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
-            if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-            new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
-            setLastShotTime(now);
+            if (MadBalls.isHost()){
+                if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
+                MadBalls.getMultiplayerHandler().sendData(new FireData(getIndex()));
+                new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+                setLastShotTime(now);
+            }
         }
+        
     };
     
     @Override

@@ -13,12 +13,17 @@ import madballs.StateLoader;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.player.Player;
+import madballs.wearables.Weapon;
 
 /**
  * Client class handles major socket operations on the client side
  * @author Caval
  */
 public class Client extends MultiplayerHandler{
+
+    public Client() {
+        super(false);
+    }
     
     /**
      * connect to the server as client via socket
@@ -40,7 +45,7 @@ public class Client extends MultiplayerHandler{
                                 // maintain the socket connection
                                 while(true){
                                     try {
-                                        System.out.println("handle");
+//                                        System.out.println("handle");
                                         handleData(getLocalPlayer().readData());
 //                                        getLocalPlayer().sendData(new Data("haha"));
                                     }
@@ -69,36 +74,53 @@ public class Client extends MultiplayerHandler{
     @Override
     public void handleData(Data data){
         super.handleData(data);
-        if (data.getType().equals("start")){
-            MadBalls.getGameEnvironment().startAnimation();
-        }
-        else if (data.getType().equals("state")){
-            try {
+        try {
+            if (data.getType().equals("start")){
+                MadBalls.getGameEnvironment().startAnimation();
+            }
+            else if (data.getType().equals("dead")){
+                GameObject obj = MadBalls.getGameEnvironment().getObject(((DeadData)data).getObjectIndex());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        MadBalls.getGameEnvironment().removeGameObj(obj);
+                    }
+                });
+            }
+            else if (data.getType().equals("state")){
                 StateData stateData = (StateData)data;
                 int objectIndex = stateData.getState().getObjectIndex();
                 StateLoader stateLoader = MadBalls.getGameEnvironment().getObject(objectIndex).getStateLoader();
+                if (stateData.getState().isDead()) System.out.println(MadBalls.getGameEnvironment().getObject(objectIndex).getClass());
                 stateLoader.addServerState(stateData.getState());
-            } catch (Exception ex){
-                Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+
             }
-            
+            else if (data.getType().equals("spawn")){
+                spawn((SpawnData)data);
+            }
+            else if (data.getType().equals("choose_map")){
+                System.out.println("map");
+                Map map = new Map(MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y, ((MapData)data).getMapNumber());
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        MadBalls.getGameEnvironment().loadMap(map);
+                    }
+                });
+            }
+            else if (data.getType().equals("fire")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((Weapon)MadBalls.getGameEnvironment().getObject(((FireData)data).getWeaponIndex())).forceFire();
+                    }
+                });
+            }
         }
-        else if (data.getType().equals("spawn")){
-            spawn((SpawnData)data);
+        catch (Exception ex){
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
-        else if (data.getType().equals("choose_map")){
-            System.out.println("map");
-            Map map = new Map(MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y, ((MapData)data).getMapNumber());
-            Platform.runLater(new Runnable() {
-                @Override
-                public void run() {
-                    MadBalls.getGameEnvironment().loadMap(map);
-                }
-            });
-        }
-        else if (data.getType().equals("move")){
-            moveObject((MoveData) data);
-        }
+        
     }
     
     private void spawn(SpawnData data){
@@ -107,23 +129,26 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        if (getLocalPlayer().getBall() == null){
-                            getLocalPlayer().setTeamNum(data.getTypeNum());
-                            getLocalPlayer().setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
-                            getPlayers().add(getLocalPlayer());
-                            getLocalPlayer().generateBall(MadBalls.getGameEnvironment());  
-                        }
-                        else {
-                            Player newPlayer = new Player(null, false);
-                            newPlayer.setTeamNum(data.getTypeNum());
-                            newPlayer.setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
-                            getPlayers().add(newPlayer);
-                            newPlayer.generateBall(MadBalls.getGameEnvironment());
-                            sendData(new Data("ready"));
-                        }
+                        Player newPlayer = new Player(null, false);
+                        newPlayer.setTeamNum(data.getTypeNum());
+                        newPlayer.setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
+                        getPlayers().add(newPlayer);
+                        newPlayer.generateBall(MadBalls.getGameEnvironment());
                     }
                 });
                 
+            }
+            else if (data.getSpawntype().equals("player_local")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        getLocalPlayer().setTeamNum(data.getTypeNum());
+                        getLocalPlayer().setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
+                        getPlayers().add(getLocalPlayer());
+                        getLocalPlayer().generateBall(MadBalls.getGameEnvironment());  
+                        sendData(new Data("ready"));
+                    }
+                });
             }
             else if (data.getSpawntype().equals("weapon")){
                 Platform.runLater(new Runnable() {
@@ -143,30 +168,30 @@ public class Client extends MultiplayerHandler{
             }
         }
         catch (Exception ex){
-            Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
-    private void moveObject(MoveData data){
-        try {
-            GameObject obj = MadBalls.getGameEnvironment().getObject(data.getObjIndex());
-            obj.getMoveBehaviour().setLastMoveTime(data.getLastMoveTime());
-            
-            if (data.getMoveType() == 1){
-                obj.setOldX(data.getOldX());
-                obj.setOldY(data.getOldY());
-                obj.getMoveBehaviour().setNewX(data.getNewX());
-                obj.getMoveBehaviour().setNewY(data.getNewY());
-            }
-            else if (data.getMoveType() == 2){
-                obj.setRotate(data.getNewRotate());
-                obj.setOldDirection(data.getOldRotate());
-            }
-        }
-        catch (Exception ex){
-            Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        
-    }
+//    private void moveObject(MoveData data){
+//        try {
+//            GameObject obj = MadBalls.getGameEnvironment().getObject(data.getObjIndex());
+//            obj.getMoveBehaviour().setLastMoveTime(data.getLastMoveTime());
+//            
+//            if (data.getMoveType() == 1){
+//                obj.setOldX(data.getOldX());
+//                obj.setOldY(data.getOldY());
+//                obj.getMoveBehaviour().setNewX(data.getNewX());
+//                obj.getMoveBehaviour().setNewY(data.getNewY());
+//            }
+//            else if (data.getMoveType() == 2){
+//                obj.setRotate(data.getNewRotate());
+//                obj.setOldDirection(data.getOldRotate());
+//            }
+//        }
+//        catch (Exception ex){
+//            Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
+//        }
+//        
+//    }
 
 }

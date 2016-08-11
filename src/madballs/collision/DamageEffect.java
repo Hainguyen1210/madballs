@@ -24,11 +24,5 @@ public class DamageEffect extends StackedCollisionEffect{
     public double getDamage() {
         return damage;
     }
-
-    @Override
-    public void affect(GameObject source, GameObject target, Shape collisionShape) {
-        target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
-        super.affect(source, target, collisionShape);
-    }
     
 }
