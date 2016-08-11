@@ -33,7 +33,6 @@ public class Speed extends StackedCollisionEffect{
     
     @Override
     public void affect(GameObject source, GameObject target, Shape collisionShape) {
-        System.out.println("madballs.Collision.Boost.Speed.affect()");
         target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
         super.affect(source, target, collisionShape);
     }

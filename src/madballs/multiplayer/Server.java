@@ -83,7 +83,7 @@ public class Server extends MultiplayerHandler{
                                 handleData(player, player.readData());
                             }
                             catch (Exception ex) {
-                                System.out.println("12");
+//                                System.out.println("12");
                                 Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }
@@ -116,7 +116,7 @@ public class Server extends MultiplayerHandler{
         newPlayer.sendData(new MapData(MadBalls.getGameEnvironment().getMap().getMapNumber()));
         newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation()));
         for (Player player : getPlayers()){
-            System.out.println("1");
+//            System.out.println("1");
             newPlayer.sendData(new SpawnData(player.getSpawnLocation()));
         }
     }

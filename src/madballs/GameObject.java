@@ -51,7 +51,7 @@ public abstract class GameObject {
     }
     
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
-        System.out.println("1" + this.getClass());
+//        System.out.println("1" + this.getClass());
         stateLoader = new StateLoader(this);
         translateX.set(x);
         translateY.set(y);
@@ -72,7 +72,7 @@ public abstract class GameObject {
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
     public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
-        System.out.println("2" + this.getClass());
+//        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
         owner.child = this;
         this.owner = owner;

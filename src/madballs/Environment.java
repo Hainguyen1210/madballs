@@ -150,15 +150,24 @@ public class Environment {
     
     public void loadMap(Map map){
         this.map = map;
+        String [][] mapArray = map.getMAP_ARRAY();
+//        int horizontalAmount = mapArray.length;
+//        int verticalAmount = mapArray[0].length;
+        int horizontalAmount = map.getMapLenghtX();
+        int verticalAmount = map.getMapLenghtY();
+        int horizontalUnit = map.getBox_X();
+        int verticalUnit = map.getBox_Y();
+        int boxSize = map.getBoxSize();
         //add the obstacles 
-        for (int i = 0; i < 30; i++){
-            for (int j = 0; j < 30; j++){
-                if (map.getMAP_ARRAY()[i][j] == 1) {
-                    new Obstacle(this, 
-                        j * map.getLENGTH()/30, i * map.getHEIGHT()/20,
-                        30, 30); 
+        for (int i = 0; i < horizontalAmount; i++){
+            for (int j = 0; j < verticalAmount; j++){
+              System.out.print(  mapArray[i][j]);
+                if (mapArray[i][j] != null && (mapArray[i][j]).equals("+")) {
+//                  System.out.println("Create OBJ " + horizontalUnit + " " + verticalUnit);
+                    new Obstacle(this,j * horizontalUnit, i * verticalUnit,boxSize, boxSize); 
                 }
             }
+            System.out.println("\n");
         }
     }
     

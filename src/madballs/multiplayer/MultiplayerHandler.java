@@ -41,8 +41,8 @@ public abstract class MultiplayerHandler {
     }
     
     public void handleData(Data data){
-        System.out.println(data.getType());
-        System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
+//        System.out.println(data.getType());
+//        System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
     }
     
     public abstract void sendData(Data data);

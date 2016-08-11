@@ -34,13 +34,13 @@ public class Client extends MultiplayerHandler{
                         try {
                             // connect socket
 //                            System.out.println("why");
-                            Socket socket = new Socket("127.0.0.1", 8099);
+                            Socket socket = new Socket("localhost", 8099);
                             setLocalPlayer(new Player(socket, false));
                                     
                                 // maintain the socket connection
                                 while(true){
                                     try {
-                                        System.out.println("handle");
+//                                        System.out.println("handle");
                                         handleData(getLocalPlayer().readData());
 //                                        getLocalPlayer().sendData(new Data("haha"));
                                     }
@@ -87,7 +87,7 @@ public class Client extends MultiplayerHandler{
             spawn((SpawnData)data);
         }
         else if (data.getType().equals("choose_map")){
-            System.out.println("map");
+//            System.out.println("map");
             Map map = new Map(MadBalls.RESOLUTION_X, MadBalls.RESOLUTION_Y, ((MapData)data).getMapNumber());
             Platform.runLater(new Runnable() {
                 @Override
