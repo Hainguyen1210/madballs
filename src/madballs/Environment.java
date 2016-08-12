@@ -61,8 +61,15 @@ public class Environment {
     final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
+//            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
+//                return;
+//            }
+//            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
+//                return;
+//            }
             lastUpdateTime.set(now);
             update(now);
+            updateIndex++;
         }
     };
     
@@ -96,7 +103,7 @@ public class Environment {
 //        copiedGameObjects = new ArrayList<>(gameObjects);
 //        if (!isHost) return;
         //spawn items
-//        if (MadBalls.isHost()) itemSpawner.spawn(now);
+        if (MadBalls.isHost()) itemSpawner.spawn(now);
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
@@ -127,9 +134,8 @@ public class Environment {
 //                        }
                 }
             }
-                checked.add(checking);
+            checked.add(checking);
         }
-        updateIndex++;
         
 //        for (GameObject obj : copiedGameObjects){
 //            if (collidedObjects.contains(obj)) return;

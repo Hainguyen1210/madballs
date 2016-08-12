@@ -92,6 +92,28 @@ public abstract class GameObject {
         
         if (isSettingDisplay) setDisplay();
     }
+    
+    public void setOwner(GameObject newOwner, double x, double y){
+        System.out.println(x);
+        System.out.println(y);
+        System.out.println("owner");
+        System.out.println(owner.getClass());
+        System.out.println(newOwner.getClass());
+        System.out.println(environment.getLastUpdateTime());
+        if (owner != null){
+            owner.child = null;
+        }
+        newOwner.child = this;
+        owner = newOwner;
+        
+        translateX.bind(Bindings.add(x, owner.translateX));
+        translateY.bind(Bindings.add(y, owner.translateY));
+        
+//        rotation = new Rotate(0 , -x , -y);
+        rotation.angleProperty().bind(owner.rotation.angleProperty());
+        environment = owner.getEnvironment();
+        
+    }
 
     public Environment getEnvironment() {
         return environment;
@@ -425,7 +447,7 @@ public abstract class GameObject {
     }
     
     public void update(long now){
-        stateLoader.update();
+        stateLoader.update(now);
         if (!isDead) {
             updateUnique(now);
         }

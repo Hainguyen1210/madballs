@@ -3,30 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.Item;
+package madballs.item;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Boost.Heal;
+import madballs.collision.Boost.Damage;
 import madballs.item.Item;
 
-/**
- *
- * @author chim-
- */
-public class HealBoost extends Item{
-    public HealBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
+public class DamageBoost extends Item{
+
+    public DamageBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
         super(environment, x, y, isSettingDisplay);
-        setCollisionEffect(new Heal(null,100,0));
+        setCollisionEffect(new Damage(null, 2, 5));
     }
 
     @Override
     public void setDisplayComponents() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    setColor(Paint.valueOf("red"));
+    setColor(Paint.valueOf("blue"));
     setSize(15);
     setHitBox(new Circle(getSize(), getColor()));
+//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
     
 }

@@ -39,10 +39,10 @@ public class StateLoader {
         }
     }
     
-    public void update(){
+    public void update(long now){
         GameObjState newState = new GameObjState(gameObject);
 //        System.out.println("is host" + MadBalls.isHost());
-        if (MadBalls.isHost()){
+        if (MadBalls.isHost() && (now - MadBalls.getGameEnvironment().getLastUpdateTime()) < 1000000000/120){
 //            System.out.println(MadBalls.getGameEnvironment().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
         }
@@ -80,6 +80,7 @@ public class StateLoader {
             MadBalls.getGameEnvironment().removeGameObj(gameObject);
             return;
         }
+        gameObject.setHpValue(state.getHp());
         if (gameObject.getOwner() == null){
             gameObject.setTranslateX(state.getTranslateX());
             gameObject.setTranslateY(state.getTranslateY());

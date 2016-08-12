@@ -6,8 +6,6 @@
 package madballs;
 
 import java.io.Serializable;
-import madballs.collision.CollisionEffect;
-import madballs.collision.CollisionPassiveBehaviour;
 
 /**
  *

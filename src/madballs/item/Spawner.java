@@ -5,15 +5,18 @@
  */
 package madballs.item;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
 import madballs.MadBalls;
-import madballs.Item.DamageBoost;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
+import madballs.multiplayer.SpawnData;
 import madballs.wearables.Awp;
 import madballs.wearables.Pistol;
 import madballs.wearables.Weapon;
@@ -24,6 +27,7 @@ import madballs.wearables.Weapon;
  */
 public class Spawner {
   private Class<Weapon>[] weapons;
+  private Class<Item>[] boostItems;
   private Random random = new Random();
   private Environment environment;
   private LongProperty lastItemSpawnTime = new SimpleLongProperty(0);
@@ -33,6 +37,7 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
     weapons = new Class[] {Awp.class, Pistol.class};
+    boostItems = new Class[] {SpeedBoost.class};
 //    itemSpawnLocations = environment.getMap().getItemSpawnLocations();
   }
   
@@ -54,7 +59,7 @@ public class Spawner {
       spawnWeapon(spawnLocation.getX(), spawnLocation.getY(), -1);
     } else {
       System.out.println("Item spawned");
-      spawnItem(spawnLocation.getX(), spawnLocation.getY());
+      spawnItem(spawnLocation.getX(), spawnLocation.getY(), 0);
     }
   }
   
@@ -62,26 +67,32 @@ public class Spawner {
       if (weaponIndex < 0){
           weaponIndex = random.nextInt(weapons.length);
       }
-      Class<Weapon> weaponType = weapons[weaponIndex];
+      Class<Weapon> weaponClass = weapons[weaponIndex];
       if (MadBalls.isHost()){
-//          MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "weapon", weaponIndex), false));
+          MadBalls.getMultiplayerHandler().sendData(new SpawnData(X, Y, "weapon", weaponIndex));
       }
-    
-    Weapon weapon = null;
 //    System.out.println("asfasdfasf" + weaponType.getName());
-    WeaponItem weaponItem = new WeaponItem(environment, X, Y, false, weaponType.getName());
+        new WeaponItem(environment, X, Y, false, weaponClass);
     
     
-      System.out.println(weaponType);
+      System.out.println(weaponClass);
   }
-  public void spawnItem(double X, double Y){
-      if (MadBalls.isHost()){
-//        MadBalls.getMultiplayerHandler().sendData(new SpawnData(new SpawnLocation(X, Y, "item", 1)));
+  public void spawnItem(double X, double Y, int itemIndex){
+      if (itemIndex < 0){
+          itemIndex = random.nextInt(boostItems.length);
       }
-//    Item item = new SpeedBoost(environment, X, Y, false);
+      Class<Item> itemClass = boostItems[itemIndex];
+      if (MadBalls.isHost()){
+        MadBalls.getMultiplayerHandler().sendData(new SpawnData(X, Y, "item", itemIndex));
+      }
+        try {
+          //    Item item = new SpeedBoost(environment, X, Y, false);
 //    Item item = new HealBoost(environment, X, Y, false);
 //    Item item = new FireRateBoost(environment, X, Y, false);
 //    Item item = new DamageBoost(environment, X, Y, false);
-    Item item = new DamageBoost(environment, X, Y, false);
+        itemClass.getDeclaredConstructor(Environment.class, double.class, double.class, boolean.class).newInstance(environment, X, Y, false);
+        } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+            Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
+        }
   }
 }

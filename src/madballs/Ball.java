@@ -8,12 +8,9 @@ package madballs;
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
-import javafx.event.EventHandler;
-import javafx.geometry.Insets;
-import javafx.scene.Group;
 import javafx.scene.control.ProgressBar;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Circle;
 import madballs.collision.BoostReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
@@ -76,7 +73,7 @@ public class Ball extends GameObject{
         final ProgressBar hpBar = new ProgressBar();
         hpBar.setTranslateX(-20);
         hpBar.setTranslateY(20);
-        hpBar.progressProperty().bind(new SimpleDoubleProperty(getHpValue()/100.0));
+        hpBar.progressProperty().bind(Bindings.divide(getHp(), 100));
         hpBar.setPrefWidth(40);
         hpBar.getStyleClass().add("hp-bar");
         

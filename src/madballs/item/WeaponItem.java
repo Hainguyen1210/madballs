@@ -5,13 +5,15 @@
  */
 package madballs.item;
 
+import java.lang.reflect.InvocationTargetException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Environment;
+import madballs.GameObject;
 import madballs.collision.GiveWeaponEffect;
 import madballs.collision.MakeUpItem;
-import madballs.wearables.Awp;
-import madballs.wearables.Pistol;
 import madballs.wearables.Weapon;
 
 
@@ -22,16 +24,13 @@ import madballs.wearables.Weapon;
 public class WeaponItem extends Item{
   private Weapon weapon;
   
-  public WeaponItem(Environment environment, double x, double y, boolean isSettingDisplay, String weaponClassStr) {
+  public WeaponItem(Environment environment, double x, double y, boolean isSettingDisplay, Class<Weapon> weaponClass) {
     super(environment, x, y, isSettingDisplay);
-      System.out.println(weaponClassStr);
-    if(weaponClassStr.equals("madballs.wearables.Awp")){
-        System.out.println("yes");
-      weapon = new Awp(this);
-    } else if (weaponClassStr.equals("madballs.wearables.Pistol")){
-        System.out.println("no");
-      weapon = new Pistol(this);
-    }
+      try {
+          weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+      } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+          Logger.getLogger(WeaponItem.class.getName()).log(Level.SEVERE, null, ex);
+      }
     weapon.setCollisionPassiveBehaviour(new MakeUpItem(null));
     weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
       setCollisionEffect(new GiveWeaponEffect(null, weapon));
