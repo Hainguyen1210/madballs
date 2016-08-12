@@ -12,12 +12,12 @@ import javafx.beans.binding.Bindings;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.shape.Circle;
-import madballs.collision.BoostReceivableBehaviour;
+import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
-import madballs.effectState.EffectState;
+import madballs.effectState.BuffState;
 import madballs.wearables.Pistol;
 import madballs.wearables.Weapon;
 /**
@@ -27,17 +27,18 @@ import madballs.wearables.Weapon;
 public class Ball extends GameObject{
     private Weapon weapon;
     private final int SPEED = 200;
-    private EffectState effectState;
+    private BuffState effectState;
 
-    public EffectState getEffectState() {
+    public BuffState getEffectState() {
         return effectState;
     }
 
-    public void setEffectState(EffectState effectState) {
+    public void setEffectState(BuffState effectState) {
         this.effectState = effectState;
     }
     
-    public void addEffectState(EffectState effectState) {
+    public void addEffectState(BuffState effectState) {
+        System.out.println("add effect" + effectState);
         effectState.setWrappedEffectState(this.effectState);
         this.effectState = effectState;
     }
@@ -47,7 +48,7 @@ public class Ball extends GameObject{
         super(environment, x , y, true);
         setMoveBehaviour(new StraightMove(this, SPEED));
         setCollisionEffect(new PushBackEffect(null, -1));
-        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BoostReceivableBehaviour(null)))));
+        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
         weapon = new Pistol(this);
     }

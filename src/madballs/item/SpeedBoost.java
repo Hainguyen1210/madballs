@@ -6,27 +6,22 @@
 package madballs.item;
 
 import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Boost.Speed;
+import madballs.effectState.SpeedBuff;
 
 
 /**
  *
  * @author haing
  */
-public class SpeedBoost extends Item{
-  public SpeedBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-    super(environment, x, y, isSettingDisplay);
-    setCollisionEffect(new Speed(null, 50, 5));
-  }
-
-  @Override
-  public void setDisplayComponents() {
-//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    setColor(Paint.valueOf("yellow"));
-    setSize(15);
-    setHitBox(new Circle(getSize(), getColor()));
-  }
-  
+public class SpeedBoost extends BuffItem{
+    public SpeedBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
+        super(environment, x, y, isSettingDisplay, new SpeedBuff(null, 5, 50));
+    }
+    
+    @Override
+    public void setDisplayComponents(){
+        setColor(Paint.valueOf("yellow"));
+        super.setDisplayComponents();
+    }
 }

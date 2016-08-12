@@ -279,6 +279,7 @@ public abstract class GameObject {
     }
 
     public void setHpValue(double hp) {
+        if (hp > 100) hp = 100; 
         this.hp.set(hp);
     }
 

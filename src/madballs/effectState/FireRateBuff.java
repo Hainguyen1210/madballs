@@ -4,18 +4,16 @@
  * and open the template in the editor.
  */
 package madballs.effectState;
-import madballs.Ball;
 /**
  *
  * @author chim-
  */
-public class FireRateBoosted extends EffectState{
+public class FireRateBuff extends BuffState{
     private double fireRate;
 
-    public FireRateBoosted(Ball ball, EffectState effectState, int duration, double fireRate) {
-        super(ball, effectState, duration);
+    public FireRateBuff(BuffState effectState, int duration, double fireRate) {
+        super(effectState, duration);
         this.fireRate = fireRate;
-        ball.getWeapon().setFireRate(ball.getWeapon().getFireRate() * fireRate);
     }
 
     @Override
@@ -25,5 +23,10 @@ public class FireRateBoosted extends EffectState{
 
     @Override
     public void uniqueUpdate(long timestamp) {
+    }
+
+    @Override
+    public void apply() {
+        getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() * fireRate);
     }
 }

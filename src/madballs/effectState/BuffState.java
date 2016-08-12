@@ -11,15 +11,18 @@ import madballs.Ball;
  *
  * @author chim-
  */
-public abstract class EffectState {
-    private EffectState wrappedEffectState;
+public abstract class BuffState {
+    private BuffState wrappedEffectState;
     private int duration;
     private long createdTime = 0;
     private Ball ball;
 
-    public EffectState(Ball ball, EffectState effectState, int duration) {
-        wrappedEffectState = effectState;
+    public void setBall(Ball ball) {
         this.ball = ball;
+    }
+
+    public BuffState(BuffState effectState, int duration) {
+        wrappedEffectState = effectState;
         this.duration = duration;
         
     }
@@ -36,11 +39,11 @@ public abstract class EffectState {
         }
     }
 
-    public void setWrappedEffectState(EffectState wrappedEffectState) {
+    public void setWrappedEffectState(BuffState wrappedEffectState) {
         this.wrappedEffectState = wrappedEffectState;
     }
 
-    public EffectState getWrappedEffectState() {
+    public BuffState getWrappedEffectState() {
         return wrappedEffectState;
     }
 
@@ -55,13 +58,21 @@ public abstract class EffectState {
     public Ball getBall() {
         return ball;
     }
-    
-    public EffectState removeFromEffectState(EffectState originEffectState){
-        
-        EffectState checking = originEffectState;
-        EffectState parent = originEffectState;
+
+    public void castOn(Ball ball) {
+      this.ball = ball;
+      ball.addEffectState(this);
+      apply();
+    }
+
+    public BuffState removeFromEffectState(BuffState originEffectState){
+        if (this == originEffectState){
+            return this.wrappedEffectState;
+        }
+        BuffState checking = originEffectState;
+        BuffState parent = originEffectState;
         while (checking != null){
-            if (checking == this){ 
+            if (checking == this){
                 parent.setWrappedEffectState(checking.wrappedEffectState);
                 return originEffectState;
             }
@@ -71,6 +82,7 @@ public abstract class EffectState {
         return null;
     }
     
+    public abstract void apply();
     public abstract void fade();
     public abstract void uniqueUpdate(long timestamp);
 }

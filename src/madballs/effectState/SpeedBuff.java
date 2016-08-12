@@ -11,13 +11,12 @@ import madballs.Ball;
  *
  * @author chim-
  */
-public class SpeedBoosted extends EffectState{
+public class SpeedBuff extends BuffState{
     private double speed;
     
-    public SpeedBoosted(Ball ball, EffectState effectState, int duration, double speed) {
-        super(ball, effectState, duration);
+    public SpeedBuff(BuffState effectState, int duration, double speed) {
+        super(effectState, duration);
         this.speed = speed;
-        ball.getMoveBehaviour().setSpeed(ball.getMoveBehaviour().getSpeed() + speed);
     }
 
 
@@ -29,6 +28,11 @@ public class SpeedBoosted extends EffectState{
     @Override
     public void fade() {
         getBall().getMoveBehaviour().setSpeed(getBall().getMoveBehaviour().getSpeed() - speed);
+    }
+
+    @Override
+    public void apply() {
+        getBall().getMoveBehaviour().setSpeed(getBall().getMoveBehaviour().getSpeed() + speed);
     }
     
 }

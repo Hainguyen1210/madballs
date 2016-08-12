@@ -7,6 +7,7 @@ package madballs;
 
 import java.util.LinkedList;
 import madballs.multiplayer.StateData;
+import madballs.wearables.Weapon;
 
 /**
  *
@@ -40,6 +41,7 @@ public class StateLoader {
     }
     
     public void update(long now){
+        if (gameObject instanceof Obstacle || gameObject instanceof Ground) return;
         GameObjState newState = new GameObjState(gameObject);
 //        System.out.println("is host" + MadBalls.isHost());
         if (MadBalls.isHost() && (now - MadBalls.getGameEnvironment().getLastUpdateTime()) < 1000000000/120){
@@ -97,6 +99,11 @@ public class StateLoader {
                 rotateBehaviour.setTargetY(state.getTargetY());
             }
             moveBehaviour.setSpeed(state.getSpeed());
+        }
+        if (gameObject instanceof Weapon){
+            Weapon weapon = (Weapon) gameObject;
+            weapon.setDamage(state.getDamage());
+            weapon.setFireRate(state.getFireRate());
         }
     }
     

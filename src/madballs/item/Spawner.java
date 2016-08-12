@@ -37,7 +37,7 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
     weapons = new Class[] {Awp.class, Pistol.class};
-    boostItems = new Class[] {SpeedBoost.class};
+    boostItems = new Class[] {SpeedBoost.class, DamageBoost.class, FireRateBoost.class, FullHeal.class};
 //    itemSpawnLocations = environment.getMap().getItemSpawnLocations();
   }
   
@@ -59,7 +59,7 @@ public class Spawner {
       spawnWeapon(spawnLocation.getX(), spawnLocation.getY(), -1);
     } else {
       System.out.println("Item spawned");
-      spawnItem(spawnLocation.getX(), spawnLocation.getY(), 0);
+      spawnItem(spawnLocation.getX(), spawnLocation.getY(), -1);
     }
   }
   

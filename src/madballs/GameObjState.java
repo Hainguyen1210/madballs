@@ -6,6 +6,7 @@
 package madballs;
 
 import java.io.Serializable;
+import madballs.wearables.Weapon;
 
 /**
  *
@@ -21,8 +22,17 @@ public class GameObjState implements Serializable{
     private double hp;
     private boolean isDead;
     private double speed;
+    private double damage, fireRate;
     private int objectIndex;
     private int updateIndex;
+
+    public double getDamage() {
+        return damage;
+    }
+
+    public double getFireRate() {
+        return fireRate;
+    }
 
     public double getTargetX() {
         return targetX;
@@ -107,6 +117,11 @@ public class GameObjState implements Serializable{
                 targetX = rotateBehaviour.getTargetX();
                 targetY = rotateBehaviour.getTargetY();
             }
+        }
+        if (obj instanceof Weapon){
+            Weapon weapon = (Weapon) obj;
+            damage = weapon.getDamage();
+            fireRate = weapon.getFireRate();
         }
     }
 }
