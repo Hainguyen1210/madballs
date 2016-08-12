@@ -26,10 +26,8 @@ public class WeaponItem extends Item{
     super(environment, x, y, isSettingDisplay);
       System.out.println(weaponClassStr);
     if(weaponClassStr.equals("madballs.wearables.Awp")){
-        System.out.println("yes");
       weapon = new Awp(this);
     } else if (weaponClassStr.equals("madballs.wearables.Pistol")){
-        System.out.println("no");
       weapon = new Pistol(this);
     }
     weapon.setCollisionPassiveBehaviour(new MakeUpItem(null));

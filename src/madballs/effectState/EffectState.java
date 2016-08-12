@@ -55,7 +55,11 @@ public abstract class EffectState {
     public Ball getBall() {
         return ball;
     }
-    
+
+    public void setBall(Ball ball) {
+      this.ball = ball;
+    }
+
     public EffectState removeFromEffectState(EffectState originEffectState){
         
         EffectState checking = originEffectState;

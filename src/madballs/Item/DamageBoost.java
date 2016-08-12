@@ -5,25 +5,12 @@
  */
 package madballs.Item;
 
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Boost.Damage;
-import madballs.item.Item;
+import madballs.effectState.DamageBoosted;
+import madballs.item.EffectItem;
 
-public class DamageBoost extends Item{
-
+public class DamageBoost extends EffectItem{
     public DamageBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay);
-        setCollisionEffect(new Damage(null, 2, 5));
+        super(environment, x, y, isSettingDisplay, new DamageBoosted(null, null, 5, 2));
     }
-
-    @Override
-    public void setDisplayComponents() {
-    setColor(Paint.valueOf("blue"));
-    setSize(15);
-    setHitBox(new Circle(getSize(), getColor()));
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-    
 }

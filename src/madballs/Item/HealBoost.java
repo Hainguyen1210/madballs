@@ -5,28 +5,16 @@
  */
 package madballs.Item;
 
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Boost.Heal;
-import madballs.item.Item;
+import madballs.effectState.HealBoosted;
+import madballs.item.EffectItem;
 
 /**
  *
  * @author chim-
  */
-public class HealBoost extends Item{
+public class HealBoost extends EffectItem{
     public HealBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay);
-        setCollisionEffect(new Heal(null,100,0));
+        super(environment, x, y, isSettingDisplay, new HealBoosted(null, null, 0, 0));
     }
-
-    @Override
-    public void setDisplayComponents() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    setColor(Paint.valueOf("red"));
-    setSize(15);
-    setHitBox(new Circle(getSize(), getColor()));
-    }
-    
 }

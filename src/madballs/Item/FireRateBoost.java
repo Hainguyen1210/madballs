@@ -5,29 +5,17 @@
  */
 package madballs.Item;
 
-import javafx.scene.paint.Paint;
-import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Boost.FireRate;
-import madballs.item.Item;
+import madballs.effectState.FireRateBoosted;
+import madballs.item.EffectItem;
 
 /**
  *
  * @author chim-
  */
-public class FireRateBoost extends Item{
+public class FireRateBoost extends EffectItem{
 
     public FireRateBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay);
-        setCollisionEffect(new FireRate(null, 1.5, 5));
+        super(environment, x, y, isSettingDisplay, new FireRateBoosted(null, null, 5, 1.5));
     }
-
-    @Override
-    public void setDisplayComponents() {
-//        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    setColor(Paint.valueOf("green"));
-    setSize(15);
-    setHitBox(new Circle(getSize(), getColor()));
-    }
-    
 }
