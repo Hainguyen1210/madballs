@@ -75,13 +75,11 @@ public class StateLoader {
     
     public void loadState(GameObjState state){
         if (state.isDead()){
-            System.out.println("dead");
+//            System.out.println("`");
             gameObject.setDead();
             MadBalls.getGameEnvironment().removeGameObj(gameObject);
             return;
         }
-        gameObject.setCollisionEffect(state.getCollisionEffect());
-        gameObject.setCollisionPassiveBehaviour(state.getCollisionPassiveBehaviour());
         if (gameObject.getOwner() == null){
             gameObject.setTranslateX(state.getTranslateX());
             gameObject.setTranslateY(state.getTranslateY());

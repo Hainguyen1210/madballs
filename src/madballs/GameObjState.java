@@ -8,15 +8,12 @@ package madballs;
 import java.io.Serializable;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
-import madballs.wearables.Weapon;
 
 /**
  *
  * @author caval
  */
 public class GameObjState implements Serializable{
-    private CollisionEffect collisionEffect;
-    private CollisionPassiveBehaviour collisionPassiveBehaviour;
     private double translateX;
     private double translateY;
     private double oldX, oldY;
@@ -39,14 +36,6 @@ public class GameObjState implements Serializable{
 
     public double getSpeed() {
         return speed;
-    }
-
-    public CollisionEffect getCollisionEffect() {
-        return collisionEffect;
-    }
-
-    public CollisionPassiveBehaviour getCollisionPassiveBehaviour() {
-        return collisionPassiveBehaviour;
     }
 
     public boolean isDead() {
@@ -103,8 +92,6 @@ public class GameObjState implements Serializable{
     }
     
     public GameObjState(GameObject obj){
-        collisionEffect = obj.getCollisionEffect();
-        collisionPassiveBehaviour = obj.getCollisionPassiveBehaviour();
         updateIndex = obj.getEnvironment().getUpdateIndex();
         translateX = obj.getTranslateX();
         translateY = obj.getTranslateY();

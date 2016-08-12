@@ -92,7 +92,6 @@ public class Client extends MultiplayerHandler{
                     StateData stateData = (StateData)data;
                     int objectIndex = stateData.getState().getObjectIndex();
                     StateLoader stateLoader = MadBalls.getGameEnvironment().getObject(objectIndex).getStateLoader();
-                    if (stateData.getState().isDead()) System.out.println(MadBalls.getGameEnvironment().getObject(objectIndex).getClass());
                     stateLoader.addServerState(stateData.getState());
                 }
                 catch (IndexOutOfBoundsException ex){

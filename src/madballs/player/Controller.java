@@ -59,6 +59,8 @@ public class Controller {
     
     public void handleMouse(MouseKeyEventHandler.MouseKeyEvent event){
         RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
+//        System.out.println("ahihi");
+//        System.out.println(player.getBall().getWeapon().getClass());
         weaponRotateBehaviour.setTargetX(event.getMouseX());
         weaponRotateBehaviour.setTargetY(event.getMouseY());
         weaponRotateBehaviour.setMousePressed(event.isPressed());

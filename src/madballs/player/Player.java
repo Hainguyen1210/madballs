@@ -164,9 +164,7 @@ public class Player {
             return (Data) in.readObject();
         } catch (EOFException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (IOException ex){
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (ClassNotFoundException ex){
+        } catch (IOException | ClassNotFoundException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }
         return null;

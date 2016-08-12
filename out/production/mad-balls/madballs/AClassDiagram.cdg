@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="newClassDiagramTemplate">
+  <ClassDiagramComponents>
+    <Class name="GameObject" package="" visibility="public" isAbstract="true" xPosition="34.0" yPosition="61.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Ball" package="" visibility="public" xPosition="370.0" yPosition="61.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Ground" package="" visibility="public" xPosition="34.0" yPosition="342.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Obstacle" package="" visibility="public" xPosition="370.0" yPosition="144.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Item" package="" visibility="public" xPosition="288.0" yPosition="227.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Projectile" package="" visibility="public" xPosition="192.0" yPosition="310.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="MoveBehaviour" package="" visibility="public" isAbstract="true" xPosition="34.0" yPosition="484.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StraightMove" package="" visibility="public" xPosition="288.0" yPosition="439.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="RotateBehaviour" package="" visibility="public" xPosition="288.0" yPosition="549.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="CollisionEffect" package="" visibility="public" xPosition="558.0" yPosition="66.0">
+      <Methods/>
+    </Interface>
+    <Interface name="CollisionPassiveBehaviour" package="" visibility="public" xPosition="553.0" yPosition="310.0">
+      <Methods/>
+    </Interface>
+    <Class name="StackedCollisionEffect" package="" visibility="public" xPosition="553.0" yPosition="186.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="StackedCollisionPassiveEffect" package="" visibility="public" xPosition="542.0" yPosition="425.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="DamageEffect" package="" visibility="public" xPosition="941.0" yPosition="18.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="DisappearBehaviour" package="" visibility="public" xPosition="866.0" yPosition="549.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="InvulnerableBehaviour" package="" visibility="public" xPosition="933.0" yPosition="466.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="PushBackEffect" package="" visibility="public" xPosition="941.0" yPosition="103.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="PushableBehaviour" package="" visibility="public" xPosition="650.0" yPosition="584.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="VulnerableBehaviour" package="" visibility="public" xPosition="1009.0" yPosition="382.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="WeaponIgnoredBehaviour" package="" visibility="public" xPosition="941.0" yPosition="299.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <IsRelation name="is" source="InvulnerableBehaviour" target="StackedCollisionPassiveEffect"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="StackedCollisionPassiveEffect" target="CollisionPassiveBehaviour"/>
+    <IsRelation name="is" source="Item" target="GameObject"/>
+    <IsRelation name="is" source="Projectile" target="GameObject"/>
+    <IsRelation name="is" source="DamageEffect" target="StackedCollisionEffect"/>
+    <IsRelation name="is" source="RotateBehaviour" target="MoveBehaviour"/>
+    <IsRelation name="is" source="Ground" target="GameObject"/>
+    <IsRelation name="is" source="PushBackEffect" target="StackedCollisionEffect"/>
+    <IsRelation name="is" source="DisappearBehaviour" target="StackedCollisionPassiveEffect"/>
+    <IsRelation name="is" source="StraightMove" target="MoveBehaviour"/>
+    <IsRelation name="is" source="Obstacle" target="GameObject"/>
+    <IsRelation name="is" source="VulnerableBehaviour" target="StackedCollisionPassiveEffect"/>
+    <IsRelation name="is" source="Ball" target="GameObject"/>
+    <IsRelation name="is" source="WeaponIgnoredBehaviour" target="StackedCollisionPassiveEffect"/>
+    <IsRelation name="is" source="PushableBehaviour" target="StackedCollisionPassiveEffect"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="StackedCollisionEffect" target="CollisionEffect"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

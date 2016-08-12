@@ -86,7 +86,7 @@ public class Server extends MultiplayerHandler{
                                 handleData(player, player.readData());
                             }
                             catch (Exception ex) {
-                                System.out.println("12");
+//                                System.out.println("12");
                                 Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
                             }
                         }

@@ -19,8 +19,8 @@ import madballs.multiplayer.Server;
  * @author Caval
  */
 public class MadBalls extends Application {
-    public static final double RESOLUTION_X = 1280;
-    public static final double RESOLUTION_Y = 720;
+    public static final double RESOLUTION_X = 720;
+    public static final double RESOLUTION_Y = 640;
     
     private static Environment gameEnvironment;
     private static Navigation navigation;
@@ -51,6 +51,7 @@ public class MadBalls extends Application {
         Pane root = new Pane();
         
         scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
+        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         gameEnvironment = new Environment(root);
 //        Client.initClient();
         

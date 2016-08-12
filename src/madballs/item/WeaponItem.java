@@ -8,8 +8,6 @@ package madballs.item;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.Ball_n_WallBehaviour;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.GiveWeaponEffect;
 import madballs.collision.MakeUpItem;
 import madballs.wearables.Awp;

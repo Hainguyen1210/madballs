@@ -14,7 +14,6 @@ import madballs.*;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.multiplayer.FireData;
-import madballs.multiplayer.SpawnData;
 
 /**
  *

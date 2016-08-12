@@ -10,14 +10,14 @@ import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Group;
-import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
-import madballs.wearables.Weapon;
 
 /**
  *
@@ -27,7 +27,7 @@ public abstract class GameObject {
     private GameObject owner, child;
     private Shape hitBox;
     private ImageView imageView = new ImageView();
-    private Group display;
+    private Group display, animationG, statusG;
     private Rectangle boundsRectangle;
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
@@ -57,7 +57,7 @@ public abstract class GameObject {
     }
     
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
-        System.out.println("1" + this.getClass());
+//        System.out.println("1" + this.getClass());
         stateLoader = new StateLoader(this);
         translateX.set(x);
         translateY.set(y);
@@ -78,7 +78,7 @@ public abstract class GameObject {
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
     public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
-        System.out.println("2" + this.getClass());
+//        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
         owner.child = this;
         this.owner = owner;
@@ -186,6 +186,14 @@ public abstract class GameObject {
 
     public Group getDisplay() {
         return display;
+    }
+
+    public Group getAnimationG() {
+      return animationG;
+    }
+
+    public Group getStatusG() {
+      return statusG;
     }
     
     public void setRotate(double direction){
@@ -355,17 +363,33 @@ public abstract class GameObject {
      */
     public void setDisplay(){
         display = new Group();
+        animationG = new Group();
+        statusG = new Group();
+        statusG.setVisible(false);
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
-        display.getTransforms().add(rotation);
+        animationG.getTransforms().add(rotation);
 //        for (Node child : display.getChildren()){
 //            child.translateXProperty().bind(translateX);
 //            child.translateYProperty().bind(translateY);
 //            child.getTransforms().add(rotation);
 //        }
         setDisplayComponents();
-        display.getChildren().addAll(hitBox, imageView);
+        animationG.getChildren().addAll(hitBox, imageView);
+        display.getChildren().addAll(animationG, statusG);
+        getDisplay().setOnMouseEntered(new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            statusG.setVisible(true);
+          }
+        });
+        getDisplay().setOnMouseExited(new EventHandler<MouseEvent>() {
+          @Override
+          public void handle(MouseEvent event) {
+            statusG.setVisible(false);
+          }
+        });
         environment.registerGameObj(this, true);
     }
     
