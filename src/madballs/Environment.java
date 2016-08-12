@@ -84,7 +84,7 @@ public class Environment {
         }
         if (!isHost) return;
         //spawn items
-//        itemSpawner.spawn(now);
+        itemSpawner.spawn(now);
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
@@ -145,7 +145,7 @@ public class Environment {
         gameObjects = new ArrayList<>();
         ground = new Ground(this, 0, 0);
         
-//        animation.start();
+//       animation.start();
     }
     
     public void loadMap(Map map){
@@ -167,7 +167,7 @@ public class Environment {
                     new Obstacle(this,j * horizontalUnit, i * verticalUnit,boxSize, boxSize); 
                 }
             }
-            System.out.println("\n");
+          System.out.println("\n");
         }
     }
     
