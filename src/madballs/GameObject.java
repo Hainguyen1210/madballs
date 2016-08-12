@@ -393,6 +393,7 @@ public abstract class GameObject {
         if (MadBalls.isHost()){
 //            System.out.println("die " + getClass());
             setDead();
+            getEnvironment().removeGameObj(this);
             if (child != null) {
                 child.die();
             }

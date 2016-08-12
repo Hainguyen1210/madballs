@@ -20,6 +20,7 @@ import madballs.Environment;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
+import madballs.multiplayer.KeyInputData;
 
 /**
  *
@@ -35,6 +36,10 @@ public class Player {
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
+
+    public Socket getSocket() {
+        return socket;
+    }
 
     public SpawnLocation getSpawnLocation() {
         return spawnLocation;
@@ -76,6 +81,7 @@ public class Player {
     
     public void generateBall(Environment environment){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
+        if (isLocal) bindInput(MadBalls.getScene());
     }
     
     public Ball getBall(){
@@ -98,26 +104,33 @@ public class Player {
         this.teamNum = teamNum;
     }
     
-    final MultiplePressedKeysEventHandler keyHandler = 
+    private final MultiplePressedKeysEventHandler keyHandler = 
         new MultiplePressedKeysEventHandler(new MultiplePressedKeysEventHandler.MultiKeyEventHandler() {
             
+            @Override
             public void handle(MultiplePressedKeysEventHandler.MultiKeyEvent ke) {
                 controller.handleKey(ke);
+            }
+        }, this);
+    
+    private final MouseKeyEventHandler mouseHandler = 
+        new MouseKeyEventHandler(new MouseKeyEventHandler.MouseEventHandler() {
+            @Override
+            public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
+                controller.handleMouse(event);
                 if (socket != null){
-                    
+
                 }
             }
-        });
-    
-    final MouseKeyEventHandler mouseHandler = new MouseKeyEventHandler(new MouseKeyEventHandler.MouseEventHandler() {
-        @Override
-        public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
-            controller.handleMouse(event);
-            if (socket != null){
-                
-            }
-        }
-    });
+        }, this);
+
+    public MultiplePressedKeysEventHandler getKeyHandler() {
+        return keyHandler;
+    }
+
+    public MouseKeyEventHandler getMouseHandler() {
+        return mouseHandler;
+    }
     
     public void bindInput(Scene scene){
 //        System.out.println("123");

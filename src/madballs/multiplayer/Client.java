@@ -40,7 +40,7 @@ public class Client extends MultiplayerHandler{
                             // connect socket
 //                            System.out.println("why");
                             Socket socket = new Socket("127.0.0.1", 8099);
-                            setLocalPlayer(new Player(socket, false));
+                            setLocalPlayer(new Player(socket, true));
                                     
                                 // maintain the socket connection
                                 while(true){
@@ -88,11 +88,29 @@ public class Client extends MultiplayerHandler{
                 });
             }
             else if (data.getType().equals("state")){
-                StateData stateData = (StateData)data;
-                int objectIndex = stateData.getState().getObjectIndex();
-                StateLoader stateLoader = MadBalls.getGameEnvironment().getObject(objectIndex).getStateLoader();
-                if (stateData.getState().isDead()) System.out.println(MadBalls.getGameEnvironment().getObject(objectIndex).getClass());
-                stateLoader.addServerState(stateData.getState());
+                try {
+                    StateData stateData = (StateData)data;
+                    int objectIndex = stateData.getState().getObjectIndex();
+                    StateLoader stateLoader = MadBalls.getGameEnvironment().getObject(objectIndex).getStateLoader();
+                    if (stateData.getState().isDead()) System.out.println(MadBalls.getGameEnvironment().getObject(objectIndex).getClass());
+                    stateLoader.addServerState(stateData.getState());
+                }
+                catch (IndexOutOfBoundsException ex){
+                    Service<Void> service = new Service<Void>() {
+                        @Override
+                        protected Task<Void> createTask() {
+                            return new Task<Void>() {
+                                @Override
+                                protected Void call() throws Exception {
+                                    handleData(data);
+                                    return null;
+                                }
+                            };
+                        }
+                    };
+                    service.start();
+                }
+                
 
             }
             else if (data.getType().equals("spawn")){

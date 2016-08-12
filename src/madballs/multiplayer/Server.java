@@ -45,7 +45,6 @@ public class Server extends MultiplayerHandler{
                                     @Override
                                     public void run() {
                                         getLocalPlayer().generateBall(MadBalls.getGameEnvironment());
-                                        getLocalPlayer().bindInput(MadBalls.getScene());
                                     }
                                 });                                
                                 // listen for client over socket
@@ -148,6 +147,14 @@ public class Server extends MultiplayerHandler{
                     MadBalls.getGameEnvironment().startAnimation();
                 }
             });
+        }
+        else if (data.getType().equals("input_key")){
+            KeyInputData keyInputData = (KeyInputData) data;
+            player.getKeyHandler().handle(keyInputData.getKeyEvent());
+        }
+        else if (data.getType().equals("input_mouse")){
+            MouseInputData mouseInputData = (MouseInputData) data;
+            player.getMouseHandler().handle(mouseInputData);
         }
     }
 }

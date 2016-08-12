@@ -77,6 +77,7 @@ public class StateLoader {
         if (state.isDead()){
             System.out.println("dead");
             gameObject.setDead();
+            MadBalls.getGameEnvironment().removeGameObj(gameObject);
             return;
         }
         gameObject.setCollisionEffect(state.getCollisionEffect());
