@@ -159,7 +159,7 @@ public class Environment {
     
     private Environment(){
         this.itemSpawner = new Spawner(this);
-        quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
+        quadtree = new Quadtree(0, new Rectangle(-25, -25, ScenesManager.RESOLUTION_X + 25, ScenesManager.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
     }
     

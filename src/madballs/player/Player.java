@@ -160,7 +160,7 @@ public class Player {
             out.writeObject(data);
             out.flush();
 //            System.out.println("sent " + data.getType());
-//            System.out.println(MadBalls.getGameEnvironment().gameNumObjects());
+//            System.out.println(Environment.getInstance().gameNumObjects());
         } catch (IOException ex) {
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }

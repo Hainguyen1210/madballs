@@ -53,7 +53,7 @@ public abstract class MultiplayerHandler {
     
     public void handleData(Data data){
 //        System.out.println(data.getType());
-//        System.out.println(MadBalls.getGameEnvironment().getNumObjects());
+//        System.out.println(Environment.getInstance().getNumObjects());
     }
     
     public void checkWinner(){

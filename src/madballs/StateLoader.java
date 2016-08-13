@@ -44,8 +44,8 @@ public class StateLoader {
         if (gameObject instanceof Obstacle || gameObject instanceof Ground) return;
         GameObjState newState = new GameObjState(gameObject);
 //        System.out.println("is host" + MadBalls.isHost());
-        if (MadBalls.isHost() && (now - MadBalls.getGameEnvironment().getLastUpdateTime()) < 1000000000/120){
-//            System.out.println(MadBalls.getGameEnvironment().getNumObjects());
+        if (MadBalls.isHost() && (now - Environment.getInstance().getLastUpdateTime()) < 1000000000/120){
+//            System.out.println(Environment.getInstance().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
         }
         else {
@@ -79,7 +79,7 @@ public class StateLoader {
         if (state.isDead()){
 //            System.out.println("`");
             gameObject.setDead();
-            MadBalls.getGameEnvironment().removeGameObj(gameObject);
+            Environment.getInstance().removeGameObj(gameObject);
             return;
         }
         gameObject.setHpValue(state.getHp());

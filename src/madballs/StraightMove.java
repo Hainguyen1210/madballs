@@ -67,7 +67,7 @@ public class StraightMove extends MoveBehaviour{
     @Override
     void calculateNewCordinate(long now) {
         // get the time elapsed and update lastUpdateTime
-        if (getLastMoveTime() == 0) setLastMoveTime(MadBalls.getGameEnvironment().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
 //        if (now - getLastMoveTime() < 5000000) return;
         
         final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;

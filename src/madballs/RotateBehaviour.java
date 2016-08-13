@@ -40,7 +40,7 @@ public class RotateBehaviour extends MoveBehaviour{
     @Override
     public void move(long now) {
 //        System.out.println(getObject().getClass());
-        if (getLastMoveTime() == 0) setLastMoveTime(MadBalls.getGameEnvironment().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
         if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
             double[] realCoordinate = getObject().getRealCoordinate();
             double newDirection = Math.atan2(getTargetY()- 768/2, getTargetX() - 1366/2);

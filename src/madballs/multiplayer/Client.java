@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import madballs.Ball;
+import madballs.Environment;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.StateLoader;
@@ -80,16 +81,16 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getGameEnvironment().startAnimation();
+                        Environment.getInstance().startAnimation();
                     }
                 });
             }
             else if (data.getType().equals("dead")){
-                GameObject obj = MadBalls.getGameEnvironment().getObject(((DeadData)data).getObjectIndex());
+                GameObject obj = Environment.getInstance().getObject(((DeadData)data).getObjectIndex());
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getGameEnvironment().removeGameObj(obj);
+                        Environment.getInstance().removeGameObj(obj);
                     }
                 });
             }
@@ -97,7 +98,7 @@ public class Client extends MultiplayerHandler{
                 try {
                     StateData stateData = (StateData)data;
                     int objectIndex = stateData.getState().getObjectIndex();
-                    StateLoader stateLoader = MadBalls.getGameEnvironment().getObject(objectIndex).getStateLoader();
+                    StateLoader stateLoader = Environment.getInstance().getObject(objectIndex).getStateLoader();
                     stateLoader.addServerState(stateData.getState());
                 }
                 catch (IndexOutOfBoundsException ex){
@@ -127,7 +128,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getGameEnvironment().loadMap(map);
+                        Environment.getInstance().loadMap(map);
                     }
                 });
             }
@@ -135,7 +136,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        ((Weapon)MadBalls.getGameEnvironment().getObject(((FireData)data).getWeaponIndex())).forceFire();
+                        ((Weapon)Environment.getInstance().getObject(((FireData)data).getWeaponIndex())).forceFire();
                     }
                 });
             }
@@ -146,7 +147,7 @@ public class Client extends MultiplayerHandler{
                     public void run() {
                         try {
                             Class<Weapon> weaponClass = (Class<Weapon>) Class.forName(getWeaponData.getWeaponClassName());
-                            ((Ball)MadBalls.getGameEnvironment().getObject(getWeaponData.getBallIndex())).setWeapon(weaponClass);
+                            ((Ball)Environment.getInstance().getObject(getWeaponData.getBallIndex())).setWeapon(weaponClass);
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
@@ -159,8 +160,8 @@ public class Client extends MultiplayerHandler{
 //                Platform.runLater(new Runnable() {
 //                    @Override
 //                    public void run() {
-//                        GameObject first = MadBalls.getGameEnvironment().getObject(collisionData.getFirstIndex());
-//                        GameObject second = MadBalls.getGameEnvironment().getObject(collisionData.getSecondIndex());
+//                        GameObject first = Environment.getInstance().getObject(collisionData.getFirstIndex());
+//                        GameObject second = Environment.getInstance().getObject(collisionData.getSecondIndex());
 //                        first.onCollision(second, collisionData.getCollisionShape());
 //                        second.onCollision(first, collisionData.getCollisionShape());
 //                    }
@@ -183,7 +184,7 @@ public class Client extends MultiplayerHandler{
                         newPlayer.setTeamNum(data.getTypeNum());
                         newPlayer.setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
                         getPlayers().add(newPlayer);
-                        newPlayer.generateBall(MadBalls.getGameEnvironment());
+                        newPlayer.generateBall(Environment.getInstance());
                     }
                 });
                 
@@ -195,7 +196,7 @@ public class Client extends MultiplayerHandler{
                         getLocalPlayer().setTeamNum(data.getTypeNum());
                         getLocalPlayer().setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
                         getPlayers().add(getLocalPlayer());
-                        getLocalPlayer().generateBall(MadBalls.getGameEnvironment());  
+                        getLocalPlayer().generateBall(Environment.getInstance());  
                         sendData(new Data("ready"));
                     }
                 });
@@ -204,7 +205,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getGameEnvironment().getItemSpawner().spawnWeapon((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        Environment.getInstance().getItemSpawner().spawnWeapon((int)data.getX(), (int)data.getY(), data.getTypeNum());
                     }
                 });
             }
@@ -212,7 +213,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getGameEnvironment().getItemSpawner().spawnItem((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        Environment.getInstance().getItemSpawner().spawnItem((int)data.getX(), (int)data.getY(), data.getTypeNum());
                     }
                 });
             }
@@ -224,7 +225,7 @@ public class Client extends MultiplayerHandler{
     
 //    private void moveObject(MoveData data){
 //        try {
-//            GameObject obj = MadBalls.getGameEnvironment().getObject(data.getObjIndex());
+//            GameObject obj = Environment.getInstance().getObject(data.getObjIndex());
 //            obj.getMoveBehaviour().setLastMoveTime(data.getLastMoveTime());
 //            
 //            if (data.getMoveType() == 1){

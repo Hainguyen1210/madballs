@@ -8,7 +8,6 @@ package madballs;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
@@ -20,10 +19,6 @@ import madballs.multiplayer.Server;
  * @author Caval
  */
 public class MadBalls extends Application {
-    public static final double RESOLUTION_X = 800;
-    public static final double RESOLUTION_Y = 600;
-    
-    private static Environment gameEnvironment;
     private static Navigation navigation;
     private static MultiplayerHandler multiplayerHandler;
     
@@ -31,10 +26,6 @@ public class MadBalls extends Application {
     
     public static Scene getScene(){
         return scene;
-    }
-
-    public static Environment getGameEnvironment() {
-        return gameEnvironment;
     }
     
     public static MultiplayerHandler getMultiplayerHandler(){
@@ -51,22 +42,23 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        primaryStage.setFullScreen(true);
+        primaryStage.setResizable(false);
         
         navigation = new Navigation();
         Group root = new Group();
         
-        scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
+        scene = new Scene(root, ScenesManager.RESOLUTION_X, ScenesManager.RESOLUTION_Y);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        gameEnvironment = Environment.getInstance();
-        gameEnvironment.setDisplay(root);
+        Environment.getInstance().setDisplay(root);
 //        Client.initClient();
         
         
         boolean isHost = navigation.getConfirmation("", "Start game", "Do you want to host?");
         if (isHost){
             multiplayerHandler = new Server();
-            Map map = new Map(RESOLUTION_X, RESOLUTION_Y, -1);
-            gameEnvironment.loadMap(map);
+            Map map = new Map(ScenesManager.RESOLUTION_X, ScenesManager.RESOLUTION_Y, -1);
+            Environment.getInstance().loadMap(map);
         }
         else {
             multiplayerHandler = new Client();
