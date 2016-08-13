@@ -1,4 +1,4 @@
-preset: 10 30 50 50 50 (MapSizeX--MapSizeY--boxLocationX--boxLocationY--boxSize)
+preset: 20 30 50 50 50 (MapSizeX--MapSizeY--boxLocationX--boxLocationY--boxSize)
 _++++.+++++.+++++.+++++.+++++.++++_
 +____._____.__+__._____.__+__.____+
 +____._1___._s+__.__2__.__s__.____+

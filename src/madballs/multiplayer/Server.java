@@ -145,7 +145,7 @@ public class Server extends MultiplayerHandler{
         if (data.getType().equals("ready")){
             currentPlayer.setReady(true);
             System.out.println("index" +playerIndex);
-            if (playerIndex >= 2){
+            if (playerIndex >= 3){
                 for (Player player : getPlayers()){
                     System.out.println(player.getPlayerNum());
                     System.out.println(player.isReady());

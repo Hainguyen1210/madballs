@@ -26,12 +26,16 @@ public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
     private Spawner itemSpawner;
-    private Group root;
+    private Group display;
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
     private Scene scene;
     private int updateIndex = 0;
+
+    public Group getDisplay() {
+        return display;
+    }
     
     public int getNumObjects(){
         return gameObjects.size();
@@ -79,7 +83,7 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        MadBalls.getMultiplayerHandler().checkWinner();
+//        MadBalls.getMultiplayerHandler().checkWinner();
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
@@ -164,7 +168,7 @@ public class Environment {
     }
     
     public void setDisplay(Group display){
-        this.root = display;
+        this.display = display;
         ground = new Ground(this, 0, 0);
     }
     
@@ -207,7 +211,7 @@ public class Environment {
     public void registerGameObj(GameObject obj, boolean shouldAddDisplay){
         gameObjects.add(obj);
 //        System.out.println(getObjectIndex(obj));
-        if (shouldAddDisplay) root.getChildren().add(obj.getDisplay());
+        if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
     }
     
     /**
@@ -216,6 +220,6 @@ public class Environment {
      */
     public void removeGameObj(GameObject obj){
 //        gameObjects.remove(obj);
-        root.getChildren().remove(obj.getDisplay());
+        display.getChildren().remove(obj.getDisplay());
     }
 }

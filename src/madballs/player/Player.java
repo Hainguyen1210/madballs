@@ -16,6 +16,7 @@ import javafx.scene.Scene;
 import madballs.Ball;
 import madballs.Environment;
 import madballs.MadBalls;
+import madballs.ScenesManager;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 
@@ -87,7 +88,10 @@ public class Player {
     
     public void generateBall(Environment environment){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
-        if (isLocal) bindInput(MadBalls.getScene());
+        if (isLocal) {
+            bindInput(MadBalls.getScene());
+            ScenesManager.getInstance().setCamera(ball);
+        }
     }
     
     public Ball getBall(){

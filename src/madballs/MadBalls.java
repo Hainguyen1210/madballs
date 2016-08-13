@@ -48,9 +48,10 @@ public class MadBalls extends Application {
         navigation = new Navigation();
         Group root = new Group();
         
-        scene = new Scene(root, ScenesManager.RESOLUTION_X, ScenesManager.RESOLUTION_Y);
+        scene = new Scene(root);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         Environment.getInstance().setDisplay(root);
+        ScenesManager.getInstance().scaleDisplay();
 //        Client.initClient();
         
         

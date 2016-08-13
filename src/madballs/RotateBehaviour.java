@@ -43,8 +43,8 @@ public class RotateBehaviour extends MoveBehaviour{
         if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
         if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
             double[] realCoordinate = getObject().getRealCoordinate();
-            double newDirection = Math.atan2(getTargetY()- 768/2, getTargetX() - 1366/2);
-//            double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
+            
+            double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
             double currentRotateDirection = Math.toRadians(getObject().getRotateAngle());
             if (newDirection != currentRotateDirection) {
 //                System.out.println("");
