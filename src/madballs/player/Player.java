@@ -124,9 +124,6 @@ public class Player {
             @Override
             public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
                 controller.handleMouse(event);
-                if (socket != null){
-
-                }
             }
         }, this);
 
@@ -139,6 +136,9 @@ public class Player {
     }
     
     public void bindInput(Scene scene){
+//
+//        camera.setTranslateX(ball.getTranslateX());
+//        camera.setTranslateY(ball.getTranslateY());
 //        System.out.println("123");
 //        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
 //        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
@@ -152,6 +152,7 @@ public class Player {
         scene.setOnMouseReleased(mouseHandler);
         scene.setOnMouseMoved(mouseHandler);
         scene.setOnMouseDragged(mouseHandler);
+        
     }
     
     public void sendData(Data data){

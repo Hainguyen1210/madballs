@@ -118,6 +118,14 @@ public abstract class GameObject {
     public Environment getEnvironment() {
         return environment;
     }
+    
+    public DoubleProperty getTranslateXProperty(){
+        return translateX;
+    }
+    
+    public DoubleProperty getTranslateYProperty(){
+        return translateY;
+    }
 
     public double getTranslateX() {
         return translateX.get();

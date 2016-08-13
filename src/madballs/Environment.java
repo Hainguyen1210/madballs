@@ -10,6 +10,7 @@ import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
@@ -25,7 +26,7 @@ public class Environment {
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
     private Spawner itemSpawner;
-    private Pane root;
+    private Group root;
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
@@ -156,14 +157,13 @@ public class Environment {
     return map;
   }
     
-
     private Environment(){
         this.itemSpawner = new Spawner(this);
         quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
     }
     
-    public void setDisplay(Pane display){
+    public void setDisplay(Group display){
         this.root = display;
         ground = new Ground(this, 0, 0);
     }

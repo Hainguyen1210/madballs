@@ -37,7 +37,7 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
     weapons = new Class[] {Awp.class, Pistol.class};
-    boostItems = new Class[] {MiniHealthFlask.class, DivineBoost.class, FullHeal.class, FireRateBoost.class, DamageBoost.class, SpeedBoost.class};
+    boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
   }
   
   public void spawn(long now){

@@ -7,16 +7,16 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.SpeedBuff;
+import madballs.effectState.Haste;
 
 
 /**
  *
  * @author haing
  */
-public class SpeedBoost extends BuffItem{
-    public SpeedBoost(Environment environment, double x, double y) {
-        super(environment, x, y, new SpeedBuff(null, 5, 50));
+public class Wheels extends BuffItem{
+    public Wheels(Environment environment, double x, double y) {
+        super(environment, x, y, new Haste(null, 5, 50));
     }
     
     @Override

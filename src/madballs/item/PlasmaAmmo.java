@@ -7,21 +7,16 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.FireRateBuff;
+import madballs.effectState.PowerUp;
 
-/**
- *
- * @author chim-
- */
-public class FireRateBoost extends BuffItem{
-
-    public FireRateBoost(Environment environment, double x, double y) {
-        super(environment, x, y, new FireRateBuff(null, 5, 1.5));
+public class PlasmaAmmo extends BuffItem{
+    public PlasmaAmmo(Environment environment, double x, double y) {
+        super(environment, x, y, new PowerUp(null, 5, 2));
     }
     
     @Override
     public void setDisplayComponents(){
-        setColor(Paint.valueOf("blue"));
+        setColor(Paint.valueOf("red"));
         super.setDisplayComponents();
     }
 }

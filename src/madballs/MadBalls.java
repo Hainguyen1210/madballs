@@ -6,6 +6,7 @@
 package madballs;
 
 import javafx.application.Application;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
@@ -19,8 +20,8 @@ import madballs.multiplayer.Server;
  * @author Caval
  */
 public class MadBalls extends Application {
-    public static final double RESOLUTION_X = 720;
-    public static final double RESOLUTION_Y = 640;
+    public static final double RESOLUTION_X = 800;
+    public static final double RESOLUTION_Y = 600;
     
     private static Environment gameEnvironment;
     private static Navigation navigation;
@@ -52,7 +53,7 @@ public class MadBalls extends Application {
     public void start(Stage primaryStage) {
         
         navigation = new Navigation();
-        Pane root = new Pane();
+        Group root = new Group();
         
         scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());

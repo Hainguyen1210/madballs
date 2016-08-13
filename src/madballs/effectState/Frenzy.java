@@ -8,10 +8,10 @@ package madballs.effectState;
  *
  * @author chim-
  */
-public class FireRateBuff extends BuffState{
+public class Frenzy extends BuffState{
     private double fireRateRatio;
 
-    public FireRateBuff(BuffState effectState, int duration, double fireRateRatio) {
+    public Frenzy(BuffState effectState, int duration, double fireRateRatio) {
         super(effectState, duration);
         this.fireRateRatio = fireRateRatio;
     }

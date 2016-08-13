@@ -10,10 +10,10 @@ import madballs.collision.DamageEffect;
  *
  * @author chim-
  */
-public class DamageBuff extends BuffState{
+public class PowerUp extends BuffState{
     private double damageRatio;
 
-    public DamageBuff(BuffState effectState, int duration, double damageRatio) {
+    public PowerUp(BuffState effectState, int duration, double damageRatio) {
         super(effectState, duration);
         this.damageRatio = damageRatio;
     }

@@ -11,10 +11,10 @@ import madballs.Ball;
  *
  * @author chim-
  */
-public class SpeedBuff extends BuffState{
+public class Haste extends BuffState{
     private double speed;
     
-    public SpeedBuff(BuffState effectState, int duration, double speed) {
+    public Haste(BuffState effectState, int duration, double speed) {
         super(effectState, duration);
         this.speed = speed;
     }

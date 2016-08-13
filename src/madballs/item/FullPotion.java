@@ -7,16 +7,21 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.DamageBuff;
+import madballs.effectState.InstantHeal;
 
-public class DamageBoost extends BuffItem{
-    public DamageBoost(Environment environment, double x, double y) {
-        super(environment, x, y, new DamageBuff(null, 5, 2));
+/**
+ *
+ * @author chim-
+ */
+public class FullPotion extends BuffItem{
+    public FullPotion(Environment environment, double x, double y) {
+        super(environment, x, y, new InstantHeal(100));
     }
+    
     
     @Override
     public void setDisplayComponents(){
-        setColor(Paint.valueOf("red"));
+        setColor(Paint.valueOf("green"));
         super.setDisplayComponents();
     }
 }
