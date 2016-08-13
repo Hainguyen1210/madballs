@@ -8,7 +8,6 @@ package madballs.item;
 import javafx.scene.paint.Paint;
 import madballs.Environment;
 import madballs.effectState.FireRateBuff;
-import madballs.item.BuffItem;
 
 /**
  *
@@ -16,8 +15,8 @@ import madballs.item.BuffItem;
  */
 public class FireRateBoost extends BuffItem{
 
-    public FireRateBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay, new FireRateBuff(null, 5, 1.5));
+    public FireRateBoost(Environment environment, double x, double y) {
+        super(environment, x, y, new FireRateBuff(null, 5, 1.5));
     }
     
     @Override

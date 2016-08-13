@@ -11,16 +11,16 @@ import madballs.collision.DamageEffect;
  * @author chim-
  */
 public class DamageBuff extends BuffState{
-    private double damage;
+    private double damageRatio;
 
-    public DamageBuff(BuffState effectState, int duration, double damage) {
+    public DamageBuff(BuffState effectState, int duration, double damageRatio) {
         super(effectState, duration);
-        this.damage = damage;
+        this.damageRatio = damageRatio;
     }
     
     @Override
     public void fade() {
-        getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() / damage);
+        getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() / damageRatio);
     }
 
     @Override
@@ -29,7 +29,7 @@ public class DamageBuff extends BuffState{
 
     @Override
     public void apply() {
-        getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() * damage);
+        getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() * damageRatio);
         getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage()));
     }
     

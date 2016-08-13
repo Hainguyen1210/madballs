@@ -42,11 +42,15 @@ public abstract class Item extends GameObject{
     this.size = size;
   }
 
-  public Item(Environment environment, double x, double y, boolean isSettingDisplay) {
-      super(environment, x, y, isSettingDisplay);
-      setDisplay();
+  public Item(Environment environment, double x, double y) {
+      super(environment, x, y, true);
+//      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
       setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new MakeUpItem(null))));
+  }
+  
+  public boolean canSpawn(){
+      return false;
   }
 
   @Override

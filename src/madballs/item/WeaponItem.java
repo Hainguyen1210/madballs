@@ -24,8 +24,8 @@ import madballs.wearables.Weapon;
 public class WeaponItem extends Item{
   private Weapon weapon;
   
-  public WeaponItem(Environment environment, double x, double y, boolean isSettingDisplay, Class<Weapon> weaponClass) {
-    super(environment, x, y, isSettingDisplay);
+  public WeaponItem(Environment environment, double x, double y, Class<Weapon> weaponClass) {
+    super(environment, x, y);
       try {
           weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
       } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

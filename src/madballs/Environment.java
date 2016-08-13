@@ -21,6 +21,7 @@ import madballs.map.Map;
  * @author Caval
  */
 public class Environment {
+    private static Environment instance = new Environment();
     private ArrayList<GameObject> gameObjects;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
     private Spawner itemSpawner;
@@ -77,6 +78,7 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
+        MadBalls.getMultiplayerHandler().checkWinner();
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
@@ -155,15 +157,19 @@ public class Environment {
   }
     
 
-    public Environment(Pane display){
+    private Environment(){
         this.itemSpawner = new Spawner(this);
-        this.root = display;
-        
         quadtree = new Quadtree(0, new Rectangle(-25, -25, MadBalls.RESOLUTION_X + 25, MadBalls.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
+    }
+    
+    public void setDisplay(Pane display){
+        this.root = display;
         ground = new Ground(this, 0, 0);
-        
-//       animation.start();
+    }
+    
+    public static Environment getInstance(){
+        return instance;
     }
     
     public void loadMap(Map map){
@@ -191,6 +197,7 @@ public class Environment {
     
     public void startAnimation(){
         animation.start();
+        MadBalls.getNavigation().showInterupt("", "Game started", "Let's rock and roll!", false);
     }
     
     /**

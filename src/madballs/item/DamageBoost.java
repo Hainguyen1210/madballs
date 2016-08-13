@@ -10,8 +10,8 @@ import madballs.Environment;
 import madballs.effectState.DamageBuff;
 
 public class DamageBoost extends BuffItem{
-    public DamageBoost(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay, new DamageBuff(null, 5, 2));
+    public DamageBoost(Environment environment, double x, double y) {
+        super(environment, x, y, new DamageBuff(null, 5, 2));
     }
     
     @Override

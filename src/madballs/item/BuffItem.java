@@ -17,8 +17,8 @@ import madballs.effectState.BuffState;
  */
 public class BuffItem extends Item{
   
-  public BuffItem(Environment environment, double x, double y, boolean isSettingDisplay, BuffState effectState) {
-    super(environment, x, y, isSettingDisplay);
+  public BuffItem(Environment environment, double x, double y, BuffState effectState) {
+    super(environment, x, y);
     setCollisionEffect(new GiveStateEffect(null, effectState));
   }  
   

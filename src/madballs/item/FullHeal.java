@@ -14,8 +14,8 @@ import madballs.effectState.InstantHeal;
  * @author chim-
  */
 public class FullHeal extends BuffItem{
-    public FullHeal(Environment environment, double x, double y, boolean isSettingDisplay) {
-        super(environment, x, y, isSettingDisplay, new InstantHeal(100));
+    public FullHeal(Environment environment, double x, double y) {
+        super(environment, x, y, new InstantHeal(100));
     }
     
     

@@ -9,16 +9,16 @@ package madballs.effectState;
  * @author chim-
  */
 public class FireRateBuff extends BuffState{
-    private double fireRate;
+    private double fireRateRatio;
 
-    public FireRateBuff(BuffState effectState, int duration, double fireRate) {
+    public FireRateBuff(BuffState effectState, int duration, double fireRateRatio) {
         super(effectState, duration);
-        this.fireRate = fireRate;
+        this.fireRateRatio = fireRateRatio;
     }
 
     @Override
     public void fade() {
-        getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() / fireRate);
+        getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() / fireRateRatio);
     }
 
     @Override
@@ -27,6 +27,6 @@ public class FireRateBuff extends BuffState{
 
     @Override
     public void apply() {
-        getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() * fireRate);
+        getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() * fireRateRatio);
     }
 }

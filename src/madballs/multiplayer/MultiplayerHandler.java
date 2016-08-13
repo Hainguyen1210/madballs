@@ -6,6 +6,7 @@
 package madballs.multiplayer;
 
 import java.util.ArrayList;
+import javafx.application.Platform;
 import javafx.concurrent.Service;
 import madballs.MadBalls;
 import madballs.player.Player;
@@ -52,6 +53,17 @@ public abstract class MultiplayerHandler {
     public void handleData(Data data){
 //        System.out.println(data.getType());
 //        System.out.println(MadBalls.getGameEnvironment().getNumObjects());
+    }
+    
+    public void checkWinner(){
+        if (localPlayer.getBall().isDead()){
+            MadBalls.getNavigation().showAlert("Game over", "You lose!", "Better luck next time.", false);
+            return;
+        }
+        for (Player player : players){
+            if (player != localPlayer && !player.getBall().isDead()) return;
+        }
+        MadBalls.getNavigation().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
     }
     
     public abstract void sendData(Data data);

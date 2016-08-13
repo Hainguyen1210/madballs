@@ -77,7 +77,12 @@ public class Client extends MultiplayerHandler{
         super.handleData(data);
         try {
             if (data.getType().equals("start")){
-                MadBalls.getGameEnvironment().startAnimation();
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        MadBalls.getGameEnvironment().startAnimation();
+                    }
+                });
             }
             else if (data.getType().equals("dead")){
                 GameObject obj = MadBalls.getGameEnvironment().getObject(((DeadData)data).getObjectIndex());

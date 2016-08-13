@@ -12,15 +12,12 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.Scene;
 import madballs.Ball;
 import madballs.Environment;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
-import madballs.multiplayer.KeyInputData;
 
 /**
  *
@@ -33,9 +30,18 @@ public class Player {
     private ObjectOutputStream out;
     private ObjectInputStream in;
     private boolean isLocal;
+    private boolean isReady;
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
+
+    public boolean isReady() {
+        return isReady;
+    }
+
+    public void setReady(boolean isReady) {
+        this.isReady = isReady;
+    }
 
     public Socket getSocket() {
         return socket;

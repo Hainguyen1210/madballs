@@ -39,6 +39,10 @@ public class MadBalls extends Application {
     public static MultiplayerHandler getMultiplayerHandler(){
         return multiplayerHandler;
     }
+
+    public static Navigation getNavigation() {
+        return navigation;
+    }
     
     public static boolean isHost(){
         return multiplayerHandler.isHost();
@@ -52,7 +56,8 @@ public class MadBalls extends Application {
         
         scene = new Scene(root, RESOLUTION_X, RESOLUTION_Y);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        gameEnvironment = new Environment(root);
+        gameEnvironment = Environment.getInstance();
+        gameEnvironment.setDisplay(root);
 //        Client.initClient();
         
         

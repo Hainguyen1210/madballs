@@ -37,8 +37,7 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
     weapons = new Class[] {Awp.class, Pistol.class};
-    boostItems = new Class[] {SpeedBoost.class, DamageBoost.class, FireRateBoost.class, FullHeal.class};
-//    itemSpawnLocations = environment.getMap().getItemSpawnLocations();
+    boostItems = new Class[] {MiniHealthFlask.class, DivineBoost.class, FullHeal.class, FireRateBoost.class, DamageBoost.class, SpeedBoost.class};
   }
   
   public void spawn(long now){
@@ -72,7 +71,7 @@ public class Spawner {
           MadBalls.getMultiplayerHandler().sendData(new SpawnData(X, Y, "weapon", weaponIndex));
       }
 //    System.out.println("asfasdfasf" + weaponType.getName());
-        new WeaponItem(environment, X, Y, false, weaponClass);
+        new WeaponItem(environment, X, Y, weaponClass);
     
     
       System.out.println(weaponClass);
@@ -86,11 +85,7 @@ public class Spawner {
         MadBalls.getMultiplayerHandler().sendData(new SpawnData(X, Y, "item", itemIndex));
       }
         try {
-          //    Item item = new SpeedBoost(environment, X, Y, false);
-//    Item item = new HealBoost(environment, X, Y, false);
-//    Item item = new FireRateBoost(environment, X, Y, false);
-//    Item item = new DamageBoost(environment, X, Y, false);
-        itemClass.getDeclaredConstructor(Environment.class, double.class, double.class, boolean.class).newInstance(environment, X, Y, false);
+        itemClass.getDeclaredConstructor(Environment.class, double.class, double.class).newInstance(environment, X, Y);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
         }

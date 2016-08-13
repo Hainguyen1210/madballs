@@ -5,23 +5,26 @@
  */
 package madballs.item;
 
-import javafx.scene.paint.Paint;
+import javafx.scene.paint.Color;
 import madballs.Environment;
-import madballs.effectState.SpeedBuff;
-
+import madballs.effectState.Rejuvenation;
 
 /**
  *
- * @author haing
+ * @author caval
  */
-public class SpeedBoost extends BuffItem{
-    public SpeedBoost(Environment environment, double x, double y) {
-        super(environment, x, y, new SpeedBuff(null, 5, 50));
+public class MiniHealthFlask extends BuffItem{
+    
+    public MiniHealthFlask(Environment environment, double x, double y) {
+        super(environment, x, y, new Rejuvenation(null, 5, 30));
     }
+    
+    
     
     @Override
     public void setDisplayComponents(){
-        setColor(Paint.valueOf("yellow"));
+        setColor(Color.LIGHTGREEN);
         super.setDisplayComponents();
     }
+    
 }

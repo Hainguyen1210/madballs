@@ -57,7 +57,7 @@ public class Navigation {
 //        addHistory(destination);
 //    }
     
-    public void showInterupt(String title, String header, String content){
+    public void showInterupt(String title, String header, String content, boolean shouldWait){
         Alert alert = new Alert(Alert.AlertType.INFORMATION);
         alert.setTitle(title);
         alert.setHeaderText(header);
@@ -67,17 +67,27 @@ public class Navigation {
 //            e.consume();
 //        });
         
-        alert.showAndWait();
+        if (shouldWait) {
+            alert.showAndWait();
+        }
+        else {
+            alert.show();
+        }
     }
     
     // show a modal alert box
-    public void showAlert(String title, String header, String content) {
+    public void showAlert(String title, String header, String content, boolean shouldWait) {
         Alert alert = new Alert(Alert.AlertType.WARNING);
         alert.setTitle(title);
         alert.setHeaderText(header);
         alert.setContentText(content);
         
-        alert.showAndWait();
+       if (shouldWait) {
+            alert.showAndWait();
+        }
+        else {
+            alert.show();
+        }
     }
     
     /**

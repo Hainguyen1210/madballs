@@ -57,7 +57,7 @@ public class Map {
             mapNumber = random.nextInt(MAP_FILES.length);
         }
         System.out.print("Choose Map number " + mapNumber + " |");
-        Scanner mapFile = new Scanner(new File(MAP_FILES[mapNumber]));
+        Scanner mapFile = new Scanner(new File("assets/map/" + MAP_FILES[mapNumber]));
         System.out.print("Map found.|");
         int counter = 0;
         System.out.print("Analyzing Map.|");

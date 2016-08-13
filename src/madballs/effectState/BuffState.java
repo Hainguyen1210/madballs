@@ -13,9 +13,23 @@ import madballs.Ball;
  */
 public abstract class BuffState {
     private BuffState wrappedEffectState;
-    private int duration;
     private long createdTime = 0;
+    private int duration;
+    private long lastTick = 0;
+    private long tickInterval = 1;
     private Ball ball;
+
+    public long getTickInterval() {
+        return tickInterval;
+    }
+
+    public void setTickInterval(long tickInterval) {
+        this.tickInterval = tickInterval;
+    }
+
+    public long getLastTick() {
+        return lastTick;
+    }
 
     public void setBall(Ball ball) {
         this.ball = ball;
@@ -30,8 +44,11 @@ public abstract class BuffState {
         if (createdTime == 0) {
             createdTime = timestamp;
         }
-        else if ((timestamp - createdTime) / 1000000000 <= duration){
-            uniqueUpdate(timestamp);
+        if ((timestamp - createdTime) / 1000000000 <= duration){
+            if ((timestamp - lastTick) / 1000000000 >= tickInterval){
+                lastTick = timestamp;
+                uniqueUpdate(timestamp);
+            }
         }
         else {
             fade();
