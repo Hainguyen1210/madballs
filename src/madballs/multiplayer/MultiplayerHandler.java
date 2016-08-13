@@ -46,6 +46,7 @@ public abstract class MultiplayerHandler {
     
     public void setLocalPlayer(Player player){
         this.localPlayer = player;
+//        player.getBall().getEnvironment().
         players.add(player);
     }
     

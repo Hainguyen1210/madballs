@@ -12,15 +12,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.beans.property.BooleanProperty;
-import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.binding.Bindings;
+import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
 import madballs.Ball;
 import madballs.Environment;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
-import madballs.multiplayer.KeyInputData;
 
 /**
  *
@@ -36,6 +35,7 @@ public class Player {
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
+    private PerspectiveCamera camera;
 
     public Socket getSocket() {
         return socket;
@@ -118,9 +118,6 @@ public class Player {
             @Override
             public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
                 controller.handleMouse(event);
-                if (socket != null){
-
-                }
             }
         }, this);
 
@@ -133,6 +130,16 @@ public class Player {
     }
     
     public void bindInput(Scene scene){
+        camera = new PerspectiveCamera(true);
+        camera.setNearClip(0.1);
+        camera.setFarClip(10000.0);
+        camera.setTranslateZ(-1000);
+        camera.setFieldOfView(30);
+        camera.translateXProperty().bind(ball.getTranslateXProperty());
+        camera.translateYProperty().bind(ball.getTranslateYProperty());
+//
+//        camera.setTranslateX(ball.getTranslateX());
+//        camera.setTranslateY(ball.getTranslateY());
 //        System.out.println("123");
 //        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
 //        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
@@ -146,6 +153,8 @@ public class Player {
         scene.setOnMouseReleased(mouseHandler);
         scene.setOnMouseMoved(mouseHandler);
         scene.setOnMouseDragged(mouseHandler);
+        scene.setCamera(camera);
+        
     }
     
     public void sendData(Data data){

@@ -45,7 +45,7 @@ public class Server extends MultiplayerHandler{
                                     @Override
                                     public void run() {
                                         getLocalPlayer().generateBall(MadBalls.getGameEnvironment());
-//                                        MadBalls.getGameEnvironment().startAnimation();
+                                        MadBalls.getGameEnvironment().startAnimation();
                                     }
                                 });                                
                                 // listen for client over socket

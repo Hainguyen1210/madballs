@@ -27,7 +27,7 @@ public class Map {
     private String [][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
-    private final static String[] MAP_FILES = {"1.txt", "2.txt"};
+    private final static String[] MAP_FILES = {"1.txt"};
     private Random random = new Random();
     private int mapNumber = -1;
     
@@ -60,37 +60,37 @@ public class Map {
         Scanner mapFile = new Scanner(new File(MAP_FILES[mapNumber]));
         System.out.print("Map found.|");
         int counter = 0;
-        System.out.print("Analyzing Map.|");
+        System.out.println("Analyzing Map.|");
         
-        while (mapFile.hasNextLine()) {
+        // collecting Map preset
+        String presetLine = mapFile.nextLine();
+        String[] presetString = presetLine.split(" ");
+for (String s : presetString) System.out.println(" " + s);
+        this.MapLenghtX = Integer.parseInt(presetString[1]);
+        this.MapLenghtY = Integer.parseInt(presetString[2]);
+        this.box_X = Integer.parseInt(presetString[3]);
+        this.box_Y = Integer.parseInt(presetString[4]);
+        this.boxSize = Integer.parseInt(presetString[5]);
+        generatedMap = new String[MapLenghtX][MapLenghtY];
+
+        for(int i=0; i<MapLenghtX; i++) {
           String line = mapFile.nextLine();
           line = line.replace(".", "");
-          // collecting Map preset
-          if (line.contains("preset: ")){
-            String[] characterString = line.split(" ");
-System.out.println("");
-for (String s : characterString) System.out.println(" " + s);
-            this.MapLenghtX = Integer.parseInt(characterString[1]);
-            this.MapLenghtY = Integer.parseInt(characterString[2]);
-            this.box_X = Integer.parseInt(characterString[3]);
-            this.box_Y = Integer.parseInt(characterString[4]);
-            this.boxSize = Integer.parseInt(characterString[5]);
-            generatedMap = new String[MapLenghtX][MapLenghtY];
-          }else{
+
             String[] characterString = line.split("");
             // collecting info
-            for(int i = 0; i < characterString.length; i++){
-              if(characterString[i].equals("s")){
-                itemSpawnLocations.add(new SpawnLocation(i * box_X, counter * box_Y, "item", 0));
-              }else if(Common.isNumeric(characterString[i])) {
-                playerSpawnLocations.add(new SpawnLocation(i * box_X, counter * box_Y, "player", Integer.parseInt(characterString[i])));
+            for(int j = 0; j < characterString.length; j++){
+              if(characterString[j].equals("s")){
+                itemSpawnLocations.add(new SpawnLocation(j * box_X, counter * box_Y, "item", 0));
+              }else if(Common.isNumeric(characterString[j])) {
+                playerSpawnLocations.add(new SpawnLocation(j * box_X, counter * box_Y, "player", Integer.parseInt(characterString[j])));
               }
-  //else { continue; } //avoid hidden characters 
             }
             generatedMap[counter] = characterString;
             counter++;            
-          }
+          
         }
+        
         System.out.println("complete reading file");
         System.out.println("Item spawn location: ");
         for(SpawnLocation sl : itemSpawnLocations){
