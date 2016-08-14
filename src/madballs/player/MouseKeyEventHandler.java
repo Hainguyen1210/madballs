@@ -6,6 +6,7 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import madballs.Environment;
 import madballs.MadBalls;
 import madballs.multiplayer.MouseInputData;
  
@@ -30,7 +31,6 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
      
     public void handle(final MouseEvent event) {
         if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), event.getSceneX(), event.getSceneY()));
-        
         if (event.getEventType() == MouseEvent.MOUSE_MOVED){
             mouseX.set(event.getSceneX());
             mouseY.set(event.getSceneY());

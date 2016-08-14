@@ -10,8 +10,6 @@ import javafx.concurrent.Task;
 import madballs.Ball;
 import madballs.Environment;
 import madballs.GameObject;
-import madballs.MadBalls;
-import madballs.ScenesManager;
 import madballs.StateLoader;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
@@ -125,7 +123,7 @@ public class Client extends MultiplayerHandler{
             }
             else if (data.getType().equals("choose_map")){
                 System.out.println("map");
-                Map map = new Map(ScenesManager.RESOLUTION_X, ScenesManager.RESOLUTION_Y, ((MapData)data).getMapNumber());
+                Map map = new Map(((MapData)data).getMapNumber());
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {

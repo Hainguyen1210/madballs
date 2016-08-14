@@ -12,11 +12,14 @@ import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.beans.binding.Bindings;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import madballs.Ball;
 import madballs.Environment;
 import madballs.MadBalls;
-import madballs.ScenesManager;
+import madballs.SceneManager;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 
@@ -90,7 +93,7 @@ public class Player {
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
         if (isLocal) {
             bindInput(MadBalls.getScene());
-            ScenesManager.getInstance().setCamera(ball);
+            SceneManager.getInstance().setCamera(ball);
         }
     }
     
@@ -156,9 +159,8 @@ public class Player {
         scene.setOnMouseReleased(mouseHandler);
         scene.setOnMouseMoved(mouseHandler);
         scene.setOnMouseDragged(mouseHandler);
-        
     }
-    
+
     public void sendData(Data data){
         try {
             out.writeObject(data);

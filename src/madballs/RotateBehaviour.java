@@ -42,20 +42,22 @@ public class RotateBehaviour extends MoveBehaviour{
 //        System.out.println(getObject().getClass());
         if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
         if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
-            double[] realCoordinate = getObject().getRealCoordinate();
-            
-            double newDirection = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
+//            double[] realCoordinate = getObject().getRealCoordinate();
+//            double directionFromTargetToSelf = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);
+//
+//            double distanceFromTargetToOwner = Math.sqrt(Math.pow(targetX - getObject().getOwnerTranslateX(), 2) + Math.pow(targetY - getObject().getOwnerTranslateY(), 2));
+//            double directionFromTargetToOwner = directionFromTargetToSelf - Math.atan2(getObject().getDistanceToOwner(), distanceFromTargetToOwner);
+            double scale = SceneManager.getInstance().getScale();
+            double sceneWidth = MadBalls.getScene().getWidth();
+            double sceneHeight = MadBalls.getScene().getHeight();
+            double yDiff = getTargetY() - sceneHeight/2 - getObject().getOwnerDiffY()*scale;
+            double xDiff = getTargetX() - sceneWidth/2 - getObject().getOwnerDiffX()*scale;
+            double newDirection = Math.atan2(yDiff, xDiff);
             double currentRotateDirection = Math.toRadians(getObject().getRotateAngle());
             if (newDirection != currentRotateDirection) {
-//                System.out.println("");
-//                System.out.println(getDirection());
-//                System.out.println(newDirection);
                 getObject().setOldDirection(currentRotateDirection);
                 getObject().setRotate(newDirection);
                 setLastMoveTime(now);
-
-//                    MadBalls.getMultiplayerHandler().sendData(new MoveData(getObject().getIndex(), now, currentRotateDirection, newDirection));
-
             }
         }
     }

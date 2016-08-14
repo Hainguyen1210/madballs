@@ -19,6 +19,7 @@ import madballs.Common;
  * @author Caval
  */
 public class Map {
+    private double width, height;
     private int MapLenghtX;
     private int MapLenghtY;
     private int box_X;
@@ -30,7 +31,15 @@ public class Map {
     private final static String[] MAP_FILES = {"1.txt"};
     private Random random = new Random();
     private int mapNumber = -1;
-    
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
+
     public int getMapNumber(){
         return mapNumber;
     }
@@ -41,7 +50,7 @@ public class Map {
 //        MAP_ARRAY = mapArray;
 //    }
     
-    public Map(double length, double height, int mapNumber){
+    public Map(int mapNumber){
         this.mapNumber = mapNumber;
 //        LENGTH = length;
 //        HEIGHT = height;
@@ -71,6 +80,8 @@ for (String s : presetString) System.out.println(" " + s);
         this.box_X = Integer.parseInt(presetString[3]);
         this.box_Y = Integer.parseInt(presetString[4]);
         this.boxSize = Integer.parseInt(presetString[5]);
+        height = box_X * MapLenghtX;
+        width = box_Y * MapLenghtY;
         generatedMap = new String[MapLenghtX][MapLenghtY];
 
         for(int i=0; i<MapLenghtX; i++) {

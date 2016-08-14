@@ -42,23 +42,23 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setFullScreen(true);
+//        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         
         navigation = new Navigation();
         Group root = new Group();
         
-        scene = new Scene(root);
+        scene = new Scene(root, 1280, 720);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         Environment.getInstance().setDisplay(root);
-        ScenesManager.getInstance().scaleDisplay();
+        SceneManager.getInstance().scaleDisplay(root);
 //        Client.initClient();
         
         
         boolean isHost = navigation.getConfirmation("", "Start game", "Do you want to host?");
         if (isHost){
             multiplayerHandler = new Server();
-            Map map = new Map(ScenesManager.RESOLUTION_X, ScenesManager.RESOLUTION_Y, -1);
+            Map map = new Map(-1);
             Environment.getInstance().loadMap(map);
         }
         else {
@@ -69,6 +69,7 @@ public class MadBalls extends Application {
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(scene);
         primaryStage.show();
+        System.out.println(primaryStage.getHeight());
     }
 
     /**

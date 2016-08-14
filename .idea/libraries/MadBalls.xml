@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="MadBalls">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/dist/MadBalls.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

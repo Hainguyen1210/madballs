@@ -163,7 +163,6 @@ public class Environment {
     
     private Environment(){
         this.itemSpawner = new Spawner(this);
-        quadtree = new Quadtree(0, new Rectangle(-25, -25, ScenesManager.RESOLUTION_X + 25, ScenesManager.RESOLUTION_Y + 25));
         gameObjects = new ArrayList<>();
     }
     
@@ -197,6 +196,7 @@ public class Environment {
             }
           System.out.println("\n");
         }
+        quadtree = new Quadtree(0, new Rectangle(-25, -25, map.getMapLenghtX() + 25, map.getMapLenghtY() + 25));
     }
     
     public void startAnimation(){

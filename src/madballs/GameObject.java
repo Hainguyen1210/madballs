@@ -34,6 +34,7 @@ public abstract class GameObject {
     
     private DoubleProperty translateX = new SimpleDoubleProperty(100);
     private DoubleProperty translateY = new SimpleDoubleProperty(100);
+    private double distanceToOwner = 0;
     private Rotate rotation;
     private double oldX, oldY;
     private double oldDirection;
@@ -82,6 +83,8 @@ public abstract class GameObject {
         stateLoader = new StateLoader(this);
         owner.child = this;
         this.owner = owner;
+        
+        distanceToOwner = Math.sqrt(x * x + y * y);
         
         translateX.bind(Bindings.add(x, owner.translateX));
         translateY.bind(Bindings.add(y, owner.translateY));
@@ -153,6 +156,24 @@ public abstract class GameObject {
         }
     }
     
+    public double getOwnerDiffX(){
+        if (owner != null) {
+            return getRealCoordinate()[0] - owner.getTranslateX();
+        }
+        else {
+            return 0;
+        }
+    }
+    
+    public double getOwnerDiffY(){
+        if (owner != null) {
+            return getRealCoordinate()[1] - owner.getTranslateY();
+        }
+        else {
+            return 0;
+        }
+    }
+    
     public double[] getRealCoordinate(){
         double rotateDirection = Math.toRadians(getRotateAngle());
         double xFromPivot = -getRotate().getPivotX();
@@ -160,6 +181,10 @@ public abstract class GameObject {
         double realX = getOwnerTranslateX() + yFromPivot * Math.cos(rotateDirection) - xFromPivot * Math.sin(rotateDirection);
         double realY = getOwnerTranslateY() + yFromPivot * Math.sin(rotateDirection) + xFromPivot * Math.cos(rotateDirection);
         return new double[] {realX, realY};
+    }
+    
+    public double getDistanceToOwner(){
+        return distanceToOwner;
     }
     
     public double getOldY() {
