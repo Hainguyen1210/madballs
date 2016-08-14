@@ -20,11 +20,11 @@ import madballs.Common;
  */
 public class Map {
     private double width, height;
-    private int MapLenghtX;
-    private int MapLenghtY;
-    private int box_X;
-    private int box_Y;
-    private int boxSize;
+    private int numRows;
+    private int numColumns;
+    private int columnWidth;
+    private int rowHeight;
+    private int obstacleSize;
     private String [][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
@@ -75,16 +75,16 @@ public class Map {
         String presetLine = mapFile.nextLine();
         String[] presetString = presetLine.split(" ");
 for (String s : presetString) System.out.println(" " + s);
-        this.MapLenghtX = Integer.parseInt(presetString[1]);
-        this.MapLenghtY = Integer.parseInt(presetString[2]);
-        this.box_X = Integer.parseInt(presetString[3]);
-        this.box_Y = Integer.parseInt(presetString[4]);
-        this.boxSize = Integer.parseInt(presetString[5]);
-        height = box_X * MapLenghtX;
-        width = box_Y * MapLenghtY;
-        generatedMap = new String[MapLenghtX][MapLenghtY];
+        this.numRows = Integer.parseInt(presetString[1]);
+        this.numColumns = Integer.parseInt(presetString[2]);
+        this.rowHeight = Integer.parseInt(presetString[3]);
+        this.columnWidth = Integer.parseInt(presetString[4]);
+        this.obstacleSize = Integer.parseInt(presetString[5]);
+        height = rowHeight * numRows;
+        width = columnWidth * numColumns;
+        generatedMap = new String[numRows][numColumns];
 
-        for(int i=0; i<MapLenghtX; i++) {
+        for(int i = 0; i< numRows; i++) {
           String line = mapFile.nextLine();
           line = line.replace(".", "");
 
@@ -92,9 +92,9 @@ for (String s : presetString) System.out.println(" " + s);
             // collecting info
             for(int j = 0; j < characterString.length; j++){
               if(characterString[j].equals("s")){
-                itemSpawnLocations.add(new SpawnLocation(j * box_X, counter * box_Y, "item", 0));
+                itemSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "item", 0));
               }else if(Common.isNumeric(characterString[j])) {
-                playerSpawnLocations.add(new SpawnLocation(j * box_X, counter * box_Y, "player", Integer.parseInt(characterString[j])));
+                playerSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "player", Integer.parseInt(characterString[j])));
               }
             }
             generatedMap[counter] = characterString;
@@ -134,24 +134,24 @@ for (String s : presetString) System.out.println(" " + s);
       return itemSpawnLocations;
     }
     
-  public int getBox_X() {
-    return box_X;
+  public int getColumnWidth() {
+    return columnWidth;
   }
 
-  public int getBox_Y() {
-    return box_Y;
+  public int getRowHeight() {
+    return rowHeight;
   }
   
-  public int getBoxSize() {
-    return boxSize;
+  public int getObstacleSize() {
+    return obstacleSize;
   }
 
-  public int getMapLenghtX() {
-    return MapLenghtX;
+  public int getNumRows() {
+    return numRows;
   }
 
-  public int getMapLenghtY() {
-    return MapLenghtY;
+  public int getNumColumns() {
+    return numColumns;
   }
   
 }

@@ -12,7 +12,6 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.layout.Pane;
 import javafx.scene.shape.Rectangle;
 import madballs.item.Spawner;
 import madballs.map.Map;
@@ -177,26 +176,19 @@ public class Environment {
     
     public void loadMap(Map map){
         this.map = map;
-        String [][] mapArray = map.getMAP_ARRAY();
-//        int horizontalAmount = mapArray.length;
-//        int verticalAmount = mapArray[0].length;
-        int horizontalAmount = map.getMapLenghtX();
-        int verticalAmount = map.getMapLenghtY();
-        int horizontalUnit = map.getBox_X();
-        int verticalUnit = map.getBox_Y();
-        int boxSize = map.getBoxSize();
-        //add the obstacles 
-        for (int i = 0; i < horizontalAmount; i++){
-            for (int j = 0; j < verticalAmount; j++){
+        String[][] mapArray = map.getMAP_ARRAY();
+        //add the obstacles
+        for (int i = 0; i < map.getNumRows(); i++){
+            for (int j = 0; j < map.getNumColumns(); j++){
               System.out.print(  mapArray[i][j]);
                 if (mapArray[i][j] != null && (mapArray[i][j]).equals("+")) {
 //                  System.out.println("Create OBJ " + horizontalUnit + " " + verticalUnit);
-                    new Obstacle(this,j * horizontalUnit, i * verticalUnit,boxSize, boxSize); 
+                    new Obstacle(this,j * map.getColumnWidth(), i * map.getRowHeight(), map.getObstacleSize(), map.getObstacleSize());
                 }
             }
           System.out.println("\n");
         }
-        quadtree = new Quadtree(0, new Rectangle(-25, -25, map.getMapLenghtX() + 25, map.getMapLenghtY() + 25));
+        quadtree = new Quadtree(0, new Rectangle(-25, -25, map.getWidth() + 25, map.getHeight() + 25));
     }
     
     public void startAnimation(){
