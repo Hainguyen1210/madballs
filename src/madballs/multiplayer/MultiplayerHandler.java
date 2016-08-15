@@ -57,13 +57,16 @@ public abstract class MultiplayerHandler {
     }
     
     public void checkWinner(){
+        if (MadBalls.isGameOver()) return;
         if (localPlayer.getBall().isDead()){
+            MadBalls.setGameOver(true);
             MadBalls.getNavigation().showAlert("Game over", "You lose!", "Better luck next time.", false);
             return;
         }
         for (Player player : players){
             if (player != localPlayer && !player.getBall().isDead()) return;
         }
+        MadBalls.setGameOver(true);
         MadBalls.getNavigation().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
     }
     

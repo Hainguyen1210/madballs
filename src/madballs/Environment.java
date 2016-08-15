@@ -82,7 +82,7 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-//        MadBalls.getMultiplayerHandler().checkWinner();
+        MadBalls.getMultiplayerHandler().checkWinner();
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);

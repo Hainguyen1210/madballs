@@ -21,7 +21,8 @@ import madballs.multiplayer.Server;
 public class MadBalls extends Application {
     private static Navigation navigation;
     private static MultiplayerHandler multiplayerHandler;
-    
+    private static boolean isGameOver = false;
+
     private static Scene scene;
     
     public static Scene getScene(){
@@ -38,6 +39,14 @@ public class MadBalls extends Application {
     
     public static boolean isHost(){
         return multiplayerHandler.isHost();
+    }
+
+    public static boolean isGameOver() {
+        return isGameOver;
+    }
+
+    public static void setGameOver(boolean isGameOver) {
+        MadBalls.isGameOver = isGameOver;
     }
     
     @Override
