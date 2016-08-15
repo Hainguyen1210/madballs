@@ -152,7 +152,7 @@ public abstract class Weapon extends GameObject{
         if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
             if (MadBalls.isHost()){
                 if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-                MadBalls.getMultiplayerHandler().sendData(new FireData(getIndex()));
+                MadBalls.getMultiplayerHandler().sendData(new FireData(getID()));
                 new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
                 setLastShotTime(now);
             }

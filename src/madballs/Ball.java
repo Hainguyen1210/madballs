@@ -26,7 +26,7 @@ import madballs.wearables.Weapon;
  */
 public class Ball extends GameObject{
     private Weapon weapon;
-    private final int SPEED = 200;
+    private final int SPEED = 100;
     private BuffState effectState;
 
     public BuffState getEffectState() {

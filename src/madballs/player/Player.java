@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Scene;
@@ -122,6 +124,7 @@ public class Player {
             
             @Override
             public void handle(MultiplePressedKeysEventHandler.MultiKeyEvent ke) {
+//                if (!MadBalls.isHost()) return;
                 controller.handleKey(ke);
             }
         }, this);
@@ -130,6 +133,7 @@ public class Player {
         new MouseKeyEventHandler(new MouseKeyEventHandler.MouseEventHandler() {
             @Override
             public void handle(MouseKeyEventHandler.MouseKeyEvent event) {
+//                if (!MadBalls.isHost()) return;
                 controller.handleMouse(event);
             }
         }, this);
@@ -177,6 +181,14 @@ public class Player {
             return (Data) in.readObject();
         } catch (EOFException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SocketException ex){
+            MadBalls.getMultiplayerHandler().getPlayers().remove(this);
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    ball.die();
+                }
+            });
         } catch (IOException | ClassNotFoundException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
         }

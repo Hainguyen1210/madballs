@@ -24,6 +24,7 @@ import javafx.scene.transform.Rotate;
  * @author Caval
  */
 public abstract class GameObject {
+    private Integer ID;
     private GameObject owner, child;
     private Shape hitBox;
     private ImageView imageView = new ImageView();
@@ -44,7 +45,15 @@ public abstract class GameObject {
     private StateLoader stateLoader;
     private MoveBehaviour moveBehaviour;
     private Environment environment;
-    
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+
     public StateLoader getStateLoader(){
         return stateLoader;
     }
@@ -53,9 +62,9 @@ public abstract class GameObject {
         return isDead;
     }
     
-    public int getIndex(){
-        return environment.getObjectIndex(this);
-    }
+//    public int getIndex(){
+//        return environment.getObjectIndex(this);
+//    }
     
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
 //        System.out.println("1" + this.getClass());
@@ -462,7 +471,7 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-//        System.out.println("remove " + getClass() + getIndex());
+//        System.out.println("remove " + getClass() + getID());
         isDead = true;
         if (owner != null) {
             owner.child = null;
@@ -471,7 +480,7 @@ public abstract class GameObject {
     
     public void die(){
         if (MadBalls.isHost()){
-//            System.out.println("die " + getClass());
+//            System.out.println("die " + getClass() + getID());
             setDead();
             getEnvironment().removeGameObj(this);
             if (child != null) {

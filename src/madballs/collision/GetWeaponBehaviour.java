@@ -28,7 +28,7 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
             Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
             if(weapon != null && MadBalls.isHost()) {
                 ((Ball)target).setWeapon((Class<Weapon>) weapon.getClass());
-                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(target.getIndex(), weapon.getClass().getName()));
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(target.getID(), weapon.getClass().getName()));
             }
             System.out.println("Get weapon " + weapon);
             GameObject owner = source.getOwner();

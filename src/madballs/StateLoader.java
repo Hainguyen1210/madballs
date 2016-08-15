@@ -17,6 +17,7 @@ public class StateLoader {
     private final LinkedList<GameObjState> serverStates = new LinkedList<>();
     private final LinkedList<GameObjState> localStates = new LinkedList<>();
     private final GameObject gameObject;
+    private long lastLoadTime = 0;
     
     public StateLoader(GameObject obj){
         gameObject = obj;
@@ -24,7 +25,7 @@ public class StateLoader {
     
     public void addServerState(GameObjState state){
         synchronized(serverStates){
-            if (serverStates.size() == 5){
+            if (serverStates.size() == 10){
                 serverStates.remove();
             }
             serverStates.add(state);
@@ -33,7 +34,7 @@ public class StateLoader {
     
     public void addLocalState(GameObjState state){
         synchronized(localStates){
-            if (localStates.size() == 5){
+            if (localStates.size() == 10){
                 localStates.remove();
             }
             localStates.add(state);
@@ -43,8 +44,10 @@ public class StateLoader {
     public void update(long now){
         if (gameObject instanceof Obstacle || gameObject instanceof Ground) return;
         GameObjState newState = new GameObjState(gameObject);
+        if (lastLoadTime == 0) lastLoadTime = now;
 //        System.out.println("is host" + MadBalls.isHost());
-        if (MadBalls.isHost() && (now - Environment.getInstance().getLastUpdateTime()) < 1000000000/120){
+        if (MadBalls.isHost() && (now - lastLoadTime > 0)){
+            lastLoadTime = now;
 //            System.out.println(Environment.getInstance().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
         }
@@ -53,28 +56,43 @@ public class StateLoader {
                 synchronized(localStates){
                     addLocalState(newState);
                     GameObjState localState, serverState;
+                    boolean isReconcilated = false;
                     while (serverStates.size() > 0){
                         localState = localStates.size() > 0 ? localStates.getFirst() : null;
                         serverState = serverStates.getFirst();
                         if (localState == null || localState.getUpdateIndex() > serverState.getUpdateIndex()){
                             loadState(serverState);
                             serverStates.remove();
+                            isReconcilated = false;
                         }
                         else if (localState.getUpdateIndex() == serverState.getUpdateIndex()){
-                            loadState(serverState);
-                            localStates.remove();
+                            if (localState.isSimilarTo(serverState)){
+                                isReconcilated = true;
+                                localStates.remove();
+                            }
+                            else {
+                                loadState(serverState);
+                                localStates.clear();
+                                isReconcilated = false;
+                            }
                             serverStates.remove();
                         }
                         else if (localState.getUpdateIndex() < serverState.getUpdateIndex()){
                             localStates.remove();
+                            isReconcilated = false;
+                        }
+                    }
+                    if (isReconcilated){
+                        for (GameObjState state : localStates){
+                            loadState(state);
                         }
                     }
                 }
             }
         }
-        
+
     }
-    
+
     public void loadState(GameObjState state){
         if (state.isDead()){
 //            System.out.println("`");
@@ -106,5 +124,5 @@ public class StateLoader {
             weapon.setFireRate(state.getFireRate());
         }
     }
-    
+
 }
