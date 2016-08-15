@@ -431,6 +431,7 @@ public abstract class GameObject {
         animationG = new Group();
         statusG = new Group();
         statusG.setVisible(false);
+        statusG.setTranslateZ(1);
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
