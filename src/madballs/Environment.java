@@ -86,7 +86,7 @@ public class Environment {
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
-//        ArrayList<GameObject> deadGameObjects = new ArrayList<>();
+        ArrayList<GameObject> deadGameObjects = new ArrayList<>();
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         quadtree.clear();
         
@@ -94,17 +94,17 @@ public class Environment {
             obj.update(now);
 //            obj.updateBoundsRectangle();
             if (obj.isDead()) {
-//                deadGameObjects.add(obj);
+                deadGameObjects.add(obj);
             }
             else {
                 quadtree.insert(obj);
             }
         }
         
-//        for (GameObject obj : deadGameObjects){
-//            removeGameObj(obj);
-//            copiedGameObjects.remove(obj);
-//        }
+        for (GameObject obj : deadGameObjects){
+            gameObjects.remove(obj);
+            copiedGameObjects.remove(obj);
+        }
         
 //        copiedGameObjects = new ArrayList<>(gameObjects);
 //        if (!isHost) return;
