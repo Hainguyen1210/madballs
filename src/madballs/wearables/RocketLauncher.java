@@ -30,7 +30,7 @@ public class RocketLauncher extends Weapon {
 
 //        setFireSoundFX("pistol");
         setProjectileCollisionEffect(new NullEffect(null));
-        setProjectileCollisionBehaviour(new ExplosionBehaviour(new DisappearBehaviour(null), 100, getDamage()));
+        setProjectileCollisionBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 100, getDamage()));
     }
 
     @Override

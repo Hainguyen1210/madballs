@@ -210,6 +210,14 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
+            else if (data.getSpawntype().equals("explosion")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new Explosion(MadBalls.getMainEnvironment(), data.getParameters()[0], data.getParameters()[1], data.getParameters()[2], data.getParameters()[3]);
+                    }
+                });
+            }
         }
         catch (Exception ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);

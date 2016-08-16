@@ -15,6 +15,7 @@ public class SpawnData extends Data{
     private double x, y;
     private int typeNumber;
     private String spawnType;
+    private double[] parameters;
 
     public double getX() {
         return x;
@@ -31,7 +32,11 @@ public class SpawnData extends Data{
     public String getSpawntype(){
         return spawnType;
     }
-    
+
+    public double[] getParameters() {
+        return parameters;
+    }
+
     public SpawnData(double x, double y, String spawnType, int typeNumber) {
         super("spawn");
         this.x = x;
@@ -46,5 +51,11 @@ public class SpawnData extends Data{
         this.y = spawnLocation.getY();
         this.spawnType = spawnLocation.getType() + (isLocal ? "_local" : "");
         this.typeNumber = spawnLocation.getTypeNumber();
+    }
+
+    public SpawnData(String spawnType, double[] parameters){
+        super("spawn");
+        this.spawnType = spawnType;
+        this.parameters = parameters;
     }
 }
