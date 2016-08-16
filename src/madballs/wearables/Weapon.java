@@ -8,14 +8,17 @@ package madballs.wearables;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import madballs.projectiles.Projectile;
-import madballs.*;
+import madballs.Environment;
+import madballs.GameObject;
+import madballs.MadBalls;
+import madballs.RotateBehaviour;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
+import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.FireData;
+import madballs.projectiles.Projectile;
 
 /**
  *
@@ -26,6 +29,7 @@ public abstract class Weapon extends GameObject{
     private Image projectileImage;
     private double projectileHitBoxSize;
     private Paint projectileColor;
+    private String fireSoundFX;
     
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
@@ -146,17 +150,22 @@ public abstract class Weapon extends GameObject{
     final public void setProjectileHitBoxSize(double size) {
         this.projectileHitBoxSize = size;
     }
-    
+
+    public void setFireSoundFX(String fireSoundFX) {
+        this.fireSoundFX = fireSoundFX;
+    }
+
     public void forceFire(){
-        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
+        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 1/fireRate/2);
+        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
     }
     
     public void attack(long now){
         if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
             if (MadBalls.isHost()){
                 if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-                MadBalls.getMultiplayerHandler().sendData(new FireData(getIndex()));
-                new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
+                MadBalls.getMultiplayerHandler().sendData(new FireData(getID()));
+                forceFire();
                 setLastShotTime(now);
             }
         }
@@ -168,6 +177,5 @@ public abstract class Weapon extends GameObject{
 //        System.out.println(owner.getTranslateY());
 //        System.out.println(getTranslateY());
         if (getMoveBehaviour().isMousePressed()) attack(now);
-        getMoveBehaviour().move(now);
     }
 }

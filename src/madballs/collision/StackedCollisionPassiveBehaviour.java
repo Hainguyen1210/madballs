@@ -7,7 +7,9 @@ package madballs.collision;
 
 import java.io.Serializable;
 import javafx.scene.shape.Shape;
+import madballs.Environment;
 import madballs.GameObject;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -18,7 +20,10 @@ public abstract class StackedCollisionPassiveBehaviour implements CollisionPassi
 
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        uniqueGetAffected(source, target, effect, collisionShape);
+        if (isConditionMet(source, target, effect, collisionShape)){
+            if (effect.getSoundFX() != null) SoundStudio.getInstance().playSound(effect.getSoundFX(), Environment.getInstance().getLastUpdateTime(), 0);
+            uniqueGetAffected(source, target, effect, collisionShape);
+        }
         if (wrappedBehaviour != null) wrappedBehaviour.getAffected(source, target, effect, collisionShape);
     }
     
@@ -27,6 +32,8 @@ public abstract class StackedCollisionPassiveBehaviour implements CollisionPassi
     }
     
     public abstract void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
+
+    protected abstract boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
     
     /**
      * the recursive method to check whether this combo behaviour contains a specific behaviour

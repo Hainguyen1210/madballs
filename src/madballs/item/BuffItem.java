@@ -16,10 +16,12 @@ import madballs.effectState.BuffState;
  * @author haing
  */
 public class BuffItem extends Item{
+  protected GiveStateEffect giveStateEffect;
   
   public BuffItem(Environment environment, double x, double y, BuffState effectState) {
     super(environment, x, y);
-    setCollisionEffect(new GiveStateEffect(null, effectState));
+    giveStateEffect = new GiveStateEffect(null, effectState);
+    setCollisionEffect(giveStateEffect);
   }  
   
   @Override

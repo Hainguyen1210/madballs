@@ -7,7 +7,9 @@ package madballs.collision;
 
 import java.io.Serializable;
 import javafx.scene.shape.Shape;
+import madballs.Environment;
 import madballs.GameObject;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -15,8 +17,16 @@ import madballs.GameObject;
  */
 public abstract class StackedCollisionEffect implements CollisionEffect, Serializable{
     StackedCollisionEffect wrappedEffect;
+    private String soundFX;
 
-    
+    public void setSoundFX(String soundFX) {
+        this.soundFX = soundFX;
+    }
+
+    public String getSoundFX() {
+        return soundFX;
+    }
+
     public StackedCollisionEffect(StackedCollisionEffect effect) {
         wrappedEffect = effect;
     }

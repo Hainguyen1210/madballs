@@ -39,7 +39,8 @@ public class Pistol extends Weapon{
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
-        
+
+        setFireSoundFX("pistol");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
         setImage(imageGenerator.getImage("ak47"));

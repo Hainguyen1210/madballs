@@ -20,6 +20,7 @@ public abstract class MultiplayerHandler {
     private Player localPlayer;
     private ArrayList<Player> players = new ArrayList<>();
     private boolean isHost;
+    protected long latency;
     
     public MultiplayerHandler(boolean isHost){
         this.isHost = isHost;

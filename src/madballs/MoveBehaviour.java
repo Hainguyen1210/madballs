@@ -11,6 +11,7 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleLongProperty;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -22,6 +23,7 @@ public abstract class MoveBehaviour {
     private double speed;
     private double movedDistance = 0;
     private GameObject obj;
+    private String soundFX;
     
     public MoveBehaviour(GameObject obj, double speed){
         this.obj = obj;
@@ -63,11 +65,24 @@ public abstract class MoveBehaviour {
     public void setMovedDistance(double movedDistance) {
         this.movedDistance = movedDistance;
     }
+
+    public String getSoundFX() {
+        return soundFX;
+    }
+
+    public void setSoundFX(String soundFX) {
+        this.soundFX = soundFX;
+    }
+
     /**
      * method for the move behavior to calculate the result coordinate of the obj after the move
      * @param now current timestamp
      */
     abstract void calculateNewCordinate(long now);
     
-    public abstract void move(long now);
+    public abstract void moveUnique(long now);
+
+    public void move(long now){
+        moveUnique(now);
+    }
 }

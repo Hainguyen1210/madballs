@@ -6,6 +6,7 @@
 package madballs;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
@@ -22,7 +23,8 @@ import madballs.map.Map;
  */
 public class Environment {
     private static Environment instance = new Environment();
-    private ArrayList<GameObject> gameObjects;
+    private java.util.Map<Integer, GameObject> gameObjects;
+    private int currentObjID = 0;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
     private Spawner itemSpawner;
     private Group display;
@@ -40,13 +42,13 @@ public class Environment {
         return gameObjects.size();
     }
     
-    public GameObject getObject(int index){
-        return gameObjects.get(index);
+    public GameObject getObject(Integer id){
+        return gameObjects.get(id);
     }
     
-    public int getObjectIndex(GameObject object){
-        return gameObjects.indexOf(object);
-    }
+//    public int getObjectIndex(GameObject object){
+//        return gameObjects.indexOf(object);
+//    }
     
     public Spawner getItemSpawner() {
       return itemSpawner;
@@ -66,15 +68,15 @@ public class Environment {
     final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
+            updateIndex++;
 //            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
 //                return;
 //            }
-//            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
+//            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/800 ){
 //                return;
 //            }
             lastUpdateTime.set(now);
             update(now);
-            updateIndex++;
         }
     };
     
@@ -85,25 +87,25 @@ public class Environment {
         MadBalls.getMultiplayerHandler().checkWinner();
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
-        ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects);
-        ArrayList<GameObject> deadGameObjects = new ArrayList<>();
+        java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
+        ArrayList<Integer> deadObjIDs = new ArrayList<>();
 //        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         quadtree.clear();
         
-        for (GameObject obj : copiedGameObjects){
+        for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
 //            obj.updateBoundsRectangle();
             if (obj.isDead()) {
-                deadGameObjects.add(obj);
+                deadObjIDs.add(obj.getID());
             }
             else {
                 quadtree.insert(obj);
             }
         }
         
-        for (GameObject obj : deadGameObjects){
-            gameObjects.remove(obj);
-            copiedGameObjects.remove(obj);
+        for (Integer id : deadObjIDs){
+            gameObjects.remove(id);
+            copiedGameObjects.remove(id);
         }
         
 //        copiedGameObjects = new ArrayList<>(gameObjects);
@@ -115,7 +117,7 @@ public class Environment {
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
         
 //        boolean isUncollided = false;
-        for (GameObject checking : copiedGameObjects){
+        for (GameObject checking : copiedGameObjects.values()){
             if (checking.isDead() || checking instanceof Obstacle) continue;
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking);
@@ -162,7 +164,7 @@ public class Environment {
     
     private Environment(){
         this.itemSpawner = new Spawner(this);
-        gameObjects = new ArrayList<>();
+        gameObjects = new HashMap<>();
     }
     
     public void setDisplay(Group display){
@@ -201,7 +203,9 @@ public class Environment {
      * @param obj 
      */
     public void registerGameObj(GameObject obj, boolean shouldAddDisplay){
-        gameObjects.add(obj);
+        Integer newID = new Integer(currentObjID++);
+        obj.setID(newID);
+        gameObjects.put(newID++, obj);
 //        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
     }
@@ -211,7 +215,7 @@ public class Environment {
      * @param obj 
      */
     public void removeGameObj(GameObject obj){
-//        gameObjects.remove(obj);
+//        gameObjects.remove(obj.getID());
         display.getChildren().remove(obj.getDisplay());
     }
 }
