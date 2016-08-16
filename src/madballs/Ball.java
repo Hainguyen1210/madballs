@@ -39,7 +39,7 @@ public class Ball extends GameObject{
     
     public void addEffectState(BuffState effectState) {
         System.out.println("add effect" + effectState);
-        effectState.setWrappedEffectState(this.effectState);
+        effectState.setWrappedBuffState(this.effectState);
         this.effectState = effectState;
     }
 
@@ -66,6 +66,9 @@ public class Ball extends GameObject{
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
             SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this);
+            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
+                SceneManager.getInstance().bindGameInfo(this);
+            }
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -90,6 +93,11 @@ public class Ball extends GameObject{
     }
     @Override
     public void updateUnique(long now) {
-        if (effectState != null) effectState.update(now);
+        if (effectState != null) {
+            effectState.update(now);
+            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
+                SceneManager.getInstance().updateBuffStatus(effectState);
+            }
+        }
     }
 }

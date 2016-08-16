@@ -68,7 +68,6 @@ public class MadBalls extends Application {
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
-        SceneManager.getInstance().scaleDisplay(root);
 //        Client.initClient();
         
         
@@ -86,6 +85,7 @@ public class MadBalls extends Application {
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(scene);
         primaryStage.show();
+        SceneManager.getInstance().displayGameInfo(primaryStage);
     }
 
     /**

@@ -16,8 +16,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.scene.Group;
 import javafx.scene.Scene;
 import madballs.*;
 import madballs.map.Map;
@@ -94,6 +92,7 @@ public class Player {
         if (xDiff < map.getWidth()/numMapParts/2*zoomOut + 100 && yDiff < map.getHeight()/numMapParts/2*zoomOut + 100){
             relevantObjIDs.add(obj.getID());
         }
+//        relevantObjIDs.add(obj.getID());
 
     }
 
@@ -115,7 +114,8 @@ public class Player {
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
         if (isLocal) {
             bindInput(MadBalls.getScene());
-            SceneManager.getInstance().setCamera(ball);
+            SceneManager.getInstance().bindCamera(ball);
+            SceneManager.getInstance().bindGameInfo(ball);
         }
     }
     
@@ -199,9 +199,9 @@ public class Player {
     public Data readData(){
         try {
             return (Data) in.readObject();
-        } catch (EOFException | ClassNotFoundException ex){
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullPointerException | SocketException ex){
+        } catch (ClassNotFoundException | IOException ex){
+            Platform.exit();
+        } catch (NullPointerException ex){
             MadBalls.getMultiplayerHandler().getPlayers().remove(this);
             Platform.runLater(new Runnable() {
                 @Override
@@ -209,8 +209,6 @@ public class Player {
                     ball.die();
                 }
             });
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }

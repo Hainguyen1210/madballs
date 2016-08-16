@@ -5,8 +5,7 @@
  */
 package madballs.wearables;
 
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.gameFX.SoundStudio;
@@ -36,7 +35,8 @@ public abstract class Weapon extends GameObject{
     private double scope = 1;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
-    private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
+    private double damage = -1, fireRate = -1, range = -1, projectileSpeed = -1;
+    private IntegerProperty ammo = new SimpleIntegerProperty(-1);
 
     public double getScope() {
         return scope;
@@ -103,12 +103,16 @@ public abstract class Weapon extends GameObject{
         this.range = range;
     }
 
-    public double getAmmo() {
+    public int getAmmo() {
+        return ammo.get();
+    }
+
+    public IntegerProperty ammoProperty() {
         return ammo;
     }
 
-    final public void setAmmo(double ammo) {
-        this.ammo = ammo;
+    final public void setAmmo(int ammo) {
+        this.ammo.set(ammo);
     }
 
     public double getProjectileSpeed() {
@@ -195,14 +199,14 @@ public abstract class Weapon extends GameObject{
     }
 
     public boolean checkAmmo(){
-        if (ammo == 0){
+        if (getAmmo() == 0){
             ((Ball)getOwner()).setWeapon(Pistol.class);
 //            if (MadBalls.isHost()){
 //                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
 //                ((Ball)getOwner()).setWeapon(Pistol.class);
 //            }
         }
-        return ammo == 0;
+        return getAmmo() == 0;
     }
     
     @Override

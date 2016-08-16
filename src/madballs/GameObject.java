@@ -480,7 +480,7 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-        System.out.println("remove " + getClass() + getID());
+//        System.out.println("remove " + getClass() + getID());
         if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, getEnvironment().getLastUpdateTime(), 0);
         isDead = true;
         if (owner != null) {
@@ -490,7 +490,7 @@ public abstract class GameObject {
     
     public void die(){
         if (MadBalls.isHost()){
-            System.out.println("die " + getClass() + getID());
+//            System.out.println("die " + getClass() + getID());
             setDead();
             getEnvironment().removeGameObj(this);
             if (child != null) {
