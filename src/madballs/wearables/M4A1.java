@@ -25,7 +25,8 @@ public class M4A1 extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(1.2);
         setDamage(18);
         setAmmo(45);
         setFireRate(4);

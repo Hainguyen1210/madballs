@@ -16,7 +16,6 @@ import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
@@ -31,7 +30,8 @@ public class SceneManager {
     private static SceneManager instance = new SceneManager();
     private Rectangle2D primaryScreenBounds;
     private double screenWidth, screenHeight;
-    private double scale;
+    private DoubleProperty scale = new SimpleDoubleProperty(1);
+    private DoubleProperty zoomOut = new SimpleDoubleProperty(1);
     private PerspectiveCamera camera;
 
     public Rectangle2D getPrimaryScreenBounds() {
@@ -47,9 +47,21 @@ public class SceneManager {
     }
 
     public double getScale() {
-        return scale;
+        return scale.get();
     }
-    
+
+    public void setScale(double scale) {
+        this.scale.set(scale);
+    }
+
+    public double getZoomOut() {
+        return zoomOut.get();
+    }
+
+    public void setZoomOut(double zoomOut) {
+        this.zoomOut.set(zoomOut);
+    }
+
     private SceneManager(){
         primaryScreenBounds = Screen.getPrimary().getVisualBounds();
         screenWidth = primaryScreenBounds.getWidth();
@@ -67,12 +79,12 @@ public class SceneManager {
     }
     
     public void setCamera(GameObject obj){
-        scale = MadBalls.getScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts;
+        scale.bind(Bindings.divide(MadBalls.getScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts, zoomOut));
         System.out.println(MadBalls.getScene().getHeight());
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(8000);
-        camera.setTranslateZ(-MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts / Math.tan(Math.toRadians(30)));
+        camera.translateZProperty().bind(Bindings.multiply(zoomOut, -MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts / Math.tan(Math.toRadians(30))));
         camera.setFieldOfView(30);
         camera.translateXProperty().bind(obj.getTranslateXProperty());
         camera.translateYProperty().bind(obj.getTranslateYProperty());

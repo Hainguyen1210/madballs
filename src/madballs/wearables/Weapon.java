@@ -33,10 +33,19 @@ public abstract class Weapon extends GameObject{
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
     private MoveBehaviour projectileMoveBehaviour;
+    private double scope = 1;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
     private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
-    
+
+    public double getScope() {
+        return scope;
+    }
+
+    public void setScope(double scope) {
+        this.scope = scope;
+    }
+
     public double getDamage() {
         return damage;
     }

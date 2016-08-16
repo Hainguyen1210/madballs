@@ -29,7 +29,8 @@ public class Minigun extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(1.3);
         setDamage(15);
         setAmmo(50);
         setFireRate(10);

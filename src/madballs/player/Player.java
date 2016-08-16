@@ -89,8 +89,9 @@ public class Player {
         double xDiff = Math.abs(obj.getTranslateX() - ball.getTranslateX());
         double yDiff = Math.abs(obj.getTranslateY() - ball.getTranslateY());
         Map map = obj.getEnvironment().getMap();
+        double zoomOut = SceneManager.getInstance().getZoomOut();
         double numMapParts = SceneManager.numMapParts;
-        if (xDiff < map.getWidth()/numMapParts/2 + 100 && yDiff < map.getHeight()/numMapParts/2 + 100){
+        if (xDiff < map.getWidth()/numMapParts/2*zoomOut + 100 && yDiff < map.getHeight()/numMapParts/2*zoomOut + 100){
             relevantObjIDs.add(obj.getID());
         }
 

@@ -29,7 +29,8 @@ public class Uzi extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(1.1);
         setDamage(10);
         setAmmo(40);
         setFireRate(4);

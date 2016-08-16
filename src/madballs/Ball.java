@@ -18,10 +18,7 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.effectState.BuffState;
 import madballs.moveBehaviour.StraightMove;
-import madballs.wearables.Pistol;
-import madballs.wearables.RocketLauncher;
-import madballs.wearables.Weapon;
-import madballs.wearables.XM1104;
+import madballs.wearables.*;
 
 /**
  *
@@ -55,7 +52,8 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        weapon = new RocketLauncher(this);
+        weapon = new Awp(this);
+        SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
     
     public Weapon getWeapon() {
@@ -66,6 +64,7 @@ public class Ball extends GameObject{
         try {
             weapon.die();
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+            SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);

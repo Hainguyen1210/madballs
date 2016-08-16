@@ -25,7 +25,8 @@ public class Ak47 extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(1.2);
         setDamage(20);
         setAmmo(45);
         setFireRate(3);

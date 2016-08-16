@@ -20,6 +20,7 @@ public class RocketLauncher extends Weapon {
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
+        setScope(2.5);
         setDamage(200);
         setAmmo(5);
         setFireRate(0.25);
