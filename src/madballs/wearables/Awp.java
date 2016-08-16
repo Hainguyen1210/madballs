@@ -26,14 +26,15 @@ public class Awp extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
-        setDamage(50);
+        setDamage(75);
         setAmmo(-1);
-        setFireRate(1);
+        setFireRate(0.35);
         setRange(800);
         setProjectileSpeed(800);
         setProjectileHitBoxSize(5);
         setProjectileColor(Paint.valueOf("yellow"));
-        
+
+        setFireSoundFX("awp");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }

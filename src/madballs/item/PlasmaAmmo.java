@@ -12,6 +12,7 @@ import madballs.effectState.PowerUp;
 public class PlasmaAmmo extends BuffItem{
     public PlasmaAmmo(Environment environment, double x, double y) {
         super(environment, x, y, new PowerUp(null, 5, 2));
+        giveStateEffect.setSoundFX("plasma");
     }
     
     @Override

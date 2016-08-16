@@ -37,12 +37,12 @@ public class Spawner {
   public Spawner(Environment environment){
     this.environment = environment;
     weapons = new Class[] {Awp.class, Pistol.class};
-      boostItems = new Class[] {DivinePotion.class};
+      boostItems = new Class[] {PlasmaAmmo.class};
 //    boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
   }
   
   public void spawn(long now){
-    if((now - lastItemSpawnTime.get()) / 1000000000.0 > 12){
+    if((now - lastItemSpawnTime.get()) / 1000000000.0 > 5){
       lastItemSpawnTime.set(now);
       randomSpawn();
     }

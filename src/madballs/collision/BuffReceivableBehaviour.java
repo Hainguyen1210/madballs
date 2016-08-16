@@ -22,24 +22,13 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
     
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-      if (effect.hasCollisionEffect(GiveStateEffect.class)) {
         GiveStateEffect receivedEffect = (GiveStateEffect)effect;
         BuffState effectState = receivedEffect.getEffectState();
         effectState.castOn((Ball)target);
-      }
-      
-//      if (effect.hasCollisionEffect(Speed.class)){
-//            int timeout = (int) ((Speed)effect).getEffectTimeout();
-//            int speed = (int) ((Speed)effect).getSpeedAmount();
-//            ((Ball)target).addEffectState(new SpeedBoosted(((Ball)target), null, timeout, speed));
-//        } else if(effect.hasCollisionEffect(Heal.class)){
-//            ((Ball)target).setHpValue(100);
-//        } else if (effect.hasCollisionEffect(FireRate.class)) {
-//            ((Ball)target).addEffectState(new FireRateBoosted(((Ball)target), null, 5, 1.5));
-//        } else if (effect.hasCollisionEffect(Damage.class)) {
-//            System.out.println("current dmg: " + ((Ball)target).getWeapon().getDamage());
-//            ((Ball)target).addEffectState(new DamageBoosted(((Ball)target), null, 5, 2));
-//            System.out.println("current dmg: " + ((Ball)target).getWeapon().getDamage());
-//        }
+    }
+
+    @Override
+    protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        return effect.hasCollisionEffect(GiveStateEffect.class);
     }
 }

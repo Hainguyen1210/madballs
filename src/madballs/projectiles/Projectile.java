@@ -5,7 +5,6 @@
  */
 package madballs.projectiles;
 
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 import madballs.StraightMove;
@@ -47,7 +46,6 @@ public class Projectile extends GameObject{
 
     @Override
     public void updateUnique(long now) {
-        getMoveBehaviour().move(now);
         if (getMoveBehaviour().getMovedDistance() >= sourceWeapon.getRange()){
             getEnvironment().getGround().onCollision(this, getHitBox());
         }

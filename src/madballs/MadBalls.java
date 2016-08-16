@@ -9,6 +9,7 @@ import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import madballs.gameFX.SoundStudio;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
 import madballs.multiplayer.MultiplayerHandler;
@@ -53,6 +54,7 @@ public class MadBalls extends Application {
     public void start(Stage primaryStage) {
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
+        SoundStudio.getInstance();
         
         navigation = new Navigation();
         Group root = new Group();

@@ -9,7 +9,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.SimpleDoubleProperty;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.shape.Circle;
 import madballs.collision.BuffReceivableBehaviour;
@@ -47,6 +46,8 @@ public class Ball extends GameObject{
     public Ball(Environment environment, double x, double y) {
         super(environment, x , y, true);
         setMoveBehaviour(new StraightMove(this, SPEED));
+        getMoveBehaviour().setSoundFX("footstep2");
+        setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
@@ -86,6 +87,5 @@ public class Ball extends GameObject{
     @Override
     public void updateUnique(long now) {
         if (effectState != null) effectState.update(now);
-        getMoveBehaviour().move(now);
     }
 }

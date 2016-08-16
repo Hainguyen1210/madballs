@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -29,6 +30,7 @@ public abstract class GameObject {
     private Shape hitBox;
     private ImageView imageView = new ImageView();
     private Group display, animationG, statusG;
+    private String dieSoundFX;
     private Rectangle boundsRectangle;
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
@@ -61,8 +63,11 @@ public abstract class GameObject {
     public boolean isDead(){
         return isDead;
     }
-    
-//    public int getIndex(){
+
+    public void setDieSoundFX(String dieSoundFX) {
+        this.dieSoundFX = dieSoundFX;
+    }
+    //    public int getIndex(){
 //        return environment.getObjectIndex(this);
 //    }
     
@@ -473,6 +478,7 @@ public abstract class GameObject {
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
+        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, Environment.getInstance().getLastUpdateTime(), 0);
         isDead = true;
         if (owner != null) {
             owner.child = null;
@@ -493,6 +499,7 @@ public abstract class GameObject {
     public void update(long now){
         stateLoader.update(now);
         if (!isDead) {
+            if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
         }
     }

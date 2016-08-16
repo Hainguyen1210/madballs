@@ -23,19 +23,20 @@ public class MakeUpItem extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        Item item = null;
-        if (source instanceof Obstacle){
-            GameObject owner = target;
-            while (owner != null){
-                owner = owner.getOwner();
-            }
-          if(owner instanceof Item){
-            item = (Item) owner;
+        GameObject owner = target;
+        while (owner != null){
+            owner = owner.getOwner();
+        }
+        if(owner instanceof Item){
+            Item item = (Item) owner;
             Spawner spawner = source.getEnvironment().getItemSpawner();
             spawner.randomSpawn();
             owner.die();
-            
-          }
         }
+    }
+
+    @Override
+    protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        return source instanceof Obstacle;
     }
 }

@@ -179,9 +179,9 @@ public class Player {
     public Data readData(){
         try {
             return (Data) in.readObject();
-        } catch (EOFException ex){
+        } catch (EOFException | ClassNotFoundException ex){
             Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (SocketException ex){
+        } catch (NullPointerException | SocketException ex){
             MadBalls.getMultiplayerHandler().getPlayers().remove(this);
             Platform.runLater(new Runnable() {
                 @Override
@@ -189,8 +189,8 @@ public class Player {
                     ball.die();
                 }
             });
-        } catch (IOException | ClassNotFoundException ex){
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

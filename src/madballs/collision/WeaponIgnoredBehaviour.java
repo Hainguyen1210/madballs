@@ -29,5 +29,10 @@ public class WeaponIgnoredBehaviour extends StackedCollisionPassiveBehaviour{
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         
     }
-    
+
+    @Override
+    protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        return false;
+    }
+
 }
