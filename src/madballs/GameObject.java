@@ -501,8 +501,8 @@ public abstract class GameObject {
     
     public void update(long now){
         if (!isDead) {
-            if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
+            if (moveBehaviour != null) moveBehaviour.move(now);
         }
         updateRelevancy();
         stateLoader.update(now);

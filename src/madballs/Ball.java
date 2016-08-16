@@ -55,7 +55,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        weapon = new RocketLauncher(this);
+        weapon = new XM1104(this);
     }
     
     public Weapon getWeapon() {
