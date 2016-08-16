@@ -60,11 +60,11 @@ public class Awp extends Weapon{
 
     @Override
     public void setDisplayComponents() {
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setWidth(WIDTH-15);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("yellow")));
         setImage(ImageGenerator.getInstance().getImage("awp"));
-        configImageView(0, 0, HEIGHT, WIDTH);
+        configImageView(-15, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }

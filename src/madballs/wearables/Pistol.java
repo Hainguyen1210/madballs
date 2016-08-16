@@ -70,10 +70,10 @@ public class Pistol extends Weapon{
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
         setImage(ImageGenerator.getInstance().getImage("pistol"));
-        configImageView(0, 0, HEIGHT, WIDTH);
+        configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }
