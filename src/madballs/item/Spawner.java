@@ -17,8 +17,12 @@ import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.SpawnData;
+import madballs.wearables.Ak47;
 import madballs.wearables.Awp;
+import madballs.wearables.M4A1;
+import madballs.wearables.Minigun;
 import madballs.wearables.Pistol;
+import madballs.wearables.Uzi;
 import madballs.wearables.Weapon;
 
 /**
@@ -36,8 +40,8 @@ public class Spawner {
   
   public Spawner(Environment environment){
     this.environment = environment;
-    weapons = new Class[] {Awp.class, Pistol.class};
-      boostItems = new Class[] {PlasmaAmmo.class};
+    weapons = new Class[] {Awp.class,Uzi.class, Ak47.class, Minigun.class, M4A1.class, Pistol.class};
+    boostItems = new Class[] {PlasmaAmmo.class};
 //    boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
   }
   
