@@ -34,7 +34,7 @@ public class Haste extends BuffState{
 
     @Override
     public void apply() {
-        SoundStudio.getInstance().playSound("speedUp", Environment.getInstance().getLastUpdateTime(), 0);
+        SoundStudio.getInstance().playSound("speedUp", getBall().getEnvironment().getLastUpdateTime(), 0);
         getBall().getMoveBehaviour().setSpeed(getBall().getMoveBehaviour().getSpeed() + speed);
     }
     

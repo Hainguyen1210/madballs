@@ -22,10 +22,15 @@ import madballs.multiplayer.Server;
 public class MadBalls extends Application {
     private static Navigation navigation;
     private static MultiplayerHandler multiplayerHandler;
+    private static Environment mainEnvironment;
     private static boolean isGameOver = false;
 
     private static Scene scene;
-    
+
+    public static Environment getMainEnvironment() {
+        return mainEnvironment;
+    }
+
     public static Scene getScene(){
         return scene;
     }
@@ -61,7 +66,8 @@ public class MadBalls extends Application {
         
         scene = new Scene(root, 1280, 720);
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        Environment.getInstance().setDisplay(root);
+        mainEnvironment = new Environment();
+        mainEnvironment.setDisplay(root);
         SceneManager.getInstance().scaleDisplay(root);
 //        Client.initClient();
         
@@ -70,7 +76,7 @@ public class MadBalls extends Application {
         if (isHost){
             multiplayerHandler = new Server();
             Map map = new Map(-1);
-            Environment.getInstance().loadMap(map);
+            mainEnvironment.loadMap(map);
         }
         else {
             multiplayerHandler = new Client();
@@ -80,7 +86,6 @@ public class MadBalls extends Application {
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(scene);
         primaryStage.show();
-        System.out.println(primaryStage.getHeight());
     }
 
     /**

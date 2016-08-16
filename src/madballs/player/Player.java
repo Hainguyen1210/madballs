@@ -11,6 +11,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
 import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -18,10 +19,8 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.scene.Group;
 import javafx.scene.Scene;
-import madballs.Ball;
-import madballs.Environment;
-import madballs.MadBalls;
-import madballs.SceneManager;
+import madballs.*;
+import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 
@@ -40,6 +39,15 @@ public class Player {
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
+    private ArrayList<Integer> relevantObjIDs = new ArrayList<>();
+
+    public ArrayList<Integer> getRelevantObjIDs() {
+        return relevantObjIDs;
+    }
+
+    public void setRelevantObjIDs(ArrayList<Integer> relevantObjIDs) {
+        this.relevantObjIDs = relevantObjIDs;
+    }
 
     public boolean isReady() {
         return isReady;
@@ -76,7 +84,18 @@ public class Player {
     public boolean isLocal(){
         return isLocal;
     }
-    
+
+    public void checkRelevancy(GameObject obj){
+        double xDiff = Math.abs(obj.getTranslateX() - ball.getTranslateX());
+        double yDiff = Math.abs(obj.getTranslateY() - ball.getTranslateY());
+        Map map = obj.getEnvironment().getMap();
+        double numMapParts = SceneManager.numMapParts;
+        if (xDiff < map.getWidth()/numMapParts/2 + 100 && yDiff < map.getHeight()/numMapParts/2 + 100){
+            relevantObjIDs.add(obj.getID());
+        }
+
+    }
+
     public Player(Socket socket, boolean isLocal){
         controller = new Controller(this);
         this.isLocal = isLocal;

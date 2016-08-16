@@ -3,7 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs;
+package madballs.moveBehaviour;
+
+import madballs.Environment;
+import madballs.GameObject;
+import madballs.MadBalls;
+import madballs.SceneManager;
 
 /**
  * do not use the variable direction of MoveBehaviour class, use the obj's Rotate angle instead
@@ -40,7 +45,7 @@ public class RotateBehaviour extends MoveBehaviour{
     @Override
     public void moveUnique(long now) {
 //        System.out.println(getObject().getClass());
-        if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(getObject().getEnvironment().getLastUpdateTime());
         if ((now - getLastMoveTime()) / 1_000_000_000.0 > 0.001){
 //            double[] realCoordinate = getObject().getRealCoordinate();
 //            double directionFromTargetToSelf = Math.atan2(getTargetY() - realCoordinate[1], getTargetX() - realCoordinate[0]);

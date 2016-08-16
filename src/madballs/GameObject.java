@@ -19,6 +19,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
+import madballs.map.Map;
+import madballs.moveBehaviour.MoveBehaviour;
+import madballs.player.Player;
 
 /**
  *
@@ -80,9 +83,9 @@ public abstract class GameObject {
         oldY = y;
         rotation = new Rotate(0);
         oldDirection = 0;
-        
+
         this.environment = environment;
-        
+
         if (isSettingDisplay) setDisplay();
     }
     
@@ -129,7 +132,7 @@ public abstract class GameObject {
 //        rotation = new Rotate(0 , -x , -y);
         rotation.angleProperty().bind(owner.rotation.angleProperty());
         environment = owner.getEnvironment();
-        
+
     }
 
     public Environment getEnvironment() {
@@ -477,8 +480,8 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-//        System.out.println("remove " + getClass() + getID());
-        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, Environment.getInstance().getLastUpdateTime(), 0);
+        System.out.println("remove " + getClass() + getID());
+        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, getEnvironment().getLastUpdateTime(), 0);
         isDead = true;
         if (owner != null) {
             owner.child = null;
@@ -487,7 +490,7 @@ public abstract class GameObject {
     
     public void die(){
         if (MadBalls.isHost()){
-//            System.out.println("die " + getClass() + getID());
+            System.out.println("die " + getClass() + getID());
             setDead();
             getEnvironment().removeGameObj(this);
             if (child != null) {
@@ -497,15 +500,22 @@ public abstract class GameObject {
     }
     
     public void update(long now){
-        stateLoader.update(now);
         if (!isDead) {
             if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
         }
+        updateRelevancy();
+        stateLoader.update(now);
+    }
+
+    private void updateRelevancy(){
+        for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
+            player.checkRelevancy(this);
+        }
     }
     
     /**
-     * the obj must implement this method to set its hit box and image
+     * the obj must implement this method to set its hit box and image, etc.
      */
     public abstract void setDisplayComponents();
     

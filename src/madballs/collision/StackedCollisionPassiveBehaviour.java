@@ -21,7 +21,7 @@ public abstract class StackedCollisionPassiveBehaviour implements CollisionPassi
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (isConditionMet(source, target, effect, collisionShape)){
-            if (effect.getSoundFX() != null) SoundStudio.getInstance().playSound(effect.getSoundFX(), Environment.getInstance().getLastUpdateTime(), 0);
+            if (effect.getSoundFX() != null) SoundStudio.getInstance().playSound(effect.getSoundFX(), target.getEnvironment().getLastUpdateTime(), 0);
             uniqueGetAffected(source, target, effect, collisionShape);
         }
         if (wrappedBehaviour != null) wrappedBehaviour.getAffected(source, target, effect, collisionShape);

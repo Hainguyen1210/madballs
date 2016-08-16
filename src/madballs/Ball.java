@@ -17,8 +17,12 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.effectState.BuffState;
+import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Pistol;
+import madballs.wearables.RocketLauncher;
 import madballs.wearables.Weapon;
+import madballs.wearables.XM1104;
+
 /**
  *
  * @author Caval
@@ -51,14 +55,14 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        weapon = new Pistol(this);
+        weapon = new RocketLauncher(this);
     }
     
     public Weapon getWeapon() {
         return weapon;
     }
 
-    public void setWeapon(Class<Weapon> weaponClass) {
+    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
         try {
             this.weapon.die();
             this.weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);

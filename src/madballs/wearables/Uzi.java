@@ -31,7 +31,7 @@ public class Uzi extends Weapon{
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
         setDamage(10);
-        setAmmo(-1);
+        setAmmo(40);
         setFireRate(4);
         setRange(700);
         setProjectileSpeed(800);
@@ -41,27 +41,6 @@ public class Uzi extends Weapon{
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
-
-    
-//    public Uzi(Environment environment, int X, int Y) {
-//        super(environment, X, Y);
-//        
-//        setCollisionEffect(new PushBackEffect(null, -1));
-//        setCollisionPassiveBehaviour(new PushableBehaviour(null));
-//        
-//        
-//        setDamage(100);
-//        setAmmo(-1);
-//        setFireRate(5);
-//        setRange(1000);
-//        setProjectileSpeed(800);
-//        setProjectileHitBoxSize(1);
-//        setProjectileColor(Paint.valueOf("red"));
-//        
-//        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-//        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-//    }
-
     
     @Override
     public void setDisplayComponents() {

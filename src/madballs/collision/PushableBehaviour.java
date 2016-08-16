@@ -28,7 +28,7 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        SoundStudio.getInstance().playSound("nutfall", Environment.getInstance().getLastUpdateTime(), 0.5);
+        SoundStudio.getInstance().playSound("nutfall", target.getEnvironment().getLastUpdateTime(), 0.5);
         double pushBackAmount = effect.getPushBackAmount();
 
         if (pushBackAmount < 0){

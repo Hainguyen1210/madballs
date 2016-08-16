@@ -26,8 +26,8 @@ public class M4A1 extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
-        setDamage(15);
-        setAmmo(-1);
+        setDamage(18);
+        setAmmo(45);
         setFireRate(4);
         setRange(600);
         setProjectileSpeed(500);
@@ -37,24 +37,6 @@ public class M4A1 extends Weapon{
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
-    
-//    public M4A1(Environment environment, int X, int Y) {
-//        super(environment, X, Y);
-//        
-//        setCollisionEffect(new PushBackEffect(null, -1));
-//        setCollisionPassiveBehaviour(new PushableBehaviour(null));
-//        
-//        setDamage(100);
-//        setAmmo(-1);
-//        setFireRate(1);
-//        setRange(800);
-//        setProjectileSpeed(800);
-//        setProjectileHitBoxSize(5);
-//        setProjectileColor(Paint.valueOf("yellow"));
-//        
-//        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-//        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-//    }
 
     @Override
     public void setDisplayComponents() {

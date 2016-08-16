@@ -6,6 +6,9 @@
 package madballs;
 
 import java.util.LinkedList;
+
+import madballs.moveBehaviour.MoveBehaviour;
+import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.StateData;
 import madballs.wearables.Weapon;
 
@@ -97,7 +100,7 @@ public class StateLoader {
         if (state.isDead()){
 //            System.out.println("`");
             gameObject.setDead();
-            Environment.getInstance().removeGameObj(gameObject);
+            gameObject.getEnvironment().removeGameObj(gameObject);
             return;
         }
         gameObject.setHpValue(state.getHp());

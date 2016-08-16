@@ -56,14 +56,12 @@ public class SceneManager {
     }
     
     public void setCamera(GameObject obj){
-        scale = MadBalls.getScene().getHeight() / Environment.getInstance().getMap().getHeight() * numMapParts;
+        scale = MadBalls.getScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts;
         System.out.println(MadBalls.getScene().getHeight());
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(8000);
-        System.out.println(1000 * Math.tan(Math.toRadians(15)));
-        System.out.println(1000 * Math.tan(Math.toRadians(30)));
-        camera.setTranslateZ(-Environment.getInstance().getMap().getHeight() / numMapParts / Math.tan(Math.toRadians(30)));
+        camera.setTranslateZ(-MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts / Math.tan(Math.toRadians(30)));
         camera.setFieldOfView(30);
         camera.translateXProperty().bind(obj.getTranslateXProperty());
         camera.translateYProperty().bind(obj.getTranslateYProperty());

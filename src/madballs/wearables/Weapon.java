@@ -10,6 +10,10 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.gameFX.SoundStudio;
+import madballs.moveBehaviour.MoveBehaviour;
+import madballs.moveBehaviour.RotateBehaviour;
+import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 import madballs.*;
 import madballs.collision.CollisionEffect;
@@ -28,6 +32,7 @@ public abstract class Weapon extends GameObject{
     
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
+    private MoveBehaviour projectileMoveBehaviour;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
     private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
@@ -105,6 +110,14 @@ public abstract class Weapon extends GameObject{
         this.projectileSpeed = projectileSpeed;
     }
 
+    public MoveBehaviour getProjectileMoveBehaviour() {
+        return projectileMoveBehaviour;
+    }
+
+    public void setProjectileMoveBehaviour(MoveBehaviour projectileMoveBehaviour) {
+        this.projectileMoveBehaviour = projectileMoveBehaviour;
+    }
+
     public Weapon(GameObject owner, double x, double y) {
         super(owner, x, y, true);
         setMoveBehaviour(new RotateBehaviour(this, -1));
@@ -150,9 +163,14 @@ public abstract class Weapon extends GameObject{
         this.fireSoundFX = fireSoundFX;
     }
 
+    public String getFireSoundFX() {
+        return fireSoundFX;
+    }
+
     public void forceFire(){
-        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 1/fireRate/2);
+        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, getEnvironment().getLastUpdateTime(), 0);
         new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+        checkAmmo();
     }
     
     public void attack(long now){
@@ -165,7 +183,18 @@ public abstract class Weapon extends GameObject{
             }
         }
         
-    };
+    }
+
+    public boolean checkAmmo(){
+        if (ammo == 0){
+            ((Ball)getOwner()).setWeapon(Pistol.class);
+//            if (MadBalls.isHost()){
+//                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
+//                ((Ball)getOwner()).setWeapon(Pistol.class);
+//            }
+        }
+        return ammo == 0;
+    }
     
     @Override
     public void updateUnique(long now) {
