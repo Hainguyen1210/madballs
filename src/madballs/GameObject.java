@@ -18,16 +18,19 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
  * @author Caval
  */
 public abstract class GameObject {
+    private Integer ID;
     private GameObject owner, child;
     private Shape hitBox;
     private ImageView imageView = new ImageView();
     private Group display, animationG, statusG;
+    private String dieSoundFX;
     private Rectangle boundsRectangle;
     private CollisionEffect collisionEffect;
     private CollisionPassiveBehaviour collisionPassiveBehaviour;
@@ -44,7 +47,15 @@ public abstract class GameObject {
     private StateLoader stateLoader;
     private MoveBehaviour moveBehaviour;
     private Environment environment;
-    
+
+    public Integer getID() {
+        return ID;
+    }
+
+    public void setID(Integer ID) {
+        this.ID = ID;
+    }
+
     public StateLoader getStateLoader(){
         return stateLoader;
     }
@@ -52,10 +63,13 @@ public abstract class GameObject {
     public boolean isDead(){
         return isDead;
     }
-    
-    public int getIndex(){
-        return environment.getObjectIndex(this);
+
+    public void setDieSoundFX(String dieSoundFX) {
+        this.dieSoundFX = dieSoundFX;
     }
+    //    public int getIndex(){
+//        return environment.getObjectIndex(this);
+//    }
     
     public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
 //        System.out.println("1" + this.getClass());
@@ -422,6 +436,7 @@ public abstract class GameObject {
         animationG = new Group();
         statusG = new Group();
         statusG.setVisible(false);
+        statusG.setTranslateZ(1);
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
@@ -462,7 +477,8 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-//        System.out.println("remove " + getClass() + getIndex());
+//        System.out.println("remove " + getClass() + getID());
+        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, Environment.getInstance().getLastUpdateTime(), 0);
         isDead = true;
         if (owner != null) {
             owner.child = null;
@@ -471,7 +487,7 @@ public abstract class GameObject {
     
     public void die(){
         if (MadBalls.isHost()){
-//            System.out.println("die " + getClass());
+//            System.out.println("die " + getClass() + getID());
             setDead();
             getEnvironment().removeGameObj(this);
             if (child != null) {
@@ -483,6 +499,7 @@ public abstract class GameObject {
     public void update(long now){
         stateLoader.update(now);
         if (!isDead) {
+            if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
         }
     }

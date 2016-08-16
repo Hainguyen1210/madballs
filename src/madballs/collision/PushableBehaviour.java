@@ -6,7 +6,9 @@
 package madballs.collision;
 
 import javafx.scene.shape.Shape;
+import madballs.Environment;
 import madballs.GameObject;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -26,60 +28,64 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (effect.hasCollisionEffect(PushBackEffect.class)){
-            double pushBackAmount = effect.getPushBackAmount();
+        SoundStudio.getInstance().playSound("nutfall", Environment.getInstance().getLastUpdateTime(), 0.5);
+        double pushBackAmount = effect.getPushBackAmount();
 
-            if (pushBackAmount < 0){
-                for (int i = 0; i < 1; i ++){
-                    Shape intersect = collisionShape;
-                    double intersectWidth = intersect.getBoundsInLocal().getWidth();
-                    double intersectHeight = intersect.getBoundsInLocal().getHeight();
+        if (pushBackAmount < 0){
+            for (int i = 0; i < 1; i ++){
+                Shape intersect = collisionShape;
+                double intersectWidth = intersect.getBoundsInLocal().getWidth();
+                double intersectHeight = intersect.getBoundsInLocal().getHeight();
 
-                    double currentDirection = Math.toRadians(target.getRotateAngle());
-                    double oldX = target.getOwnerOldX();
-                    double oldY = target.getOwnerOldY();
-                    target.setRotate(target.getOldDirection());
+                double currentDirection = Math.toRadians(target.getRotateAngle());
+                double oldX = target.getOwnerOldX();
+                double oldY = target.getOwnerOldY();
+                target.setRotate(target.getOldDirection());
 
-                    if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() == -1){
-                        break;
-                    }
-                    else {
-                        target.setRotate(currentDirection);
-                    }
-                    boolean isXReversed = false;
-                    if (intersectWidth == intersectHeight){
+                if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() == -1){
+                    break;
+                }
+                else {
+                    target.setRotate(currentDirection);
+                }
+                boolean isXReversed = false;
+                if (intersectWidth == intersectHeight){
+                    target.setTranslateX(oldX);
+                    target.setTranslateY(oldY);
+                }
+                else {
+                    if (intersectWidth < intersectHeight){
                         target.setTranslateX(oldX);
+                        isXReversed = true;
+                    }
+                    else if (intersectWidth > intersectHeight){
                         target.setTranslateY(oldY);
                     }
-                    else {
-                        if (intersectWidth < intersectHeight){
+
+                    intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
+                    if (intersect.getBoundsInLocal().getWidth() != -1 ){
+                        if (isXReversed) {
+                            target.setTranslateY(oldY);
+                        }
+                        else {
                             target.setTranslateX(oldX);
-                            isXReversed = true;
                         }
-                        else if (intersectWidth > intersectHeight){
-                            target.setTranslateY(oldY);                        
-                        }
-
-                        intersect = Shape.intersect(source.getHitBox(), target.getHitBox());
-                        if (intersect.getBoundsInLocal().getWidth() != -1 ){
-                            if (isXReversed) {
-                                target.setTranslateY(oldY);
-                            }
-                            else {
-                                target.setTranslateX(oldX);
-                            }
-                        }
-                    }
-
-                    if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() != -1){
-                        target.setRotate(target.getOldDirection());
                     }
                 }
-            }
-            else if (pushBackAmount > 0){
-                
+
+                if (Shape.intersect(source.getHitBox(), target.getHitBox()).getBoundsInLocal().getWidth() != -1){
+                    target.setRotate(target.getOldDirection());
+                }
             }
         }
+        else if (pushBackAmount > 0){
+
+        }
     }
-    
+
+    @Override
+    protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        return effect.hasCollisionEffect(PushBackEffect.class);
+    }
+
 }

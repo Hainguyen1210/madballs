@@ -13,6 +13,7 @@ import madballs.wearables.Weapon;
  * @author caval
  */
 public class GameObjState implements Serializable{
+    private Integer objID;
     private double translateX;
     private double translateY;
     private double oldX, oldY;
@@ -23,8 +24,11 @@ public class GameObjState implements Serializable{
     private boolean isDead;
     private double speed;
     private double damage, fireRate;
-    private int objectIndex;
     private int updateIndex;
+
+    public Integer getObjID() {
+        return objID;
+    }
 
     public double getDamage() {
         return damage;
@@ -49,11 +53,7 @@ public class GameObjState implements Serializable{
     public boolean isDead() {
         return isDead;
     }
-    
-    public int getObjectIndex(){
-        return objectIndex;
-    }
-    
+
     public int getUpdateIndex(){
         return updateIndex;
     }
@@ -95,11 +95,17 @@ public class GameObjState implements Serializable{
                 && state.direction == direction
                 && state.oldDirection == oldDirection
                 && state.hp == hp
-                && state.objectIndex == objectIndex
+                && state.isDead == isDead
+                && state.speed == speed
+                && state.targetX == targetX
+                && state.targetY == targetY
+                && state.damage == damage
+                && state.fireRate == fireRate
             );
     }
     
     public GameObjState(GameObject obj){
+        objID = obj.getID();
         updateIndex = obj.getEnvironment().getUpdateIndex();
         translateX = obj.getTranslateX();
         translateY = obj.getTranslateY();
@@ -108,7 +114,6 @@ public class GameObjState implements Serializable{
         oldY = obj.getOldY();
         oldDirection = obj.getOldDirection();
         hp = obj.getHpValue();
-        objectIndex = obj.getIndex();
         isDead = obj.isDead();
         if (obj.getMoveBehaviour() != null){
             speed = obj.getMoveBehaviour().getSpeed();

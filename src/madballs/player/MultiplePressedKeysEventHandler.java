@@ -29,10 +29,11 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
         if (!MadBalls.isHost()) player.sendData(new KeyInputData(event));
         final KeyCode code = event.getCode();
 //        System.out.println("type" + event.getEventType());
-        if (KeyEvent.KEY_PRESSED.equals(event.getEventType())) {
-            buffer.add(code);
-        } else if (KeyEvent.KEY_RELEASED.equals(event.getEventType())) {
+        if (KeyEvent.KEY_RELEASED.equals(event.getEventType())) {
             buffer.remove(code);
+        }
+        else if (KeyEvent.KEY_PRESSED.equals(event.getEventType())) {
+            buffer.add(code);
         }
         multiKeyEventHandler.handle(multiKeyEvent);
         event.consume();

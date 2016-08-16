@@ -23,9 +23,6 @@ public class GiveStateEffect extends StackedCollisionEffect{
     public GiveStateEffect(StackedCollisionEffect effect, BuffState effectState) {
       super(effect);
       this.effectState = effectState;
-    }     
-    @Override
-    public void affect(GameObject source, GameObject target, Shape collisionShape) {
-        target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
     }
+
 }

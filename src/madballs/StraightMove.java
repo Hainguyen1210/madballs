@@ -7,6 +7,7 @@ package madballs;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import madballs.gameFX.SoundStudio;
 
 /**
  *
@@ -103,9 +104,18 @@ public class StraightMove extends MoveBehaviour{
     
     
     @Override
-    public void move(long now){
+    public void moveUnique(long now){
+        if (getVelocityX() != 0 || getVelocityY() != 0){
+            if (getSoundFX() != null){
+                SoundStudio.getInstance().playSound(getSoundFX(), now, 0.2);
+            }
+        }
+        else {
+//            SoundStudio.getInstance().endSoundRepeat(getSoundFX());
+        }
         GameObject obj = getObject();
         calculateNewCordinate(now);
+
 //        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());
 //        if (obj.getTranslateY() != getNewY()) obj.setOldY(obj.getTranslateY());
         obj.setTranslateX(getNewX());

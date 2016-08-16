@@ -84,23 +84,17 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
-            else if (data.getType().equals("dead")){
-                GameObject obj = Environment.getInstance().getObject(((DeadData)data).getObjectIndex());
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        Environment.getInstance().removeGameObj(obj);
-                    }
-                });
+            else if (data.getType().equals("latency")){
+
             }
             else if (data.getType().equals("state")){
                 try {
                     StateData stateData = (StateData)data;
-                    int objectIndex = stateData.getState().getObjectIndex();
-                    StateLoader stateLoader = Environment.getInstance().getObject(objectIndex).getStateLoader();
+                    Integer objID = stateData.getState().getObjID();
+                    StateLoader stateLoader = Environment.getInstance().getObject(objID).getStateLoader();
                     stateLoader.addServerState(stateData.getState());
                 }
-                catch (IndexOutOfBoundsException ex){
+                catch (NullPointerException ex){
                     Service<Void> service = new Service<Void>() {
                         @Override
                         protected Task<Void> createTask() {
