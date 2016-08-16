@@ -5,11 +5,22 @@
  */
 package madballs;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.SimpleDoubleProperty;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
+import javafx.util.Duration;
 
 /**
  *
@@ -66,5 +77,26 @@ public class SceneManager {
         camera.translateXProperty().bind(obj.getTranslateXProperty());
         camera.translateYProperty().bind(obj.getTranslateYProperty());
         MadBalls.getScene().setCamera(camera);
+    }
+
+    public void displayLabel(String labelName, Paint color, double duration, GameObject target){
+        Label label = new Label(labelName);
+        target.getEnvironment().getDisplay().getChildren().add(label);
+        label.setTranslateZ(100);
+        label.setTextFill(color);
+        label.translateXProperty().bind(Bindings.add(target.getTranslateXProperty(), -labelName.length()*4));
+        DoubleProperty yDiffProperty = new SimpleDoubleProperty(-20);
+        label.translateYProperty().bind(Bindings.add(target.getTranslateYProperty(), yDiffProperty));
+
+        Timeline timeline = new Timeline(
+                new KeyFrame(Duration.seconds(duration),
+                        new EventHandler<ActionEvent>() {
+                            @Override
+                            public void handle(ActionEvent event) {
+                                target.getEnvironment().getDisplay().getChildren().remove(label);
+                            }
+                        },
+                        new KeyValue(yDiffProperty, -50)));
+        timeline.play();
     }
 }

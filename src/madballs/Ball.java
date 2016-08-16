@@ -64,8 +64,9 @@ public class Ball extends GameObject{
 
     public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
         try {
-            this.weapon.die();
-            this.weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+            weapon.die();
+            weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+            SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }

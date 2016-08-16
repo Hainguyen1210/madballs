@@ -116,7 +116,7 @@ public class Environment {
 //        copiedGameObjects = new ArrayList<>(gameObjects);
 //        if (!isHost) return;
         //spawn items
-//        if (MadBalls.isHost()) itemSpawner.spawn(now);
+        if (MadBalls.isHost()) itemSpawner.spawn(now);
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
 //        ArrayList<GameObject> collidedObjects = new ArrayList<>();
