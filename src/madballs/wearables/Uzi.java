@@ -18,11 +18,11 @@ import madballs.GameObject;
  *
  * @author Caval
  */
-public class Pistol extends Weapon{
-    private final double WIDTH = 20;
+public class Uzi extends Weapon{
+    private final double WIDTH = 25;
     private final double HEIGHT = 7;
 
-    public Pistol(GameObject owner) {
+    public Uzi(GameObject owner) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
@@ -32,7 +32,7 @@ public class Pistol extends Weapon{
         
         setDamage(10);
         setAmmo(-1);
-        setFireRate(1);
+        setFireRate(4);
         setRange(700);
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
@@ -43,7 +43,7 @@ public class Pistol extends Weapon{
     }
 
     
-//    public Pistol(Environment environment, int X, int Y) {
+//    public Uzi(Environment environment, int X, int Y) {
 //        super(environment, X, Y);
 //        
 //        setCollisionEffect(new PushBackEffect(null, -1));

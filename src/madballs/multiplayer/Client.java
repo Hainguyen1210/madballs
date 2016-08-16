@@ -40,7 +40,7 @@ public class Client extends MultiplayerHandler{
                         try {
                             // connect socket
 //                            System.out.println("why");
-                            Socket socket = new Socket("127.0.0.1", 8099);
+                            Socket socket = new Socket("10.247.200.72", 8099);
                             setLocalPlayer(new Player(socket, true));
                                     
                                 // maintain the socket connection

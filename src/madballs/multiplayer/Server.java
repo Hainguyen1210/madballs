@@ -46,7 +46,7 @@ public class Server extends MultiplayerHandler{
                                     public void run() {
                                         getLocalPlayer().generateBall(Environment.getInstance());
                                         getLocalPlayer().setReady(true);
-//                                        Environment.getInstance().startAnimation();
+                                        Environment.getInstance().startAnimation();
 
                                     }
                                 });
