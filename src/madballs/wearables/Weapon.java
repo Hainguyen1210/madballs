@@ -10,15 +10,12 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import madballs.Environment;
-import madballs.GameObject;
-import madballs.MadBalls;
-import madballs.RotateBehaviour;
+import madballs.gameFX.SoundStudio;
+import madballs.projectiles.Projectile;
+import madballs.*;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
-import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.FireData;
-import madballs.projectiles.Projectile;
 
 /**
  *
@@ -156,6 +153,7 @@ public abstract class Weapon extends GameObject{
     }
 
     public void forceFire(){
+
         if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 1/fireRate/2);
         new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
     }

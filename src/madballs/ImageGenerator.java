@@ -1,14 +1,21 @@
 package madballs;
 
 import javafx.scene.image.Image;
+import madballs.gameFX.MediaHandler;
 
 import java.io.File;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created by hainguyen on 8/16/16.
  */
 public class ImageGenerator {
     private static ImageGenerator imageGenerator = new ImageGenerator();
+
+    private Map<String, Image> images = new HashMap<>();
+    private String[] imageNames = new String[]
+            {"ak47", "awp", "bazooka", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi"};
     private Image ak47, awp, bazooka, flameThrower, m4a1, minigun, pistol, shotgun, uzi;
 
     public static ImageGenerator getInstance(){
@@ -16,17 +23,17 @@ public class ImageGenerator {
     }
 
     private ImageGenerator(){
-        ak47 = new Image(new File("assets/img/ak47.png").toURI().toString());
+        for( String imageName: imageNames){
+            Image gunImage = new Image(new File("assets/img/"+ imageName + ".png").toURI().toString());
+            images.put(imageName, gunImage);
+        }
     }
 
     public Image getImage(String imageName){
         if (imageName == null){
             return null;
         }
-        if (imageName.equalsIgnoreCase("ak47")){
-            System.out.println("get ak47");
-            return ak47;
-        }
-        return null;
+        return images.get(imageName);
+
     }
 }

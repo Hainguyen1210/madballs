@@ -53,8 +53,6 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-        AudioClip pistol = new AudioClip( getClass().getResource("sound/pistol.mp3").toExternalForm());
-        pistol.play();
 
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);

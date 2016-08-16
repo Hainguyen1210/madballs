@@ -464,7 +464,15 @@ public abstract class GameObject {
         });
         environment.registerGameObj(this, true);
     }
-    
+
+    public void configImageView(double translateX, double translateY, double height, double width){
+        this.imageView.setTranslateX(translateX);
+        this.imageView.setTranslateY(translateY);
+        this.imageView.setFitHeight(height);
+        this.imageView.setFitWidth(width);
+    }
+
+
     /**
      * update the rectangle shape representing the bounds of the game obj
      */

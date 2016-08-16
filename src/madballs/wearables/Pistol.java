@@ -43,7 +43,6 @@ public class Pistol extends Weapon{
         setFireSoundFX("pistol");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-        setImage(imageGenerator.getImage("ak47"));
 
     }
 
@@ -73,7 +72,8 @@ public class Pistol extends Weapon{
         setWidth(WIDTH);
         setHeight(HEIGHT);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage(ImageGenerator.getInstance().getImage("ak47"));
+        setImage(ImageGenerator.getInstance().getImage("pistol"));
+        configImageView(0, 0, HEIGHT, WIDTH);
     }
     
 }

@@ -7,6 +7,7 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
 import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
@@ -62,6 +63,8 @@ public class Awp extends Weapon{
         setWidth(WIDTH);
         setHeight(HEIGHT);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("yellow")));
+        setImage(ImageGenerator.getInstance().getImage("awp"));
+        configImageView(0, 0, HEIGHT, WIDTH);
     }
     
 }
