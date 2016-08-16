@@ -8,6 +8,7 @@ package madballs;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.media.AudioClip;
 import javafx.stage.Stage;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
@@ -51,6 +52,9 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+        AudioClip pistol = new AudioClip( getClass().getResource("sound/pistol.mp3").toExternalForm());
+        pistol.play();
+
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         
@@ -61,6 +65,7 @@ public class MadBalls extends Application {
         scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         Environment.getInstance().setDisplay(root);
         SceneManager.getInstance().scaleDisplay(root);
+
 //        Client.initClient();
         
         

@@ -7,6 +7,8 @@ package madballs.wearables;
 
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.projectiles.Projectile;
@@ -21,6 +23,7 @@ import madballs.multiplayer.FireData;
  */
 public abstract class Weapon extends GameObject{
     private String projectileImageName;
+    private Image projectileImage;
     private double projectileHitBoxSize;
     private Paint projectileColor;
     
@@ -128,13 +131,13 @@ public abstract class Weapon extends GameObject{
         this.projectileCollisionBehaviour = projectileCollisionBehaviour;
     }
 
-    public String getProjectileImageName() {
-        return projectileImageName;
-    }
-
-    public void setProjectileImageName(String projectileImageName) {
-        this.projectileImageName = projectileImageName;
-    }
+//    public String getProjectileImageName() {
+//        return projectileImageName;
+//    }
+//
+//    public void setProjectileImageName(String projectileImageName) {
+//        this.projectileImageName = projectileImageName;
+//    }
 
     public double getProjectileHitBoxSize() {
         return projectileHitBoxSize;
@@ -145,7 +148,7 @@ public abstract class Weapon extends GameObject{
     }
     
     public void forceFire(){
-        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
     }
     
     public void attack(long now){
@@ -153,13 +156,13 @@ public abstract class Weapon extends GameObject{
             if (MadBalls.isHost()){
                 if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
                 MadBalls.getMultiplayerHandler().sendData(new FireData(getIndex()));
-                new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+                new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
                 setLastShotTime(now);
             }
         }
         
     };
-    
+
     @Override
     public void updateUnique(long now) {
 //        System.out.println(owner.getTranslateY());

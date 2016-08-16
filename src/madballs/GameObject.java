@@ -6,6 +6,7 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.scene.image.Image;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
@@ -303,10 +304,10 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(String imageName) {
-//        this.imageView.setImage(image);
+    public void setImage(Image image) {
+        this.imageView.setImage(image);
     }
-    
+
     public DoubleProperty getHp(){
         return hp;
     }

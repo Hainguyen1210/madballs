@@ -48,7 +48,7 @@ public abstract class Item extends GameObject{
 //      setCollisionEffect(new NullEffect(null));
       setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new MakeUpItem(null))));
   }
-  
+
   public boolean canSpawn(){
       return false;
   }
@@ -61,5 +61,5 @@ public abstract class Item extends GameObject{
   private void setImage(ImageView image) {
 //    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
-    
+
 }
