@@ -12,7 +12,8 @@ package madballs.effectState;
 public class InstantHeal extends InstantBuff{
     private double amount;
 
-    public InstantHeal(double amount) {
+    public InstantHeal(BuffState buffState, double amount) {
+        super(buffState);
         this.amount = amount;
     }
 

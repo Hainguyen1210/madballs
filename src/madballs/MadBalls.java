@@ -8,6 +8,8 @@ package madballs;
 import javafx.application.Application;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
 import javafx.stage.Stage;
 import madballs.gameFX.SoundStudio;
 import madballs.map.Map;
@@ -25,14 +27,19 @@ public class MadBalls extends Application {
     private static Environment mainEnvironment;
     private static boolean isGameOver = false;
 
-    private static Scene scene;
+    private static Scene mainScene;
+    private static SubScene animationScene;
+
+    public static Scene getMainScene() {
+        return mainScene;
+    }
 
     public static Environment getMainEnvironment() {
         return mainEnvironment;
     }
 
-    public static Scene getScene(){
-        return scene;
+    public static SubScene getAnimationScene(){
+        return animationScene;
     }
     
     public static MultiplayerHandler getMultiplayerHandler(){
@@ -60,12 +67,17 @@ public class MadBalls extends Application {
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
+
+
         
         navigation = new Navigation();
         Group root = new Group();
-        
-        scene = new Scene(root, 1280, 720);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+        animationScene = new SubScene(root, 1280, 720);
+
+        Group mainRoot = new Group(animationScene);
+
+        mainScene = new Scene(mainRoot, 1280, 720, true, SceneAntialiasing.BALANCED);
+        mainScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
 //        Client.initClient();
@@ -83,9 +95,9 @@ public class MadBalls extends Application {
         multiplayerHandler.init();
         
         primaryStage.setTitle("MAD BALL");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(mainScene);
         primaryStage.show();
-        SceneManager.getInstance().displayGameInfo(primaryStage);
+        SceneManager.getInstance().displayGameInfo(mainRoot);
     }
 
     /**

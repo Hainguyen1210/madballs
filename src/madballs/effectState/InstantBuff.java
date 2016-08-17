@@ -13,8 +13,8 @@ import madballs.Ball;
  */
 public abstract class InstantBuff extends BuffState{
 
-    public InstantBuff() {
-        super(null, 0);
+    public InstantBuff(BuffState buffState) {
+        super(buffState, 0);
     }
     
     @Override

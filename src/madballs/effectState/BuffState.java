@@ -35,8 +35,8 @@ public abstract class BuffState {
         this.ball = ball;
     }
 
-    public BuffState(BuffState effectState, int duration) {
-        wrappedBuffState = effectState;
+    public BuffState(BuffState buffState, int duration) {
+        wrappedBuffState = buffState;
         this.duration = duration;
         
     }
@@ -52,12 +52,13 @@ public abstract class BuffState {
         }
         else {
             fade();
-            ball.setEffectState(removeFromBuffState(ball.getEffectState()));
+            ball.setBuffState(removeFromBuffState(ball.getBuffState()));
         }
+        if (wrappedBuffState != null) wrappedBuffState.update(timestamp);
     }
 
-    public void setWrappedBuffState(BuffState wrappedEffectState) {
-        this.wrappedBuffState = wrappedEffectState;
+    public void setWrappedBuffState(BuffState wrappedBuffState) {
+        this.wrappedBuffState = wrappedBuffState;
     }
 
     public BuffState getWrappedBuffState() {
@@ -80,18 +81,22 @@ public abstract class BuffState {
       this.ball = ball;
       ball.addEffectState(this);
       apply();
+        if (wrappedBuffState != null) {
+            wrappedBuffState.ball = ball;
+            wrappedBuffState.apply();
+        }
     }
 
-    public BuffState removeFromBuffState(BuffState originEffectState){
-        if (this == originEffectState){
+    public BuffState removeFromBuffState(BuffState originBuffState){
+        if (this == originBuffState){
             return this.wrappedBuffState;
         }
-        BuffState checking = originEffectState;
-        BuffState parent = originEffectState;
+        BuffState checking = originBuffState;
+        BuffState parent = originBuffState;
         while (checking != null){
             if (checking == this){
                 parent.setWrappedBuffState(checking.wrappedBuffState);
-                return originEffectState;
+                return originBuffState;
             }
             parent = checking;
             checking = parent.wrappedBuffState;

@@ -209,6 +209,7 @@ public class Environment {
         gameObjects.put(newID++, obj);
 //        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
+        System.out.println("z" + obj.getDisplay().getTranslateZ());
     }
     
     /**

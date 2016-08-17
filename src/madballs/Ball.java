@@ -29,11 +29,11 @@ public class Ball extends GameObject{
     private final int SPEED = 100;
     private BuffState effectState;
 
-    public BuffState getEffectState() {
+    public BuffState getBuffState() {
         return effectState;
     }
 
-    public void setEffectState(BuffState effectState) {
+    public void setBuffState(BuffState effectState) {
         this.effectState = effectState;
     }
     
@@ -67,7 +67,7 @@ public class Ball extends GameObject{
             SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
-                SceneManager.getInstance().bindGameInfo(this);
+                SceneManager.getInstance().bindWeaponInfo(this);
             }
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);

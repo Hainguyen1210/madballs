@@ -15,7 +15,7 @@ import madballs.effectState.InstantHeal;
  */
 public class FullPotion extends BuffItem{
     public FullPotion(Environment environment, double x, double y) {
-        super(environment, x, y, new InstantHeal(100));
+        super(environment, x, y, new InstantHeal(null, 100));
     }
     
     

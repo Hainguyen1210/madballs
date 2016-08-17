@@ -15,17 +15,14 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Group;
 import javafx.scene.PerspectiveCamera;
-import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.*;
-import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
-import javafx.stage.WindowEvent;
 import javafx.util.Duration;
 import madballs.effectState.BuffState;
 
@@ -98,25 +95,8 @@ public class SceneManager {
         return instance;
     }
     
-    public void displayGameInfo(Stage mainStage){
-        gameInfoStage = new Stage(StageStyle.TRANSPARENT);
-        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                gameInfoStage.close();
-            }
-        });
-        gameInfoStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                event.consume();
-            }
-        });
-        gameInfoStage.setAlwaysOnTop(true);
-        gameInfoStage.setWidth(mainStage.getWidth());
-        gameInfoStage.setHeight(100);
-        gameInfoStage.setX(mainStage.getX());
-        gameInfoStage.setY(mainStage.getY() + mainStage.getHeight() - 80);
+    public void displayGameInfo(Group root){
+
 
         hpBar.setPrefSize(250, 25);
         hpBar.setTranslateX(50);
@@ -126,18 +106,17 @@ public class SceneManager {
         gameInfoDisplay = new FlowPane(hpBar, weaponLabel, buffLabel);
         gameInfoDisplay.setAlignment(Pos.CENTER_LEFT);
         gameInfoDisplay.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
+        gameInfoDisplay.setPrefWidth(MadBalls.getMainScene().getWidth());
+        gameInfoDisplay.setPrefHeight(30);
+        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
+        gameInfoDisplay.setTranslateZ(-1);
 
-        Scene scene = new Scene(gameInfoDisplay);
-        scene.setFill(Color.TRANSPARENT);
-        gameInfoStage.setScene(scene);
-        gameInfoStage.initOwner(mainStage);
-        gameInfoStage.show();
-
-        mainStage.requestFocus();
+        root.getChildren().add(gameInfoDisplay);
     }
     
     public void bindCamera(GameObject obj){
-        scale.bind(Bindings.divide(MadBalls.getScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts, zoomOut));
+        System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
+        scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts, zoomOut));
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(8000);
@@ -147,11 +126,11 @@ public class SceneManager {
         camera.setFieldOfView(30);
         camera.translateXProperty().bind(obj.getTranslateXProperty());
         camera.translateYProperty().bind(obj.getTranslateYProperty());
-        MadBalls.getScene().setCamera(camera);
+        MadBalls.getMainEnvironment().getDisplay().getChildren().add(camera);
+        MadBalls.getAnimationScene().setCamera(camera);
     }
 
-    public void bindGameInfo(Ball ball){
-        hpBar.progressProperty().bind(Bindings.divide(ball.getHp(), 100));
+    public void bindWeaponInfo(Ball ball){
         if (ball.getWeapon().getAmmo() >= 0){
             weaponLabel.textProperty().bind(Bindings.format("%s / %d", ball.getWeapon().getClass().getSimpleName(), ball.getWeapon().ammoProperty()));
         }
@@ -159,6 +138,16 @@ public class SceneManager {
             weaponLabel.textProperty().bind(Bindings.format("%s / *", ball.getWeapon().getClass().getSimpleName()));
         }
 
+    }
+
+    public void bindBallInfo(Ball ball){
+//        gameInfoDisplay.translateXProperty().bind(Bindings.subtract(ball.getTranslateXProperty(), Bindings.divide(MadBalls.getAnimationScene().getWidth()/2, scale)));
+//        gameInfoDisplay.translateYProperty().bind(Bindings.add(ball.getTranslateYProperty(),
+//                Bindings.subtract(Bindings.divide(MadBalls.getAnimationScene().getHeight()/2, scale),
+//                        Bindings.multiply(50, scale))));
+
+
+        hpBar.progressProperty().bind(Bindings.divide(ball.getHp(), 100));
     }
 
     public void displayLabel(String labelName, Paint color, double duration, GameObject target){
@@ -194,5 +183,11 @@ public class SceneManager {
             wrappedState = wrappedState.getWrappedBuffState();
         }
         buffLabel.setText(stateString);
+    }
+
+    public void bindBall(Ball ball){
+        bindCamera(ball);
+        bindBallInfo(ball);
+        bindWeaponInfo(ball);
     }
 }

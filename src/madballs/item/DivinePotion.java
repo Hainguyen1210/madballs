@@ -20,7 +20,7 @@ import madballs.effectState.Haste;
 public class DivinePotion extends BuffItem{
     
     public DivinePotion(Environment environment, double x, double y) {
-        super(environment, x, y, new Haste(new Frenzy(new PowerUp(new InstantHeal(100), 5, 2), 5, 2), 5, 50));
+        super(environment, x, y, new Haste(new Frenzy(new PowerUp(new InstantHeal(null, 100), 5, 2), 5, 2), 5, 50));
     }
     
     @Override

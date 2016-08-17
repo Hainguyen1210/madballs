@@ -5,12 +5,10 @@
  */
 package madballs.player;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -113,9 +111,8 @@ public class Player {
     public void generateBall(Environment environment){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
         if (isLocal) {
-            bindInput(MadBalls.getScene());
-            SceneManager.getInstance().bindCamera(ball);
-            SceneManager.getInstance().bindGameInfo(ball);
+            bindInput(MadBalls.getMainScene());
+            SceneManager.getInstance().bindBall(ball);
         }
     }
     

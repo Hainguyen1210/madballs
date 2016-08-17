@@ -5,7 +5,6 @@
  */
 package madballs.moveBehaviour;
 
-import madballs.Environment;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.SceneManager;
@@ -53,8 +52,8 @@ public class RotateBehaviour extends MoveBehaviour{
 //            double distanceFromTargetToOwner = Math.sqrt(Math.pow(targetX - getObject().getOwnerTranslateX(), 2) + Math.pow(targetY - getObject().getOwnerTranslateY(), 2));
 //            double directionFromTargetToOwner = directionFromTargetToSelf - Math.atan2(getObject().getDistanceToOwner(), distanceFromTargetToOwner);
             double scale = SceneManager.getInstance().getScale();
-            double sceneWidth = MadBalls.getScene().getWidth();
-            double sceneHeight = MadBalls.getScene().getHeight();
+            double sceneWidth = MadBalls.getAnimationScene().getWidth();
+            double sceneHeight = MadBalls.getAnimationScene().getHeight();
             double yDiff = getTargetY() - sceneHeight/2 - getObject().getOwnerDiffY()*scale;
             double xDiff = getTargetX() - sceneWidth/2 - getObject().getOwnerDiffX()*scale;
             double newDirection = Math.atan2(yDiff, xDiff);
