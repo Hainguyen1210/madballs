@@ -45,7 +45,7 @@ public class XM1104 extends Weapon {
     public void forceFire(){
         if (getFireSoundFX() != null) SoundStudio.getInstance().playSound(getFireSoundFX(), getEnvironment().getLastUpdateTime(), 0);
         for (int i = 0; i < 5; i++){
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName());
+            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau");
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1)));
             if (checkAmmo()){
                 return;
@@ -59,4 +59,6 @@ public class XM1104 extends Weapon {
         setHeight(HEIGHT);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("grey")));
     }
+
+
 }

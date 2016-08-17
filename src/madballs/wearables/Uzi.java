@@ -7,6 +7,7 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
 import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
@@ -46,8 +47,10 @@ public class Uzi extends Weapon{
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
+        setImage(ImageGenerator.getInstance().getImage("uzi"));
+        configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }

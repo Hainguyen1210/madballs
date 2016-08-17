@@ -5,26 +5,32 @@
  */
 package madballs.wearables;
 
-import javafx.beans.property.*;
+
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleLongProperty;
+import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import madballs.Ball;
+import madballs.GameObject;
+import madballs.MadBalls;
+import madballs.collision.CollisionEffect;
+import madballs.collision.CollisionPassiveBehaviour;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
-import madballs.moveBehaviour.StraightMove;
-import madballs.multiplayer.GetWeaponData;
-import madballs.projectiles.Projectile;
-import madballs.*;
-import madballs.collision.CollisionEffect;
-import madballs.collision.CollisionPassiveBehaviour;
 import madballs.multiplayer.FireData;
+import madballs.projectiles.Projectile;
 
 /**
  *
  * @author Caval
  */
-public abstract class Weapon extends GameObject{
+public abstract class Weapon extends GameObject {
     private String projectileImageName;
+    private Image projectileImage;
     private double projectileHitBoxSize;
     private Paint projectileColor;
     private String fireSoundFX;
@@ -156,13 +162,13 @@ public abstract class Weapon extends GameObject{
         this.projectileCollisionBehaviour = projectileCollisionBehaviour;
     }
 
-    public String getProjectileImageName() {
-        return projectileImageName;
-    }
-
-    public void setProjectileImageName(String projectileImageName) {
-        this.projectileImageName = projectileImageName;
-    }
+//    public String getProjectileImageName() {
+//        return projectileImageName;
+//    }
+//
+//    public void setProjectileImageName(String projectileImageName) {
+//        this.projectileImageName = projectileImageName;
+//    }
 
     public double getProjectileHitBoxSize() {
         return projectileHitBoxSize;
@@ -181,6 +187,7 @@ public abstract class Weapon extends GameObject{
     }
 
     public void forceFire(){
+
         if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, getEnvironment().getLastUpdateTime(), 0);
         new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
         checkAmmo();
@@ -195,7 +202,6 @@ public abstract class Weapon extends GameObject{
                 setLastShotTime(now);
             }
         }
-        
     }
 
     public boolean checkAmmo(){

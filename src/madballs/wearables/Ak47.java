@@ -7,6 +7,7 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
 import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
@@ -41,9 +42,11 @@ public class Ak47 extends Weapon{
 
     @Override
     public void setDisplayComponents() {
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setWidth(WIDTH-10);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("orange")));
+        setImage(ImageGenerator.getInstance().getImage("ak47"));
+        configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }

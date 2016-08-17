@@ -7,6 +7,7 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
 import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
@@ -19,6 +20,7 @@ import madballs.GameObject;
  * @author Caval
  */
 public class Pistol extends Weapon{
+    private ImageGenerator imageGenerator = ImageGenerator.getInstance();
     private final double WIDTH = 20;
     private final double HEIGHT = 7;
 
@@ -41,13 +43,16 @@ public class Pistol extends Weapon{
         setFireSoundFX("pistol");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
+
     }
     
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
+        setImage(ImageGenerator.getInstance().getImage("pistol"));
+        configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }

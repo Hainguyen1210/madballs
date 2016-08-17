@@ -64,6 +64,7 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
@@ -78,6 +79,7 @@ public class MadBalls extends Application {
 
         mainScene = new Scene(mainRoot, 1280, 720, true, SceneAntialiasing.BALANCED);
         mainScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
 //        Client.initClient();

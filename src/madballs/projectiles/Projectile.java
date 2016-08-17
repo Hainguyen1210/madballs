@@ -5,6 +5,7 @@
  */
 package madballs.projectiles;
 
+
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 import madballs.moveBehaviour.StraightMove;
@@ -14,15 +15,15 @@ import madballs.wearables.Weapon;
  *
  * @author Caval
  */
-public class Projectile extends GameObject{
-    private Weapon sourceWeapon;    
+public class Projectile extends GameObject {
+    private Weapon sourceWeapon;
 
-    public Projectile(Weapon sourceWeapon, Shape hitBox, String imageName) {
+    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName) {
         super(sourceWeapon.getEnvironment(), 0, 0, false);
         
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
-        setImage(imageName);
+//        setImage(projectImageName);
         setDisplay();
         
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
