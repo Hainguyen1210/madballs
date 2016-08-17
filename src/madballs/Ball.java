@@ -17,7 +17,10 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.effectState.BuffState;
+import madballs.wearables.Ak47;
+import madballs.wearables.M4A1;
 import madballs.wearables.Pistol;
+import madballs.wearables.Uzi;
 import madballs.wearables.Weapon;
 /**
  *
@@ -51,7 +54,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        weapon = new Pistol(this);
+        weapon = new Uzi(this);
     }
     
     public Weapon getWeapon() {

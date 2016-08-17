@@ -24,7 +24,7 @@ public class SoundStudio {
     }
 
     private void loadSound(){
-        for (String name : new String[]{"footstep2", "nutfall", "pistol", "awp", "penetrate", "die1", "speedUp", "plasma"}){
+        for (String name : new String[]{"footstep2", "nutfall","Ak47","Uzi","M4A1", "pistol", "awp", "penetrate", "die1", "speedUp", "plasma"}){
             MediaHandler mediaHandler = new MediaHandler(new MediaPlayer(new Media(new File("assets/sound/" + name +".mp3").toURI().toString())));
             mediaHandlers.put(name, mediaHandler);
         }

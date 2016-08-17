@@ -151,7 +151,7 @@ public abstract class Weapon extends GameObject{
     }
 
     public void forceFire(){
-        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 1/fireRate/2);
+        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 0);
         new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
     }
     
