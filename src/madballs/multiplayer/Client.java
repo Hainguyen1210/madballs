@@ -8,6 +8,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import madballs.*;
+import madballs.buffState.BuffState;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.player.Player;
@@ -144,6 +145,18 @@ public class Client extends MultiplayerHandler{
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    }
+                });
+            }
+            else if (data.getType().equals("buff")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        BuffData buffData = (BuffData) data;
+                        Ball ball = (Ball) MadBalls.getMainEnvironment().getObject(buffData.getBallID());
+                        BuffState buffState = BuffState.recreateBuffState(buffData);
+                        buffState.castOn(ball, 0);
+                        ball.addEffectState(buffState);
                     }
                 });
             }

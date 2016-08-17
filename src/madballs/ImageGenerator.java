@@ -1,7 +1,6 @@
 package madballs;
 
 import javafx.scene.image.Image;
-import madballs.gameFX.MediaHandler;
 
 import java.io.File;
 import java.util.HashMap;

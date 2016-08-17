@@ -16,7 +16,7 @@ import madballs.collision.GetWeaponBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
-import madballs.effectState.BuffState;
+import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.*;
 
@@ -37,10 +37,9 @@ public class Ball extends GameObject{
         this.buffState = effectState;
     }
     
-    public void addEffectState(BuffState effectState) {
-        System.out.println("add effect" + effectState);
-        effectState.setWrappedBuffState(this.buffState);
-        this.buffState = effectState;
+    public void addEffectState(BuffState buffState) {
+        buffState.wrapBuffState(this.buffState);
+        this.buffState = buffState;
     }
 
 
@@ -65,7 +64,7 @@ public class Ball extends GameObject{
             weapon.die();
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
             SceneManager.getInstance().setZoomOut(weapon.getScope());
-            SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this);
+            SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
@@ -96,7 +95,7 @@ public class Ball extends GameObject{
         if (buffState != null) {
             buffState.update(now);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
-                System.out.println(buffState.getWrappedBuffState() == null);
+//                System.out.println(buffState.getWrappedBuffState() == null);
                 SceneManager.getInstance().updateBuffStatus(buffState);
             }
         }

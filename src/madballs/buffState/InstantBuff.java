@@ -3,9 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.effectState;
+package madballs.buffState;
 
+import javafx.scene.paint.Paint;
 import madballs.Ball;
+import madballs.SceneManager;
+import madballs.multiplayer.BuffData;
 
 /**
  *
@@ -13,14 +16,22 @@ import madballs.Ball;
  */
 public abstract class InstantBuff extends BuffState{
 
+    public InstantBuff(BuffData data){
+        super(data);
+    }
+
     public InstantBuff(BuffState buffState) {
         super(buffState, 0);
     }
     
     @Override
-    public void castOn(Ball ball){
+    public void castOn(Ball ball, int index){
         setBall(ball);
+        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 0.75, ball, index * 0.375);
         apply();
+        if (getWrappedBuffState() != null) {
+            getWrappedBuffState().castOn(ball, index == 0 ? 0 : index + 1);
+        }
     }
 
     @Override

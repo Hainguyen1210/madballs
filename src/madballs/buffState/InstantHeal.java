@@ -3,7 +3,9 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.effectState;
+package madballs.buffState;
+
+import madballs.multiplayer.BuffData;
 
 /**
  *
@@ -12,14 +14,27 @@ package madballs.effectState;
 public class InstantHeal extends InstantBuff{
     private double amount;
 
+    public InstantHeal(BuffData data){
+        super(data);
+    }
+
     public InstantHeal(BuffState buffState, double amount) {
         super(buffState);
         this.amount = amount;
     }
 
     @Override
+    public double[] getParameters() {
+        return new double[]{amount};
+    }
+
+    @Override
+    public void recreateFromData(BuffData data) {
+        amount = data.getParameters()[0];
+    }
+
+    @Override
     public void apply() {
         getBall().setHpValue(amount);
     }
-    
 }

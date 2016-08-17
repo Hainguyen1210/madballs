@@ -12,9 +12,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Environment;
 import madballs.GameObject;
-import madballs.collision.GiveWeaponEffect;
-import madballs.collision.MakeUpItem;
-import madballs.collision.ReleaseSpawnLocation;
+import madballs.collision.*;
 import madballs.map.SpawnLocation;
 import madballs.wearables.Weapon;
 
@@ -33,7 +31,7 @@ public class WeaponItem extends Item{
       } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
           Logger.getLogger(WeaponItem.class.getName()).log(Level.SEVERE, null, ex);
       }
-    weapon.setCollisionPassiveBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation()));
+    weapon.setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation()))));
     weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
       setCollisionEffect(new GiveWeaponEffect(null, weapon));
   }

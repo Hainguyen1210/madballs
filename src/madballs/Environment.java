@@ -90,12 +90,6 @@ public class Environment {
         java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
         ArrayList<Integer> deadObjIDs = new ArrayList<>();
         quadtree.clear();
-
-        if (MadBalls.isHost()){
-            for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
-                player.setRelevantObjIDs(new ArrayList<>());
-            }
-        }
         
         for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
@@ -209,7 +203,7 @@ public class Environment {
         gameObjects.put(newID++, obj);
 //        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
-        System.out.println("z" + obj.getDisplay().getTranslateZ());
+//        System.out.println("z" + obj.getDisplay().getTranslateZ());
     }
     
     /**

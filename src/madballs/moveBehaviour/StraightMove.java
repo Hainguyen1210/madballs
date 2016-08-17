@@ -7,7 +7,6 @@ package madballs.moveBehaviour;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
-import madballs.Environment;
 import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
@@ -109,11 +108,8 @@ public class StraightMove extends MoveBehaviour{
     public void moveUnique(long now){
         if (getVelocityX() != 0 || getVelocityY() != 0){
             if (getSoundFX() != null){
-                SoundStudio.getInstance().playSound(getSoundFX(), now, 0.2);
+                SoundStudio.getInstance().playAudio(getSoundFX(), 0.2, this.toString(), now);
             }
-        }
-        else {
-//            SoundStudio.getInstance().endSoundRepeat(getSoundFX());
         }
         GameObject obj = getObject();
         calculateNewCordinate(now);

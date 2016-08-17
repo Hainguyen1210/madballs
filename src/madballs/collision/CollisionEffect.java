@@ -13,5 +13,5 @@ import madballs.GameObject;
  * @author Caval
  */
 public interface CollisionEffect {
-    public void affect(GameObject source, GameObject target, Shape collisionShape);
+    void affect(GameObject source, GameObject target, Shape collisionShape);
 }

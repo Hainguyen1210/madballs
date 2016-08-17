@@ -7,13 +7,13 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.PowerUp;
+import madballs.buffState.PowerUp;
 import madballs.map.SpawnLocation;
 
 public class PlasmaAmmo extends BuffItem{
     public PlasmaAmmo(Environment environment, SpawnLocation spawnLocation) {
         super(environment, spawnLocation, new PowerUp(null, 5, 2));
-        giveStateEffect.setSoundFX("plasma");
+        giveBuffEffect.setSoundFX("plasma");
     }
     
     @Override

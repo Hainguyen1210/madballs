@@ -3,11 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.effectState;
+package madballs.buffState;
 
-import madballs.Ball;
-import madballs.Environment;
 import madballs.gameFX.SoundStudio;
+import madballs.multiplayer.BuffData;
 
 /**
  *
@@ -15,6 +14,10 @@ import madballs.gameFX.SoundStudio;
  */
 public class Haste extends BuffState{
     private double speed;
+
+    public Haste(BuffData data){
+        super(data);
+    }
     
     public Haste(BuffState effectState, int duration, double speed) {
         super(effectState, duration);
@@ -33,9 +36,18 @@ public class Haste extends BuffState{
     }
 
     @Override
+    public double[] getParameters() {
+        return new double[0];
+    }
+
+    @Override
+    public void recreateFromData(BuffData data) {
+
+    }
+
+    @Override
     public void apply() {
-        SoundStudio.getInstance().playSound("speedUp", getBall().getEnvironment().getLastUpdateTime(), 0);
+        SoundStudio.getInstance().playAudio("speedUp");
         getBall().getMoveBehaviour().setSpeed(getBall().getMoveBehaviour().getSpeed() + speed);
     }
-    
 }

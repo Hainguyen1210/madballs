@@ -47,7 +47,7 @@ public class Server extends MultiplayerHandler{
                                     public void run() {
                                         getLocalPlayer().generateBall(MadBalls.getMainEnvironment());
                                         getLocalPlayer().setReady(true);
-                                        MadBalls.getMainEnvironment().startAnimation();
+//                                        MadBalls.getMainEnvironment().startAnimation();
 
                                     }
                                 });
@@ -137,11 +137,6 @@ public class Server extends MultiplayerHandler{
     public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
-                if (data instanceof StateData){
-                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
-                        continue;
-                    }
-                }
                 player.sendData(data);
             }
         }

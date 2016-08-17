@@ -5,11 +5,13 @@
  */
 package madballs.map;
 
+import java.io.Serializable;
+
 /**
  *
  * @author caval
  */
-public class SpawnLocation {
+public class SpawnLocation implements Serializable{
     private double x;
     private double y;
     private String type;
@@ -38,6 +40,22 @@ public class SpawnLocation {
 
     public int getTypeNumber() {
         return typeNumber;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setTypeNumber(int typeNumber) {
+        this.typeNumber = typeNumber;
     }
 
     public SpawnLocation(double x, double y, String type, int typeNumber) {

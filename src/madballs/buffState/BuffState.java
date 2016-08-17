@@ -3,17 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.effectState;
+package madballs.buffState;
 
 import javafx.scene.paint.Paint;
 import madballs.Ball;
+import madballs.MadBalls;
 import madballs.SceneManager;
+import madballs.multiplayer.BuffData;
+
+import java.lang.reflect.InvocationTargetException;
 
 /**
  *
  * @author chim-
  */
-public abstract class BuffState {
+public abstract class BuffState{
     private BuffState wrappedBuffState;
     private long createdTime = 0;
     private int duration;
@@ -63,6 +67,15 @@ public abstract class BuffState {
         this.wrappedBuffState = wrappedBuffState;
     }
 
+    public void wrapBuffState(BuffState buffState){
+        if (wrappedBuffState != null){
+            wrappedBuffState.wrapBuffState(buffState);
+        }
+        else {
+            setWrappedBuffState(buffState);
+        }
+    }
+
     public BuffState getWrappedBuffState() {
         return wrappedBuffState;
     }
@@ -79,12 +92,12 @@ public abstract class BuffState {
         return ball;
     }
 
-    public void castOn(Ball ball) {
+    public void castOn(Ball ball, int index) {
         this.ball = ball;
+        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 0.75, ball, index * 0.375);
         apply();
-        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 2.5, ball);
         if (wrappedBuffState != null) {
-            wrappedBuffState.castOn(ball);
+            wrappedBuffState.castOn(ball, index + 1);
         }
     }
 
@@ -104,7 +117,32 @@ public abstract class BuffState {
         }
         return null;
     }
-    
+
+    public BuffState(BuffData data){
+        createdTime = data.getCreatedTime();
+        duration = data.getDuration();
+        lastTick = data.getLastTick();
+        tickInterval = data.getTickInterval();
+        ball = (Ball) MadBalls.getMainEnvironment().getObject(data.getBallID());
+        recreateFromData(data);
+    }
+
+    public static BuffState recreateBuffState(BuffData data){
+        try {
+            Class buffStateClass = Class.forName(data.getBuffStateClass());
+            BuffState buffState = (BuffState) buffStateClass.getDeclaredConstructor(BuffData.class).newInstance(data);
+            if (data.getWrappedBuffData() != null){
+                buffState.setWrappedBuffState(recreateBuffState(data.getWrappedBuffData()));
+            }
+            return buffState;
+        } catch (ClassNotFoundException | NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
+    public abstract double[] getParameters();
+    public abstract void recreateFromData(BuffData data);
     public abstract void apply();
     public abstract void fade();
     public abstract void uniqueUpdate(long timestamp);

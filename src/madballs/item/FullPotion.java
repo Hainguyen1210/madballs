@@ -7,7 +7,7 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.InstantHeal;
+import madballs.buffState.InstantHeal;
 import madballs.map.SpawnLocation;
 
 /**

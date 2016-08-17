@@ -7,7 +7,7 @@ package madballs.item;
 
 import javafx.scene.paint.Color;
 import madballs.Environment;
-import madballs.effectState.Rejuvenation;
+import madballs.buffState.Rejuvenation;
 import madballs.map.SpawnLocation;
 
 /**

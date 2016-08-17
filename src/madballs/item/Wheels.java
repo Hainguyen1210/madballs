@@ -7,7 +7,7 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.Haste;
+import madballs.buffState.Haste;
 import madballs.map.SpawnLocation;
 
 

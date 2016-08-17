@@ -24,7 +24,7 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
-import madballs.effectState.BuffState;
+import madballs.buffState.BuffState;
 
 /**
  *
@@ -150,16 +150,15 @@ public class SceneManager {
         hpBar.progressProperty().bind(Bindings.divide(ball.getHp(), 100));
     }
 
-    public void displayLabel(String labelName, Paint color, double duration, GameObject target){
+    public void displayLabel(String labelName, Paint color, double duration, GameObject target, double delay){
         Label label = new Label(labelName);
-        target.getEnvironment().getDisplay().getChildren().add(label);
         label.setTranslateZ(100);
         label.setTextFill(color);
         label.translateXProperty().bind(Bindings.add(target.getTranslateXProperty(), -labelName.length()*4));
         DoubleProperty yDiffProperty = new SimpleDoubleProperty(-20);
         label.translateYProperty().bind(Bindings.add(target.getTranslateYProperty(), yDiffProperty));
 
-        Timeline timeline = new Timeline(
+        final Timeline timeline = new Timeline(
                 new KeyFrame(Duration.seconds(duration),
                         new EventHandler<ActionEvent>() {
                             @Override
@@ -167,8 +166,27 @@ public class SceneManager {
                                 target.getEnvironment().getDisplay().getChildren().remove(label);
                             }
                         },
-                        new KeyValue(yDiffProperty, -50)));
-        timeline.play();
+                        new KeyValue(yDiffProperty, -50))
+        );
+
+        if (delay > 0){
+            final Timeline delayTimeline = new Timeline(
+                    new KeyFrame(Duration.seconds(delay),
+                            new EventHandler<ActionEvent>() {
+                                @Override
+                                public void handle(ActionEvent event) {
+                                    target.getEnvironment().getDisplay().getChildren().add(label);
+                                    timeline.play();
+                                }
+                            })
+            );
+            delayTimeline.play();
+        }
+        else {
+            target.getEnvironment().getDisplay().getChildren().add(label);
+            timeline.play();
+        }
+
     }
 
     public void updateBuffStatus(BuffState state){
@@ -179,7 +197,6 @@ public class SceneManager {
         String stateString = state.getClass().getSimpleName();
         BuffState wrappedState = state.getWrappedBuffState();
         while (wrappedState != null){
-            System.out.print("zzzz");
             stateString += ", " + wrappedState.getClass().getSimpleName();
             wrappedState = wrappedState.getWrappedBuffState();
         }

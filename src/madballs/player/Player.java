@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 
 import javafx.application.Platform;
 import javafx.scene.Scene;
+import javafx.scene.SubScene;
 import madballs.*;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
@@ -84,10 +85,9 @@ public class Player {
     public void checkRelevancy(GameObject obj){
         double xDiff = Math.abs(obj.getTranslateX() - ball.getTranslateX());
         double yDiff = Math.abs(obj.getTranslateY() - ball.getTranslateY());
-        Map map = obj.getEnvironment().getMap();
-        double zoomOut = SceneManager.getInstance().getZoomOut();
-        double numMapParts = SceneManager.numMapParts;
-        if (xDiff < map.getWidth()/numMapParts/2*zoomOut + 100 && yDiff < map.getHeight()/numMapParts/2*zoomOut + 100){
+        SubScene animationScene = MadBalls.getAnimationScene();
+        double scale = SceneManager.getInstance().getScale();
+        if (xDiff < animationScene.getWidth()/2/scale + 100 && yDiff < animationScene.getHeight()/2/scale + 100){
             relevantObjIDs.add(obj.getID());
         }
 //        relevantObjIDs.add(obj.getID());

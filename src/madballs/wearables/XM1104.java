@@ -3,7 +3,6 @@ package madballs.wearables;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import madballs.Environment;
 import madballs.GameObject;
 import madballs.collision.*;
 import madballs.gameFX.SoundStudio;
@@ -43,7 +42,7 @@ public class XM1104 extends Weapon {
 
     @Override
     public void forceFire(){
-        if (getFireSoundFX() != null) SoundStudio.getInstance().playSound(getFireSoundFX(), getEnvironment().getLastUpdateTime(), 0);
+        if (getFireSoundFX() != null) SoundStudio.getInstance().playAudio(getFireSoundFX());
         for (int i = 0; i < 5; i++){
             Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau");
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1)));

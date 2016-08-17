@@ -7,7 +7,7 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.Frenzy;
+import madballs.buffState.Frenzy;
 import madballs.map.SpawnLocation;
 
 /**

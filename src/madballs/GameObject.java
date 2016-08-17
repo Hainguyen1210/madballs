@@ -20,7 +20,6 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
-import madballs.map.Map;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.player.Player;
 
@@ -490,7 +489,7 @@ public abstract class GameObject {
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
-        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, getEnvironment().getLastUpdateTime(), 0);
+        if (dieSoundFX != null) SoundStudio.getInstance().playAudio(dieSoundFX);
         isDead = true;
         if (owner != null) {
             owner.child = null;
