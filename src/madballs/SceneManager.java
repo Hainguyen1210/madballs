@@ -179,6 +179,7 @@ public class SceneManager {
         String stateString = state.getClass().getSimpleName();
         BuffState wrappedState = state.getWrappedBuffState();
         while (wrappedState != null){
+            System.out.print("zzzz");
             stateString += ", " + wrappedState.getClass().getSimpleName();
             wrappedState = wrappedState.getWrappedBuffState();
         }

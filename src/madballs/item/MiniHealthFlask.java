@@ -8,6 +8,7 @@ package madballs.item;
 import javafx.scene.paint.Color;
 import madballs.Environment;
 import madballs.effectState.Rejuvenation;
+import madballs.map.SpawnLocation;
 
 /**
  *
@@ -15,8 +16,8 @@ import madballs.effectState.Rejuvenation;
  */
 public class MiniHealthFlask extends BuffItem{
     
-    public MiniHealthFlask(Environment environment, double x, double y) {
-        super(environment, x, y, new Rejuvenation(null, 5, 30));
+    public MiniHealthFlask(Environment environment, SpawnLocation spawnLocation) {
+        super(environment, spawnLocation, new Rejuvenation(null, 5, 30));
     }
     
     

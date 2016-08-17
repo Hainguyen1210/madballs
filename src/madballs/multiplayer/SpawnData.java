@@ -13,6 +13,7 @@ import madballs.map.SpawnLocation;
  */
 public class SpawnData extends Data{
     private double x, y;
+    private SpawnLocation spawnLocation;
     private int typeNumber;
     private String spawnType;
     private double[] parameters;
@@ -28,7 +29,11 @@ public class SpawnData extends Data{
     public int getTypeNum() {
         return typeNumber;
     }
-    
+
+    public SpawnLocation getSpawnLocation() {
+        return spawnLocation;
+    }
+
     public String getSpawntype(){
         return spawnType;
     }
@@ -47,6 +52,7 @@ public class SpawnData extends Data{
     
     public SpawnData(SpawnLocation spawnLocation, boolean isLocal) {
         super("spawn");
+        this.spawnLocation = spawnLocation;
         this.x = spawnLocation.getX();
         this.y = spawnLocation.getY();
         this.spawnType = spawnLocation.getType() + (isLocal ? "_local" : "");

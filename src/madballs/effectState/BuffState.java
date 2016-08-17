@@ -5,7 +5,9 @@
  */
 package madballs.effectState;
 
+import javafx.scene.paint.Paint;
 import madballs.Ball;
+import madballs.SceneManager;
 
 /**
  *
@@ -78,12 +80,11 @@ public abstract class BuffState {
     }
 
     public void castOn(Ball ball) {
-      this.ball = ball;
-      ball.addEffectState(this);
-      apply();
+        this.ball = ball;
+        apply();
+        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 2.5, ball);
         if (wrappedBuffState != null) {
-            wrappedBuffState.ball = ball;
-            wrappedBuffState.apply();
+            wrappedBuffState.castOn(ball);
         }
     }
 

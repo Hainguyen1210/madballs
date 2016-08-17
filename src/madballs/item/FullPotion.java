@@ -8,14 +8,16 @@ package madballs.item;
 import javafx.scene.paint.Paint;
 import madballs.Environment;
 import madballs.effectState.InstantHeal;
+import madballs.map.SpawnLocation;
 
 /**
  *
  * @author chim-
  */
 public class FullPotion extends BuffItem{
-    public FullPotion(Environment environment, double x, double y) {
-        super(environment, x, y, new InstantHeal(null, 100));
+
+    public FullPotion(Environment environment, SpawnLocation spawnLocation) {
+        super(environment, spawnLocation, new InstantHeal(null, 100));
     }
     
     

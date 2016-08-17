@@ -27,20 +27,20 @@ import madballs.wearables.*;
 public class Ball extends GameObject{
     private Weapon weapon;
     private final int SPEED = 100;
-    private BuffState effectState;
+    private BuffState buffState;
 
     public BuffState getBuffState() {
-        return effectState;
+        return buffState;
     }
 
     public void setBuffState(BuffState effectState) {
-        this.effectState = effectState;
+        this.buffState = effectState;
     }
     
     public void addEffectState(BuffState effectState) {
         System.out.println("add effect" + effectState);
-        effectState.setWrappedBuffState(this.effectState);
-        this.effectState = effectState;
+        effectState.setWrappedBuffState(this.buffState);
+        this.buffState = effectState;
     }
 
 
@@ -93,10 +93,11 @@ public class Ball extends GameObject{
     }
     @Override
     public void updateUnique(long now) {
-        if (effectState != null) {
-            effectState.update(now);
+        if (buffState != null) {
+            buffState.update(now);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
-                SceneManager.getInstance().updateBuffStatus(effectState);
+                System.out.println(buffState.getWrappedBuffState() == null);
+                SceneManager.getInstance().updateBuffStatus(buffState);
             }
         }
     }

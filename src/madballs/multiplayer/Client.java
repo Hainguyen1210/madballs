@@ -198,7 +198,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getMainEnvironment().getItemSpawner().spawnWeapon((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        MadBalls.getMainEnvironment().getItemSpawner().spawnWeapon(data.getSpawnLocation(), data.getTypeNum());
                     }
                 });
             }
@@ -206,7 +206,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getMainEnvironment().getItemSpawner().spawnItem((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        MadBalls.getMainEnvironment().getItemSpawner().spawnItem(data.getSpawnLocation(), data.getTypeNum());
                     }
                 });
             }

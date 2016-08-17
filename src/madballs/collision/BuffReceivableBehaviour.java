@@ -31,7 +31,7 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         GiveStateEffect receivedEffect = (GiveStateEffect)effect;
         BuffState effectState = receivedEffect.getEffectState();
-        SceneManager.getInstance().displayLabel(effectState.getClass().getSimpleName(), source.getHitBox().getFill(), 2.5, target);
+        ((Ball)target).addEffectState(effectState);
         effectState.castOn((Ball)target);
     }
 
