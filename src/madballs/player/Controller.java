@@ -6,9 +6,8 @@
 package madballs.player;
 
 import javafx.scene.input.KeyCode;
-import madballs.MoveBehaviour;
-import madballs.RotateBehaviour;
-import madballs.StraightMove;
+import madballs.moveBehaviour.RotateBehaviour;
+import madballs.moveBehaviour.StraightMove;
 
 /**
  *

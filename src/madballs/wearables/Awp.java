@@ -26,12 +26,13 @@ public class Awp extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(2);
         setDamage(75);
-        setAmmo(-1);
+        setAmmo(20);
         setFireRate(0.35);
-        setRange(800);
-        setProjectileSpeed(800);
+        setRange(1000);
+        setProjectileSpeed(1000);
         setProjectileHitBoxSize(5);
         setProjectileColor(Paint.valueOf("yellow"));
 
@@ -39,24 +40,6 @@ public class Awp extends Weapon{
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
-    
-//    public Awp(Environment environment, int X, int Y) {
-//        super(environment, X, Y);
-//        
-//        setCollisionEffect(new PushBackEffect(null, -1));
-//        setCollisionPassiveBehaviour(new PushableBehaviour(null));
-//        
-//        setDamage(100);
-//        setAmmo(-1);
-//        setFireRate(1);
-//        setRange(800);
-//        setProjectileSpeed(800);
-//        setProjectileHitBoxSize(5);
-//        setProjectileColor(Paint.valueOf("yellow"));
-//        
-//        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-//        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-//    }
 
     @Override
     public void setDisplayComponents() {

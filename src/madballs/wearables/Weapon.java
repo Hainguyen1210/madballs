@@ -5,23 +5,30 @@
  */
 package madballs.wearables;
 
+
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
-import madballs.gameFX.SoundStudio;
-import madballs.projectiles.Projectile;
-import madballs.*;
+import madballs.Ball;
+import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
+import madballs.gameFX.SoundStudio;
+import madballs.moveBehaviour.MoveBehaviour;
+import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.FireData;
+import madballs.projectiles.Projectile;
 
 /**
  *
  * @author Caval
  */
-public abstract class Weapon extends GameObject{
+public abstract class Weapon extends GameObject {
     private String projectileImageName;
     private Image projectileImage;
     private double projectileHitBoxSize;
@@ -30,10 +37,21 @@ public abstract class Weapon extends GameObject{
     
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
+    private MoveBehaviour projectileMoveBehaviour;
+    private double scope = 1;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
-    private double damage = -1, fireRate = -1, range = -1, ammo = -1, projectileSpeed = -1;
-    
+    private double damage = -1, fireRate = -1, range = -1, projectileSpeed = -1;
+    private IntegerProperty ammo = new SimpleIntegerProperty(-1);
+
+    public double getScope() {
+        return scope;
+    }
+
+    public void setScope(double scope) {
+        this.scope = scope;
+    }
+
     public double getDamage() {
         return damage;
     }
@@ -91,12 +109,16 @@ public abstract class Weapon extends GameObject{
         this.range = range;
     }
 
-    public double getAmmo() {
+    public int getAmmo() {
+        return ammo.get();
+    }
+
+    public IntegerProperty ammoProperty() {
         return ammo;
     }
 
-    final public void setAmmo(double ammo) {
-        this.ammo = ammo;
+    final public void setAmmo(int ammo) {
+        this.ammo.set(ammo);
     }
 
     public double getProjectileSpeed() {
@@ -105,6 +127,14 @@ public abstract class Weapon extends GameObject{
 
     final public void setProjectileSpeed(double projectileSpeed) {
         this.projectileSpeed = projectileSpeed;
+    }
+
+    public MoveBehaviour getProjectileMoveBehaviour() {
+        return projectileMoveBehaviour;
+    }
+
+    public void setProjectileMoveBehaviour(MoveBehaviour projectileMoveBehaviour) {
+        this.projectileMoveBehaviour = projectileMoveBehaviour;
     }
 
     public Weapon(GameObject owner, double x, double y) {
@@ -152,10 +182,15 @@ public abstract class Weapon extends GameObject{
         this.fireSoundFX = fireSoundFX;
     }
 
+    public String getFireSoundFX() {
+        return fireSoundFX;
+    }
+
     public void forceFire(){
 
-        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, Environment.getInstance().getLastUpdateTime(), 1/fireRate/2);
+        if (fireSoundFX != null) SoundStudio.getInstance().playSound(fireSoundFX, getEnvironment().getLastUpdateTime(), 0);
         new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+        checkAmmo();
     }
     
     public void attack(long now){
@@ -167,9 +202,19 @@ public abstract class Weapon extends GameObject{
                 setLastShotTime(now);
             }
         }
-        
-    };
+    }
 
+    public boolean checkAmmo(){
+        if (getAmmo() == 0){
+            ((Ball)getOwner()).setWeapon(Pistol.class);
+//            if (MadBalls.isHost()){
+//                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
+//                ((Ball)getOwner()).setWeapon(Pistol.class);
+//            }
+        }
+        return getAmmo() == 0;
+    }
+    
     @Override
     public void updateUnique(long now) {
 //        System.out.println(owner.getTranslateY());

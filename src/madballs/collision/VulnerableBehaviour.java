@@ -22,7 +22,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        SoundStudio.getInstance().playSound("penetrate", Environment.getInstance().getLastUpdateTime(), 0.1);
+        SoundStudio.getInstance().playSound("penetrate", target.getEnvironment().getLastUpdateTime(), 0.1);
         target.setHpValue(target.getHpValue() - effect.getDamage());
         System.out.println(target.getHpValue());
         if (target.getHpValue() <= 0){

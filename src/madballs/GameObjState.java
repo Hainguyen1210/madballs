@@ -6,6 +6,9 @@
 package madballs;
 
 import java.io.Serializable;
+
+import madballs.moveBehaviour.RotateBehaviour;
+import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Weapon;
 
 /**
@@ -17,6 +20,7 @@ public class GameObjState implements Serializable{
     private double translateX;
     private double translateY;
     private double oldX, oldY;
+    private double velocityX, velocityY;
     private double targetX, targetY;
     private double direction;
     private double oldDirection;
@@ -85,7 +89,15 @@ public class GameObjState implements Serializable{
     public double getHp() {
         return hp;
     }
-    
+
+    public double getVelocityX() {
+        return velocityX;
+    }
+
+    public double getVelocityY() {
+        return velocityY;
+    }
+
     public boolean isSimilarTo(GameObjState state){
         return (
                 state.translateX == translateX
@@ -101,6 +113,8 @@ public class GameObjState implements Serializable{
                 && state.targetY == targetY
                 && state.damage == damage
                 && state.fireRate == fireRate
+                && state.velocityX == velocityX
+                && state.velocityY == velocityY
             );
     }
     
@@ -121,6 +135,11 @@ public class GameObjState implements Serializable{
                 RotateBehaviour rotateBehaviour = (RotateBehaviour) obj.getMoveBehaviour();
                 targetX = rotateBehaviour.getTargetX();
                 targetY = rotateBehaviour.getTargetY();
+            }
+            else if (obj.getMoveBehaviour() instanceof StraightMove){
+                StraightMove straightMove = (StraightMove)obj.getMoveBehaviour();
+                velocityX = straightMove.getVelocityX();
+                velocityY = straightMove.getVelocityY();
             }
         }
         if (obj instanceof Weapon){

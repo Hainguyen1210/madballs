@@ -3,10 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs;
+package madballs.moveBehaviour;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import madballs.Environment;
+import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
 /**
@@ -68,7 +70,7 @@ public class StraightMove extends MoveBehaviour{
     @Override
     void calculateNewCordinate(long now) {
         // get the time elapsed and update lastUpdateTime
-        if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(getObject().getEnvironment().getLastUpdateTime());
 //        if (now - getLastMoveTime() < 5000000) return;
         
         final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;

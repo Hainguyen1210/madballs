@@ -12,7 +12,7 @@ import madballs.Ball;
  * @author chim-
  */
 public abstract class BuffState {
-    private BuffState wrappedEffectState;
+    private BuffState wrappedBuffState;
     private long createdTime = 0;
     private int duration;
     private long lastTick = 0;
@@ -36,7 +36,7 @@ public abstract class BuffState {
     }
 
     public BuffState(BuffState effectState, int duration) {
-        wrappedEffectState = effectState;
+        wrappedBuffState = effectState;
         this.duration = duration;
         
     }
@@ -52,16 +52,16 @@ public abstract class BuffState {
         }
         else {
             fade();
-            ball.setEffectState(removeFromEffectState(ball.getEffectState()));
+            ball.setEffectState(removeFromBuffState(ball.getEffectState()));
         }
     }
 
-    public void setWrappedEffectState(BuffState wrappedEffectState) {
-        this.wrappedEffectState = wrappedEffectState;
+    public void setWrappedBuffState(BuffState wrappedEffectState) {
+        this.wrappedBuffState = wrappedEffectState;
     }
 
-    public BuffState getWrappedEffectState() {
-        return wrappedEffectState;
+    public BuffState getWrappedBuffState() {
+        return wrappedBuffState;
     }
 
     public int getDuration() {
@@ -82,19 +82,19 @@ public abstract class BuffState {
       apply();
     }
 
-    public BuffState removeFromEffectState(BuffState originEffectState){
+    public BuffState removeFromBuffState(BuffState originEffectState){
         if (this == originEffectState){
-            return this.wrappedEffectState;
+            return this.wrappedBuffState;
         }
         BuffState checking = originEffectState;
         BuffState parent = originEffectState;
         while (checking != null){
             if (checking == this){
-                parent.setWrappedEffectState(checking.wrappedEffectState);
+                parent.setWrappedBuffState(checking.wrappedBuffState);
                 return originEffectState;
             }
             parent = checking;
-            checking = parent.wrappedEffectState;
+            checking = parent.wrappedBuffState;
         }
         return null;
     }

@@ -8,7 +8,7 @@ package madballs.projectiles;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
-import madballs.StraightMove;
+import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Weapon;
 
 /**
@@ -39,10 +39,12 @@ public class Projectile extends GameObject {
         // set collision characteristics and move behaviour
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());
         setCollisionPassiveBehaviour(sourceWeapon.getProjectileCollisionBehaviour());
-        
+
         StraightMove straightMoveBehaviour = new StraightMove(this, sourceWeapon.getProjectileSpeed());
         straightMoveBehaviour.setNewDirection(Math.toRadians(sourceWeapon.getRotateAngle()));
         setMoveBehaviour(straightMoveBehaviour);
+
+        sourceWeapon.setAmmo(sourceWeapon.getAmmo() - 1);
     }
 
     @Override

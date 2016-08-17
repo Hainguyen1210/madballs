@@ -5,9 +5,16 @@
  */
 package madballs.collision;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Paint;
 import javafx.scene.shape.Shape;
+import javafx.util.Duration;
 import madballs.Ball;
 import madballs.GameObject;
+import madballs.SceneManager;
 import madballs.effectState.BuffState;
 
 /**
@@ -24,6 +31,7 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         GiveStateEffect receivedEffect = (GiveStateEffect)effect;
         BuffState effectState = receivedEffect.getEffectState();
+        SceneManager.getInstance().displayLabel(effectState.getClass().getSimpleName(), source.getHitBox().getFill(), 2.5, target);
         effectState.castOn((Ball)target);
     }
 

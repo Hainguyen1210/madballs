@@ -16,13 +16,13 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import madballs.item.Spawner;
 import madballs.map.Map;
+import madballs.player.Player;
 
 /**
  *
  * @author Caval
  */
 public class Environment {
-    private static Environment instance = new Environment();
     private java.util.Map<Integer, GameObject> gameObjects;
     private int currentObjID = 0;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
@@ -89,8 +89,13 @@ public class Environment {
       
         java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
         ArrayList<Integer> deadObjIDs = new ArrayList<>();
-//        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
         quadtree.clear();
+
+        if (MadBalls.isHost()){
+            for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
+                player.setRelevantObjIDs(new ArrayList<>());
+            }
+        }
         
         for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
@@ -162,7 +167,7 @@ public class Environment {
     return map;
   }
     
-    private Environment(){
+    public Environment(){
         this.itemSpawner = new Spawner(this);
         gameObjects = new HashMap<>();
     }
@@ -171,11 +176,7 @@ public class Environment {
         this.display = display;
         ground = new Ground(this, 0, 0);
     }
-    
-    public static Environment getInstance(){
-        return instance;
-    }
-    
+
     public void loadMap(Map map){
         this.map = map;
         String[][] mapArray = map.getMAP_ARRAY();
