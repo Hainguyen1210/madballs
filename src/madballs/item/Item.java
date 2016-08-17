@@ -12,6 +12,8 @@ import madballs.collision.DisappearBehaviour;
 import madballs.collision.MakeUpItem;
 import madballs.Environment;
 import madballs.GameObject;
+import madballs.collision.ReleaseSpawnLocation;
+import madballs.map.SpawnLocation;
 
 /**
  *
@@ -19,6 +21,7 @@ import madballs.GameObject;
  */
 public abstract class Item extends GameObject{
   private ImageView image;
+  private SpawnLocation lastSpawnLocation;
   private int size;
   private Paint color;
 
@@ -42,11 +45,20 @@ public abstract class Item extends GameObject{
     this.size = size;
   }
 
-  public Item(Environment environment, double x, double y) {
-      super(environment, x, y, true);
+  public SpawnLocation getLastSpawnLocation() {
+    return lastSpawnLocation;
+  }
+
+  public void setLastSpawnLocation(SpawnLocation lastSpawnLocation) {
+    this.lastSpawnLocation = lastSpawnLocation;
+  }
+
+  public Item(Environment environment, SpawnLocation spawnLocation) {
+      super(environment, spawnLocation.getX(), spawnLocation.getY(), true);
+    setLastSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
-      setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new MakeUpItem(null))));
+      setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(new MakeUpItem(null)))));
   }
   
   public boolean canSpawn(){

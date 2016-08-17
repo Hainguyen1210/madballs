@@ -12,6 +12,7 @@ import madballs.effectState.PowerUp;
 import madballs.effectState.Frenzy;
 import madballs.effectState.InstantHeal;
 import madballs.effectState.Haste;
+import madballs.map.SpawnLocation;
 
 /**
  *
@@ -19,8 +20,8 @@ import madballs.effectState.Haste;
  */
 public class DivinePotion extends BuffItem{
     
-    public DivinePotion(Environment environment, double x, double y) {
-        super(environment, x, y, new Haste(new Frenzy(new PowerUp(new InstantHeal(100), 5, 2), 5, 2), 5, 50));
+    public DivinePotion(Environment environment, SpawnLocation spawnLocation) {
+        super(environment, spawnLocation, new Haste(new Frenzy(new PowerUp(new InstantHeal(100), 5, 2), 5, 2), 5, 50));
     }
     
     @Override

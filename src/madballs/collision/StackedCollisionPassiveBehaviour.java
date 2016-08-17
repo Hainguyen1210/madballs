@@ -26,7 +26,7 @@ public abstract class StackedCollisionPassiveBehaviour implements CollisionPassi
         }
         if (wrappedBehaviour != null) wrappedBehaviour.getAffected(source, target, effect, collisionShape);
     }
-    
+
     public StackedCollisionPassiveBehaviour(CollisionPassiveBehaviour behaviour) {
         wrappedBehaviour = behaviour;
     }

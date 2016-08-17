@@ -77,6 +77,7 @@ public class MadBalls extends Application {
             multiplayerHandler = new Server();
             Map map = new Map(-1);
             mainEnvironment.loadMap(map);
+            mainEnvironment.startAnimation();
         }
         else {
             multiplayerHandler = new Client();

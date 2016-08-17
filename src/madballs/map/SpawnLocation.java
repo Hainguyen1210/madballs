@@ -15,9 +15,18 @@ public class SpawnLocation {
     private String type;
     private int typeNumber;
 
-    public double getX() {
-        return x;
+
+    private boolean isSpawned = false;
+
+    public void setSpawned(boolean spawned) {
+        isSpawned = spawned;
     }
+
+    public boolean isSpawned() {
+        return isSpawned;
+    }
+
+    public double getX() { return x; }
 
     public double getY() {
         return y;

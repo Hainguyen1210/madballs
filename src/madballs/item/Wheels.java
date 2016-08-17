@@ -8,6 +8,7 @@ package madballs.item;
 import javafx.scene.paint.Paint;
 import madballs.Environment;
 import madballs.effectState.Haste;
+import madballs.map.SpawnLocation;
 
 
 /**
@@ -15,8 +16,8 @@ import madballs.effectState.Haste;
  * @author haing
  */
 public class Wheels extends BuffItem{
-    public Wheels(Environment environment, double x, double y) {
-        super(environment, x, y, new Haste(null, 5, 50));
+    public Wheels(Environment environment, SpawnLocation spawnLocation) {
+        super(environment, spawnLocation, new Haste(null, 5, 50));
     }
     
     @Override
