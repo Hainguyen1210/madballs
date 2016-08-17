@@ -9,7 +9,6 @@ import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
 import madballs.collision.Ball_n_WallBehaviour;
 import madballs.collision.DisappearBehaviour;
-import madballs.collision.MakeUpItem;
 import madballs.Environment;
 import madballs.GameObject;
 import madballs.collision.ReleaseSpawnLocation;
@@ -21,7 +20,7 @@ import madballs.map.SpawnLocation;
  */
 public abstract class Item extends GameObject{
   private ImageView image;
-  private SpawnLocation lastSpawnLocation;
+  private SpawnLocation spawnLocation;
   private int size;
   private Paint color;
 
@@ -45,20 +44,20 @@ public abstract class Item extends GameObject{
     this.size = size;
   }
 
-  public SpawnLocation getLastSpawnLocation() {
-    return lastSpawnLocation;
+  public SpawnLocation getSpawnLocation() {
+    return spawnLocation;
   }
 
-  public void setLastSpawnLocation(SpawnLocation lastSpawnLocation) {
-    this.lastSpawnLocation = lastSpawnLocation;
+  public void setSpawnLocation(SpawnLocation spawnLocation) {
+    this.spawnLocation = spawnLocation;
   }
 
   public Item(Environment environment, SpawnLocation spawnLocation) {
       super(environment, spawnLocation.getX(), spawnLocation.getY(), true);
-    setLastSpawnLocation(spawnLocation);
+    setSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
-      setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(new MakeUpItem(null)))));
+      setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation))));
   }
   
   public boolean canSpawn(){

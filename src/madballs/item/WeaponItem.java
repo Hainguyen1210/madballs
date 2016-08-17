@@ -14,6 +14,7 @@ import madballs.Environment;
 import madballs.GameObject;
 import madballs.collision.GiveWeaponEffect;
 import madballs.collision.MakeUpItem;
+import madballs.collision.ReleaseSpawnLocation;
 import madballs.map.SpawnLocation;
 import madballs.wearables.Weapon;
 
@@ -32,7 +33,7 @@ public class WeaponItem extends Item{
       } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
           Logger.getLogger(WeaponItem.class.getName()).log(Level.SEVERE, null, ex);
       }
-    weapon.setCollisionPassiveBehaviour(new MakeUpItem(null));
+    weapon.setCollisionPassiveBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation()));
     weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
       setCollisionEffect(new GiveWeaponEffect(null, weapon));
   }
