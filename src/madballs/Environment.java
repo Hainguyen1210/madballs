@@ -181,20 +181,58 @@ public class Environment {
         ground = new Ground(this, 0, 0);
     }
 
-    public void loadMap(Map map){
+    public void loadMap(Map map) {
         this.map = map;
         String[][] mapArray = map.getMAP_ARRAY();
         //add the obstacles
-        for (int i = 0; i < map.getNumRows(); i++){
-            for (int j = 0; j < map.getNumColumns(); j++){
-              System.out.print(  mapArray[i][j]);
-                if (mapArray[i][j] != null && (mapArray[i][j]).equals("+")) {
-//                  System.out.println("Create OBJ " + horizontalUnit + " " + verticalUnit);
-                    new Obstacle(this,j * map.getColumnWidth(), i * map.getRowHeight(), map.getObstacleSize(), map.getObstacleSize());
+
+        int boxSize = map.getObstacleSize();
+        int currentBoxSizeRow = 0, locationRowX = 0, locationRowY = 0; //define start point and size
+        int currentBoxSizeCol = 0, locationColX = 0, locationColY = 0;
+        boolean isStartedRow = false, isStartedCol = false;
+
+        //render rows
+        for(int row = 0; row < map.getNumRows();row++){
+            for (int col = 0; col < map.getNumColumns(); col++){
+                System.out.print( mapArray[row][col] );
+                if (mapArray[row][col] != null && (mapArray[row][col]).equals("x")) {
+                    if (!isStartedRow){
+                        locationRowX = col*map.getColumnWidth(); locationRowY = row*map.getRowHeight(); //set start point
+                        isStartedRow = true;
+                    }
+                    currentBoxSizeRow += boxSize;
+                    // render last row right away
+                    if (row == map.getNumRows()-1
+                            ) new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize);
+                } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("x")){
+                    if (isStartedRow){
+                        new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize); //end point
+                        System.out.print("#");
+                        currentBoxSizeRow = 0;
+                        isStartedRow = false;
+                    }
+                }
+            } System.out.println();
+        }
+        //render columns
+        for (int col = 0; col < map.getNumColumns(); col++) {
+            for (int row = 0; row < map.getNumRows(); row++) {
+                if (mapArray[row][col] != null && (mapArray[row][col]).equals("+")) {
+                    if (!isStartedCol){
+                        locationColX = col*map.getColumnWidth(); locationColY = row*map.getRowHeight(); //set start point
+                        isStartedCol = true;
+                    }
+                    currentBoxSizeCol += boxSize;
+                } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("+")){
+                    if (isStartedCol){
+                        new Obstacle(this, locationColX, locationColY, boxSize, currentBoxSizeCol); //end point
+                        currentBoxSizeCol = 0;
+                        isStartedCol = false;
+                    }
                 }
             }
-          System.out.println("\n");
         }
+
         quadtree = new Quadtree(0, new Rectangle(-25, -25, map.getWidth() + 25, map.getHeight() + 25));
     }
     
