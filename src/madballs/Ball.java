@@ -63,7 +63,7 @@ public class Ball extends GameObject{
         try {
             weapon.die();
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
-            SceneManager.getInstance().setZoomOut(weapon.getScope());
+            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
                 SceneManager.getInstance().bindWeaponInfo(this);
