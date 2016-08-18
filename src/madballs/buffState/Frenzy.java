@@ -12,7 +12,7 @@ import madballs.multiplayer.BuffData;
  *
  * @author chim-
  */
-public class Frenzy extends BuffState{
+public class Frenzy extends WeaponBuff{
     private double fireRateRatio;
 
     public Frenzy(BuffData data){
@@ -46,6 +46,7 @@ public class Frenzy extends BuffState{
     @Override
     public void recreateFromData(BuffData data) {
         fireRateRatio = data.getParameters()[0];
+
     }
 
     @Override

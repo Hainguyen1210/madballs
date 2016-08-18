@@ -22,6 +22,7 @@ import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.player.Player;
+import madballs.projectiles.Projectile;
 
 /**
  *
@@ -440,6 +441,8 @@ public abstract class GameObject {
         statusG = new Group();
         statusG.setVisible(false);
         statusG.setTranslateZ(1);
+        statusG.setTranslateX(-20);
+        statusG.setTranslateY(20);
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
@@ -464,6 +467,7 @@ public abstract class GameObject {
             statusG.setVisible(false);
           }
         });
+        hitBox.setOpacity(1);
         environment.registerGameObj(this, true);
     }
 
@@ -504,6 +508,13 @@ public abstract class GameObject {
             if (child != null) {
                 child.die();
             }
+        }
+    }
+
+    public void dieWithOwner(){
+        die();
+        if (owner != null){
+            owner.dieWithOwner();
         }
     }
     

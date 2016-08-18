@@ -12,7 +12,7 @@ import madballs.multiplayer.BuffData;
  *
  * @author chim-
  */
-public class PowerUp extends BuffState{
+public class PowerUp extends WeaponBuff{
     private double damageRatio;
 
     public PowerUp(BuffData data){

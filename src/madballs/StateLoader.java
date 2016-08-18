@@ -10,6 +10,7 @@ import java.util.LinkedList;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.StateData;
+import madballs.projectiles.Projectile;
 import madballs.wearables.Weapon;
 
 /**
@@ -50,6 +51,7 @@ public class StateLoader {
         if (lastLoadTime == 0) lastLoadTime = now;
 //        System.out.println("is host" + MadBalls.isHost());
         if (MadBalls.isHost() && (now - lastLoadTime > 0)){
+            if (gameObject instanceof Projectile && !gameObject.isDead()) return;
             lastLoadTime = now;
 //            System.out.println(Environment.getInstance().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));

@@ -6,11 +6,16 @@
 package madballs;
 
 import java.lang.reflect.InvocationTargetException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
+import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
+import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
 import madballs.collision.PushBackEffect;
@@ -28,6 +33,8 @@ public class Ball extends GameObject{
     private Weapon weapon;
     private final int SPEED = 100;
     private BuffState buffState;
+    private HBox buffBar;
+    private Map<String, Circle> buffIndicators = new HashMap<>();
 
     public BuffState getBuffState() {
         return buffState;
@@ -38,8 +45,24 @@ public class Ball extends GameObject{
     }
     
     public void addEffectState(BuffState buffState) {
+        registerBuffState(buffState);
         buffState.wrapBuffState(this.buffState);
         this.buffState = buffState;
+    }
+
+    public void registerBuffState(BuffState buffState){
+        Circle circle = new Circle(3, buffState.getColor());
+        buffBar.getChildren().add(circle);
+        buffIndicators.put(buffState.toString(), circle);
+        if (buffState.getWrappedBuffState() != null){
+            registerBuffState(buffState.getWrappedBuffState());
+        }
+    }
+
+    public void removeBuffState(BuffState buffState){
+        Circle circle = buffIndicators.get(buffState.toString());
+        buffBar.getChildren().remove(circle);
+        buffIndicators.remove(buffState.toString());
     }
 
 
@@ -51,8 +74,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        weapon = new Awp(this);
-        SceneManager.getInstance().setZoomOut(weapon.getScope());
+        setWeapon(Minigun.class);
     }
     
     public Weapon getWeapon() {
@@ -61,10 +83,11 @@ public class Ball extends GameObject{
 
     public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
         try {
-            weapon.die();
+            if (weapon != null) weapon.die();
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
+            if (buffState != null) buffState.reApply(WeaponBuff.class);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
@@ -79,13 +102,14 @@ public class Ball extends GameObject{
     @Override
     public void setDisplayComponents(){
         final ProgressBar hpBar = new ProgressBar();
-        hpBar.setTranslateX(-20);
-        hpBar.setTranslateY(20);
         hpBar.progressProperty().bind(Bindings.divide(getHp(), 100));
         hpBar.setPrefWidth(40);
         hpBar.getStyleClass().add("hp-bar");
+
+        buffBar = new HBox(1);
+        buffBar.setTranslateY(5);
         
-        getStatusG().getChildren().add(hpBar);
+        getStatusG().getChildren().addAll(hpBar, buffBar);
 //        hpBar.setLayoutY(getTranslateY() - 1);
         
         setHitBox(new Circle(15));
@@ -94,10 +118,6 @@ public class Ball extends GameObject{
     public void updateUnique(long now) {
         if (buffState != null) {
             buffState.update(now);
-            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
-//                System.out.println(buffState.getWrappedBuffState() == null);
-                SceneManager.getInstance().updateBuffStatus(buffState);
-            }
         }
     }
 }

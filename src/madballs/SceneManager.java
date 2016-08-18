@@ -26,6 +26,9 @@ import javafx.stage.Stage;
 import javafx.util.Duration;
 import madballs.buffState.BuffState;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  *
  * @author caval
@@ -37,7 +40,8 @@ public class SceneManager {
     private FlowPane gameInfoDisplay;
     private ProgressBar hpBar = new ProgressBar();
     private Label weaponLabel = new Label();
-    private Label buffLabel = new Label();
+    private HBox buffBar = new HBox(10);
+    private Map<String, Label> buffLabels = new HashMap<>();
     private Rectangle2D primaryScreenBounds;
     private double screenWidth, screenHeight;
     // scale: the ratio of the visual/scene size to the actual game element size.
@@ -101,9 +105,9 @@ public class SceneManager {
         hpBar.setPrefSize(250, 25);
         hpBar.setTranslateX(50);
         weaponLabel.setTranslateX(120);
-        buffLabel.setTranslateX(140);
+        buffBar.setTranslateX(140);
 
-        gameInfoDisplay = new FlowPane(hpBar, weaponLabel, buffLabel);
+        gameInfoDisplay = new FlowPane(hpBar, weaponLabel, buffBar);
         gameInfoDisplay.setAlignment(Pos.CENTER_LEFT);
         gameInfoDisplay.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
         gameInfoDisplay.setPrefWidth(MadBalls.getMainScene().getWidth());
@@ -190,23 +194,22 @@ public class SceneManager {
 
     }
 
-    public void updateBuffStatus(BuffState state){
-        if (state == null){
-            buffLabel.setText("");
-            return;
-        }
-        String stateString = state.getClass().getSimpleName();
-        BuffState wrappedState = state.getWrappedBuffState();
-        while (wrappedState != null){
-            stateString += ", " + wrappedState.getClass().getSimpleName();
-            wrappedState = wrappedState.getWrappedBuffState();
-        }
-        buffLabel.setText(stateString);
-    }
-
     public void bindBall(Ball ball){
         bindCamera(ball);
         bindBallInfo(ball);
         bindWeaponInfo(ball);
+    }
+
+    public void registerBuffState(BuffState buffState){
+        Label label = new Label(buffState.getClass().getSimpleName());
+        label.setTextFill(buffState.getColor());
+        buffBar.getChildren().add(label);
+        buffLabels.put(buffState.toString(), label);
+    }
+
+    public void removeBuffState(BuffState buffState){
+        Label label = buffLabels.get(buffState.toString());
+        buffBar.getChildren().remove(label);
+        buffLabels.remove(buffState.toString());
     }
 }

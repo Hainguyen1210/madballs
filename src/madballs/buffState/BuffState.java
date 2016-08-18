@@ -67,6 +67,8 @@ public abstract class BuffState{
         }
         else {
             fade();
+            ball.removeBuffState(this);
+            if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().removeBuffState(this);
             ball.setBuffState(removeFromBuffState(ball.getBuffState()));
         }
         if (wrappedBuffState != null) wrappedBuffState.update(timestamp);
@@ -104,6 +106,7 @@ public abstract class BuffState{
     public void castOn(Ball ball, int index) {
         this.ball = ball;
         SceneManager.getInstance().displayLabel(getClass().getSimpleName(), color, 0.75, ball, index * 0.375);
+        if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().registerBuffState(this);
         apply();
         if (wrappedBuffState != null) {
             wrappedBuffState.castOn(ball, index + 1);
@@ -151,6 +154,14 @@ public abstract class BuffState{
         return null;
     }
 
+    public <B extends BuffState> void reApply(Class<B> buffClass){
+        if (buffClass.isInstance(this)){
+            apply();
+        }
+        if (wrappedBuffState != null){
+            wrappedBuffState.reApply(buffClass);
+        }
+    }
     public abstract double[] getParameters();
     public abstract void recreateFromData(BuffData data);
     public abstract void apply();

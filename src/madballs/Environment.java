@@ -8,6 +8,8 @@ package madballs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.WeakHashMap;
+
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -88,24 +90,32 @@ public class Environment {
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
-        ArrayList<Integer> deadObjIDs = new ArrayList<>();
+//        ArrayList<Integer> deadObjIDs = new ArrayList<>();
         quadtree.clear();
         
         for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
 //            obj.updateBoundsRectangle();
             if (obj.isDead()) {
-                deadObjIDs.add(obj.getID());
+//                System.out.println("dead" + gameObjects.containsKey(obj.getID()));
+//                System.out.println(currentObjID);
+//                System.out.println(gameObjects.size());
+                gameObjects.remove(obj.getID());
+//                System.out.println(gameObjects.size());
             }
             else {
                 quadtree.insert(obj);
             }
         }
-        
-        for (Integer id : deadObjIDs){
-            gameObjects.remove(id);
-            copiedGameObjects.remove(id);
-        }
+
+//        for (Integer id : deadObjIDs){
+//            System.out.println("dead" + gameObjects.containsKey(id));
+//            System.out.println(currentObjID);
+//            System.out.println(gameObjects.size());
+//            gameObjects.remove(id);
+//            System.out.println(gameObjects.size());
+//            copiedGameObjects.remove(id);
+//        }
         
 //        copiedGameObjects = new ArrayList<>(gameObjects);
 //        if (!isHost) return;
@@ -163,7 +173,7 @@ public class Environment {
     
     public Environment(){
         this.itemSpawner = new Spawner(this);
-        gameObjects = new HashMap<>();
+        gameObjects = new WeakHashMap<>();
     }
     
     public void setDisplay(Group display){
