@@ -28,7 +28,7 @@ public class Map {
     private String [][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
-    private final static String[] MAP_FILES = {"1.txt"};
+    private final static String[] MAP_FILES = {"1.txt", "2.txt"};
     private Random random = new Random();
     private int mapNumber = -1;
 
