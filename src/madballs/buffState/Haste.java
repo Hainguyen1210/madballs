@@ -5,6 +5,7 @@
  */
 package madballs.buffState;
 
+import javafx.scene.paint.Paint;
 import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.BuffData;
 
@@ -24,6 +25,10 @@ public class Haste extends BuffState{
         this.speed = speed;
     }
 
+    @Override
+    public void setColor() {
+        setColor(Paint.valueOf("yellow"));
+    }
 
     @Override
     public void uniqueUpdate(long timestamp) {

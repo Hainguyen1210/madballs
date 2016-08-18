@@ -5,6 +5,7 @@
  */
 package madballs.buffState;
 
+import javafx.scene.paint.Color;
 import madballs.multiplayer.BuffData;
 
 /**
@@ -21,6 +22,10 @@ public class Rejuvenation extends BuffState{
     public Rejuvenation(BuffState effectState, int duration, double amount) {
         super(effectState, duration);
         this.amount = amount;
+    }
+    @Override
+    public void setColor() {
+        setColor(Color.LIGHTGREEN);
     }
 
     @Override

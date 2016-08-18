@@ -24,6 +24,15 @@ public abstract class BuffState{
     private long lastTick = 0;
     private long tickInterval = 1;
     private Ball ball;
+    private Paint color = Paint.valueOf("red");
+
+    public Paint getColor() {
+        return color;
+    }
+
+    protected void setColor(Paint color){
+        this.color = color;
+    }
 
     public long getTickInterval() {
         return tickInterval;
@@ -44,7 +53,7 @@ public abstract class BuffState{
     public BuffState(BuffState buffState, int duration) {
         wrappedBuffState = buffState;
         this.duration = duration;
-        
+        setColor();
     }
     public void update(long timestamp){
         if (createdTime == 0) {
@@ -94,7 +103,7 @@ public abstract class BuffState{
 
     public void castOn(Ball ball, int index) {
         this.ball = ball;
-        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 0.75, ball, index * 0.375);
+        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), color, 0.75, ball, index * 0.375);
         apply();
         if (wrappedBuffState != null) {
             wrappedBuffState.castOn(ball, index + 1);
@@ -124,6 +133,7 @@ public abstract class BuffState{
         lastTick = data.getLastTick();
         tickInterval = data.getTickInterval();
         ball = (Ball) MadBalls.getMainEnvironment().getObject(data.getBallID());
+        setColor();
         recreateFromData(data);
     }
 
@@ -145,5 +155,6 @@ public abstract class BuffState{
     public abstract void recreateFromData(BuffData data);
     public abstract void apply();
     public abstract void fade();
+    public abstract void setColor();
     public abstract void uniqueUpdate(long timestamp);
 }

@@ -5,6 +5,7 @@
  */
 package madballs.buffState;
 
+import javafx.scene.paint.Color;
 import madballs.multiplayer.BuffData;
 
 /**
@@ -21,6 +22,11 @@ public class InstantHeal extends InstantBuff{
     public InstantHeal(BuffState buffState, double amount) {
         super(buffState);
         this.amount = amount;
+    }
+
+    @Override
+    public void setColor() {
+        setColor(Color.GREEN);
     }
 
     @Override

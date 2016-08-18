@@ -27,7 +27,7 @@ public abstract class InstantBuff extends BuffState{
     @Override
     public void castOn(Ball ball, int index){
         setBall(ball);
-        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), Paint.valueOf("red"), 0.75, ball, index * 0.375);
+        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), getColor(), 0.75, ball, index * 0.375);
         apply();
         if (getWrappedBuffState() != null) {
             getWrappedBuffState().castOn(ball, index == 0 ? 0 : index + 1);

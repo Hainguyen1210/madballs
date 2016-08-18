@@ -108,7 +108,8 @@ public class SceneManager {
         gameInfoDisplay.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
         gameInfoDisplay.setPrefWidth(MadBalls.getMainScene().getWidth());
         gameInfoDisplay.setPrefHeight(30);
-        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
+        gameInfoDisplay.translateYProperty().bind(Bindings.subtract(MadBalls.getMainScene().getHeight(), gameInfoDisplay.heightProperty()));
+//        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
         gameInfoDisplay.setTranslateZ(-1);
 
         root.getChildren().add(gameInfoDisplay);

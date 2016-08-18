@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package madballs.buffState;
+import javafx.scene.paint.Paint;
 import madballs.collision.DamageEffect;
 import madballs.multiplayer.BuffData;
 
@@ -21,6 +22,11 @@ public class PowerUp extends BuffState{
     public PowerUp(BuffState effectState, int duration, double damageRatio) {
         super(effectState, duration);
         this.damageRatio = damageRatio;
+    }
+
+    @Override
+    public void setColor() {
+//        setColor(Paint.valueOf("red"));
     }
     
     @Override

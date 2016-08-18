@@ -5,6 +5,7 @@
  */
 package madballs.buffState;
 
+import javafx.scene.paint.Paint;
 import madballs.multiplayer.BuffData;
 
 /**
@@ -26,6 +27,11 @@ public class Frenzy extends BuffState{
     @Override
     public void fade() {
         getBall().getWeapon().setFireRate(getBall().getWeapon().getFireRate() / fireRateRatio);
+    }
+
+    @Override
+    public void setColor() {
+        setColor(Paint.valueOf("blue"));
     }
 
     @Override
