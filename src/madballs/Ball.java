@@ -85,10 +85,10 @@ public class Ball extends GameObject{
         try {
             if (weapon != null) weapon.die();
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
-            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().setZoomOut(weapon.getScope());
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (buffState != null) buffState.reApply(WeaponBuff.class);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
+                SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {

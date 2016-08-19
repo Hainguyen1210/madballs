@@ -16,6 +16,7 @@ import java.util.concurrent.Executors;
  */
 public class SoundStudio {
     private static SoundStudio instance = new SoundStudio();
+    ExecutorService soundPool = Executors.newFixedThreadPool(2);
     private Map<String, AudioClip> audioClipMap = new HashMap<>();
     private Map<String, Map<String, Long>> audioTimerMap = new HashMap<>();
 //    private Map<String, Media> medias = new HashMap<>();
@@ -39,22 +40,28 @@ public class SoundStudio {
     }
 
     public void playAudio(String audioName, double interval, String requester, long now){
-//        if (!audioTimerMap.containsKey(requester)){
-//            audioTimerMap.put(requester, new HashMap<>());
-//        }
-//        Map<String, Long> timer = audioTimerMap.get(requester);
-//        if (!timer.containsKey(audioName)){
-//            timer.put(audioName, now);
-//        }
-//        Long lastPlayTime = timer.get(audioName);
-//        if ((now - lastPlayTime) / 1000000000 > interval || now == lastPlayTime){
-//            timer.replace(audioName, now);
-//            playAudio(audioName);
-//        }
+        if (!audioTimerMap.containsKey(requester)){
+            audioTimerMap.put(requester, new HashMap<>());
+        }
+        Map<String, Long> timer = audioTimerMap.get(requester);
+        if (!timer.containsKey(audioName)){
+            timer.put(audioName, now);
+        }
+        Long lastPlayTime = timer.get(audioName);
+        if ((now - lastPlayTime) / 1000000000 > interval || now == lastPlayTime){
+            timer.replace(audioName, now);
+            playAudio(audioName);
+        }
     }
 
     public void playAudio(String audioName){
-//        audioClipMap.get(audioName).play();
+        Runnable soundPlay = new Runnable() {
+            @Override
+            public void run() {
+                audioClipMap.get(audioName).play();
+            }
+        };
+        soundPool.execute(soundPlay);
     }
 
 //    public MediaHandler getMediaHandler(String name){

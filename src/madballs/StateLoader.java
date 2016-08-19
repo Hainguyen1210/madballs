@@ -51,7 +51,6 @@ public class StateLoader {
         if (lastLoadTime == 0) lastLoadTime = now;
 //        System.out.println("is host" + MadBalls.isHost());
         if (MadBalls.isHost() && (now - lastLoadTime > 0)){
-            if (gameObject instanceof Projectile && !gameObject.isDead()) return;
             lastLoadTime = now;
 //            System.out.println(Environment.getInstance().getNumObjects());
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
@@ -99,6 +98,9 @@ public class StateLoader {
     }
 
     public void loadState(GameObjState state){
+//        if (gameObject.isDead() && !state.isDead()){
+//            gameObject.getDisplay().setVisible(true);
+//        }
         if (state.isDead()){
 //            System.out.println("`");
             gameObject.setDead();

@@ -509,6 +509,9 @@ public abstract class GameObject {
                 child.die();
             }
         }
+//        else {
+//            getDisplay().setVisible(false);
+//        }
     }
 
     public void dieWithOwner(){
