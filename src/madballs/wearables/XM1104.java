@@ -4,6 +4,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
+import madballs.ImageGenerator;
 import madballs.collision.*;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.StraightMove;
@@ -55,8 +56,10 @@ public class XM1104 extends Weapon {
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("grey")));
+        setImage(ImageGenerator.getInstance().getImage("shotgun"));
+        configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
 
 

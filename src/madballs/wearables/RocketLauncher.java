@@ -3,6 +3,7 @@ package madballs.wearables;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
+import madballs.ImageGenerator;
 import madballs.collision.*;
 
 /**
@@ -36,8 +37,10 @@ public class RocketLauncher extends Weapon {
 
     @Override
     public void setDisplayComponents() {
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setWidth(WIDTH-30);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
+        setImage(ImageGenerator.getInstance().getImage("bazooka"));
+        configImageView(-30, -HEIGHT/2, HEIGHT, WIDTH);
     }
 }
