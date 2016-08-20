@@ -82,16 +82,21 @@ public class Player {
         return isLocal;
     }
 
-    public void checkRelevancy(GameObject obj){
-        double xDiff = Math.abs(obj.getTranslateX() - ball.getTranslateX());
-        double yDiff = Math.abs(obj.getTranslateY() - ball.getTranslateY());
+    public void checkRelevancy(GameObject obj, double varianceX, double varianceY){
+        if (obj.isDead()) {
+            relevantObjIDs.add(obj.getID());
+            return;
+        }
+        if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) relevantObjIDs.add(obj.getID());
+
+    }
+
+    public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
+        double xDiff = Math.abs(x - ball.getTranslateX());
+        double yDiff = Math.abs(y - ball.getTranslateY());
         SubScene animationScene = MadBalls.getAnimationScene();
         double scale = SceneManager.getInstance().getScale();
-        if (xDiff < animationScene.getWidth()/2/scale + 100 && yDiff < animationScene.getHeight()/2/scale + 100){
-            relevantObjIDs.add(obj.getID());
-        }
-//        relevantObjIDs.add(obj.getID());
-
+        return  (xDiff < animationScene.getWidth()/2/scale + varianceX && yDiff < animationScene.getHeight()/2/scale + varianceY);
     }
 
     public Player(Socket socket, boolean isLocal){
@@ -196,9 +201,7 @@ public class Player {
     public Data readData(){
         try {
             return (Data) in.readObject();
-        } catch (ClassNotFoundException | IOException ex){
-            Platform.exit();
-        } catch (NullPointerException ex){
+        } catch (ClassNotFoundException | IOException | NullPointerException ex){
             MadBalls.getMultiplayerHandler().getPlayers().remove(this);
             Platform.runLater(new Runnable() {
                 @Override

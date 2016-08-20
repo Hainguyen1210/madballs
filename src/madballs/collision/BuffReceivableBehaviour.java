@@ -33,6 +33,6 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return MadBalls.isHost() && effect.hasCollisionEffect(GiveBuffEffect.class);
+        return MadBalls.isHost() && effect instanceof GiveBuffEffect;
     }
 }

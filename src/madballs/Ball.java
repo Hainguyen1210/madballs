@@ -74,7 +74,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
         
-        setWeapon(RocketLauncher.class);
+        setWeapon(Minigun.class);
     }
     
     public Weapon getWeapon() {
@@ -83,7 +83,10 @@ public class Ball extends GameObject{
 
     public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
         try {
-            if (weapon != null) weapon.die();
+            if (weapon != null) {
+                System.out.println("old weap: " + weapon.getID());
+                weapon.die();
+            }
             weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (buffState != null) buffState.reApply(WeaponBuff.class);
@@ -91,6 +94,8 @@ public class Ball extends GameObject{
                 SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
+            System.out.println("Get weapon " + weaponClass);
+            System.out.println("new weap: " + weapon.getID());
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }

@@ -176,6 +176,8 @@ public class Client extends MultiplayerHandler{
         }
         catch (Exception ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.exit();
+            System.exit(0);
         }
         
     }

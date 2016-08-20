@@ -9,6 +9,7 @@ import java.util.LinkedList;
 
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
+import madballs.moveBehaviour.StraightMove;
 import madballs.multiplayer.StateData;
 import madballs.projectiles.Projectile;
 import madballs.wearables.Weapon;
@@ -49,10 +50,7 @@ public class StateLoader {
         if (gameObject instanceof Obstacle || gameObject instanceof Ground) return;
         GameObjState newState = new GameObjState(gameObject);
         if (lastLoadTime == 0) lastLoadTime = now;
-//        System.out.println("is host" + MadBalls.isHost());
-        if (MadBalls.isHost() && (now - lastLoadTime > 0)){
-            lastLoadTime = now;
-//            System.out.println(Environment.getInstance().getNumObjects());
+        if (MadBalls.isHost()){
             MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
         }
         else {
@@ -98,14 +96,16 @@ public class StateLoader {
     }
 
     public void loadState(GameObjState state){
+        if (state.isDead() && gameObject instanceof Weapon) {
+            System.out.println("dead state" + gameObject.getID());
+            System.out.println(gameObject.getClass());
+        }
 //        if (gameObject.isDead() && !state.isDead()){
 //            gameObject.getDisplay().setVisible(true);
 //        }
         if (state.isDead()){
 //            System.out.println("`");
             gameObject.setDead();
-            gameObject.getEnvironment().removeGameObj(gameObject);
-            return;
         }
         gameObject.setHpValue(state.getHp());
         if (gameObject.getOwner() == null){
@@ -122,6 +122,11 @@ public class StateLoader {
                 RotateBehaviour rotateBehaviour = (RotateBehaviour) moveBehaviour;
                 rotateBehaviour.setTargetX(state.getTargetX());
                 rotateBehaviour.setTargetY(state.getTargetY());
+            }
+            else if (gameObject.getMoveBehaviour() instanceof StraightMove){
+                StraightMove straightMove = (StraightMove)gameObject.getMoveBehaviour();
+                straightMove.setVelocityX(state.getVelocityX());
+                straightMove.setVelocityY(state.getVelocityY());
             }
             moveBehaviour.setSpeed(state.getSpeed());
         }

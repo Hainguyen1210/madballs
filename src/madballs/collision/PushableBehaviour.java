@@ -7,6 +7,7 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.gameFX.SoundStudio;
 
 /**
@@ -27,7 +28,8 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        SoundStudio.getInstance().playAudio("nutfall", 0.5, this.toString(), target.getEnvironment().getLastUpdateTime());
+        SoundStudio.getInstance().playAudio("nutfall", 0.5, this.toString(), target.getEnvironment().getLastUpdateTime(),
+                target.getTranslateX(), target.getTranslateY(), 400, 400);
         double pushBackAmount = effect.getPushBackAmount();
 
         if (pushBackAmount < 0){
@@ -84,7 +86,7 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect.hasCollisionEffect(PushBackEffect.class);
+        return effect instanceof PushBackEffect;
     }
 
 }

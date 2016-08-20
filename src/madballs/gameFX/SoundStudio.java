@@ -4,6 +4,7 @@ import javafx.scene.media.AudioClip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
+import madballs.MadBalls;
 
 import java.io.File;
 import java.util.HashMap;
@@ -39,7 +40,7 @@ public class SoundStudio {
         }
     }
 
-    public void playAudio(String audioName, double interval, String requester, long now){
+    public void playAudio(String audioName, double interval, String requester, long now, double x, double y, double varianceX, double varianceY){
         if (!audioTimerMap.containsKey(requester)){
             audioTimerMap.put(requester, new HashMap<>());
         }
@@ -50,11 +51,12 @@ public class SoundStudio {
         Long lastPlayTime = timer.get(audioName);
         if ((now - lastPlayTime) / 1000000000 > interval || now == lastPlayTime){
             timer.replace(audioName, now);
-            playAudio(audioName);
+            playAudio(audioName, x, y, varianceX, varianceY);
         }
     }
 
-    public void playAudio(String audioName){
+    public void playAudio(String audioName, double x, double y, double varianceX, double varianceY){
+        if (!MadBalls.getMultiplayerHandler().getLocalPlayer().getRelevancy(x,y,varianceX,varianceY)) return;
         Runnable soundPlay = new Runnable() {
             @Override
             public void run() {

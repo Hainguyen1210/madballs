@@ -91,10 +91,11 @@ public class Spawner {
         if (MadBalls.isHost()) {
             MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
         }
-        new WeaponItem(environment, weaponClass, spawnLocation);
+        WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation);
 
 
-        System.out.println(weaponClass);
+        System.out.print(weaponClass);
+        System.out.println(newItem.getID());
     }
 
     public void spawnItem(SpawnLocation spawnLocation, int itemIndex) {
@@ -104,14 +105,18 @@ public class Spawner {
             itemIndex = random.nextInt(boostItems.length);
         }
         spawnLocation.setTypeNumber(itemIndex);
+        spawnLocation.setType("item");
         Class<Item> itemClass = boostItems[itemIndex];
         if (MadBalls.isHost()) {
             MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
         }
         try {
-            itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class).newInstance(environment, spawnLocation);
+            Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class).newInstance(environment, spawnLocation);
+            System.out.print(itemClass);
+            System.out.println(newItem.getID());
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
         }
+
     }
 }

@@ -493,18 +493,20 @@ public abstract class GameObject {
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
-        if (dieSoundFX != null) SoundStudio.getInstance().playAudio(dieSoundFX);
+        if (dieSoundFX != null) {
+            SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
+        }
         isDead = true;
         if (owner != null) {
             owner.child = null;
         }
+        getEnvironment().removeGameObj(this);
     }
     
     public void die(){
         if (MadBalls.isHost()){
 //            System.out.println("die " + getClass() + getID());
             setDead();
-            getEnvironment().removeGameObj(this);
             if (child != null) {
                 child.die();
             }
@@ -526,13 +528,18 @@ public abstract class GameObject {
             updateUnique(now);
             if (moveBehaviour != null) moveBehaviour.move(now);
         }
-        updateRelevancy();
+        if (MadBalls.isHost()) {
+            updateRelevancy();
+        }
+        else {
+            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
+        }
         stateLoader.update(now);
     }
 
     private void updateRelevancy(){
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
-            player.checkRelevancy(this);
+            player.checkRelevancy(this, 100, 100);
         }
     }
     

@@ -43,7 +43,9 @@ public class XM1104 extends Weapon {
 
     @Override
     public void forceFire(){
-        if (getFireSoundFX() != null) SoundStudio.getInstance().playAudio(getFireSoundFX());
+        if (getFireSoundFX() != null) {
+            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
+        }
         for (int i = 0; i < 5; i++){
             Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau");
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1)));

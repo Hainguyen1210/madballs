@@ -117,7 +117,7 @@ public class Environment {
 //            copiedGameObjects.remove(id);
 //        }
         
-//        copiedGameObjects = new ArrayList<>(gameObjects);
+        copiedGameObjects = new HashMap<>(gameObjects);
 //        if (!isHost) return;
         //spawn items
         if (MadBalls.isHost()) itemSpawner.spawn(now);

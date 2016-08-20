@@ -6,11 +6,14 @@
 package madballs;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
@@ -98,6 +101,13 @@ public class MadBalls extends Application {
         
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(mainScene);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         primaryStage.show();
         SceneManager.getInstance().displayGameInfo(mainRoot);
     }

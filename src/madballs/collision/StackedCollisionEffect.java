@@ -46,15 +46,15 @@ public abstract class StackedCollisionEffect implements CollisionEffect, Seriali
      * @param effectClass
      * @return 
      */
-    public boolean hasCollisionEffect(Class effectClass){
-        if (effectClass.isInstance(this)) return true;
-        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
-            return wrappedEffect.hasCollisionEffect(effectClass);
-        }
-        else {
-            return false;
-        }
-    }
+//    public boolean hasCollisionEffect(Class effectClass){
+//        if (effectClass.isInstance(this)) return true;
+//        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
+////            return wrappedEffect.hasCollisionEffect(effectClass);
+//        }
+//        else {
+//            return false;
+//        }
+//    }
     
     /**
      * return the total damage caused by this combo effect
