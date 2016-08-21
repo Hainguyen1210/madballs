@@ -3,13 +3,21 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs.effectState;
+package madballs.buffState;
+
+import javafx.scene.paint.Paint;
+import madballs.multiplayer.BuffData;
+
 /**
  *
  * @author chim-
  */
-public class Frenzy extends BuffState{
+public class Frenzy extends WeaponBuff{
     private double fireRateRatio;
+
+    public Frenzy(BuffData data){
+        super(data);
+    }
 
     public Frenzy(BuffState effectState, int duration, double fireRateRatio) {
         super(effectState, duration);
@@ -22,7 +30,23 @@ public class Frenzy extends BuffState{
     }
 
     @Override
+    public void setColor() {
+        setColor(Paint.valueOf("blue"));
+    }
+
+    @Override
     public void uniqueUpdate(long timestamp) {
+    }
+
+    @Override
+    public double[] getParameters() {
+        return new double[] {fireRateRatio};
+    }
+
+    @Override
+    public void recreateFromData(BuffData data) {
+        fireRateRatio = data.getParameters()[0];
+
     }
 
     @Override

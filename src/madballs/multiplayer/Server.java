@@ -14,6 +14,7 @@ import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import madballs.Environment;
+import madballs.MadBalls;
 import madballs.player.Player;
 
 /**
@@ -40,13 +41,13 @@ public class Server extends MultiplayerHandler{
                             try {       
                                 setLocalPlayer(new Player(null, true));
                                 getLocalPlayer().setPlayerNum(++playerIndex);
-                                getLocalPlayer().setSpawnLocation(Environment.getInstance().getMap().getPlayerSpawnLocation(1));
+                                getLocalPlayer().setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(1));
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getLocalPlayer().generateBall(Environment.getInstance());
+                                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment());
                                         getLocalPlayer().setReady(true);
-                                        Environment.getInstance().startAnimation();
+//                                        MadBalls.getMainEnvironment().startAnimation();
 
                                     }
                                 });
@@ -91,6 +92,7 @@ public class Server extends MultiplayerHandler{
                             catch (Exception ex) {
 //                                System.out.println("12");
                                 Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
+                                return null;
                             }
                         }
                     }
@@ -103,7 +105,7 @@ public class Server extends MultiplayerHandler{
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
         newPlayer.setPlayerNum(++playerIndex);
-        newPlayer.setSpawnLocation(Environment.getInstance().getMap().getPlayerSpawnLocation(playerIndex));
+        newPlayer.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(playerIndex));
         sendInfoToNewPlayer(newPlayer);
         anounceNewPlayer(newPlayer);
         getPlayers().add(newPlayer);
@@ -111,7 +113,7 @@ public class Server extends MultiplayerHandler{
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                newPlayer.generateBall(Environment.getInstance());
+                newPlayer.generateBall(MadBalls.getMainEnvironment());
             }
         });
         
@@ -119,7 +121,7 @@ public class Server extends MultiplayerHandler{
     }
     
     public void sendInfoToNewPlayer(Player newPlayer){
-        newPlayer.sendData(new MapData(Environment.getInstance().getMap().getMapNumber()));
+        newPlayer.sendData(new MapData(MadBalls.getMainEnvironment().getMap().getMapNumber()));
         for (Player player : getPlayers()){
             System.out.println("1");
             newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false));
@@ -135,6 +137,14 @@ public class Server extends MultiplayerHandler{
     public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
+                if (data instanceof StateData){
+                    if (((StateData)data).getState().isDead()){
+                        System.out.println("dead" + ((StateData)data).getState().getObjID());
+                    }
+                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
+//                        continue;
+                    }
+                }
                 player.sendData(data);
             }
         }
@@ -156,7 +166,7 @@ public class Server extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Environment.getInstance().startAnimation();
+                        MadBalls.getMainEnvironment().startAnimation();
                     }
                 });
             }

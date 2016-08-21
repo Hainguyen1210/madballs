@@ -6,7 +6,6 @@
 package madballs.collision;
 
 import javafx.scene.shape.Shape;
-import madballs.Environment;
 import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
@@ -22,7 +21,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        SoundStudio.getInstance().playSound("penetrate", Environment.getInstance().getLastUpdateTime(), 0.1);
+        SoundStudio.getInstance().playAudio("penetrate", target.getTranslateX(), target.getTranslateY(), 500, 500);
         target.setHpValue(target.getHpValue() - effect.getDamage());
         System.out.println(target.getHpValue());
         if (target.getHpValue() <= 0){
@@ -32,7 +31,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect.hasCollisionEffect(DamageEffect.class);
+        return effect instanceof DamageEffect;
     }
 
 }

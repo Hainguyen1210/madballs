@@ -7,10 +7,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import madballs.Ball;
-import madballs.Environment;
-import madballs.GameObject;
-import madballs.StateLoader;
+import madballs.*;
+import madballs.buffState.BuffState;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.player.Player;
@@ -40,7 +38,7 @@ public class Client extends MultiplayerHandler{
                         try {
                             // connect socket
 //                            System.out.println("why");
-                            Socket socket = new Socket("10.247.200.72", 8099);
+                            Socket socket = new Socket("127.0.0.1", 8099);
                             setLocalPlayer(new Player(socket, true));
                                     
                                 // maintain the socket connection
@@ -49,6 +47,9 @@ public class Client extends MultiplayerHandler{
 //                                        System.out.println("handle");
                                         handleData(getLocalPlayer().readData());
 //                                        getLocalPlayer().sendData(new Data("haha"));
+                                    }
+                                    catch (Exception ex){
+                                        return null;
                                     }
                                     finally {
                                         
@@ -80,7 +81,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Environment.getInstance().startAnimation();
+                        MadBalls.getMainEnvironment().startAnimation();
                     }
                 });
             }
@@ -91,7 +92,7 @@ public class Client extends MultiplayerHandler{
                 try {
                     StateData stateData = (StateData)data;
                     Integer objID = stateData.getState().getObjID();
-                    StateLoader stateLoader = Environment.getInstance().getObject(objID).getStateLoader();
+                    StateLoader stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
                     stateLoader.addServerState(stateData.getState());
                 }
                 catch (NullPointerException ex){
@@ -121,7 +122,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Environment.getInstance().loadMap(map);
+                        MadBalls.getMainEnvironment().loadMap(map);
                     }
                 });
             }
@@ -129,7 +130,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        ((Weapon)Environment.getInstance().getObject(((FireData)data).getWeaponIndex())).forceFire();
+                        ((Weapon)MadBalls.getMainEnvironment().getObject(((FireData)data).getWeaponIndex())).forceFire();
                     }
                 });
             }
@@ -140,10 +141,22 @@ public class Client extends MultiplayerHandler{
                     public void run() {
                         try {
                             Class<Weapon> weaponClass = (Class<Weapon>) Class.forName(getWeaponData.getWeaponClassName());
-                            ((Ball)Environment.getInstance().getObject(getWeaponData.getBallIndex())).setWeapon(weaponClass);
+                            ((Ball)MadBalls.getMainEnvironment().getObject(getWeaponData.getBallIndex())).setWeapon(weaponClass);
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
                         }
+                    }
+                });
+            }
+            else if (data.getType().equals("buff")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        BuffData buffData = (BuffData) data;
+                        Ball ball = (Ball) MadBalls.getMainEnvironment().getObject(buffData.getBallID());
+                        BuffState buffState = BuffState.recreateBuffState(buffData);
+                        buffState.castOn(ball, 0);
+                        ball.addEffectState(buffState);
                     }
                 });
             }
@@ -163,6 +176,8 @@ public class Client extends MultiplayerHandler{
         }
         catch (Exception ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.exit();
+            System.exit(0);
         }
         
     }
@@ -177,7 +192,7 @@ public class Client extends MultiplayerHandler{
                         newPlayer.setTeamNum(data.getTypeNum());
                         newPlayer.setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
                         getPlayers().add(newPlayer);
-                        newPlayer.generateBall(Environment.getInstance());
+                        newPlayer.generateBall(MadBalls.getMainEnvironment());
                     }
                 });
                 
@@ -189,7 +204,7 @@ public class Client extends MultiplayerHandler{
                         getLocalPlayer().setTeamNum(data.getTypeNum());
                         getLocalPlayer().setSpawnLocation(new SpawnLocation(data.getX(), data.getY(), data.getSpawntype(), data.getTypeNum()));
                         getPlayers().add(getLocalPlayer());
-                        getLocalPlayer().generateBall(Environment.getInstance());  
+                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment());
                         sendData(new Data("ready"));
                     }
                 });
@@ -198,7 +213,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Environment.getInstance().getItemSpawner().spawnWeapon((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        MadBalls.getMainEnvironment().getItemSpawner().spawnWeapon(data.getSpawnLocation(), data.getTypeNum());
                     }
                 });
             }
@@ -206,13 +221,22 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        Environment.getInstance().getItemSpawner().spawnItem((int)data.getX(), (int)data.getY(), data.getTypeNum());
+                        MadBalls.getMainEnvironment().getItemSpawner().spawnItem(data.getSpawnLocation(), data.getTypeNum());
+                    }
+                });
+            }
+            else if (data.getSpawntype().equals("explosion")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        new Explosion(MadBalls.getMainEnvironment(), data.getParameters()[0], data.getParameters()[1], data.getParameters()[2], data.getParameters()[3]);
                     }
                 });
             }
         }
         catch (Exception ex){
             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
+            Platform.exit();
         }
     }
     

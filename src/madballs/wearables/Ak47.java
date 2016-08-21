@@ -7,6 +7,7 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
 import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
@@ -25,9 +26,10 @@ public class Ak47 extends Weapon{
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
-        
+
+        setScope(1.2);
         setDamage(20);
-        setAmmo(-1);
+        setAmmo(45);
         setFireRate(3);
         setRange(700);
         setProjectileSpeed(500);
@@ -38,30 +40,14 @@ public class Ak47 extends Weapon{
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
-    
-//    public Ak47(Environment environment, int X, int Y) {
-//        super(environment, X, Y);
-//        
-//        setCollisionEffect(new PushBackEffect(null, -1));
-//        setCollisionPassiveBehaviour(new PushableBehaviour(null));
-//        
-//        setDamage(100);
-//        setAmmo(-1);
-//        setFireRate(1);
-//        setRange(800);
-//        setProjectileSpeed(800);
-//        setProjectileHitBoxSize(5);
-//        setProjectileColor(Paint.valueOf("yellow"));
-//        
-//        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
-//        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
-//    }
 
     @Override
     public void setDisplayComponents() {
-        setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setWidth(WIDTH-10);
+        setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("orange")));
+        setImage(ImageGenerator.getInstance().getImage("ak47"));
+        configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
 }

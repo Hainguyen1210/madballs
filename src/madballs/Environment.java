@@ -8,6 +8,8 @@ package madballs;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.WeakHashMap;
+
 import javafx.animation.AnimationTimer;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
@@ -16,13 +18,13 @@ import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
 import madballs.item.Spawner;
 import madballs.map.Map;
+import madballs.player.Player;
 
 /**
  *
  * @author Caval
  */
 public class Environment {
-    private static Environment instance = new Environment();
     private java.util.Map<Integer, GameObject> gameObjects;
     private int currentObjID = 0;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
@@ -88,27 +90,34 @@ public class Environment {
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
-        ArrayList<Integer> deadObjIDs = new ArrayList<>();
-//        copiedGameObjects.addAll(gameObjects.subList(0, gameObjects.size()));
+//        ArrayList<Integer> deadObjIDs = new ArrayList<>();
         quadtree.clear();
         
         for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
 //            obj.updateBoundsRectangle();
             if (obj.isDead()) {
-                deadObjIDs.add(obj.getID());
+//                System.out.println("dead" + gameObjects.containsKey(obj.getID()));
+//                System.out.println(currentObjID);
+//                System.out.println(gameObjects.size());
+                gameObjects.remove(obj.getID());
+//                System.out.println(gameObjects.size());
             }
             else {
                 quadtree.insert(obj);
             }
         }
+
+//        for (Integer id : deadObjIDs){
+//            System.out.println("dead" + gameObjects.containsKey(id));
+//            System.out.println(currentObjID);
+//            System.out.println(gameObjects.size());
+//            gameObjects.remove(id);
+//            System.out.println(gameObjects.size());
+//            copiedGameObjects.remove(id);
+//        }
         
-        for (Integer id : deadObjIDs){
-            gameObjects.remove(id);
-            copiedGameObjects.remove(id);
-        }
-        
-//        copiedGameObjects = new ArrayList<>(gameObjects);
+        copiedGameObjects = new HashMap<>(gameObjects);
 //        if (!isHost) return;
         //spawn items
         if (MadBalls.isHost()) itemSpawner.spawn(now);
@@ -162,34 +171,68 @@ public class Environment {
     return map;
   }
     
-    private Environment(){
+    public Environment(){
         this.itemSpawner = new Spawner(this);
-        gameObjects = new HashMap<>();
+        gameObjects = new WeakHashMap<>();
     }
     
     public void setDisplay(Group display){
         this.display = display;
         ground = new Ground(this, 0, 0);
     }
-    
-    public static Environment getInstance(){
-        return instance;
-    }
-    
-    public void loadMap(Map map){
+
+    public void loadMap(Map map) {
         this.map = map;
         String[][] mapArray = map.getMAP_ARRAY();
         //add the obstacles
-        for (int i = 0; i < map.getNumRows(); i++){
-            for (int j = 0; j < map.getNumColumns(); j++){
-              System.out.print(  mapArray[i][j]);
-                if (mapArray[i][j] != null && (mapArray[i][j]).equals("+")) {
-//                  System.out.println("Create OBJ " + horizontalUnit + " " + verticalUnit);
-                    new Obstacle(this,j * map.getColumnWidth(), i * map.getRowHeight(), map.getObstacleSize(), map.getObstacleSize());
+
+        int boxSize = map.getObstacleSize();
+        int currentBoxSizeRow = 0, locationRowX = 0, locationRowY = 0; //define start point and size
+        int currentBoxSizeCol = 0, locationColX = 0, locationColY = 0;
+        boolean isStartedRow = false, isStartedCol = false;
+
+        //render rows
+        for(int row = 0; row < map.getNumRows();row++){
+            for (int col = 0; col < map.getNumColumns(); col++){
+                System.out.print( mapArray[row][col] );
+                if (mapArray[row][col] != null && (mapArray[row][col]).equals("x")) {
+                    if (!isStartedRow){
+                        locationRowX = col*map.getColumnWidth(); locationRowY = row*map.getRowHeight(); //set start point
+                        isStartedRow = true;
+                    }
+                    currentBoxSizeRow += boxSize;
+                    // render last row right away
+                    if (row == map.getNumRows()-1
+                            ) new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize);
+                } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("x")){
+                    if (isStartedRow){
+                        new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize); //end point
+                        System.out.print("#");
+                        currentBoxSizeRow = 0;
+                        isStartedRow = false;
+                    }
+                }
+            } System.out.println();
+        }
+        //render columns
+        for (int col = 0; col < map.getNumColumns(); col++) {
+            for (int row = 0; row < map.getNumRows(); row++) {
+                if (mapArray[row][col] != null && (mapArray[row][col]).equals("+")) {
+                    if (!isStartedCol){
+                        locationColX = col*map.getColumnWidth(); locationColY = row*map.getRowHeight(); //set start point
+                        isStartedCol = true;
+                    }
+                    currentBoxSizeCol += boxSize;
+                } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("+")){
+                    if (isStartedCol){
+                        new Obstacle(this, locationColX, locationColY, boxSize, currentBoxSizeCol); //end point
+                        currentBoxSizeCol = 0;
+                        isStartedCol = false;
+                    }
                 }
             }
-          System.out.println("\n");
         }
+
         quadtree = new Quadtree(0, new Rectangle(-25, -25, map.getWidth() + 25, map.getHeight() + 25));
     }
     
@@ -208,6 +251,7 @@ public class Environment {
         gameObjects.put(newID++, obj);
 //        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
+//        System.out.println("z" + obj.getDisplay().getTranslateZ());
     }
     
     /**

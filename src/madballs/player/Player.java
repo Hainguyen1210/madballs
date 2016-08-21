@@ -5,23 +5,19 @@
  */
 package madballs.player;
 
-import java.io.EOFException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.net.SocketException;
+import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import madballs.Ball;
-import madballs.Environment;
-import madballs.MadBalls;
-import madballs.SceneManager;
+import javafx.scene.SubScene;
+import madballs.*;
+import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 
@@ -40,6 +36,15 @@ public class Player {
     private int playerNum;
     private int teamNum;
     private SpawnLocation spawnLocation;
+    private ArrayList<Integer> relevantObjIDs = new ArrayList<>();
+
+    public ArrayList<Integer> getRelevantObjIDs() {
+        return relevantObjIDs;
+    }
+
+    public void setRelevantObjIDs(ArrayList<Integer> relevantObjIDs) {
+        this.relevantObjIDs = relevantObjIDs;
+    }
 
     public boolean isReady() {
         return isReady;
@@ -76,7 +81,24 @@ public class Player {
     public boolean isLocal(){
         return isLocal;
     }
-    
+
+    public void checkRelevancy(GameObject obj, double varianceX, double varianceY){
+        if (obj.isDead()) {
+            relevantObjIDs.add(obj.getID());
+            return;
+        }
+        if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) relevantObjIDs.add(obj.getID());
+
+    }
+
+    public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
+        double xDiff = Math.abs(x - ball.getTranslateX());
+        double yDiff = Math.abs(y - ball.getTranslateY());
+        SubScene animationScene = MadBalls.getAnimationScene();
+        double scale = SceneManager.getInstance().getScale();
+        return  (xDiff < animationScene.getWidth()/2/scale + varianceX && yDiff < animationScene.getHeight()/2/scale + varianceY);
+    }
+
     public Player(Socket socket, boolean isLocal){
         controller = new Controller(this);
         this.isLocal = isLocal;
@@ -94,8 +116,8 @@ public class Player {
     public void generateBall(Environment environment){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
         if (isLocal) {
-            bindInput(MadBalls.getScene());
-            SceneManager.getInstance().setCamera(ball);
+            bindInput(MadBalls.getMainScene());
+            SceneManager.getInstance().bindBall(ball);
         }
     }
     
@@ -179,9 +201,7 @@ public class Player {
     public Data readData(){
         try {
             return (Data) in.readObject();
-        } catch (EOFException | ClassNotFoundException ex){
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        } catch (NullPointerException | SocketException ex){
+        } catch (ClassNotFoundException | IOException | NullPointerException ex){
             MadBalls.getMultiplayerHandler().getPlayers().remove(this);
             Platform.runLater(new Runnable() {
                 @Override
@@ -189,8 +209,6 @@ public class Player {
                     ball.die();
                 }
             });
-        } catch (IOException e) {
-            e.printStackTrace();
         }
         return null;
     }

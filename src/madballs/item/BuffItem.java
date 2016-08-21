@@ -5,23 +5,23 @@
  */
 package madballs.item;
 
-import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Environment;
-import madballs.collision.GiveStateEffect;
-import madballs.effectState.BuffState;
+import madballs.collision.GiveBuffEffect;
+import madballs.buffState.BuffState;
+import madballs.map.SpawnLocation;
 
 /**
  *
  * @author haing
  */
 public class BuffItem extends Item{
-  protected GiveStateEffect giveStateEffect;
+  protected GiveBuffEffect giveBuffEffect;
   
-  public BuffItem(Environment environment, double x, double y, BuffState effectState) {
-    super(environment, x, y);
-    giveStateEffect = new GiveStateEffect(null, effectState);
-    setCollisionEffect(giveStateEffect);
+  public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState) {
+    super(environment, spawnLocation);
+    giveBuffEffect = new GiveBuffEffect(null, effectState);
+    setCollisionEffect(giveBuffEffect);
   }  
   
   @Override

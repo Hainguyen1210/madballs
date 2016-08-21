@@ -3,10 +3,11 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs;
+package madballs.moveBehaviour;
 
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
 /**
@@ -68,7 +69,7 @@ public class StraightMove extends MoveBehaviour{
     @Override
     void calculateNewCordinate(long now) {
         // get the time elapsed and update lastUpdateTime
-        if (getLastMoveTime() == 0) setLastMoveTime(Environment.getInstance().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(getObject().getEnvironment().getLastUpdateTime());
 //        if (now - getLastMoveTime() < 5000000) return;
         
         final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;
@@ -105,15 +106,13 @@ public class StraightMove extends MoveBehaviour{
     
     @Override
     public void moveUnique(long now){
+        GameObject obj = getObject();
         if (getVelocityX() != 0 || getVelocityY() != 0){
             if (getSoundFX() != null){
-                SoundStudio.getInstance().playSound(getSoundFX(), now, 0.2);
+                SoundStudio.getInstance().playAudio(getSoundFX(), 0.2, this.toString(), now,
+                        obj.getTranslateX(), obj.getTranslateY(), 400, 400);
             }
         }
-        else {
-//            SoundStudio.getInstance().endSoundRepeat(getSoundFX());
-        }
-        GameObject obj = getObject();
         calculateNewCordinate(now);
 
 //        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());

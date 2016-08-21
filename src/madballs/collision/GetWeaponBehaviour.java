@@ -24,12 +24,12 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
+        System.out.println("give weap by " + source);
         Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
         if(weapon != null && MadBalls.isHost()) {
-            ((Ball)target).setWeapon((Class<Weapon>) weapon.getClass());
+            ((Ball)target).setWeapon(weapon.getClass());
             MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(target.getID(), weapon.getClass().getName()));
         }
-        System.out.println("Get weapon " + weapon);
         GameObject owner = source.getOwner();
         if (owner != null) {
             owner.die();
@@ -38,7 +38,7 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect.hasCollisionEffect(GiveWeaponEffect.class);
+        return effect instanceof GiveWeaponEffect;
     }
 
 }

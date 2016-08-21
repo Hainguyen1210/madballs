@@ -8,7 +8,9 @@ package madballs.collision;
 import javafx.scene.shape.Shape;
 import madballs.Ball;
 import madballs.GameObject;
-import madballs.effectState.BuffState;
+import madballs.MadBalls;
+import madballs.buffState.BuffState;
+import madballs.multiplayer.BuffData;
 
 /**
  *
@@ -22,13 +24,15 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
     
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        GiveStateEffect receivedEffect = (GiveStateEffect)effect;
-        BuffState effectState = receivedEffect.getEffectState();
-        effectState.castOn((Ball)target);
+        GiveBuffEffect receivedEffect = (GiveBuffEffect)effect;
+        BuffState buffState = receivedEffect.getBuffState();
+        buffState.castOn((Ball)target, 0);
+        MadBalls.getMultiplayerHandler().sendData(new BuffData(buffState));
+        ((Ball)target).addEffectState(buffState);
     }
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect.hasCollisionEffect(GiveStateEffect.class);
+        return MadBalls.isHost() && effect instanceof GiveBuffEffect;
     }
 }

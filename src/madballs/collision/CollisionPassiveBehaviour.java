@@ -13,5 +13,5 @@ import madballs.GameObject;
  * @author Caval
  */
 public interface CollisionPassiveBehaviour {
-    public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
+    void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape);
 }

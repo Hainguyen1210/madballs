@@ -6,9 +6,14 @@
 package madballs;
 
 import javafx.application.Application;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.SceneAntialiasing;
+import javafx.scene.SubScene;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
@@ -22,12 +27,22 @@ import madballs.multiplayer.Server;
 public class MadBalls extends Application {
     private static Navigation navigation;
     private static MultiplayerHandler multiplayerHandler;
+    private static Environment mainEnvironment;
     private static boolean isGameOver = false;
 
-    private static Scene scene;
-    
-    public static Scene getScene(){
-        return scene;
+    private static Scene mainScene;
+    private static SubScene animationScene;
+
+    public static Scene getMainScene() {
+        return mainScene;
+    }
+
+    public static Environment getMainEnvironment() {
+        return mainEnvironment;
+    }
+
+    public static SubScene getAnimationScene(){
+        return animationScene;
     }
     
     public static MultiplayerHandler getMultiplayerHandler(){
@@ -52,17 +67,24 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
+
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
+
+
         
         navigation = new Navigation();
         Group root = new Group();
-        
-        scene = new Scene(root, 1280, 720);
-        scene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
-        Environment.getInstance().setDisplay(root);
-        SceneManager.getInstance().scaleDisplay(root);
+        animationScene = new SubScene(root, 1280, 720);
+
+        Group mainRoot = new Group(animationScene);
+
+        mainScene = new Scene(mainRoot, 1280, 720, true, SceneAntialiasing.BALANCED);
+        mainScene.getStylesheets().add(getClass().getResource("style.css").toExternalForm());
+
+        mainEnvironment = new Environment();
+        mainEnvironment.setDisplay(root);
 //        Client.initClient();
         
         
@@ -70,7 +92,7 @@ public class MadBalls extends Application {
         if (isHost){
             multiplayerHandler = new Server();
             Map map = new Map(-1);
-            Environment.getInstance().loadMap(map);
+            mainEnvironment.loadMap(map);
         }
         else {
             multiplayerHandler = new Client();
@@ -78,9 +100,16 @@ public class MadBalls extends Application {
         multiplayerHandler.init();
         
         primaryStage.setTitle("MAD BALL");
-        primaryStage.setScene(scene);
+        primaryStage.setScene(mainScene);
+        primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
         primaryStage.show();
-        System.out.println(primaryStage.getHeight());
+        SceneManager.getInstance().displayGameInfo(mainRoot);
     }
 
     /**

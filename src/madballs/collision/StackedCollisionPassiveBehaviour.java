@@ -7,7 +7,6 @@ package madballs.collision;
 
 import java.io.Serializable;
 import javafx.scene.shape.Shape;
-import madballs.Environment;
 import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
@@ -21,12 +20,12 @@ public abstract class StackedCollisionPassiveBehaviour implements CollisionPassi
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (isConditionMet(source, target, effect, collisionShape)){
-            if (effect.getSoundFX() != null) SoundStudio.getInstance().playSound(effect.getSoundFX(), Environment.getInstance().getLastUpdateTime(), 0);
+            if (effect.getSoundFX() != null) SoundStudio.getInstance().playAudio(effect.getSoundFX(), source.getTranslateX(), source.getTranslateY(), 400, 400);
             uniqueGetAffected(source, target, effect, collisionShape);
         }
         if (wrappedBehaviour != null) wrappedBehaviour.getAffected(source, target, effect, collisionShape);
     }
-    
+
     public StackedCollisionPassiveBehaviour(CollisionPassiveBehaviour behaviour) {
         wrappedBehaviour = behaviour;
     }

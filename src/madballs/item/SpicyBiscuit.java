@@ -7,7 +7,8 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.effectState.Frenzy;
+import madballs.buffState.Frenzy;
+import madballs.map.SpawnLocation;
 
 /**
  *
@@ -15,8 +16,8 @@ import madballs.effectState.Frenzy;
  */
 public class SpicyBiscuit extends BuffItem{
 
-    public SpicyBiscuit(Environment environment, double x, double y) {
-        super(environment, x, y, new Frenzy(null, 5, 1.5));
+    public SpicyBiscuit(Environment environment, SpawnLocation spawnLocation) {
+        super(environment, spawnLocation, new Frenzy(null, 5, 1.5));
     }
     
     @Override

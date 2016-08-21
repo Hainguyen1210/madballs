@@ -6,6 +6,7 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.scene.image.Image;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
@@ -19,6 +20,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.shape.Shape;
 import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
+import madballs.moveBehaviour.MoveBehaviour;
+import madballs.player.Player;
+import madballs.projectiles.Projectile;
 
 /**
  *
@@ -80,9 +84,9 @@ public abstract class GameObject {
         oldY = y;
         rotation = new Rotate(0);
         oldDirection = 0;
-        
+
         this.environment = environment;
-        
+
         if (isSettingDisplay) setDisplay();
     }
     
@@ -129,7 +133,7 @@ public abstract class GameObject {
 //        rotation = new Rotate(0 , -x , -y);
         rotation.angleProperty().bind(owner.rotation.angleProperty());
         environment = owner.getEnvironment();
-        
+
     }
 
     public Environment getEnvironment() {
@@ -317,10 +321,10 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(String imageName) {
-//        this.imageView.setImage(image);
+    public void setImage(Image image) {
+        this.imageView.setImage(image);
     }
-    
+
     public DoubleProperty getHp(){
         return hp;
     }
@@ -437,6 +441,8 @@ public abstract class GameObject {
         statusG = new Group();
         statusG.setVisible(false);
         statusG.setTranslateZ(1);
+        statusG.setTranslateX(-20);
+        statusG.setTranslateY(20);
 //        display.setPrefSize(0, 0);
         display.translateXProperty().bind(translateX);
         display.translateYProperty().bind(translateY);
@@ -461,9 +467,18 @@ public abstract class GameObject {
             statusG.setVisible(false);
           }
         });
+        hitBox.setOpacity(1);
         environment.registerGameObj(this, true);
     }
-    
+
+    public void configImageView(double translateX, double translateY, double height, double width){
+        this.imageView.setTranslateX(translateX);
+        this.imageView.setTranslateY(translateY);
+        this.imageView.setFitHeight(height);
+        this.imageView.setFitWidth(width);
+    }
+
+
     /**
      * update the rectangle shape representing the bounds of the game obj
      */
@@ -478,34 +493,58 @@ public abstract class GameObject {
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
-        if (dieSoundFX != null) SoundStudio.getInstance().playSound(dieSoundFX, Environment.getInstance().getLastUpdateTime(), 0);
+        if (dieSoundFX != null) {
+            SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
+        }
         isDead = true;
         if (owner != null) {
             owner.child = null;
         }
+        getEnvironment().removeGameObj(this);
     }
     
     public void die(){
         if (MadBalls.isHost()){
 //            System.out.println("die " + getClass() + getID());
             setDead();
-            getEnvironment().removeGameObj(this);
             if (child != null) {
                 child.die();
             }
         }
+//        else {
+//            getDisplay().setVisible(false);
+//        }
+    }
+
+    public void dieWithOwner(){
+        die();
+        if (owner != null){
+            owner.dieWithOwner();
+        }
     }
     
     public void update(long now){
-        stateLoader.update(now);
         if (!isDead) {
-            if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
+            if (moveBehaviour != null) moveBehaviour.move(now);
+        }
+        if (MadBalls.isHost()) {
+            updateRelevancy();
+        }
+        else {
+            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
+        }
+        stateLoader.update(now);
+    }
+
+    private void updateRelevancy(){
+        for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
+            player.checkRelevancy(this, 100, 100);
         }
     }
     
     /**
-     * the obj must implement this method to set its hit box and image
+     * the obj must implement this method to set its hit box and image, etc.
      */
     public abstract void setDisplayComponents();
     

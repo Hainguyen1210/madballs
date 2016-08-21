@@ -46,22 +46,22 @@ public abstract class StackedCollisionEffect implements CollisionEffect, Seriali
      * @param effectClass
      * @return 
      */
-    public boolean hasCollisionEffect(Class effectClass){
-        if (effectClass.isInstance(this)) return true;
-        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
-            return ((StackedCollisionEffect) wrappedEffect).hasCollisionEffect(effectClass);
-        }
-        else {
-            return false;
-        }
-    }
+//    public boolean hasCollisionEffect(Class effectClass){
+//        if (effectClass.isInstance(this)) return true;
+//        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
+////            return wrappedEffect.hasCollisionEffect(effectClass);
+//        }
+//        else {
+//            return false;
+//        }
+//    }
     
     /**
      * return the total damage caused by this combo effect
      * @return 
      */
     public double getDamage(){
-        double damage = this instanceof DamageEffect ? ((DamageEffect)this).getDamage() : 0;
+        double damage = this instanceof DamageEffect ? this.getDamage() : 0;
         return wrappedEffect == null ? damage : wrappedEffect.getDamage() + damage;
     }
     
@@ -70,7 +70,7 @@ public abstract class StackedCollisionEffect implements CollisionEffect, Seriali
      * @return 
      */
     public double getPushBackAmount(){
-        double amount = this instanceof PushBackEffect ? ((PushBackEffect)this).getPushBackAmount(): 0;
+        double amount = this instanceof PushBackEffect ? this.getPushBackAmount(): 0;
         return wrappedEffect == null ? amount : wrappedEffect.getPushBackAmount() + amount;
     }
 }
