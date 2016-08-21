@@ -38,6 +38,7 @@ public class Minigun extends Weapon{
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("blue"));
         
+        setFireSoundFX("minigun");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
