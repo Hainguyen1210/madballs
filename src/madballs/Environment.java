@@ -97,7 +97,7 @@ public class Environment {
         MadBalls.getMultiplayerHandler().checkWinner();
 //        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
-        java.util.Map<Integer, GameObject> copiedGameObjects = new HashMap<>(gameObjects);
+        java.util.Map<Integer, GameObject> copiedGameObjects = new WeakHashMap<>(gameObjects);
 //        ArrayList<Integer> deadObjIDs = new ArrayList<>();
         quadtree.clear();
         
@@ -126,7 +126,7 @@ public class Environment {
 //            copiedGameObjects.remove(id);
 //        }
         
-        copiedGameObjects = new HashMap<>(gameObjects);
+        copiedGameObjects = new WeakHashMap<>(gameObjects);
 //        if (!isHost) return;
         //spawn items
         if (MadBalls.isHost()) itemSpawner.spawn(now);
@@ -273,9 +273,11 @@ public class Environment {
     }
 
     public GameObject resurrectGameObj(Integer id){
-        GameObject obj = deadGameObjects.get(id);
-        gameObjects.put(id, obj);
-        deadGameObjects.remove(id);
-        return obj;
+        synchronized (gameObjects){
+            GameObject obj = deadGameObjects.get(id);
+            gameObjects.put(id, obj);
+            deadGameObjects.remove(id);
+            return obj;
+        }
     }
 }

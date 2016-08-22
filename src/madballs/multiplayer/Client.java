@@ -97,6 +97,9 @@ public class Client extends MultiplayerHandler{
                         stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
                     }
                     catch (NullPointerException ex){
+                        if (stateData.getState().isDead()){
+                            return;
+                        }
                         stateLoader = MadBalls.getMainEnvironment().resurrectGameObj(objID).getStateLoader();
 
                     }
