@@ -259,7 +259,6 @@ public class Environment {
      * @param obj 
      */
     public void removeGameObj(GameObject obj){
-//        gameObjects.remove(obj.getID());
         display.getChildren().remove(obj.getDisplay());
     }
 }

@@ -96,10 +96,10 @@ public class StateLoader {
     }
 
     public void loadState(GameObjState state){
-        if (state.isDead() && gameObject instanceof Weapon) {
-            System.out.println("dead state" + gameObject.getID());
-            System.out.println(gameObject.getClass());
-        }
+//        if (state.isDead() && gameObject instanceof Weapon) {
+//            System.out.println("dead state" + gameObject.getID());
+//            System.out.println(gameObject.getClass());
+//        }
 //        if (gameObject.isDead() && !state.isDead()){
 //            gameObject.getDisplay().setVisible(true);
 //        }
