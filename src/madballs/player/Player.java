@@ -87,7 +87,12 @@ public class Player {
             relevantObjIDs.add(obj.getID());
             return;
         }
-        if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) relevantObjIDs.add(obj.getID());
+        if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) {
+            relevantObjIDs.add(obj.getID());
+        }
+        else {
+            relevantObjIDs.remove(obj.getID());
+        }
 
     }
 
@@ -113,8 +118,8 @@ public class Player {
         }
     }
     
-    public void generateBall(Environment environment){
-        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
+    public void generateBall(Environment environment, Integer id){
+        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id);
         if (isLocal) {
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);

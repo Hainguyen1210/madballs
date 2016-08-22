@@ -5,9 +5,11 @@ import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
 import madballs.ImageGenerator;
+import madballs.MadBalls;
 import madballs.collision.*;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.FireData;
 import madballs.projectiles.Projectile;
 
 import java.util.Random;
@@ -21,10 +23,10 @@ public class XM1104 extends Weapon {
     private final int varyingAngle = 40;
     private final Random random = new Random();
 
-    public XM1104(GameObject owner) {
+    public XM1104(GameObject owner, Integer id) {
         super(owner,
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
 
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -44,16 +46,27 @@ public class XM1104 extends Weapon {
     }
 
     @Override
-    public void forceFire(){
+    public void forceFire(Integer id){
+        if (!MadBalls.isHost()) return;
         if (getFireSoundFX() != null) {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
         }
         for (int i = 0; i < 5; i++){
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau");
-            ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1)));
+            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau", id);
+            double direction = Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1));
+            ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
+            MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), direction));
             if (checkAmmo()){
                 return;
             }
+        }
+    }
+
+    public void forceFire(Integer id, double direction){
+        if (getFireSoundFX() != null) {
+            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
+            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau", id);
+            ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
         }
     }
 

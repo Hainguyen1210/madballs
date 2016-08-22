@@ -24,10 +24,10 @@ import madballs.wearables.Weapon;
 public class WeaponItem extends Item {
     private Weapon weapon;
 
-    public WeaponItem(Environment environment, Class<Weapon> weaponClass, SpawnLocation spawnLocation) {
-        super(environment, spawnLocation);
+    public WeaponItem(Environment environment, Class<Weapon> weaponClass, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, id);
         try {
-            weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+            weapon = weaponClass.getDeclaredConstructor(GameObject.class, Integer.class).newInstance(this, -1);
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(WeaponItem.class.getName()).log(Level.SEVERE, null, ex);
         }

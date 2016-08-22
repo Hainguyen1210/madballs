@@ -23,10 +23,10 @@ public class Uzi extends Weapon{
     private final double WIDTH = 25;
     private final double HEIGHT = 7;
 
-    public Uzi(GameObject owner) {
+    public Uzi(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

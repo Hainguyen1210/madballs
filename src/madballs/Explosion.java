@@ -13,12 +13,12 @@ public class Explosion extends GameObject {
     private double radius;
     private long explodedTime;
 
-    public Explosion(Environment environment, double x, double y, double radius, double damage) {
-        super(environment, x, y, false);
+    public Explosion(Environment environment, double x, double y, double radius, double damage, Integer id) {
+        super(environment, x, y, false, id);
         SoundStudio.getInstance().playAudio("explosion", x, y, 800, 800);
         explodedTime = getEnvironment().getLastUpdateTime();
         this.radius = radius;
-        setDisplay();
+        setDisplay(id);
         setCollisionEffect(new DamageEffect(null, damage));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }

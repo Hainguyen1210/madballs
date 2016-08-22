@@ -19,10 +19,10 @@ public class M4A1 extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 5;
     
-    public M4A1(GameObject owner) {
+    public M4A1(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

@@ -18,13 +18,13 @@ import madballs.wearables.Weapon;
 public class Projectile extends GameObject {
     private Weapon sourceWeapon;
 
-    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName) {
-        super(sourceWeapon.getEnvironment(), 0, 0, false);
+    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName, Integer id) {
+        super(sourceWeapon.getEnvironment(), 0, 0, false, id);
         
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
 //        setImage(projectImageName);
-        setDisplay();
+        setDisplay(id);
         
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
         double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() / 2 + 5;

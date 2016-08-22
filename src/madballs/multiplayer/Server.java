@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
-import madballs.Environment;
 import madballs.MadBalls;
 import madballs.player.Player;
 
@@ -23,12 +22,14 @@ import madballs.player.Player;
  */
 public class Server extends MultiplayerHandler{
     private int playerIndex = 0;
+    private int numPlayers = 2;
 
     public Server() {
         super(true);
     }
     
     public void init(){
+        numPlayers = Integer.parseInt(MadBalls.getNavigation().getTextResponse("Start game", "Host game", "Enter number of players", "2"));
         setService(new Service<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -45,7 +46,7 @@ public class Server extends MultiplayerHandler{
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment());
+                                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment(), -1);
                                         getLocalPlayer().setReady(true);
 //                                        MadBalls.getMainEnvironment().startAnimation();
 
@@ -107,13 +108,13 @@ public class Server extends MultiplayerHandler{
         newPlayer.setPlayerNum(++playerIndex);
         newPlayer.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(playerIndex));
         sendInfoToNewPlayer(newPlayer);
-        anounceNewPlayer(newPlayer);
+        announceNewPlayer(newPlayer);
         getPlayers().add(newPlayer);
         
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                newPlayer.generateBall(MadBalls.getMainEnvironment());
+                newPlayer.generateBall(MadBalls.getMainEnvironment(), -1);
             }
         });
         
@@ -124,13 +125,20 @@ public class Server extends MultiplayerHandler{
         newPlayer.sendData(new MapData(MadBalls.getMainEnvironment().getMap().getMapNumber()));
         for (Player player : getPlayers()){
             System.out.println("1");
-            newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false));
+            newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false, player.getBall().getID()));
         }
     }
     
-    public void anounceNewPlayer(Player newPlayer){
-        sendData(new SpawnData(newPlayer.getSpawnLocation(), false));
-        newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation(), true));
+    public void announceNewPlayer(Player newPlayer){
+        try {
+            Integer newBallID = MadBalls.getMainEnvironment().getCurrentObjID();
+            sendData(new SpawnData(newPlayer.getSpawnLocation(), false, newBallID));
+            newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation(), true, newBallID));
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
+
     }
 
     @Override
@@ -142,7 +150,7 @@ public class Server extends MultiplayerHandler{
                         System.out.println("dead" + ((StateData)data).getState().getObjID());
                     }
                     if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
-//                        continue;
+                        continue;
                     }
                 }
                 player.sendData(data);
@@ -155,7 +163,7 @@ public class Server extends MultiplayerHandler{
         if (data.getType().equals("ready")){
             currentPlayer.setReady(true);
             System.out.println("index" +playerIndex);
-            if (playerIndex >= 3){
+            if (playerIndex >= numPlayers){
                 for (Player player : getPlayers()){
                     System.out.println(player.getPlayerNum());
                     System.out.println(player.isReady());

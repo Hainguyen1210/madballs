@@ -22,6 +22,7 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.GetWeaponData;
 import madballs.wearables.*;
 
 /**
@@ -65,15 +66,15 @@ public class Ball extends GameObject{
     }
 
 
-    public Ball(Environment environment, double x, double y) {
-        super(environment, x , y, true);
+    public Ball(Environment environment, double x, double y, Integer id) {
+        super(environment, x , y, true, id);
         setMoveBehaviour(new StraightMove(this, SPEED));
         getMoveBehaviour().setSoundFX("footstep2");
         setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
   
-        setWeapon(Pistol.class);
+        setWeapon(Pistol.class, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
     
@@ -81,13 +82,16 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
+    public <W extends Weapon> void setWeapon(Class<W> weaponClass, Integer weaponID) {
         try {
             if (weapon != null) {
                 System.out.println("old weap: " + weapon.getID());
                 weapon.die();
             }
-            weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
+            weapon = weaponClass.getDeclaredConstructor(GameObject.class, Integer.class).newInstance(this, weaponID);
+            if (MadBalls.isHost()) {
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getID(), weapon.getClass().getName(), weapon.getID()));
+            }
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (buffState != null) buffState.reApply(WeaponBuff.class);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){

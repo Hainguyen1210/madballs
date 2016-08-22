@@ -18,12 +18,12 @@ public class Obstacle extends GameObject{
     public double length;
     public double height;
 
-    public Obstacle(Environment environment, double x, double y, double length, double height) {
-        super(environment, x, y, false);
+    public Obstacle(Environment environment, double x, double y, double length, double height, Integer id) {
+        super(environment, x, y, false, id);
         
         this.length = length;
         this.height = height;
-        setDisplay();
+        setDisplay(id);
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }

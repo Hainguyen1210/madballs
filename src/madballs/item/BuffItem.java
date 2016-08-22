@@ -18,8 +18,8 @@ import madballs.map.SpawnLocation;
 public class BuffItem extends Item{
   protected GiveBuffEffect giveBuffEffect;
   
-  public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState) {
-    super(environment, spawnLocation);
+  public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState, Integer id) {
+    super(environment, spawnLocation, id);
     giveBuffEffect = new GiveBuffEffect(null, effectState);
     setCollisionEffect(giveBuffEffect);
   }  

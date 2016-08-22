@@ -24,10 +24,10 @@ public class Pistol extends Weapon{
     private final double WIDTH = 20;
     private final double HEIGHT = 7;
 
-    public Pistol(GameObject owner) {
+    public Pistol(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

@@ -62,10 +62,10 @@ public class Spawner {
         int itemOrWeapon = random.nextInt(2);
         if (itemOrWeapon == 0) {
             System.out.println("Weapon spawned");
-            spawnWeapon(currentSpawnLocation, -1);
+            spawnWeapon(currentSpawnLocation, -1, -1);
         } else {
             System.out.println("Item spawned");
-            spawnItem(currentSpawnLocation, -1);
+            spawnItem(currentSpawnLocation, -1, -1);
         }
     }
 
@@ -78,7 +78,7 @@ public class Spawner {
         return true;
     }
 
-    public void spawnWeapon(SpawnLocation spawnLocation, int weaponIndex) {
+    public void spawnWeapon(SpawnLocation spawnLocation, int weaponIndex, Integer id) {
         double X = spawnLocation.getX();
         double Y = spawnLocation.getY();
         if (weaponIndex < 0) {
@@ -87,17 +87,17 @@ public class Spawner {
         spawnLocation.setTypeNumber(weaponIndex);
         spawnLocation.setType("weapon");
         Class<Weapon> weaponClass = weapons[weaponIndex];
+        WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation, id);
         if (MadBalls.isHost()) {
-            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
+            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
         }
-        WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation);
 
 
         System.out.print(weaponClass);
         System.out.println(newItem.getID());
     }
 
-    public void spawnItem(SpawnLocation spawnLocation, int itemIndex) {
+    public void spawnItem(SpawnLocation spawnLocation, int itemIndex, Integer id) {
         double X = spawnLocation.getX();
         double Y = spawnLocation.getY();
         if (itemIndex < 0) {
@@ -106,16 +106,17 @@ public class Spawner {
         spawnLocation.setTypeNumber(itemIndex);
         spawnLocation.setType("item");
         Class<Item> itemClass = boostItems[itemIndex];
-        if (MadBalls.isHost()) {
-            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
-        }
         try {
-            Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class).newInstance(environment, spawnLocation);
+            Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class, Integer.class).newInstance(environment, spawnLocation, id);
             System.out.print(itemClass);
             System.out.println(newItem.getID());
+            if (MadBalls.isHost()) {
+                MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
+            }
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
         }
+
 
     }
 }

@@ -11,8 +11,8 @@ import madballs.buffState.PowerUp;
 import madballs.map.SpawnLocation;
 
 public class PlasmaAmmo extends BuffItem{
-    public PlasmaAmmo(Environment environment, SpawnLocation spawnLocation) {
-        super(environment, spawnLocation, new PowerUp(null, 5, 2));
+    public PlasmaAmmo(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new PowerUp(null, 5, 2), id);
         giveBuffEffect.setSoundFX("plasma");
     }
     

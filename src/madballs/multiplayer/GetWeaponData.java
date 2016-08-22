@@ -10,21 +10,27 @@ package madballs.multiplayer;
  * @author caval
  */
 public class GetWeaponData extends Data{
-    private int ballIndex;
+    private Integer ballID;
     private String weaponClassName;
+    private Integer weaponID;
 
-    public int getBallIndex() {
-        return ballIndex;
+    public Integer getBallID() {
+        return ballID;
     }
 
     public String getWeaponClassName() {
         return weaponClassName;
     }
 
-    public GetWeaponData(int ballIndex, String weaponClassName) {
+    public Integer getWeaponID() {
+        return weaponID;
+    }
+
+    public GetWeaponData(Integer ballID, String weaponClassName, Integer weaponID) {
         super("get_weapon");
-        this.ballIndex = ballIndex;
+        this.ballID = ballID;
         this.weaponClassName = weaponClassName;
+        this.weaponID = weaponID;
     }
     
 }

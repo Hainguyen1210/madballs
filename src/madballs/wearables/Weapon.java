@@ -138,8 +138,8 @@ public abstract class Weapon extends GameObject {
         this.projectileMoveBehaviour = projectileMoveBehaviour;
     }
 
-    public Weapon(GameObject owner, double x, double y) {
-        super(owner, x, y, true);
+    public Weapon(GameObject owner, double x, double y, Integer id) {
+        super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
     }
 //    public Weapon(Environment environment, double x, double y) {
@@ -187,22 +187,22 @@ public abstract class Weapon extends GameObject {
         return fireSoundFX;
     }
 
-    public void forceFire(){
+    public void forceFire(Integer projectileID){
         if (fireSoundFX != null) {
             SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 600*scope, 600*scope);
         }
-        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+        Projectile projectile = new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName, projectileID);
+        if (MadBalls.isHost()){
+            MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), -1));
+        }
         checkAmmo();
     }
     
     public void attack(long now){
+        if (!MadBalls.isHost()) return;
         if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
-            if (MadBalls.isHost()){
-                if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-                MadBalls.getMultiplayerHandler().sendData(new FireData(getID()));
-                forceFire();
-                setLastShotTime(now);
-            }
+            forceFire(-1);
+            setLastShotTime(now);
         }
     }
 
@@ -210,8 +210,8 @@ public abstract class Weapon extends GameObject {
         if (getAmmo() == 0){
 //            ((Ball)getOwner()).setWeapon(Pistol.class);
             if (MadBalls.isHost()){
-                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
-                ((Ball)getOwner()).setWeapon(Pistol.class);
+                ((Ball)getOwner()).setWeapon(Pistol.class, -1);
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName(), ((Ball)getOwner()).getWeapon().getID()));
             }
         }
         return getAmmo() == 0;

@@ -188,7 +188,7 @@ public class Environment {
     
     public void setDisplay(Group display){
         this.display = display;
-        ground = new Ground(this, 0, 0);
+        ground = new Ground(this, 0, 0, -1);
     }
 
     public void loadMap(Map map) {
@@ -213,10 +213,10 @@ public class Environment {
                     currentBoxSizeRow += boxSize;
                     // render last row right away
                     if (row == map.getNumRows()-1
-                            ) new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize);
+                            ) new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize, -1);
                 } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("x")){
                     if (isStartedRow){
-                        new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize); //end point
+                        new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize, -1); //end point
                         System.out.print("#");
                         currentBoxSizeRow = 0;
                         isStartedRow = false;
@@ -235,7 +235,7 @@ public class Environment {
                     currentBoxSizeCol += boxSize;
                 } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("+")){
                     if (isStartedCol){
-                        new Obstacle(this, locationColX, locationColY, boxSize, currentBoxSizeCol); //end point
+                        new Obstacle(this, locationColX, locationColY, boxSize, currentBoxSizeCol, -1); //end point
                         currentBoxSizeCol = 0;
                         isStartedCol = false;
                     }
@@ -255,12 +255,15 @@ public class Environment {
      * add new obj to the environment
      * @param obj 
      */
-    public void registerGameObj(GameObject obj, boolean shouldAddDisplay){
-        Integer newID = new Integer(currentObjID++);
-        obj.setID(newID);
-        gameObjects.put(newID++, obj);
+    public void registerGameObj(GameObject obj, boolean shouldAddDisplay, Integer id){
+        if (id == -1){
+            id = currentObjID;
+        }
+        obj.setID(id);
+        gameObjects.put(id, obj);
 //        System.out.println(getObjectIndex(obj));
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
+        currentObjID = id + 1;
 //        System.out.println("z" + obj.getDisplay().getTranslateZ());
     }
     

@@ -13,10 +13,10 @@ public class Bazooka extends Weapon {
     private final double WIDTH = 60;
     private final double HEIGHT = 15;
 
-    public Bazooka(GameObject owner) {
+    public Bazooka(GameObject owner, Integer id) {
         super(owner,
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
 
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

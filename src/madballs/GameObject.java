@@ -75,7 +75,7 @@ public abstract class GameObject {
 //        return environment.getObjectIndex(this);
 //    }
     
-    public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
+    public GameObject(Environment environment, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("1" + this.getClass());
         stateLoader = new StateLoader(this);
         translateX.set(x);
@@ -87,7 +87,7 @@ public abstract class GameObject {
 
         this.environment = environment;
 
-        if (isSettingDisplay) setDisplay();
+        if (isSettingDisplay) setDisplay(id);
     }
     
     /**
@@ -96,7 +96,7 @@ public abstract class GameObject {
      * @param x the varied X coordinate compared to the owner (child's X = owner's X + x)
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
-    public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
+    public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
         owner.child = this;
@@ -111,7 +111,7 @@ public abstract class GameObject {
         rotation.angleProperty().bind(owner.rotation.angleProperty());
         environment = owner.getEnvironment();
         
-        if (isSettingDisplay) setDisplay();
+        if (isSettingDisplay) setDisplay(id);
     }
     
     public void setOwner(GameObject newOwner, double x, double y){
@@ -435,7 +435,7 @@ public abstract class GameObject {
     /**
      * put all the display component inside the display HBox
      */
-    public void setDisplay(){
+    public void setDisplay(Integer id){
         display = new Group();
         animationG = new Group();
         statusG = new Group();
@@ -468,7 +468,7 @@ public abstract class GameObject {
           }
         });
         hitBox.setOpacity(1);
-        environment.registerGameObj(this, true);
+        environment.registerGameObj(this, true, id);
     }
 
     public void configImageView(double translateX, double translateY, double height, double width){
@@ -492,20 +492,20 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-        System.out.println("remove " + getClass() + getID());
+//        System.out.println("remove " + getClass() + getID());
         if (dieSoundFX != null) {
             SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
         }
         isDead = true;
-        if (owner != null) {
-            owner.child = null;
-        }
+//        if (owner != null) {
+//            owner.child = null;
+//        }
         getEnvironment().removeGameObj(this);
     }
     
     public void die(){
         setDead();
-        if (child != null) {
+        if (child != null && !child.isDead()) {
             child.die();
         }
 //        if (MadBalls.isHost()){
@@ -535,15 +535,15 @@ public abstract class GameObject {
         if (MadBalls.isHost()) {
             updateRelevancy();
         }
-        else {
-            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
-        }
+//        else {
+//            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
+//        }
         stateLoader.update(now);
     }
 
     private void updateRelevancy(){
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
-            player.checkRelevancy(this, 100, 100);
+            player.checkRelevancy(this, 1000, 1000);
         }
     }
     

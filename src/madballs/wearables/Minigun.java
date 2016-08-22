@@ -23,10 +23,10 @@ public class Minigun extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 15;
 
-    public Minigun(GameObject owner) {
+    public Minigun(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));

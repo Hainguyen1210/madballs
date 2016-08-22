@@ -21,8 +21,8 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (MadBalls.isHost()){
-            MadBalls.getMultiplayerHandler().sendData(new SpawnData("explosion", new double[]{target.getTranslateX(), target.getTranslateY(), radius, damage}));
-            new Explosion(target.getEnvironment(), target.getTranslateX(), target.getTranslateY(), radius, damage);
+            Explosion explosion = new Explosion(target.getEnvironment(), target.getTranslateX(), target.getTranslateY(), radius, damage, -1);
+            MadBalls.getMultiplayerHandler().sendData(new SpawnData("explosion", new double[]{target.getTranslateX(), target.getTranslateY(), radius, damage}, explosion.getID()));
         }
     }
 

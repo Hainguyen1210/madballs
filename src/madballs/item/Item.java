@@ -52,8 +52,8 @@ public abstract class Item extends GameObject{
     this.spawnLocation = spawnLocation;
   }
 
-  public Item(Environment environment, SpawnLocation spawnLocation) {
-      super(environment, spawnLocation.getX(), spawnLocation.getY(), true);
+  public Item(Environment environment, SpawnLocation spawnLocation, Integer id) {
+      super(environment, spawnLocation.getX(), spawnLocation.getY(), true, id);
     setSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
