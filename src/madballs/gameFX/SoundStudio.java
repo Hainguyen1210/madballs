@@ -32,7 +32,7 @@ public class SoundStudio {
     }
 
     private void loadSound(){
-        for (String name : new String[]{"footstep2", "nutfall", "pistol", "awp", "penetrate", "die1", "speedUp", "plasma"}){
+        for (String name : new String[]{"footstep2", "nutfall", "pistol", "awp", "penetrate", "die1", "speedUp", "plasma", "uzi", "minigun", "shotgun", "explosion", "bazooka", "reload"}){
             AudioClip audioClip = new AudioClip(new File("assets/sound/" + name +".mp3").toURI().toString());
             audioClipMap.put(name, audioClip);
 //            MediaHandler mediaHandler = new MediaHandler(new Media(new File("assets/sound/" + name +".mp3").toURI().toString()));
