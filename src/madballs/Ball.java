@@ -11,10 +11,10 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.layout.HBox;
 import javafx.scene.shape.Circle;
+import static javax.swing.text.html.HTML.Tag.HEAD;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
@@ -23,8 +23,9 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
-import madballs.wearables.*;
-
+import madballs.wearables.Minigun;
+import madballs.wearables.Uzi;
+import madballs.wearables.Weapon;
 /**
  *
  * @author Caval
@@ -73,7 +74,7 @@ public class Ball extends GameObject{
         setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
-        
+  
         setWeapon(Minigun.class);
     }
     

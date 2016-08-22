@@ -40,6 +40,7 @@ public class Uzi extends Weapon{
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
         
+        setFireSoundFX("uzi");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }

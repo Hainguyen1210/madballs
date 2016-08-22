@@ -187,7 +187,6 @@ public abstract class Weapon extends GameObject {
     }
 
     public void forceFire(){
-
         if (fireSoundFX != null) {
             SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 600*scope, 600*scope);
         }
