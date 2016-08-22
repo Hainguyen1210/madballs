@@ -275,8 +275,10 @@ public class Environment {
     public GameObject resurrectGameObj(Integer id){
         synchronized (gameObjects){
             GameObject obj = deadGameObjects.get(id);
-            gameObjects.put(id, obj);
-            deadGameObjects.remove(id);
+            if (obj != null){
+                gameObjects.put(id, obj);
+                deadGameObjects.remove(id);
+            }
             return obj;
         }
     }
