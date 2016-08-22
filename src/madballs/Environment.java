@@ -25,7 +25,7 @@ import madballs.player.Player;
  * @author Caval
  */
 public class Environment {
-    private java.util.Map<Integer, GameObject> gameObjects;
+    private java.util.Map<Integer, GameObject> gameObjects, deadGameObjects;
     private int currentObjID = 0;
     private LongProperty lastUpdateTime = new SimpleLongProperty(0);
     private Spawner itemSpawner;
@@ -108,6 +108,7 @@ public class Environment {
 //                System.out.println("dead" + gameObjects.containsKey(obj.getID()));
 //                System.out.println(currentObjID);
 //                System.out.println(gameObjects.size());
+                deadGameObjects.put(obj.getID(), obj);
                 gameObjects.remove(obj.getID());
 //                System.out.println(gameObjects.size());
             }
@@ -182,6 +183,7 @@ public class Environment {
     public Environment(){
         this.itemSpawner = new Spawner(this);
         gameObjects = new WeakHashMap<>();
+        deadGameObjects = new WeakHashMap<>();
     }
     
     public void setDisplay(Group display){
@@ -268,5 +270,12 @@ public class Environment {
      */
     public void removeGameObj(GameObject obj){
         display.getChildren().remove(obj.getDisplay());
+    }
+
+    public GameObject resurrectGameObj(Integer id){
+        GameObject obj = deadGameObjects.get(id);
+        gameObjects.put(id, obj);
+        deadGameObjects.remove(id);
+        return obj;
     }
 }

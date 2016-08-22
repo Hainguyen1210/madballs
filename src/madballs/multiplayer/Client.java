@@ -89,26 +89,33 @@ public class Client extends MultiplayerHandler{
 
             }
             else if (data.getType().equals("state")){
-                try {
-                    StateData stateData = (StateData)data;
-                    Integer objID = stateData.getState().getObjID();
-                    StateLoader stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
+                StateData stateData = (StateData)data;
+                Integer objID = stateData.getState().getObjID();
+                if (objID < MadBalls.getMainEnvironment().getCurrentObjID()){
+                    StateLoader stateLoader;
+                    try{
+                        stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
+                    }
+                    catch (NullPointerException ex){
+                        stateLoader = MadBalls.getMainEnvironment().resurrectGameObj(objID).getStateLoader();
+
+                    }
                     stateLoader.addServerState(stateData.getState());
                 }
-                catch (NullPointerException ex){
-//                    Service<Void> service = new Service<Void>() {
-//                        @Override
-//                        protected Task<Void> createTask() {
-//                            return new Task<Void>() {
-//                                @Override
-//                                protected Void call() throws Exception {
-//                                    handleData(data);
-//                                    return null;
-//                                }
-//                            };
-//                        }
-//                    };
-//                    service.start();
+                else {
+                    Service<Void> service = new Service<Void>() {
+                        @Override
+                        protected Task<Void> createTask() {
+                            return new Task<Void>() {
+                                @Override
+                                protected Void call() throws Exception {
+                                    handleData(data);
+                                    return null;
+                                }
+                            };
+                        }
+                    };
+                    service.start();
                 }
                 
 
