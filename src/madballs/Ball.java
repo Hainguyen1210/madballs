@@ -24,6 +24,7 @@ import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Minigun;
+import madballs.wearables.Pistol;
 import madballs.wearables.Uzi;
 import madballs.wearables.Weapon;
 /**
@@ -75,7 +76,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
   
-        setWeapon(Minigun.class);
+        setWeapon(Pistol.class);
     }
     
     public Weapon getWeapon() {

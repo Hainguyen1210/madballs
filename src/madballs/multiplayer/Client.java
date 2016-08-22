@@ -38,7 +38,7 @@ public class Client extends MultiplayerHandler{
                         try {
                             // connect socket
 //                            System.out.println("why");
-                            Socket socket = new Socket("127.0.0.1", 8099);
+                            Socket socket = new Socket("10.247.200.72", 8099);
                             setLocalPlayer(new Player(socket, true));
                                     
                                 // maintain the socket connection
@@ -96,19 +96,19 @@ public class Client extends MultiplayerHandler{
                     stateLoader.addServerState(stateData.getState());
                 }
                 catch (NullPointerException ex){
-                    Service<Void> service = new Service<Void>() {
-                        @Override
-                        protected Task<Void> createTask() {
-                            return new Task<Void>() {
-                                @Override
-                                protected Void call() throws Exception {
-                                    handleData(data);
-                                    return null;
-                                }
-                            };
-                        }
-                    };
-                    service.start();
+//                    Service<Void> service = new Service<Void>() {
+//                        @Override
+//                        protected Task<Void> createTask() {
+//                            return new Task<Void>() {
+//                                @Override
+//                                protected Void call() throws Exception {
+//                                    handleData(data);
+//                                    return null;
+//                                }
+//                            };
+//                        }
+//                    };
+//                    service.start();
                 }
                 
 
@@ -130,7 +130,12 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        ((Weapon)MadBalls.getMainEnvironment().getObject(((FireData)data).getWeaponIndex())).forceFire();
+                        try {
+                            ((Weapon)MadBalls.getMainEnvironment().getObject(((FireData)data).getWeaponIndex())).forceFire();
+                        }
+                        catch(NullPointerException exception){
+                            MadBalls.getMainEnvironment().setCurrentObjID(MadBalls.getMainEnvironment().getCurrentObjID()+1);
+                        }
                     }
                 });
             }

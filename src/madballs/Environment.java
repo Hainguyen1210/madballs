@@ -66,6 +66,14 @@ public class Environment {
     public Ground getGround() {
         return ground;
     }
+
+    public int getCurrentObjID() {
+        return currentObjID;
+    }
+    
+    public void setCurrentObjID(Integer id){
+        this.currentObjID = id;
+    }
     
     final AnimationTimer animation = new AnimationTimer() {
         @Override

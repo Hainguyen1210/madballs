@@ -492,7 +492,7 @@ public abstract class GameObject {
     }
     
     public void setDead(){
-//        System.out.println("remove " + getClass() + getID());
+        System.out.println("remove " + getClass() + getID());
         if (dieSoundFX != null) {
             SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
         }

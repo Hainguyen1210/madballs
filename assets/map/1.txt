@@ -1,7 +1,7 @@
 preset: 30 30 50 50 50 (MapSizeX--MapSizeY--boxLocationX--boxLocationY--boxSize)
 xxxxxxxxxx.xxxxxxxxxx.xxxxxxxxxx
 +_________.__+_______.__+______+
-+_____1_ss._s+____2__.______s__+
++_____1_ss._s+_______._2____s__+
 +xxxxxx_ss.__+_______.__s______+
 +_________.__+_____+_.__s______+
 +____xxxxx.__+____+__._________+
