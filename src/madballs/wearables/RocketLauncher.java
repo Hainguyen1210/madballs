@@ -30,7 +30,7 @@ public class RocketLauncher extends Weapon {
         setProjectileHitBoxSize(20);
         setProjectileColor(Paint.valueOf("red"));
 
-//        setFireSoundFX("pistol");
+        setFireSoundFX("bazooka");
         setProjectileCollisionEffect(new NullEffect(null));
         setProjectileCollisionBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 100, getDamage()));
     }

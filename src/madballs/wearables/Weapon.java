@@ -22,6 +22,7 @@ import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.FireData;
+import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 
 /**
@@ -207,11 +208,11 @@ public abstract class Weapon extends GameObject {
 
     public boolean checkAmmo(){
         if (getAmmo() == 0){
-            ((Ball)getOwner()).setWeapon(Pistol.class);
-//            if (MadBalls.isHost()){
-//                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
-//                ((Ball)getOwner()).setWeapon(Pistol.class);
-//            }
+//            ((Ball)getOwner()).setWeapon(Pistol.class);
+            if (MadBalls.isHost()){
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
+                ((Ball)getOwner()).setWeapon(Pistol.class);
+            }
         }
         return getAmmo() == 0;
     }

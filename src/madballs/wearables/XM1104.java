@@ -37,6 +37,8 @@ public class XM1104 extends Weapon {
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
 
+        setFireSoundFX("shotgun");
+
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
