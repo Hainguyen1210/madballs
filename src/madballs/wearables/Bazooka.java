@@ -9,11 +9,11 @@ import madballs.collision.*;
 /**
  * Created by caval on 16/08/2016.
  */
-public class RocketLauncher extends Weapon {
+public class Bazooka extends Weapon {
     private final double WIDTH = 60;
     private final double HEIGHT = 15;
 
-    public RocketLauncher(GameObject owner) {
+    public Bazooka(GameObject owner) {
         super(owner,
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
@@ -23,7 +23,7 @@ public class RocketLauncher extends Weapon {
 
         setScope(2.5);
         setDamage(200);
-        setAmmo(5);
+        setAmmo(2);
         setFireRate(0.25);
         setRange(2000);
         setProjectileSpeed(400);

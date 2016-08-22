@@ -15,7 +15,6 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
 import madballs.MadBalls;
-import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.SpawnData;
 import madballs.wearables.*;
@@ -35,7 +34,7 @@ public class Spawner {
 
     public Spawner(Environment environment) {
         this.environment = environment;
-        weapons = new Class[]{Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Pistol.class, RocketLauncher.class, XM1104.class};
+        weapons = new Class[]{Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Pistol.class, Bazooka.class, XM1104.class};
 //        boostItems = new Class[]{DivinePotion.class};
         boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
     }
