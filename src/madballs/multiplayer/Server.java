@@ -176,14 +176,14 @@ public class Server extends MultiplayerHandler{
     public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
-//                if (data instanceof StateData){
+                if (data instanceof StateData){
 //                    if (((StateData)data).getState().isDead()){
 //                        System.out.println("dead" + ((StateData)data).getState().getObjID());
 //                    }
-//                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
-////                        continue;
-//                    }
-//                }
+                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
+                        continue;
+                    }
+                }
                 player.sendData(data);
             }
         }

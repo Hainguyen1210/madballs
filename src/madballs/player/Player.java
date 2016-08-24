@@ -112,9 +112,8 @@ public class Player {
     public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
         double xDiff = Math.abs(x - ball.getTranslateX());
         double yDiff = Math.abs(y - ball.getTranslateY());
-        SubScene animationScene = MadBalls.getAnimationScene();
         double scale = SceneManager.getInstance().getScale();
-        return  (xDiff < animationScene.getWidth()/2/scale + varianceX && yDiff < animationScene.getHeight()/2/scale + varianceY);
+        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
     }
 
     public Player(Socket socket, boolean isLocal){
