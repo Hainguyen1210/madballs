@@ -6,16 +6,26 @@
 package madballs;
 
 import javafx.application.Application;
+import javafx.embed.swing.SwingFXUtils;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
+import javafx.scene.layout.*;
 import javafx.stage.Stage;
 import madballs.gameFX.SoundStudio;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
 import madballs.multiplayer.MultiplayerHandler;
 import madballs.multiplayer.Server;
+
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.IOException;
 
 /**
  *
@@ -28,6 +38,7 @@ public class MadBalls extends Application {
     private static boolean isGameOver = false;
 
     private static Scene mainScene;
+    private static Map currentMap;
     private static SubScene animationScene;
 
     public static Scene getMainScene() {
@@ -64,13 +75,13 @@ public class MadBalls extends Application {
     
     @Override
     public void start(Stage primaryStage) {
-
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
 
+//        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
+        Map.searchFiles();
 
-        
         navigation = new Navigation();
         Group root = new Group();
         animationScene = new SubScene(root, 1280, 720);
@@ -83,19 +94,20 @@ public class MadBalls extends Application {
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
 //        Client.initClient();
-        
-        
+
+
         boolean isHost = navigation.getConfirmation("", "Start game", "Do you want to host?");
         if (isHost){
             multiplayerHandler = new Server();
-            Map map = new Map(-1);
-            mainEnvironment.loadMap(map);
+            currentMap = new Map(-1);
+            mainEnvironment.loadMap(currentMap);
+            root.getChildren().add(new ImageView(ImageGenerator.getInstance().getImage("map" + currentMap.getMapNumber())));
         }
         else {
             multiplayerHandler = new Client();
         }
         multiplayerHandler.init();
-        
+
         primaryStage.setTitle("MAD BALL");
         primaryStage.setScene(mainScene);
         primaryStage.show();

@@ -456,6 +456,7 @@ public abstract class GameObject {
 //            child.getTransforms().add(rotation);
 //        }
         setDisplayComponents();
+        imageView.setSmooth(true); imageView.setCache(true); //try these
         animationG.getChildren().addAll(hitBox, imageView);
         display.getChildren().addAll(animationG, statusG);
         getDisplay().setOnMouseEntered(new EventHandler<MouseEvent>() {

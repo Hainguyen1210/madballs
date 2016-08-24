@@ -5,17 +5,27 @@
  */
 package madballs.map;
 
+import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javafx.embed.swing.SwingFXUtils;
+import javafx.scene.Group;
+import javafx.scene.Scene;
+import javafx.scene.SnapshotParameters;
 import javafx.scene.image.Image;
+import javafx.scene.image.WritableImage;
 import madballs.Common;
 import madballs.ImageGenerator;
+import madballs.Obstacle;
+
+import javax.imageio.ImageIO;
 
 /**
  *
@@ -32,7 +42,8 @@ public class Map {
     private String [][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
-    private final static String[] MAP_FILES = {"1.txt", "2.txt"};
+//    private final static String[] MAP_FILES = {"1.txt", "2.txt"};
+    private final static ArrayList<String> MAP_FILES = new ArrayList<>();
     private Random random = new Random();
     private int mapNumber = -1;
 
@@ -47,6 +58,26 @@ public class Map {
     public int getMapNumber(){
         return mapNumber;
     }
+
+    public static ArrayList<String> getMapFiles() {
+        return MAP_FILES;
+    }
+
+    public static void searchFiles(){
+
+        System.out.println("Reading map from assets/map:");
+        File folder = new File("assets/map/");
+        File[] listOfFiles = folder.listFiles();
+        for (int i = 0; i < listOfFiles.length; i++) {
+            File file = listOfFiles[i];
+            if (file.isFile() && file.getName().endsWith(".txt")) {
+                MAP_FILES.add(file.getName());
+            }
+            System.out.println(file.getName());
+        }
+        System.out.println("Read all files from assets/map");
+    }
+
 
     public Image getObstacleImg() {
         return obstacleImg;
@@ -71,10 +102,10 @@ public class Map {
       try {
         System.out.print("start reading file|");
         if (mapNumber == -1){
-            mapNumber = random.nextInt(MAP_FILES.length);
+            mapNumber = random.nextInt(MAP_FILES.size());
         }
         System.out.print("Choose Map number " + mapNumber + " |");
-        Scanner mapFile = new Scanner(new File("assets/map/" + MAP_FILES[mapNumber]));
+        Scanner mapFile = new Scanner(new File("assets/map/" + MAP_FILES.get(mapNumber)));
         System.out.print("Map found.|");
         int counter = 0;
         System.out.println("Analyzing Map.|");
