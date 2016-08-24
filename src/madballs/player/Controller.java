@@ -6,8 +6,10 @@
 package madballs.player;
 
 import javafx.scene.input.KeyCode;
+import madballs.MadBalls;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
+import madballs.wearables.Weapon;
 
 /**
  *
@@ -15,12 +17,35 @@ import madballs.moveBehaviour.StraightMove;
  */
 public class Controller {
     private Player player;
-    
+    private double sceneWidth, sceneHeight;
+
+    public double getSceneWidth() {
+        return sceneWidth;
+    }
+
+    public void setSceneWidth(double sceneWidth) {
+        this.sceneWidth = sceneWidth;
+    }
+
+    public double getSceneHeight() {
+        return sceneHeight;
+    }
+
+    public void setSceneHeight(double sceneHeight) {
+        this.sceneHeight = sceneHeight;
+    }
+
     public Controller(Player player){
         this.player = player;
     }
     
     public void handleKey(MultiplePressedKeysEventHandler.MultiKeyEvent ke){
+        if (ke.isPressed(KeyCode.I) && ke.isPressed(KeyCode.O) && ke.isPressed(KeyCode.P)) {
+            if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                MadBalls.getMultiplayerHandler().prepareNewGame();
+            }
+        }
+
         StraightMove ballMoveBehaviour = (StraightMove) player.getBall().getMoveBehaviour();
 //                try {
         if (!((ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) && (ke.isPressed(KeyCode.RIGHT) || ke.isPressed(KeyCode.D)))) {
@@ -57,11 +82,18 @@ public class Controller {
     }
     
     public void handleMouse(MouseKeyEventHandler.MouseKeyEvent event){
+        Weapon playerWeapon = player.getBall().getWeapon();
         RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
 //        System.out.println("ahihi");
 //        System.out.println(player.getBall().getWeapon().getClass());
-        weaponRotateBehaviour.setTargetX(event.getMouseX());
-        weaponRotateBehaviour.setTargetY(event.getMouseY());
+//        weaponRotateBehaviour.setTargetX(event.getMouseX());
+//        weaponRotateBehaviour.setTargetY(event.getMouseY());
+        double scale = event.getScale();
+        double yDiff = event.getMouseY() - sceneHeight/2 - playerWeapon.getOwnerDiffY()*scale;
+        double xDiff = event.getMouseX() - sceneWidth/2 - playerWeapon.getOwnerDiffX()*scale;
+        double newDirection = Math.atan2(yDiff, xDiff);
+//        System.out.println(Math.toDegrees(newDirection));
+        weaponRotateBehaviour.setNewDirection(newDirection);
         weaponRotateBehaviour.setMousePressed(event.isPressed());
     }
 }

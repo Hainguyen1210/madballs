@@ -14,18 +14,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
+import javafx.scene.control.Label;
+import javafx.scene.text.Font;
 import madballs.*;
-import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
+import madballs.scenes.SceneManager;
 
 /**
  *
  * @author Caval
  */
 public class Player {
+    private String name;
     private Ball ball;
     private Controller controller;
     private Socket socket;
@@ -34,9 +39,17 @@ public class Player {
     private boolean isLocal;
     private boolean isReady;
     private int playerNum;
-    private int teamNum;
+    private IntegerProperty teamNum = new SimpleIntegerProperty();
     private SpawnLocation spawnLocation;
     private ArrayList<Integer> relevantObjIDs = new ArrayList<>();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public ArrayList<Integer> getRelevantObjIDs() {
         return relevantObjIDs;
@@ -108,6 +121,10 @@ public class Player {
         controller = new Controller(this);
         this.isLocal = isLocal;
         this.socket = socket;
+        setSocket(socket);
+    }
+
+    public void setSocket(Socket socket){
         if (socket != null){
             try {
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -121,8 +138,14 @@ public class Player {
     public void generateBall(Environment environment, Integer id){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id);
         if (isLocal) {
+            Label nameLabel = new Label(name);
+            nameLabel.setFont(new Font(10));
+            nameLabel.setTranslateY(-55);
+            ball.getStatusG().getChildren().add(nameLabel);
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);
+            controller.setSceneWidth(MadBalls.getAnimationScene().getWidth());
+            controller.setSceneHeight(MadBalls.getAnimationScene().getHeight());
         }
     }
     
@@ -138,12 +161,16 @@ public class Player {
         this.playerNum = playerNum;
     }
 
-    public int getTeamNum() {
+    public IntegerProperty teamNumProperty() {
         return teamNum;
+    }
+
+    public int getTeamNum() {
+        return teamNum.get();
     }
     
     public void setTeamNum(int teamNum){
-        this.teamNum = teamNum;
+        this.teamNum.set(teamNum);
     }
     
     private final MultiplePressedKeysEventHandler keyHandler = 

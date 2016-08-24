@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package madballs;
+package madballs.scenes;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -24,6 +24,9 @@ import javafx.scene.paint.Paint;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import madballs.Ball;
+import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.buffState.BuffState;
 
 import java.util.HashMap;
@@ -50,6 +53,10 @@ public class SceneManager {
     // zoomOut: the ratio of how much the game elements have been zoomed out compared to its initial size
     private DoubleProperty zoomOut = new SimpleDoubleProperty(1);
     private PerspectiveCamera camera;
+
+    public PerspectiveCamera getCamera() {
+        return camera;
+    }
 
     public Rectangle2D getPrimaryScreenBounds() {
         return primaryScreenBounds;
@@ -110,9 +117,9 @@ public class SceneManager {
         gameInfoDisplay = new FlowPane(hpBar, weaponLabel, buffBar);
         gameInfoDisplay.setAlignment(Pos.CENTER_LEFT);
         gameInfoDisplay.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
-        gameInfoDisplay.setPrefWidth(MadBalls.getMainScene().getWidth());
+        gameInfoDisplay.setPrefWidth(MadBalls.getAnimationScene().getWidth());
         gameInfoDisplay.setPrefHeight(30);
-        gameInfoDisplay.translateYProperty().bind(Bindings.subtract(MadBalls.getMainScene().getHeight(), gameInfoDisplay.heightProperty()));
+        gameInfoDisplay.translateYProperty().bind(Bindings.subtract(MadBalls.getAnimationScene().getHeight(), gameInfoDisplay.heightProperty()));
 //        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
         gameInfoDisplay.setTranslateZ(-1);
 
@@ -122,6 +129,9 @@ public class SceneManager {
     public void bindCamera(GameObject obj){
         System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
         scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts, zoomOut));
+//        scale.bind(Bindings.divide(
+//                Bindings.divide(MadBalls.getAnimationScene().heightProperty(), MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts)
+//                , zoomOut));
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(8000);

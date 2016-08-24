@@ -6,10 +6,10 @@ import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
-import madballs.Environment;
 import madballs.MadBalls;
+import madballs.scenes.SceneManager;
 import madballs.multiplayer.MouseInputData;
- 
+
 /**
  *
  * @author Paul
@@ -19,6 +19,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
     private final BooleanProperty isMousePressed = new SimpleBooleanProperty(false);
     private final DoubleProperty mouseX = new SimpleDoubleProperty();
     private final DoubleProperty mouseY = new SimpleDoubleProperty();
+    private final DoubleProperty scale = new SimpleDoubleProperty();
     private final MouseKeyEvent multiKeyEvent = new MouseKeyEvent();
     private Player player;
      
@@ -30,18 +31,31 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
     }
      
     public void handle(final MouseEvent event) {
-        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), event.getSceneX(), event.getSceneY()));
+//        double scale = SceneManager.getInstance().getScale();
+//        double sceneWidth = MadBalls.getAnimationScene().getWidth();
+//        double sceneHeight = MadBalls.getAnimationScene().getHeight();
+//        double xFromCenter = sceneWidth/2 - event.getSceneX();
+//        double yFromCenter = sceneHeight/2 - event.getSceneY();
+        SceneManager sceneManager = SceneManager.getInstance();
+        scale.set(sceneManager.getScale());
+//        double targetX = event.getSceneX() / sceneWidth * 1280;
+        double targetX = event.getSceneX();
+        double targetY = event.getSceneY();
+//        double targetY = event.getSceneY() / sceneHeight * 720;
+//        double targetX = sceneManager.getCamera().getTranslateX() - xFromCenter/scale;
+//        double targetY = sceneManager.getCamera().getTranslateY() - yFromCenter/scale;
+        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), targetX, targetY, scale.get()));
         if (event.getEventType() == MouseEvent.MOUSE_MOVED){
-            mouseX.set(event.getSceneX());
-            mouseY.set(event.getSceneY());
+            mouseX.set(targetX);
+            mouseY.set(targetY);
         }
         if (event.getEventType() == MouseEvent.MOUSE_PRESSED){
             isMousePressed.set(true);
         }
         if (event.getEventType() == MouseEvent.MOUSE_DRAGGED){
             isMousePressed.set(true);
-            mouseX.set(event.getSceneX());
-            mouseY.set(event.getSceneY());
+            mouseX.set(targetX);
+            mouseY.set(targetY);
         }
         if (event.getEventType() == MouseEvent.MOUSE_RELEASED){
             isMousePressed.set(false);
@@ -66,6 +80,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
         if (data.getEventType().equals("MOUSE_RELEASED")){
             isMousePressed.set(false);
         }
+        scale.set(data.getScale());
         multiKeyEventHandler.handle(multiKeyEvent);
     }
      
@@ -85,5 +100,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
         public double getMouseY(){
             return mouseY.get();
         }
+
+        public double getScale() { return scale.get(); }
     }
 }

@@ -21,7 +21,7 @@ public class GameObjState implements Serializable{
     private double translateY;
     private double oldX, oldY;
     private double velocityX, velocityY;
-    private double targetX, targetY;
+//    private double targetX, targetY;
     private double direction;
     private double oldDirection;
     private double hp;
@@ -41,14 +41,13 @@ public class GameObjState implements Serializable{
     public double getFireRate() {
         return fireRate;
     }
-
-    public double getTargetX() {
-        return targetX;
-    }
-
-    public double getTargetY() {
-        return targetY;
-    }
+    //    public double getTargetX() {
+//        return targetX;
+//    }
+//
+//    public double getTargetY() {
+//        return targetY;
+//    }
 
     public double getSpeed() {
         return speed;
@@ -109,8 +108,8 @@ public class GameObjState implements Serializable{
                 && state.hp == hp
                 && state.isDead == isDead
                 && state.speed == speed
-                && state.targetX == targetX
-                && state.targetY == targetY
+//                && state.targetX == targetX
+//                && state.targetY == targetY
                 && state.damage == damage
                 && state.fireRate == fireRate
                 && state.velocityX == velocityX
@@ -133,8 +132,8 @@ public class GameObjState implements Serializable{
             speed = obj.getMoveBehaviour().getSpeed();
             if (obj.getMoveBehaviour() instanceof RotateBehaviour){
                 RotateBehaviour rotateBehaviour = (RotateBehaviour) obj.getMoveBehaviour();
-                targetX = rotateBehaviour.getTargetX();
-                targetY = rotateBehaviour.getTargetY();
+//                targetX = rotateBehaviour.getTargetX();
+//                targetY = rotateBehaviour.getTargetY();
             }
             else if (obj.getMoveBehaviour() instanceof StraightMove){
                 StraightMove straightMove = (StraightMove)obj.getMoveBehaviour();

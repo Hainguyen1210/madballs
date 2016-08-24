@@ -120,8 +120,9 @@ public class StateLoader {
             MoveBehaviour moveBehaviour = gameObject.getMoveBehaviour();
             if (gameObject.getMoveBehaviour() instanceof RotateBehaviour){
                 RotateBehaviour rotateBehaviour = (RotateBehaviour) moveBehaviour;
-                rotateBehaviour.setTargetX(state.getTargetX());
-                rotateBehaviour.setTargetY(state.getTargetY());
+                rotateBehaviour.setNewDirection(state.getDirection());
+//                rotateBehaviour.setTargetX(state.getTargetX());
+//                rotateBehaviour.setTargetY(state.getTargetY());
             }
             else if (gameObject.getMoveBehaviour() instanceof StraightMove){
                 StraightMove straightMove = (StraightMove)gameObject.getMoveBehaviour();

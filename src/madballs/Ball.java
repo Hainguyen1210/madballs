@@ -23,6 +23,7 @@ import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
 import madballs.multiplayer.GetWeaponData;
+import madballs.scenes.SceneManager;
 import madballs.wearables.*;
 
 /**
@@ -73,8 +74,8 @@ public class Ball extends GameObject{
         setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
-  
-        setWeapon(Pistol.class, -1);
+
+        weapon = new Pistol(this, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
     

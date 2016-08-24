@@ -19,6 +19,7 @@ import javafx.scene.shape.Rectangle;
 import madballs.item.Spawner;
 import madballs.map.Map;
 import madballs.player.Player;
+import madballs.scenes.Navigation;
 
 /**
  *
@@ -75,7 +76,7 @@ public class Environment {
         this.currentObjID = id;
     }
     
-    final AnimationTimer animation = new AnimationTimer() {
+    private final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
             updateIndex++;
@@ -248,7 +249,11 @@ public class Environment {
     
     public void startAnimation(){
         animation.start();
-        MadBalls.getNavigation().showInterupt("", "Game started", "Let's rock and roll!", false);
+//        Navigation.getInstance().showInterupt("", "Game started", "Let's rock and roll!", false);
+    }
+
+    public void stopAnimation(){
+        animation.stop();
     }
     
     /**
@@ -280,8 +285,10 @@ public class Environment {
             GameObject obj = deadGameObjects.get(id);
             if (obj != null){
                 gameObjects.put(id, obj);
+                display.getChildren().add(obj.getDisplay());
                 deadGameObjects.remove(id);
             }
+            System.out.println("resurrect");
             return obj;
         }
     }

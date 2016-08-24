@@ -13,7 +13,11 @@ import javafx.scene.input.MouseEvent;
  */
 public class MouseInputData extends Data{
     private String eventType;
-    private double x, y;
+    private double x, y, scale;
+
+    public double getScale() {
+        return scale;
+    }
 
     public String getEventType() {
         return eventType;
@@ -27,12 +31,13 @@ public class MouseInputData extends Data{
         return y;
     }
 
-    public MouseInputData(String eventType, double x, double y) {
+    public MouseInputData(String eventType, double x, double y, double scale) {
         super("input_mouse");
 //        System.out.println(eventType);
         this.eventType = eventType;
         this.x = x;
         this.y = y;
+        this.scale = scale;
     }
     
 }

@@ -8,7 +8,7 @@ package madballs.buffState;
 import javafx.scene.paint.Paint;
 import madballs.Ball;
 import madballs.MadBalls;
-import madballs.SceneManager;
+import madballs.scenes.SceneManager;
 import madballs.multiplayer.BuffData;
 
 import java.lang.reflect.InvocationTargetException;

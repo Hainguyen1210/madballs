@@ -15,6 +15,10 @@ import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 import madballs.MadBalls;
 import madballs.player.Player;
+import madballs.scenes.Navigation;
+import madballs.scenes.ScenesFactory;
+import madballs.scenes.controller.GameRoomController;
+import madballs.wearables.Pistol;
 
 /**
  *
@@ -24,12 +28,16 @@ public class Server extends MultiplayerHandler{
     private int playerIndex = 0;
     private int numPlayers = 2;
 
+    public int getPlayerIndex() {
+        return playerIndex;
+    }
+
     public Server() {
         super(true);
     }
     
     public void init(){
-        numPlayers = Integer.parseInt(MadBalls.getNavigation().getTextResponse("Start game", "Host game", "Enter number of players", "2"));
+        numPlayers = MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocations().size();
         setService(new Service<Void>() {
             @Override
             protected Task<Void> createTask() {
@@ -40,13 +48,16 @@ public class Server extends MultiplayerHandler{
                         try {
                             listener = new ServerSocket(8099);
                             try {       
-                                setLocalPlayer(new Player(null, true));
-                                getLocalPlayer().setPlayerNum(++playerIndex);
-                                getLocalPlayer().setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(1));
+
+//                                getLocalPlayer().setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(1));
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {
-                                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment(), -1);
+                                        setLocalPlayer(new Player(null, true));
+                                        getPlayers().add(getLocalPlayer());
+                                        getLocalPlayer().setPlayerNum(++playerIndex);
+                                        ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).displayPlayer(getLocalPlayer());
+//                                        getLocalPlayer().generateBall(MadBalls.getMainEnvironment(), -1);
                                         getLocalPlayer().setReady(true);
 //                                        MadBalls.getMainEnvironment().startAnimation();
 
@@ -55,6 +66,9 @@ public class Server extends MultiplayerHandler{
                                 // listen for client over socket
                                 while(true){
                                     try {
+                                        if (playerIndex + 1 == numPlayers){
+                                            return null;
+                                        }
                                         Socket socket = listener.accept();
                                         addNewPlayer(socket);
                                     }
@@ -76,7 +90,7 @@ public class Server extends MultiplayerHandler{
         getService().start();
     }
     
-    
+
     
     
     public void waitAndHandleData(Player player){
@@ -90,9 +104,16 @@ public class Server extends MultiplayerHandler{
                             try {
                                 handleData(player, player.readData());
                             }
-                            catch (Exception ex) {
-//                                System.out.println("12");
-                                Logger.getLogger(MultiplayerHandler.class.getName()).log(Level.SEVERE, null, ex);
+                            catch (NullPointerException ex) {
+                                Platform.runLater(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        player.setTeamNum(-1);
+                                        sendData(new PlayerData(player));
+                                        getPlayers().remove(player);
+                                        ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).updatePlayersPane();
+                                    }
+                                });
                                 return null;
                             }
                         }
@@ -105,16 +126,22 @@ public class Server extends MultiplayerHandler{
     
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
+        handleData(newPlayer, newPlayer.readData());
+        System.out.println(1);
         newPlayer.setPlayerNum(++playerIndex);
-        newPlayer.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(playerIndex));
+//        newPlayer.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(playerIndex));
         sendInfoToNewPlayer(newPlayer);
+        System.out.println(2);
         announceNewPlayer(newPlayer);
+        System.out.println(3);
         getPlayers().add(newPlayer);
+        System.out.println(newPlayer.getName());
         
         Platform.runLater(new Runnable() {
             @Override
             public void run() {
-                newPlayer.generateBall(MadBalls.getMainEnvironment(), -1);
+                ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).displayPlayer(newPlayer);
+//                newPlayer.generateBall(MadBalls.getMainEnvironment(), -1);
             }
         });
         
@@ -123,17 +150,21 @@ public class Server extends MultiplayerHandler{
     
     public void sendInfoToNewPlayer(Player newPlayer){
         newPlayer.sendData(new MapData(MadBalls.getMainEnvironment().getMap().getMapNumber()));
+        System.out.println(4);
         for (Player player : getPlayers()){
             System.out.println("1");
-            newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false, player.getBall().getID()));
+            newPlayer.sendData(new PlayerData(player, false));
+//            newPlayer.sendData(new SpawnData(player.getSpawnLocation(), false, player.getBall().getID()));
         }
     }
     
     public void announceNewPlayer(Player newPlayer){
         try {
             Integer newBallID = MadBalls.getMainEnvironment().getCurrentObjID();
-            sendData(new SpawnData(newPlayer.getSpawnLocation(), false, newBallID));
-            newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation(), true, newBallID));
+            sendData(new PlayerData(newPlayer, false));
+            newPlayer.sendData(new PlayerData(newPlayer, true));
+//            sendData(new SpawnData(newPlayer.getSpawnLocation(), false, newBallID));
+//            newPlayer.sendData(new SpawnData(newPlayer.getSpawnLocation(), true, newBallID));
         }
         catch (Exception ex){
             ex.printStackTrace();
@@ -145,14 +176,14 @@ public class Server extends MultiplayerHandler{
     public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
-                if (data instanceof StateData){
-                    if (((StateData)data).getState().isDead()){
-                        System.out.println("dead" + ((StateData)data).getState().getObjID());
-                    }
-                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
-                        continue;
-                    }
-                }
+//                if (data instanceof StateData){
+//                    if (((StateData)data).getState().isDead()){
+//                        System.out.println("dead" + ((StateData)data).getState().getObjID());
+//                    }
+//                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
+////                        continue;
+//                    }
+//                }
                 player.sendData(data);
             }
         }
@@ -161,23 +192,26 @@ public class Server extends MultiplayerHandler{
     public void handleData(Player currentPlayer, Data data){
         super.handleData(data);
         if (data.getType().equals("ready")){
+            ReadyData readyData = (ReadyData) data;
             currentPlayer.setReady(true);
+            currentPlayer.getController().setSceneWidth(readyData.getSceneWidth());
+            currentPlayer.getController().setSceneHeight(readyData.getSceneHeight());
+            System.out.println(readyData.getSceneWidth());
+            System.out.println(readyData.getSceneHeight());
             System.out.println("index" +playerIndex);
-            if (playerIndex >= numPlayers){
-                for (Player player : getPlayers()){
-                    System.out.println(player.getPlayerNum());
-                    System.out.println(player.isReady());
-                    if (!player.isReady()) return;
-                }
-                System.out.println("start");
-                sendData(new Data("start"));
-                Platform.runLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        MadBalls.getMainEnvironment().startAnimation();
-                    }
-                });
+            for (Player player : getPlayers()){
+                System.out.println(player.getPlayerNum());
+                System.out.println(player.isReady());
+                if (!player.isReady()) return;
             }
+            System.out.println("start");
+            sendData(new Data("start"));
+            Platform.runLater(new Runnable() {
+                @Override
+                public void run() {
+                    MadBalls.getMainEnvironment().startAnimation();
+                }
+            });
         }
         else if (data.getType().equals("input_key")){
             KeyInputData keyInputData = (KeyInputData) data;
@@ -186,6 +220,11 @@ public class Server extends MultiplayerHandler{
         else if (data.getType().equals("input_mouse")){
             MouseInputData mouseInputData = (MouseInputData) data;
             currentPlayer.getMouseHandler().handle(mouseInputData);
+        }
+        else if (data.getType().equals("player")){
+            PlayerData playerData = (PlayerData) data;
+            System.out.println("new player" + playerData.getName());
+            currentPlayer.setName(playerData.getName());
         }
     }
 }

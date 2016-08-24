@@ -8,6 +8,7 @@ package madballs.map;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
@@ -25,12 +26,21 @@ public class Map {
     private int columnWidth;
     private int rowHeight;
     private int obstacleSize;
+    private int numTeams = 0;
     private String [][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
     private final static String[] MAP_FILES = {"2.txt"};
     private Random random = new Random();
     private int mapNumber = -1;
+
+    public int getNumTeams() {
+        return numTeams;
+    }
+
+    public static String[] getMapFiles() {
+        return MAP_FILES;
+    }
 
     public double getWidth() {
         return width;
@@ -54,6 +64,11 @@ public class Map {
         this.mapNumber = mapNumber;
 //        LENGTH = length;
 //        HEIGHT = height;
+        MAP_ARRAY = loadMap();
+    }
+
+    public Map(String mapFileName){
+        this.mapNumber = Arrays.asList(MAP_FILES).indexOf(mapFileName);
         MAP_ARRAY = loadMap();
     }
 
@@ -94,7 +109,9 @@ for (String s : presetString) System.out.println(" " + s);
               if(characterString[j].equals("s")){
                 itemSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "item", 0));
               }else if(Common.isNumeric(characterString[j])) {
-                playerSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "player", Integer.parseInt(characterString[j])));
+                  int teamNum = Integer.parseInt(characterString[j]);
+                  if (teamNum > numTeams) numTeams = teamNum;
+                playerSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "ball", teamNum));
               }
             }
             generatedMap[counter] = characterString;
@@ -133,8 +150,12 @@ for (String s : presetString) System.out.println(" " + s);
     public ArrayList<SpawnLocation> getItemSpawnLocations() {
       return itemSpawnLocations;
     }
-    
-  public int getColumnWidth() {
+
+    public ArrayList<SpawnLocation> getPlayerSpawnLocations() {
+        return playerSpawnLocations;
+    }
+
+    public int getColumnWidth() {
     return columnWidth;
   }
 
