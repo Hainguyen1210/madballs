@@ -39,6 +39,7 @@ public class Minigun extends Weapon{
         setProjectileSpeed(600);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("blue"));
+        setProjectileImage(ImageGenerator.getInstance().getImage("bullet"));
         
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));

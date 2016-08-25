@@ -29,7 +29,6 @@ import madballs.projectiles.Projectile;
  * @author Caval
  */
 public abstract class Weapon extends GameObject {
-    private String projectileImageName;
     private Image projectileImage;
     private double projectileHitBoxSize;
     private Paint projectileColor;
@@ -79,6 +78,16 @@ public abstract class Weapon extends GameObject {
     public Paint getProjectileColor() {
         return projectileColor;
     }
+
+    public void setProjectileImage(Image projectileImage) {
+        this.projectileImage = projectileImage;
+    }
+
+    public Image getProjectileImage() {
+        return projectileImage;
+    }
+
+
 
     public void setProjectileColor(Paint projectileColor) {
         this.projectileColor = projectileColor;
@@ -178,6 +187,7 @@ public abstract class Weapon extends GameObject {
         this.projectileHitBoxSize = size;
     }
 
+
     public void setFireSoundFX(String fireSoundFX) {
         this.fireSoundFX = fireSoundFX;
     }
@@ -189,7 +199,7 @@ public abstract class Weapon extends GameObject {
     public void forceFire(){
 
         if (fireSoundFX != null) SoundStudio.getInstance().playAudio(fireSoundFX);
-        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName);
+        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
         checkAmmo();
     }
     

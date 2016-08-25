@@ -29,6 +29,7 @@ public class RocketLauncher extends Weapon {
         setProjectileSpeed(400);
         setProjectileHitBoxSize(20);
         setProjectileColor(Paint.valueOf("red"));
+        setProjectileImage(ImageGenerator.getInstance().getImage("bullet"));
 
 //        setFireSoundFX("pistol");
         setProjectileCollisionEffect(new NullEffect(null));

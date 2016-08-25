@@ -36,6 +36,7 @@ public class XM1104 extends Weapon {
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
+        setProjectileImage(ImageGenerator.getInstance().getImage("bullet"));
 
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
@@ -45,7 +46,7 @@ public class XM1104 extends Weapon {
     public void forceFire(){
         if (getFireSoundFX() != null) SoundStudio.getInstance().playAudio(getFireSoundFX());
         for (int i = 0; i < 5; i++){
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau");
+            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImage());
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1)));
             if (checkAmmo()){
                 return;

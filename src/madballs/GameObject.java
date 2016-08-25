@@ -256,6 +256,8 @@ public abstract class GameObject {
     public ImageView getImage() {
         return imageView;
     }
+
+
     public void setImageView(ImageView imageView){
         this.imageView = imageView;
     }

@@ -6,6 +6,7 @@
 package madballs.projectiles;
 
 
+import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 import madballs.moveBehaviour.StraightMove;
@@ -18,14 +19,14 @@ import madballs.wearables.Weapon;
 public class Projectile extends GameObject {
     private Weapon sourceWeapon;
 
-    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName) {
+    public Projectile(Weapon sourceWeapon, Shape hitBox, Image image) {
         super(sourceWeapon.getEnvironment(), 0, 0, false);
         
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
-//        setImage(projectImageName);
+        setImage(image);
         setDisplay();
-        
+
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
         double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() / 2 + 5;
         double rotateDirection = Math.toRadians(sourceWeapon.getRotateAngle());
@@ -34,8 +35,12 @@ public class Projectile extends GameObject {
         double realY = realCoordinate[1];
         setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
         setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
-        
-        
+
+
+        getImage().setRotate(sourceWeapon.getRotateAngle());
+        getImage().setFitHeight(hitBox.getLayoutBounds().getHeight()*2);
+        getImage().setFitWidth(hitBox.getLayoutBounds().getWidth()*2);
+
         // set collision characteristics and move behaviour
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());
         setCollisionPassiveBehaviour(sourceWeapon.getProjectileCollisionBehaviour());

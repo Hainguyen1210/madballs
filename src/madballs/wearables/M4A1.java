@@ -35,6 +35,7 @@ public class M4A1 extends Weapon{
         setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("gray"));
+        setProjectileImage(ImageGenerator.getInstance().getImage("bullet"));
         
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
