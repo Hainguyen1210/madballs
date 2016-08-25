@@ -136,11 +136,11 @@ public class Player {
     
     public void generateBall(Environment environment, Integer id){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id);
+        Label nameLabel = new Label(name);
+        nameLabel.setFont(new Font(10));
+        nameLabel.setTranslateY(-55);
+        ball.getStatusG().getChildren().add(nameLabel);
         if (isLocal) {
-            Label nameLabel = new Label(name);
-            nameLabel.setFont(new Font(10));
-            nameLabel.setTranslateY(-55);
-            ball.getStatusG().getChildren().add(nameLabel);
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);
             controller.setSceneWidth(MadBalls.getAnimationScene().getWidth());

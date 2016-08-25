@@ -44,6 +44,9 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
     }
      
     public class MultiKeyEvent {
+        public void clearBuffer(){
+            buffer.clear();
+        }
         public boolean isPressed(final KeyCode key) {
             return buffer.contains(key);
         }

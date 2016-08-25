@@ -285,7 +285,9 @@ public class Environment {
             GameObject obj = deadGameObjects.get(id);
             if (obj != null){
                 gameObjects.put(id, obj);
-                display.getChildren().add(obj.getDisplay());
+                if (!display.getChildren().contains(obj.getDisplay())){
+                    display.getChildren().add(obj.getDisplay());
+                }
                 deadGameObjects.remove(id);
             }
             System.out.println("resurrect");

@@ -104,7 +104,7 @@ public class StateLoader {
 //            gameObject.getDisplay().setVisible(true);
 //        }
         if (state.isDead()){
-//            System.out.println("`");
+//            System.out.println("dead");
             gameObject.setDead();
         }
         gameObject.setHpValue(state.getHp());

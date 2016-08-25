@@ -42,6 +42,7 @@ public class Controller {
     public void handleKey(MultiplePressedKeysEventHandler.MultiKeyEvent ke){
         if (ke.isPressed(KeyCode.I) && ke.isPressed(KeyCode.O) && ke.isPressed(KeyCode.P)) {
             if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                ke.clearBuffer();
                 MadBalls.getMultiplayerHandler().prepareNewGame();
             }
         }

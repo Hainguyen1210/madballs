@@ -149,9 +149,9 @@ public class Client extends MultiplayerHandler{
                         stateLoader.addServerState(stateData.getState());
                     }
                     catch (NullPointerException ex){
-                        if (stateData.getState().isDead()){
-                            return;
-                        }
+//                        if (stateData.getState().isDead()){
+//                            return;
+//                        }
                         Platform.runLater(new Runnable() {
                             @Override
                             public void run() {
