@@ -35,6 +35,7 @@ public class Ak47 extends Weapon{
         setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("orange"));
+        setProjectileImageName("bullet2");
         
         setFireSoundFX("ak47");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

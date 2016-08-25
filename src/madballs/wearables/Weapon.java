@@ -31,7 +31,6 @@ import madballs.projectiles.Projectile;
  */
 public abstract class Weapon extends GameObject {
     private String projectileImageName;
-    private Image projectileImage;
     private double projectileHitBoxSize;
     private Paint projectileColor;
     private String fireSoundFX;
@@ -79,6 +78,14 @@ public abstract class Weapon extends GameObject {
 
     public Paint getProjectileColor() {
         return projectileColor;
+    }
+
+    public String getProjectileImageName() {
+        return projectileImageName;
+    }
+
+    public void setProjectileImageName(String projectileImageName) {
+        this.projectileImageName = projectileImageName;
     }
 
     public void setProjectileColor(Paint projectileColor) {
@@ -178,6 +185,7 @@ public abstract class Weapon extends GameObject {
     final public void setProjectileHitBoxSize(double size) {
         this.projectileHitBoxSize = size;
     }
+
 
     public void setFireSoundFX(String fireSoundFX) {
         this.fireSoundFX = fireSoundFX;

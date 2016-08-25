@@ -35,6 +35,7 @@ public class Awp extends Weapon{
         setProjectileSpeed(1000);
         setProjectileHitBoxSize(5);
         setProjectileColor(Paint.valueOf("yellow"));
+        setProjectileImageName("bullet3");
 
         setFireSoundFX("awp");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

@@ -12,7 +12,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
+import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
@@ -31,6 +34,7 @@ import madballs.wearables.*;
  * @author Caval
  */
 public class Ball extends GameObject{
+    private Image ballImage;
     private Weapon weapon;
     private final int SPEED = 100;
     private BuffState buffState;
@@ -78,7 +82,15 @@ public class Ball extends GameObject{
         weapon = new Pistol(this, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
-    
+
+    public Image getBallImage() {
+        return ballImage;
+    }
+
+    public void setBallImage(Image ballImage) {
+        this.ballImage = ballImage;
+    }
+
     public Weapon getWeapon() {
         return weapon;
     }
@@ -123,6 +135,7 @@ public class Ball extends GameObject{
 //        hpBar.setLayoutY(getTranslateY() - 1);
         
         setHitBox(new Circle(15));
+//        getImage().setEffect(new DropShadow(15, Color.BLACK));
     }
     @Override
     public void updateUnique(long now) {

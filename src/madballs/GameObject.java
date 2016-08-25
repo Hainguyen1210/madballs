@@ -257,6 +257,8 @@ public abstract class GameObject {
     public ImageView getImage() {
         return imageView;
     }
+
+
     public void setImageView(ImageView imageView){
         this.imageView = imageView;
     }
@@ -444,7 +446,7 @@ public abstract class GameObject {
         animationG = new Group();
         statusG = new Group();
         statusG.setVisible(false);
-        statusG.setTranslateZ(1);
+        statusG.setTranslateZ(-1);
         statusG.setTranslateX(-20);
         statusG.setTranslateY(20);
 //        display.setPrefSize(0, 0);
@@ -457,6 +459,7 @@ public abstract class GameObject {
 //            child.getTransforms().add(rotation);
 //        }
         setDisplayComponents();
+        imageView.setSmooth(true); imageView.setCache(true); //try these
         animationG.getChildren().addAll(hitBox, imageView);
         display.getChildren().addAll(animationG, statusG);
         getDisplay().setOnMouseEntered(new EventHandler<MouseEvent>() {
@@ -471,7 +474,8 @@ public abstract class GameObject {
             statusG.setVisible(false);
           }
         });
-        hitBox.setOpacity(1);
+//        hitBox.setVisible(false);
+        hitBox.setOpacity(0);
         hitBox.setCache(true);
         hitBox.setCacheHint(CacheHint.SPEED);
         environment.registerGameObj(this, true, id);

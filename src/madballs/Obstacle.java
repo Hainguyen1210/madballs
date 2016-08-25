@@ -5,10 +5,14 @@
  */
 package madballs;
 
+import javafx.scene.image.Image;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import madballs.collision.InvulnerableBehaviour;
 import madballs.collision.PushBackEffect;
+
+import java.io.File;
 
 /**
  *
@@ -20,7 +24,6 @@ public class Obstacle extends GameObject{
 
     public Obstacle(Environment environment, double x, double y, double length, double height, Integer id) {
         super(environment, x, y, false, id);
-        
         this.length = length;
         this.height = height;
         setDisplay(id);
@@ -35,11 +38,30 @@ public class Obstacle extends GameObject{
 //        rect.setArcWidth(15);
 //        setHitBox(rect);
         setHitBox(new Rectangle(length, height, Paint.valueOf("green")));
+
+//        double boxSize;if (length<height)boxSize=length;else boxSize=height;
+//        Image background = ImageGenerator.getInstance().getImage("obstacle/stripebox");
+//        backgroundPane = new Pane();
+//        backgroundPane.setBackground(
+//            new Background(
+//                new BackgroundImage(
+//                    background,
+//                    BackgroundRepeat.REPEAT,
+//                    BackgroundRepeat.REPEAT,
+//                    BackgroundPosition.DEFAULT,
+//                    BackgroundSize.DEFAULT
+//                )
+//            )
+//        );
+//        backgroundPane.setPrefSize(length, height);
+//        getAnimationG().getChildren().addAll(backgroundPane);
+//        setImage(background);
+//        getImage().setFitWidth(boxSize);getImage().setFitHeight(boxSize);
     }
 
     @Override
     public void updateUnique(long now) {
-        
+
     }
-    
+
 }

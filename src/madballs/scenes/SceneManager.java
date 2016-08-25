@@ -167,7 +167,7 @@ public class SceneManager {
 
     public void displayLabel(String labelName, Paint color, double duration, GameObject target, double delay){
         Label label = new Label(labelName);
-        label.setTranslateZ(100);
+        label.setTranslateZ(-1);
         label.setTextFill(color);
         label.translateXProperty().bind(Bindings.add(target.getTranslateXProperty(), -labelName.length()*4));
         DoubleProperty yDiffProperty = new SimpleDoubleProperty(-20);

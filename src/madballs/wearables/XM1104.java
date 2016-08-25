@@ -38,6 +38,7 @@ public class XM1104 extends Weapon {
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
+        setProjectileImageName("bullet1");
 
         setFireSoundFX("shotgun");
 
@@ -52,7 +53,7 @@ public class XM1104 extends Weapon {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
         }
         for (int i = 0; i < 5; i++){
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau", id);
+            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
             double direction = Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1));
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
             MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), direction));

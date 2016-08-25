@@ -35,6 +35,7 @@ public class M4A1 extends Weapon{
         setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("gray"));
+        setProjectileImageName("bullet2");
         
         setFireSoundFX("m4a1");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

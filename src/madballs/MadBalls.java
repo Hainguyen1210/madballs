@@ -7,13 +7,14 @@ package madballs;
 
 import javafx.application.Application;
 import javafx.application.Platform;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
+import javafx.scene.image.ImageView;
+import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
@@ -81,7 +82,10 @@ public class MadBalls extends Application {
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
 
-//        Client.initClient();
+
+//        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
+        Map.searchFiles();
+
         Group root = new Group();
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
@@ -107,7 +111,7 @@ public class MadBalls extends Application {
             multiplayerHandler.setLocalPlayer(new Player(null, true));
         }
         multiplayerHandler.init();
-        
+
         primaryStage.setTitle("MAD BALL");
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -126,11 +130,13 @@ public class MadBalls extends Application {
         if (mainEnvironment != null) map = new Map(mainEnvironment.getMap().getMapNumber());
         isGameOver = false;
         Group root = new Group();
+        root.getChildren().add(new ImageView(ImageGenerator.getInstance().getImage("map" + map.getMapNumber())));
         animationScene = new SubScene(root, sceneHeight/9*16, sceneHeight, true, SceneAntialiasing.BALANCED);
 
         Group mainRoot = new Group(animationScene);
 
         mainScene = new Scene(mainRoot);
+        mainScene.setFill(Color.BLACK);
         mainScene.getStylesheets().add(MadBalls.class.getResource("scenes/style.css").toExternalForm());
 
         if (shouldCreateEnviroment) mainEnvironment = new Environment();

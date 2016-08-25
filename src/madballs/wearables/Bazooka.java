@@ -29,6 +29,7 @@ public class Bazooka extends Weapon {
         setProjectileSpeed(400);
         setProjectileHitBoxSize(20);
         setProjectileColor(Paint.valueOf("red"));
+        setProjectileImageName("bullet4");
 
         setFireSoundFX("bazooka");
         setProjectileCollisionEffect(new NullEffect(null));

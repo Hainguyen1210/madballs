@@ -39,6 +39,7 @@ public class Minigun extends Weapon{
         setProjectileSpeed(600);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("blue"));
+        setProjectileImageName("bullet2");
         
         setFireSoundFX("minigun");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
@@ -49,7 +50,7 @@ public class Minigun extends Weapon{
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH-10);
-        setHeight(HEIGHT/2);
+        setHeight(HEIGHT/2-5);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("blue")));
         setImage(ImageGenerator.getInstance().getImage("minigun"));
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);

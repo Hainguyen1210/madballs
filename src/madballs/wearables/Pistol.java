@@ -14,13 +14,13 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
+import madballs.projectiles.Projectile;
 
 /**
  *
  * @author Caval
  */
 public class Pistol extends Weapon{
-    private ImageGenerator imageGenerator = ImageGenerator.getInstance();
     private final double WIDTH = 20;
     private final double HEIGHT = 7;
 
@@ -39,6 +39,7 @@ public class Pistol extends Weapon{
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
+        setProjectileImageName("bullet1");
 
         setFireSoundFX("pistol");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));

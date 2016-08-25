@@ -133,13 +133,21 @@ public class Player {
             }
         }
     }
-    
+
     public void generateBall(Environment environment, Integer id){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id);
         Label nameLabel = new Label(name);
         nameLabel.setFont(new Font(10));
         nameLabel.setTranslateY(-55);
         ball.getStatusG().getChildren().add(nameLabel);
+
+        double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
+        ball.setImage(ImageGenerator.getInstance().getImage("ball"+teamNum.get()));
+        ball.getImage().setFitHeight(ballSize);
+        ball.getImage().setFitWidth(ballSize);
+        ball.getImage().setTranslateX(-ballSize/2);
+        ball.getImage().setTranslateY(-ballSize/2);
+
         if (isLocal) {
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);

@@ -14,8 +14,14 @@ public class ImageGenerator {
 
     private Map<String, Image> images = new HashMap<>();
     private String[] imageNames = new String[]
-            {"ak47", "awp", "bazooka", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi"};
-    private Image ak47, awp, bazooka, flameThrower, m4a1, minigun, pistol, shotgun, uzi;
+            {"ak47", "awp", "bazooka", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi",
+                    "bullet1","bullet2","bullet3","bullet4",
+                    "background1", "background0",
+                    "obstacle10", "obstacle11",
+                    "obstacle00", "obstacle01",
+                    "ball1", "ball2", "ball3","ball4","ball5","ball6",
+                    "map0", "map1"
+            };
 
     public static ImageGenerator getInstance(){
         return imageGenerator;
@@ -23,8 +29,8 @@ public class ImageGenerator {
 
     private ImageGenerator(){
         for( String imageName: imageNames){
-            Image gunImage = new Image(new File("assets/img/"+ imageName + ".png").toURI().toString());
-            images.put(imageName, gunImage);
+            Image image = new Image(new File("assets/img/"+ imageName + ".png").toURI().toString());
+            images.put(imageName, image);
         }
     }
 
