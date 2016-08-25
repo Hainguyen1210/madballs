@@ -13,13 +13,17 @@ import java.util.Random;
 import java.util.Scanner;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import javafx.scene.image.Image;
 import madballs.Common;
+import madballs.ImageGenerator;
 
 /**
  *
  * @author Caval
  */
 public class Map {
+    private Image obstacleImg = ImageGenerator.getInstance().getImage("obstacle/plain");
     private double width, height;
     private int numRows;
     private int numColumns;
@@ -53,8 +57,12 @@ public class Map {
     public int getMapNumber(){
         return mapNumber;
     }
-    
-//    public Map(double length, double height, String [][] mapArray){
+
+    public Image getObstacleImg() {
+        return obstacleImg;
+    }
+
+    //    public Map(double length, double height, String [][] mapArray){
 //        LENGTH = length;
 //        HEIGHT = height;
 //        MAP_ARRAY = mapArray;
