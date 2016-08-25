@@ -264,6 +264,7 @@ public class Environment {
         if (id == -1){
             id = currentObjID;
         }
+//        System.out.println("size" + gameObjects.size());
         obj.setID(id);
         gameObjects.put(id, obj);
 //        System.out.println(getObjectIndex(obj));
@@ -285,12 +286,10 @@ public class Environment {
             GameObject obj = deadGameObjects.get(id);
             if (obj != null){
                 gameObjects.put(id, obj);
-                if (!display.getChildren().contains(obj.getDisplay())){
-                    display.getChildren().add(obj.getDisplay());
-                }
+                obj.revive();
                 deadGameObjects.remove(id);
             }
-            System.out.println("resurrect");
+//            System.out.println("resurrect");
             return obj;
         }
     }

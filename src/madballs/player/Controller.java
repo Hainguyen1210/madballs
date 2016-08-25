@@ -76,6 +76,10 @@ public class Controller {
             ballMoveBehaviour.setVelocityY(ballMoveBehaviour.getSpeed());
 //                        MadBalls.out.writeObject("y +");
         }
+        if (ke.isPressed(KeyCode.SPACE)) {
+            RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
+            weaponRotateBehaviour.setMousePressed(true);
+        }
 //                }
 //                catch (IOException ex){
 //                    
@@ -84,7 +88,7 @@ public class Controller {
     
     public void handleMouse(MouseKeyEventHandler.MouseKeyEvent event){
         Weapon playerWeapon = player.getBall().getWeapon();
-        RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
+        RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) playerWeapon.getMoveBehaviour();
 //        System.out.println("ahihi");
 //        System.out.println(player.getBall().getWeapon().getClass());
 //        weaponRotateBehaviour.setTargetX(event.getMouseX());

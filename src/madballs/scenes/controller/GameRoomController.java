@@ -81,25 +81,23 @@ public class GameRoomController implements Initializable {
         }
         MadBalls.newGame(false);
         Navigation.getInstance().navigate(MadBalls.getMainScene());
-        if (MadBalls.getMultiplayerHandler().getPlayers().size() == 1){
-            Player player = MadBalls.getMultiplayerHandler().getLocalPlayer();
+
+        MadBalls.getMultiplayerHandler().sendData(new Data("prepare"));
+        for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
             player.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(player.getTeamNum()));
             player.generateBall(MadBalls.getMainEnvironment(), -1);
+            for (Player receivingPlayer : MadBalls.getMultiplayerHandler().getPlayers()){
+                if (receivingPlayer != MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                    SpawnLocation spawnLocation = player.getSpawnLocation();
+                    spawnLocation.setTypeNumber(player.getPlayerNum());
+                    receivingPlayer.sendData(new SpawnData(spawnLocation, player == receivingPlayer, player.getBall().getID()));
+                }
+            }
+        }
+        if (MadBalls.getMultiplayerHandler().getPlayers().size() == 1){
             MadBalls.getMainEnvironment().startAnimation();
         }
         else {
-            MadBalls.getMultiplayerHandler().sendData(new Data("prepare"));
-            for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
-                player.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(player.getTeamNum()));
-                player.generateBall(MadBalls.getMainEnvironment(), -1);
-                for (Player receivingPlayer : MadBalls.getMultiplayerHandler().getPlayers()){
-                    if (receivingPlayer != MadBalls.getMultiplayerHandler().getLocalPlayer()){
-                        SpawnLocation spawnLocation = player.getSpawnLocation();
-                        spawnLocation.setTypeNumber(player.getPlayerNum());
-                        receivingPlayer.sendData(new SpawnData(spawnLocation, player == receivingPlayer, player.getBall().getID()));
-                    }
-                }
-            }
             MadBalls.getMultiplayerHandler().sendData(new Data("check_ready"));
         }
     }

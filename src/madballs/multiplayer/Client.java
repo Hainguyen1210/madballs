@@ -143,44 +143,27 @@ public class Client extends MultiplayerHandler{
             else if (data.getType().equals("state")){
                 StateData stateData = (StateData)data;
                 Integer objID = stateData.getState().getObjID();
-                if (objID < MadBalls.getMainEnvironment().getCurrentObjID()){
-                    try{
-                        StateLoader stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
-                        stateLoader.addServerState(stateData.getState());
-                    }
-                    catch (NullPointerException ex){
-//                        Platform.runLater(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                if (stateData.getState().isDead()){
-//                                    return;
-//                                }
-//                                GameObject object = MadBalls.getMainEnvironment().resurrectGameObj(objID);
-//                                if (object == null){
-//                                    return;
-//                                }
-//                                else {
-//                                    object.getStateLoader().addServerState(stateData.getState());
-//                                }
-//                            }
-//                        });
-
-                    }
+                try{
+                    StateLoader stateLoader = MadBalls.getMainEnvironment().getObject(objID).getStateLoader();
+                    stateLoader.addServerState(stateData.getState());
                 }
-                else {
-                    Service<Void> service = new Service<Void>() {
+                catch (NullPointerException ex){
+                    Platform.runLater(new Runnable() {
                         @Override
-                        protected Task<Void> createTask() {
-                            return new Task<Void>() {
-                                @Override
-                                protected Void call() throws Exception {
-                                    handleData(data);
-                                    return null;
-                                }
-                            };
+                        public void run() {
+                            if (stateData.getState().isDead()){
+                                return;
+                            }
+                            GameObject object = MadBalls.getMainEnvironment().resurrectGameObj(objID);
+                            if (object == null){
+                                return;
+                            }
+                            else {
+                                object.getStateLoader().addServerState(stateData.getState());
+                            }
                         }
-                    };
-                    service.start();
+                    });
+
                 }
                 
 
@@ -228,20 +211,6 @@ public class Client extends MultiplayerHandler{
                             ((Ball)MadBalls.getMainEnvironment().getObject(getWeaponData.getBallID())).setWeapon(weaponClass, getWeaponData.getWeaponID());
                         } catch (ClassNotFoundException ex) {
                             Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                        } catch (NullPointerException ex) {
-                            Service<Void> service = new Service<Void>() {
-                                @Override
-                                protected Task<Void> createTask() {
-                                    return new Task<Void>() {
-                                        @Override
-                                        protected Void call() throws Exception {
-                                            handleData(data);
-                                            return null;
-                                        }
-                                    };
-                                }
-                            };
-                            service.start();
                         }
                     }
                 });

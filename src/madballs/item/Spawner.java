@@ -47,7 +47,7 @@ public class Spawner {
     }
 
     public void randomSpawn() {
-        System.out.print("randomSpawn");
+//        System.out.print("randomSpawn");
         itemSpawnLocations = environment.getMap().getItemSpawnLocations();
 //    Map map = environment.getMap();
 //    int X = random.nextInt((int) map.getLENGTH());
@@ -61,10 +61,10 @@ public class Spawner {
         currentSpawnLocation.setSpawned(true);
         int itemOrWeapon = random.nextInt(2);
         if (itemOrWeapon == 0) {
-            System.out.println("Weapon spawned");
+//            System.out.println("Weapon spawned");
             spawnWeapon(currentSpawnLocation, -1, -1);
         } else {
-            System.out.println("Item spawned");
+//            System.out.println("Item spawned");
             spawnItem(currentSpawnLocation, -1, -1);
         }
     }
@@ -93,8 +93,8 @@ public class Spawner {
         }
 
 
-        System.out.print(weaponClass);
-        System.out.println(newItem.getID());
+//        System.out.print(weaponClass);
+//        System.out.println(newItem.getID());
     }
 
     public void spawnItem(SpawnLocation spawnLocation, int itemIndex, Integer id) {
@@ -108,8 +108,8 @@ public class Spawner {
         Class<Item> itemClass = boostItems[itemIndex];
         try {
             Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class, Integer.class).newInstance(environment, spawnLocation, id);
-            System.out.print(itemClass);
-            System.out.println(newItem.getID());
+//            System.out.print(itemClass);
+//            System.out.println(newItem.getID());
             if (MadBalls.isHost()) {
                 MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
             }

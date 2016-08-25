@@ -6,6 +6,7 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.scene.CacheHint;
 import javafx.scene.image.Image;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
@@ -468,6 +469,8 @@ public abstract class GameObject {
           }
         });
         hitBox.setOpacity(1);
+        hitBox.setCache(true);
+        hitBox.setCacheHint(CacheHint.SPEED);
         environment.registerGameObj(this, true, id);
     }
 
@@ -490,6 +493,16 @@ public abstract class GameObject {
     public Rectangle getBoundsRectangle(){
         return boundsRectangle;
     }
+
+    public void revive(){
+        if (isDead == true){
+            isDead = false;
+            if (!environment.getDisplay().getChildren().contains(display)){
+                environment.getDisplay().getChildren().add(display);
+            }
+        }
+
+    }
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
@@ -504,17 +517,17 @@ public abstract class GameObject {
     }
     
     public void die(){
-//        setDead();
-//        if (child != null && !child.isDead()) {
-//            child.die();
-//        }
-        if (MadBalls.isHost()){
-//            System.out.println("die " + getClass() + getID());
-            setDead();
-            if (child != null && !child.isDead()) {
-                child.die();
-            }
+        setDead();
+        if (child != null && !child.isDead()) {
+            child.die();
         }
+//        if (MadBalls.isHost()){
+////            System.out.println("die " + getClass() + getID());
+//            setDead();
+//            if (child != null) {
+//                child.die();
+//            }
+//        }
 //        else {
 //            getDisplay().setVisible(false);
 //        }
