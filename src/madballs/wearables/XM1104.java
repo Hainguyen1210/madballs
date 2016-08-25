@@ -42,7 +42,7 @@ public class XM1104 extends Weapon {
 
         setFireSoundFX("shotgun");
 
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
@@ -66,9 +66,9 @@ public class XM1104 extends Weapon {
     public void forceFire(Integer id, double direction){
         if (getFireSoundFX() != null) {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), "fix sau", id);
-            ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
         }
+        Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
+        ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
     }
 
     @Override

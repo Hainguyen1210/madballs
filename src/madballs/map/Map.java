@@ -24,7 +24,9 @@ import javafx.scene.image.Image;
 import javafx.scene.image.WritableImage;
 import madballs.Common;
 import madballs.ImageGenerator;
+import madballs.MadBalls;
 import madballs.Obstacle;
+import madballs.scenes.Navigation;
 
 import javax.imageio.ImageIO;
 
@@ -102,7 +104,7 @@ public class Map {
     }
 
     public Map(String mapFileName){
-        this.mapNumber = Arrays.asList(MAP_FILES).indexOf(mapFileName);
+        this.mapNumber = MAP_FILES.indexOf(mapFileName);
         MAP_ARRAY = loadMap();
     }
 
@@ -179,6 +181,28 @@ for (String s : presetString) System.out.println(" " + s);
             }
         }
         return null;
+    }
+
+    public static Map chooseMap(){
+        ArrayList<String> mapFileList = new ArrayList<>();
+        for (String mapFile : Map.getMapFiles()){
+            mapFileList.add(mapFile);
+        }
+        String mapFile = Navigation.getInstance().getTextChoice("Map chooser", "Create map", "Choose the map", "random", mapFileList);
+        Map map;
+        if (mapFile.equals("random")){
+            map = new Map(-1);
+        }
+        else {
+            map = new Map(mapFile);
+        }
+        if (map.getPlayerSpawnLocations().size() < MadBalls.getMultiplayerHandler().getPlayers().size()){
+            Navigation.getInstance().showAlert("Create map", "Error", "The chosen map cannot affort current number of connected players", true);
+            return  chooseMap();
+        }
+        else {
+            return map;
+        }
     }
 
     public ArrayList<SpawnLocation> getItemSpawnLocations() {

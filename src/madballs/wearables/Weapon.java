@@ -148,6 +148,7 @@ public abstract class Weapon extends GameObject {
     public Weapon(GameObject owner, double x, double y, Integer id) {
         super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
+        getHitBox().setOpacity(0);
     }
 //    public Weapon(Environment environment, double x, double y) {
 //        super(environment, x, y, true);

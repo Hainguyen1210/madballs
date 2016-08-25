@@ -7,12 +7,14 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.scene.Group;
 import madballs.*;
 import madballs.buffState.BuffState;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
+import madballs.scenes.SceneManager;
 import madballs.scenes.ScenesFactory;
 import madballs.scenes.controller.GameRoomController;
 import madballs.wearables.Weapon;
@@ -106,7 +108,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.newGame(false);
+                        MadBalls.restart();
                         Navigation.getInstance().navigate(MadBalls.getMainScene());
                     }
                 });
@@ -128,12 +130,27 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
-            else if (data.getType().equals("restart")){
+            else if (data.getType().equals("new_game")){
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getMainEnvironment().stopAnimation();
-                        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
+                        newMatch(true);
+                    }
+                });
+            }
+            else if (data.getType().equals("new_match")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        newMatch(false);
+                    }
+                });
+            }
+            else if (data.getType().equals("winner")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        SceneManager.getInstance().addScore(((WinnerData)data).getWinnerTeamNum(), 1);
                     }
                 });
             }
@@ -177,7 +194,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        MadBalls.getMainEnvironment().loadMap(map);
+                        MadBalls.loadTempMap(map);
                     }
                 });
             }
@@ -289,7 +306,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        new Explosion(MadBalls.getMainEnvironment(), data.getParameters()[0], data.getParameters()[1], data.getParameters()[2], data.getParameters()[3], data.getId());
+                        new Explosion(MadBalls.getMainEnvironment(), data.getParameters()[0], data.getParameters()[1], data.getParameters()[2], data.getParameters()[3], data.getId(), -1);
                     }
                 });
             }

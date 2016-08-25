@@ -43,6 +43,10 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
         multiKeyEventHandler.handle(multiKeyEvent);
         event.consume();
     }
+
+    public void clear(){
+        buffer.clear();
+    }
      
     public interface MultiKeyEventHandler {
         void handle(final MultiKeyEvent event);

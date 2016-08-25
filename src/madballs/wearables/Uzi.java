@@ -42,7 +42,7 @@ public class Uzi extends Weapon{
         setProjectileImageName("bullet1");
         
         setFireSoundFX("uzi");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
     

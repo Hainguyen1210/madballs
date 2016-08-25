@@ -42,7 +42,7 @@ public class Pistol extends Weapon{
         setProjectileImageName("bullet1");
 
         setFireSoundFX("pistol");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
 
     }

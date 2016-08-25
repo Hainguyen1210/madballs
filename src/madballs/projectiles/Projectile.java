@@ -50,7 +50,7 @@ public class Projectile extends GameObject {
         StraightMove straightMoveBehaviour = new StraightMove(this, sourceWeapon.getProjectileSpeed());
         straightMoveBehaviour.setNewDirection(Math.toRadians(sourceWeapon.getRotateAngle()));
         setMoveBehaviour(straightMoveBehaviour);
-
+        getHitBox().setOpacity(0);
         sourceWeapon.setAmmo(sourceWeapon.getAmmo() - 1);
     }
 

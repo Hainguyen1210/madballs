@@ -475,7 +475,7 @@ public abstract class GameObject {
           }
         });
 //        hitBox.setVisible(false);
-        hitBox.setOpacity(0);
+//        hitBox.setOpacity(0);
         hitBox.setCache(true);
         hitBox.setCacheHint(CacheHint.SPEED);
         environment.registerGameObj(this, true, id);
@@ -524,6 +524,7 @@ public abstract class GameObject {
     }
     
     public void die(){
+        if (this instanceof Ball && !MadBalls.isHost()) return;
         setDead();
         if (child != null && !child.isDead()) {
             child.die();

@@ -38,7 +38,7 @@ public class Awp extends Weapon{
         setProjectileImageName("bullet3");
 
         setFireSoundFX("awp");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 

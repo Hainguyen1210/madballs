@@ -7,9 +7,16 @@ package madballs.player;
 
 import javafx.scene.input.KeyCode;
 import madballs.MadBalls;
+import madballs.map.Map;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.MapData;
+import madballs.multiplayer.PlayerData;
+import madballs.scenes.Navigation;
+import madballs.scenes.SceneManager;
 import madballs.wearables.Weapon;
+
+import java.util.ArrayList;
 
 /**
  *
@@ -42,8 +49,19 @@ public class Controller {
     public void handleKey(MultiplePressedKeysEventHandler.MultiKeyEvent ke){
         if (ke.isPressed(KeyCode.I) && ke.isPressed(KeyCode.O) && ke.isPressed(KeyCode.P)) {
             if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                if (ke.isPressed(KeyCode.U)){
+                    Map map = Map.chooseMap();
+                    MadBalls.getMultiplayerHandler().sendData(new MapData(map.getMapNumber()));
+                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                        player.setTeamNum(0);
+                        MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
+                    }
+                    MadBalls.loadTempMap(map);
+                }
+                else {
+                    MadBalls.getMultiplayerHandler().newMatch(true);
+                }
                 ke.clearBuffer();
-                MadBalls.getMultiplayerHandler().prepareNewGame();
             }
         }
 
@@ -58,6 +76,7 @@ public class Controller {
 //                        MadBalls.out.writeObject("y 0");
         }
 
+        SceneManager.getInstance().getScoreBoardContainer().setVisible(ke.isPressed(KeyCode.TAB));
 
         if (ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) {
             ballMoveBehaviour.setVelocityX(-ballMoveBehaviour.getSpeed());

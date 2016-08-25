@@ -16,6 +16,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
 import javafx.scene.SubScene;
 import javafx.scene.control.Label;
@@ -42,6 +44,46 @@ public class Player {
     private IntegerProperty teamNum = new SimpleIntegerProperty();
     private SpawnLocation spawnLocation;
     private ArrayList<Integer> relevantObjIDs = new ArrayList<>();
+
+    private IntegerProperty killsCount = new SimpleIntegerProperty(0);
+    private IntegerProperty deathsCount = new SimpleIntegerProperty(0);
+    private IntegerProperty ranking = new SimpleIntegerProperty(0);
+
+    public int getRanking() {
+        return ranking.get();
+    }
+
+    public IntegerProperty rankingProperty() {
+        return ranking;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking.set(ranking);
+    }
+
+    public int getKillsCount() {
+        return killsCount.get();
+    }
+
+    public IntegerProperty killsCountProperty() {
+        return killsCount;
+    }
+
+    public void setKillsCount(int killsCount) {
+        this.killsCount.set(killsCount);
+    }
+
+    public int getDeathsCount() {
+        return deathsCount.get();
+    }
+
+    public IntegerProperty deathsCountProperty() {
+        return deathsCount;
+    }
+
+    public void setDeathsCount(int deathsCount) {
+        this.deathsCount.set(deathsCount);
+    }
 
     public String getName() {
         return name;
@@ -121,6 +163,28 @@ public class Player {
         this.isLocal = isLocal;
         this.socket = socket;
         setSocket(socket);
+
+        ranking.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                SceneManager.getInstance().reorderScoreBoard();
+            }
+        });
+    }
+
+    public void updateRanking(){
+        for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
+            if (player == this) continue;
+            if (getKillsCount() > player.getKillsCount() || (getKillsCount() == player.getKillsCount() && getDeathsCount() < player.getDeathsCount())){
+                if (getRanking() >= player.getRanking()){
+                    int newRanking = player.getRanking();
+                    player.setRanking(getRanking());
+                    setRanking(newRanking);
+                    System.out.println("update rank" + name + getRanking());
+                    player.updateRanking();
+                }
+            }
+        }
     }
 
     public void setSocket(Socket socket){
@@ -135,7 +199,9 @@ public class Player {
     }
 
     public void generateBall(Environment environment, Integer id){
-        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id);
+        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id, this);
+        SceneManager.getInstance().bindBallToScoreBoard(ball);
+
         Label nameLabel = new Label(name);
         nameLabel.setFont(new Font(10));
         nameLabel.setTranslateY(-55);

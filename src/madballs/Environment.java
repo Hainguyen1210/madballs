@@ -95,86 +95,45 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-        MadBalls.getMultiplayerHandler().checkWinner();
-//        boolean isHost = MadBalls.getMultiplayerHandler().getLocalPlayer().isHost();
       
         java.util.Map<Integer, GameObject> copiedGameObjects = new WeakHashMap<>(gameObjects);
-//        ArrayList<Integer> deadObjIDs = new ArrayList<>();
         quadtree.clear();
-        
+
+        // update objects
         for (GameObject obj : copiedGameObjects.values()){
             obj.update(now);
-//            obj.updateBoundsRectangle();
             if (obj.isDead()) {
-//                System.out.println("dead" + gameObjects.containsKey(obj.getID()));
-//                System.out.println(currentObjID);
-//                System.out.println(gameObjects.size());
                 deadGameObjects.put(obj.getID(), obj);
                 gameObjects.remove(obj.getID());
-//                System.out.println(gameObjects.size());
             }
             else {
                 quadtree.insert(obj);
             }
         }
-
-//        for (Integer id : deadObjIDs){
-//            System.out.println("dead" + gameObjects.containsKey(id));
-//            System.out.println(currentObjID);
-//            System.out.println(gameObjects.size());
-//            gameObjects.remove(id);
-//            System.out.println(gameObjects.size());
-//            copiedGameObjects.remove(id);
-//        }
         
         copiedGameObjects = new WeakHashMap<>(gameObjects);
 //        if (!isHost) return;
-        //spawn items
+        // spawn items
         if (MadBalls.isHost()) itemSpawner.spawn(now);
+
+        // collision checking
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
-//        ArrayList<GameObject> collidedObjects = new ArrayList<>();
-        
-//        boolean isUncollided = false;
+
         for (GameObject checking : copiedGameObjects.values()){
             if (checking.isDead() || checking instanceof Obstacle) continue;
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking);
             for (GameObject target : collidableObjects){
-//                if (checking instanceof Ball)System.out.println(target.getClass() + " x: " + target.getDisplay().getBoundsInParent().getMinX() + "; y: " + target.getDisplay().getBoundsInParent().getMinY());
-//  if(checking instanceof Item){System.out.println("CHECKING ITEM");}
                 if (target != checking && !checked.contains(target) && !target.hasChild(checking) && !target.hasOwner(checking)){
                     checking.checkCollisionWith(target);
-//                        if (checking.checkCollisionWith(target)) {
-//                            collidedObjects.add(target);
-//                            collidedObjects.add(checking);
-//                            GameObject owner = target.getOwner();
-//                            while (owner != null){
-//                                collidedObjects.add(owner);
-//                                owner = owner.getOwner();
-//                            }
-//                            owner = checking.getOwner();
-//                            while (owner != null){
-//                                collidedObjects.add(owner);
-//                                owner = owner.getOwner();
-//                            }
-//                        }
                 }
             }
             checked.add(checking);
         }
-        
-//        for (GameObject obj : copiedGameObjects){
-//            if (collidedObjects.contains(obj)) return;
-////            obj.setOldDirection(Math.toRadians(obj.getRotateAngle()));
-////            if (obj instanceof Ball) {
-////                System.out.println("");
-////                System.out.println(obj.getLastStableX());
-////                System.out.println(obj.getOldX());
-////            }
-//            obj.setLastStableX(obj.getTranslateX());
-//            obj.setLastStableY(obj.getTranslateY());
-//        }
+
+        // check winner
+        MadBalls.getMultiplayerHandler().checkWinner();
     }
 
   public Map getMap() {
@@ -267,7 +226,7 @@ public class Environment {
 //        System.out.println("size" + gameObjects.size());
         obj.setID(id);
         gameObjects.put(id, obj);
-//        System.out.println(getObjectIndex(obj));
+//        System.out.println(id);
         if (shouldAddDisplay) display.getChildren().add(obj.getDisplay());
         currentObjID = id + 1;
 //        System.out.println("z" + obj.getDisplay().getTranslateZ());

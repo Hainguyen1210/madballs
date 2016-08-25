@@ -86,32 +86,6 @@ public class MadBalls extends Application {
 //        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
         Map.searchFiles();
 
-        Group root = new Group();
-        mainEnvironment = new Environment();
-        mainEnvironment.setDisplay(root);
-        boolean isHost = Navigation.getInstance().getConfirmation("", "Start game", "Do you want to host?");
-        if (isHost){
-            multiplayerHandler = new Server();
-            ArrayList<String> mapFileList = new ArrayList<>();
-            for (String mapFile : Map.getMapFiles()){
-                mapFileList.add(mapFile);
-            }
-            String mapFile = Navigation.getInstance().getTextChoice("Start game", "Create map", "Choose the map", "random", mapFileList);
-            Map map;
-            if (mapFile.equals("random")){
-                map = new Map(-1);
-            }
-            else {
-                map = new Map(mapFile);
-            }
-            mainEnvironment.loadMap(map);
-        }
-        else {
-            multiplayerHandler = new Client();
-            multiplayerHandler.setLocalPlayer(new Player(null, true));
-        }
-        multiplayerHandler.init();
-
         primaryStage.setTitle("MAD BALL");
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
@@ -121,11 +95,24 @@ public class MadBalls extends Application {
             }
         });
         primaryStage.show();
-        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
+
+        boolean isHost = Navigation.getInstance().getConfirmation("", "Start game", "Do you want to host?");
+        if (isHost){
+            multiplayerHandler = new Server();
+
+            loadTempMap(Map.chooseMap());
+        }
+        else {
+            multiplayerHandler = new Client();
+            multiplayerHandler.setLocalPlayer(new Player(null, true));
+        }
+        multiplayerHandler.init();
+
+//        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
 //        SceneManager.getInstance().displayGameInfo(mainRoot);
     }
 
-    public static void newGame(boolean shouldCreateEnviroment){
+    public static void restart(){
         Map map = null;
         if (mainEnvironment != null) map = new Map(mainEnvironment.getMap().getMapNumber());
         isGameOver = false;
@@ -135,16 +122,25 @@ public class MadBalls extends Application {
 
         Group mainRoot = new Group(animationScene);
 
-        mainScene = new Scene(mainRoot);
+        mainScene = new Scene(mainRoot, sceneHeight/9*16, sceneHeight);
         mainScene.setFill(Color.BLACK);
         mainScene.getStylesheets().add(MadBalls.class.getResource("scenes/style.css").toExternalForm());
 
-        if (shouldCreateEnviroment) mainEnvironment = new Environment();
+        mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
         if (map != null) {
             mainEnvironment.loadMap(map);
         }
         SceneManager.getInstance().displayGameInfo(mainRoot);
+    }
+
+    public static void loadTempMap(Map map){
+        Group root = new Group();
+        if (mainEnvironment !=null) mainEnvironment.stopAnimation();
+        mainEnvironment = new Environment();
+        mainEnvironment.setDisplay(root);
+        mainEnvironment.loadMap(map);
+        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
     }
 
     /**

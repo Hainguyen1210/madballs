@@ -33,7 +33,7 @@ public class Bazooka extends Weapon {
 
         setFireSoundFX("bazooka");
         setProjectileCollisionEffect(new NullEffect(null));
-        setProjectileCollisionBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 100, getDamage()));
+        setProjectileCollisionBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 100, getDamage(), owner.getID()));
     }
 
     @Override

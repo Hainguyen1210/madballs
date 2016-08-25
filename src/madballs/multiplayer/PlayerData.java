@@ -10,6 +10,20 @@ public class PlayerData extends Data {
     private int number;
     private int teamNumber;
     private boolean isLocal;
+    private int killsCount, deathsCount;
+    private int ranking;
+
+    public int getRanking() {
+        return ranking;
+    }
+
+    public int getKillsCount() {
+        return killsCount;
+    }
+
+    public int getDeathsCount() {
+        return deathsCount;
+    }
 
     public String getName() {
         return name;
@@ -39,5 +53,8 @@ public class PlayerData extends Data {
         super("update_player");
         this.number = player.getPlayerNum();
         this.teamNumber = player.getTeamNum();
+        this.killsCount = player.getKillsCount();
+        this.deathsCount = player.getDeathsCount();
+        this.ranking = player.getRanking();
     }
 }

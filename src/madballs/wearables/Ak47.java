@@ -38,7 +38,7 @@ public class Ak47 extends Weapon{
         setProjectileImageName("bullet2");
         
         setFireSoundFX("ak47");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 

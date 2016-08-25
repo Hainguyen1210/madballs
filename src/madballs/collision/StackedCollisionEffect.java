@@ -57,15 +57,6 @@ public abstract class StackedCollisionEffect implements CollisionEffect, Seriali
 //    }
     
     /**
-     * return the total damage caused by this combo effect
-     * @return 
-     */
-    public double getDamage(){
-        double damage = this instanceof DamageEffect ? this.getDamage() : 0;
-        return wrappedEffect == null ? damage : wrappedEffect.getDamage() + damage;
-    }
-    
-    /**
      * return the total push back amount caused by this combo effect
      * @return 
      */

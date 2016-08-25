@@ -16,6 +16,7 @@ import javafx.concurrent.Task;
 import madballs.MadBalls;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
+import madballs.scenes.SceneManager;
 import madballs.scenes.ScenesFactory;
 import madballs.scenes.controller.GameRoomController;
 import madballs.wearables.Pistol;
@@ -66,7 +67,7 @@ public class Server extends MultiplayerHandler{
                                 // listen for client over socket
                                 while(true){
                                     try {
-                                        if (playerIndex + 1 == numPlayers){
+                                        if (getPlayers().size() == numPlayers){
                                             return null;
                                         }
                                         Socket socket = listener.accept();
@@ -111,6 +112,7 @@ public class Server extends MultiplayerHandler{
                                         player.setTeamNum(-1);
                                         sendData(new PlayerData(player));
                                         getPlayers().remove(player);
+                                        SceneManager.getInstance().reloadScoreBoard();
                                         ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).updatePlayersPane();
                                     }
                                 });

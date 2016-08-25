@@ -12,9 +12,11 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
@@ -40,6 +42,8 @@ public class GameRoomController implements Initializable {
     private ChoiceBox modeChoiceBox;
     @FXML
     private TextArea sceneHeight;
+    @FXML
+    private ImageView mapPreview;
 
     private GridPane playersGrid = new GridPane();
     private ObservableList<Integer> teams = FXCollections.observableArrayList();
@@ -69,37 +73,21 @@ public class GameRoomController implements Initializable {
             displayPlayer(player);
         }
 
+        mapPreview.setImage(ImageGenerator.getInstance().getImage("map"+MadBalls.getMainEnvironment().getMap().getMapNumber()));
     }
 
     @FXML
     public void startGame(ActionEvent e){
+        int ranking = 1;
         for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
             if (player.getTeamNum() == 0){
                 Navigation.getInstance().showAlert("Start game", "Error", "Each player must have a team", true);
                 return;
             }
+            player.setRanking(ranking++);
+            MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
         }
-        MadBalls.newGame(false);
-        Navigation.getInstance().navigate(MadBalls.getMainScene());
-
-        MadBalls.getMultiplayerHandler().sendData(new Data("prepare"));
-        for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
-            player.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(player.getTeamNum()));
-            player.generateBall(MadBalls.getMainEnvironment(), -1);
-            for (Player receivingPlayer : MadBalls.getMultiplayerHandler().getPlayers()){
-                if (receivingPlayer != MadBalls.getMultiplayerHandler().getLocalPlayer()){
-                    SpawnLocation spawnLocation = player.getSpawnLocation();
-                    spawnLocation.setTypeNumber(player.getPlayerNum());
-                    receivingPlayer.sendData(new SpawnData(spawnLocation, player == receivingPlayer, player.getBall().getID()));
-                }
-            }
-        }
-        if (MadBalls.getMultiplayerHandler().getPlayers().size() == 1){
-            MadBalls.getMainEnvironment().startAnimation();
-        }
-        else {
-            MadBalls.getMultiplayerHandler().sendData(new Data("check_ready"));
-        }
+        MadBalls.getMultiplayerHandler().startMatch();
     }
 
     public void displayPlayer(Player player){

@@ -38,6 +38,7 @@ public class Obstacle extends GameObject{
 //        rect.setArcWidth(15);
 //        setHitBox(rect);
         setHitBox(new Rectangle(length, height, Paint.valueOf("green")));
+        getHitBox().setOpacity(0);
 
 //        double boxSize;if (length<height)boxSize=length;else boxSize=height;
 //        Image background = ImageGenerator.getInstance().getImage("obstacle/stripebox");

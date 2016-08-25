@@ -14,13 +14,18 @@ import madballs.GameObject;
  */
 public class DamageEffect extends StackedCollisionEffect{
     private double damage;
-    
-    public DamageEffect(StackedCollisionEffect effect, double amount){
-        super(effect);
-        this.damage = amount;
+    private Integer ballID;
+
+    public Integer getBallID() {
+        return ballID;
     }
 
-    @Override
+    public DamageEffect(StackedCollisionEffect effect, double amount , Integer ballID){
+        super(effect);
+        this.damage = amount;
+        this.ballID = ballID;
+    }
+
     public double getDamage() {
         return damage;
     }

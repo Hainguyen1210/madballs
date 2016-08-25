@@ -1,18 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="madballs.scenes.controller.GameRoomController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="madballs.scenes.controller.GameRoomController">
    <children>
-      <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="485.0" prefWidth="766.0">
+      <ScrollPane layoutX="14.0" layoutY="14.0" prefHeight="427.0" prefWidth="766.0">
         <content>
           <AnchorPane fx:id="playersPane" minHeight="0.0" minWidth="0.0" />
         </content>
       </ScrollPane>
-      <ChoiceBox fx:id="modeChoiceBox" layoutX="14.0" layoutY="536.0" prefHeight="25.0" prefWidth="280.0" />
-      <Button fx:id="startBtn" layoutX="613.0" layoutY="525.0" mnemonicParsing="false" onAction="#startGame" prefHeight="48.0" prefWidth="167.0" text="Start" />
-      <TextArea fx:id="sceneHeight" layoutX="325.0" layoutY="536.0" prefHeight="25.0" prefWidth="208.0" promptText="Scene Height" />
+      <ChoiceBox fx:id="modeChoiceBox" layoutX="13.0" layoutY="689.0" prefHeight="25.0" prefWidth="280.0" />
+      <Button fx:id="startBtn" layoutX="612.0" layoutY="678.0" mnemonicParsing="false" onAction="#startGame" prefHeight="48.0" prefWidth="167.0" text="Start" />
+      <TextArea fx:id="sceneHeight" layoutX="324.0" layoutY="687.0" prefHeight="30.0" prefWidth="208.0" promptText="Scene Height" />
+      <ImageView fx:id="mapPreview" fitHeight="200.0" fitWidth="200.0" layoutX="303.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true" />
    </children>
 </AnchorPane>

@@ -38,7 +38,7 @@ public class M4A1 extends Weapon{
         setProjectileImageName("bullet2");
         
         setFireSoundFX("m4a1");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 

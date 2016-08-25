@@ -32,6 +32,7 @@ public class PowerUp extends WeaponBuff{
     @Override
     public void fade() {
         getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() / damageRatio);
+        getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage(), getBall().getID()));
     }
 
     @Override
@@ -51,6 +52,6 @@ public class PowerUp extends WeaponBuff{
     @Override
     public void apply() {
         getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() * damageRatio);
-        getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage()));
+        getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage(), getBall().getID()));
     }
 }

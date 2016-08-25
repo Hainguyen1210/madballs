@@ -9,8 +9,10 @@ import java.util.ArrayList;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import madballs.MadBalls;
+import madballs.map.SpawnLocation;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
+import madballs.scenes.SceneManager;
 import madballs.scenes.ScenesFactory;
 import madballs.scenes.controller.GameRoomController;
 
@@ -62,21 +64,27 @@ public abstract class MultiplayerHandler {
             PlayerData playerData = (PlayerData) data;
             for (Player player : players){
                 if (player.getPlayerNum() == playerData.getNumber()){
-                    System.out.println("update correct" + playerData.getTeamNumber());
                     Platform.runLater(new Runnable() {
                         @Override
                         public void run() {
-                            if (player.getTeamNum() >= 0) {
+                            if (playerData.getTeamNumber() >= 0) {
                                 player.setTeamNum(playerData.getTeamNumber());
+                                player.setKillsCount(playerData.getKillsCount());
+                                player.setDeathsCount(playerData.getDeathsCount());
+                                player.setRanking(playerData.getRanking());
                             }
                             else {
                                 getPlayers().remove(player);
+                                SceneManager.getInstance().reloadScoreBoard();
                                 ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).updatePlayersPane();
                             }
                             ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).updateTeamChoices();
                         }
                     });
                 }
+            }
+            if (isHost) {
+                sendData(playerData);
             }
         }
 //        System.out.println(data.getType());
@@ -86,7 +94,6 @@ public abstract class MultiplayerHandler {
     public void checkWinner(){
         if (MadBalls.isGameOver()){
             if (MadBalls.isHost()){
-                if (((Server)this).getPlayerIndex() == 1) return;
                 int survivingTeamNum = -1;
                 for (Player player : players){
                     if (!player.getBall().isDead()){
@@ -98,15 +105,16 @@ public abstract class MultiplayerHandler {
                         }
                     }
                 }
-                prepareNewGame();
+                if (SceneManager.getInstance().getTeamScoreBoard().size() == 1) return;
+                System.out.println("survive" + survivingTeamNum);
+                if (survivingTeamNum != -1){
+                    sendData(new WinnerData(survivingTeamNum));
+                    SceneManager.getInstance().addScore(survivingTeamNum, 1);
+                }
+                newMatch(players.size() == 1);
             }
             return;
         }
-//        if (localPlayer.getBall().isDead()){
-////            MadBalls.setGameOver(true);
-//            Navigation.getInstance().showAlert("Game over", "You lose!", "Better luck next time.", false);
-//            return;
-//        }
 //        for (Player player : players){
 //            if (player != localPlayer && !player.getBall().isDead()) return;
 //        }
@@ -131,11 +139,52 @@ public abstract class MultiplayerHandler {
         }
     }
 
-    public void prepareNewGame(){
+    public void newMatch(boolean isNewGame){
+        for (Player player : players){
+            player.setReady(isHost && player == getLocalPlayer());
+            player.getKeyHandler().clear();
+            player.getMouseHandler().clear();
+            if (isNewGame){
+                player.setKillsCount(0);
+                player.setDeathsCount(0);
+            }
+            if (isHost) sendData(new Data(isNewGame? "new_game" : "new_match"));
+        }
+
         MadBalls.getMainEnvironment().stopAnimation();
-        MadBalls.newGame(true);
-        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
-        sendData(new Data("restart"));
+        MadBalls.restart();
+        if (isNewGame) {
+            SceneManager.getInstance().resetTeamScoreBoard();
+            Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
+        }
+        else if (isHost) {
+            startMatch();
+        }
+    }
+
+    public void startMatch(){
+        System.out.println("stMat");
+        MadBalls.restart();
+        Navigation.getInstance().navigate(MadBalls.getMainScene());
+
+        MadBalls.getMultiplayerHandler().sendData(new Data("prepare"));
+        for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+            player.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(player.getTeamNum()));
+            player.generateBall(MadBalls.getMainEnvironment(), -1);
+            for (Player receivingPlayer : MadBalls.getMultiplayerHandler().getPlayers()){
+                if (receivingPlayer != MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                    SpawnLocation spawnLocation = player.getSpawnLocation();
+                    spawnLocation.setTypeNumber(player.getPlayerNum());
+                    receivingPlayer.sendData(new SpawnData(spawnLocation, player == receivingPlayer, player.getBall().getID()));
+                }
+            }
+        }
+        if (MadBalls.getMultiplayerHandler().getPlayers().size() == 1){
+            MadBalls.getMainEnvironment().startAnimation();
+        }
+        else {
+            MadBalls.getMultiplayerHandler().sendData(new Data("check_ready"));
+        }
     }
     
     public abstract void sendData(Data data);
