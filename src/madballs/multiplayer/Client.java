@@ -149,21 +149,21 @@ public class Client extends MultiplayerHandler{
                         stateLoader.addServerState(stateData.getState());
                     }
                     catch (NullPointerException ex){
-//                        if (stateData.getState().isDead()){
-//                            return;
-//                        }
-                        Platform.runLater(new Runnable() {
-                            @Override
-                            public void run() {
-                                GameObject object = MadBalls.getMainEnvironment().resurrectGameObj(objID);
-                                if (object == null){
-                                    return;
-                                }
-                                else {
-                                    object.getStateLoader().addServerState(stateData.getState());
-                                }
-                            }
-                        });
+//                        Platform.runLater(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                if (stateData.getState().isDead()){
+//                                    return;
+//                                }
+//                                GameObject object = MadBalls.getMainEnvironment().resurrectGameObj(objID);
+//                                if (object == null){
+//                                    return;
+//                                }
+//                                else {
+//                                    object.getStateLoader().addServerState(stateData.getState());
+//                                }
+//                            }
+//                        });
 
                     }
                 }

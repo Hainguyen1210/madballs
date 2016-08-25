@@ -504,17 +504,17 @@ public abstract class GameObject {
     }
     
     public void die(){
-        setDead();
-        if (child != null && !child.isDead()) {
-            child.die();
-        }
-//        if (MadBalls.isHost()){
-////            System.out.println("die " + getClass() + getID());
-//            setDead();
-//            if (child != null) {
-//                child.die();
-//            }
+//        setDead();
+//        if (child != null && !child.isDead()) {
+//            child.die();
 //        }
+        if (MadBalls.isHost()){
+//            System.out.println("die " + getClass() + getID());
+            setDead();
+            if (child != null && !child.isDead()) {
+                child.die();
+            }
+        }
 //        else {
 //            getDisplay().setVisible(false);
 //        }
