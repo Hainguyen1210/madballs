@@ -36,7 +36,7 @@ public class XM1104 extends Weapon {
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet"));
+        setProjectileImage(ImageGenerator.getInstance().getImage("bullet1"));
 
         setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));

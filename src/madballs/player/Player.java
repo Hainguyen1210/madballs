@@ -110,6 +110,14 @@ public class Player {
     
     public void generateBall(Environment environment){
         ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
+        double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
+        ball.setImage(ImageGenerator.getInstance().getImage("ball"+2));
+        ball.getImage().setFitHeight(ballSize);
+        ball.getImage().setFitWidth(ballSize);
+        ball.getImage().setTranslateX(-ballSize/2);
+        ball.getImage().setTranslateY(-ballSize/2);
+
+        if (ImageGenerator.getInstance().getImage("ball"+teamNum) == null) System.out.print("11111111111111111111111111111111111111111111111111111111111111111111111");
         if (isLocal) {
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);

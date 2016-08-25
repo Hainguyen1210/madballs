@@ -36,10 +36,11 @@ public class Projectile extends GameObject {
         setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
         setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
 
-
-        getImage().setRotate(sourceWeapon.getRotateAngle());
-        getImage().setFitHeight(hitBox.getLayoutBounds().getHeight()*2);
-        getImage().setFitWidth(hitBox.getLayoutBounds().getWidth()*2);
+//        getImage().setFitWidth(hitBox.getLayoutBounds().getWidth());
+        getImage().setFitHeight(hitBox.getLayoutBounds().getHeight());
+        getImage().setTranslateX(-hitBox.getLayoutBounds().getWidth()/2);
+        getImage().setTranslateY(-hitBox.getLayoutBounds().getHeight()/2);
+        setRotate(Math.toRadians(sourceWeapon.getRotateAngle()));
 
         // set collision characteristics and move behaviour
         setCollisionEffect(sourceWeapon.getProjectileCollisionEffect());

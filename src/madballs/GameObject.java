@@ -473,7 +473,7 @@ public abstract class GameObject {
             statusG.setVisible(false);
           }
         });
-        hitBox.setOpacity(1);
+        hitBox.setOpacity(0);
         environment.registerGameObj(this, true);
     }
 
