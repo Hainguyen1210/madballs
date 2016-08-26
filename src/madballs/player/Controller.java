@@ -78,7 +78,7 @@ public class Controller {
 //                        MadBalls.out.writeObject("y 0");
         }
 
-        SceneManager.getInstance().getScoreBoardContainer().setVisible(ke.isPressed(KeyCode.TAB));
+        SceneManager.getInstance().getScoreBoardContainer().setVisible(player.isLocal() && ke.isPressed(KeyCode.TAB));
 
         if (ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) {
             ballMoveBehaviour.setVelocityX(-ballMoveBehaviour.getSpeed());
