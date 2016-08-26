@@ -14,7 +14,6 @@ import javafx.scene.SceneAntialiasing;
 import javafx.scene.SubScene;
 import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
@@ -26,8 +25,6 @@ import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
 import madballs.scenes.ScenesFactory;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -100,7 +97,7 @@ public class MadBalls extends Application {
         if (isHost){
             multiplayerHandler = new Server();
 
-            loadTempMap(Map.chooseMap());
+            loadMap(Map.chooseMap());
         }
         else {
             multiplayerHandler = new Client();
@@ -134,12 +131,13 @@ public class MadBalls extends Application {
         SceneManager.getInstance().displayGameInfo(mainRoot);
     }
 
-    public static void loadTempMap(Map map){
+    public static void loadMap(Map map){
         Group root = new Group();
         if (mainEnvironment !=null) mainEnvironment.stopAnimation();
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
         mainEnvironment.loadMap(map);
+        SceneManager.getInstance().resetTeamScoreBoard();
         Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
     }
 

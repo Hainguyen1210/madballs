@@ -12,11 +12,8 @@ import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
 import madballs.multiplayer.MapData;
 import madballs.multiplayer.PlayerData;
-import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
 import madballs.wearables.Weapon;
-
-import java.util.ArrayList;
 
 /**
  *
@@ -54,9 +51,14 @@ public class Controller {
                     MadBalls.getMultiplayerHandler().sendData(new MapData(map.getMapNumber()));
                     for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
                         player.setTeamNum(0);
+                        player.setReady(player == MadBalls.getMultiplayerHandler().getLocalPlayer());
+                        player.getKeyHandler().clear();
+                        player.getMouseHandler().clear();
+                        player.setKillsCount(0);
+                        player.setDeathsCount(0);
                         MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
                     }
-                    MadBalls.loadTempMap(map);
+                    MadBalls.loadMap(map);
                 }
                 else {
                     MadBalls.getMultiplayerHandler().newMatch(true);

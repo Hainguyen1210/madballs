@@ -152,7 +152,7 @@ public abstract class MultiplayerHandler {
         }
 
         MadBalls.getMainEnvironment().stopAnimation();
-        MadBalls.restart();
+//        MadBalls.restart();
         if (isNewGame) {
             SceneManager.getInstance().resetTeamScoreBoard();
             Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
