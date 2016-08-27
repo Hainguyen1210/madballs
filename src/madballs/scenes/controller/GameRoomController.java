@@ -18,6 +18,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
 import madballs.ImageGenerator;
 import madballs.MadBalls;
+import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 import madballs.multiplayer.PlayerData;
@@ -54,26 +55,31 @@ public class GameRoomController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-        System.out.println("game room");
-        System.out.println(((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()) == null);
-        startBtn.setVisible(MadBalls.isHost());
-        sceneHeight.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try {
-                    MadBalls.setSceneHeight(Integer.parseInt(newValue));
-                } catch (NumberFormatException ex){
-                    MadBalls.setSceneHeight(720);
+        try {
+            System.out.println("game room");
+            System.out.println(((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()) == null);
+            startBtn.setVisible(MadBalls.isHost());
+            sceneHeight.textProperty().addListener(new ChangeListener<String>() {
+                @Override
+                public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                    try {
+                        MadBalls.setSceneHeight(Integer.parseInt(newValue));
+                    } catch (NumberFormatException ex){
+                        MadBalls.setSceneHeight(720);
+                    }
                 }
+            });
+            playersPane.getChildren().add(playersGrid);
+            ArrayList<Player> players = MadBalls.getMultiplayerHandler().getPlayers();
+            for (Player player : players){
+                displayPlayer(player);
             }
-        });
-        playersPane.getChildren().add(playersGrid);
-        ArrayList<Player> players = MadBalls.getMultiplayerHandler().getPlayers();
-        for (Player player : players){
-            displayPlayer(player);
-        }
 
-        mapPreview.setImage(ImageGenerator.getInstance().getImage("map"+MadBalls.getMainEnvironment().getMap().getMapNumber()));
+            mapPreview.setImage(ImageGenerator.getInstance().getImage("map_" + Map.getMapFiles().get(MadBalls.getMainEnvironment().getMap().getMapNumber()).replace(".txt", "")));
+        }
+        catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     @FXML

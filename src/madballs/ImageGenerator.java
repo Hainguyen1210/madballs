@@ -20,7 +20,7 @@ public class ImageGenerator {
                     "obstacle10", "obstacle11",
                     "obstacle00", "obstacle01",
                     "ball1", "ball2", "ball3","ball4","ball5","ball6",
-                    "map0", "map1"
+                    "map_desert", "map_warehouse"
             };
 
     public static ImageGenerator getInstance(){

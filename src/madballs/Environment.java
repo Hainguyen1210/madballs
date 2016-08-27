@@ -79,13 +79,13 @@ public class Environment {
     private final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
+            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
+                return;
+            }
+            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/80 ){
+                return;
+            }
             updateIndex++;
-//            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
-//                return;
-//            }
-//            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/800 ){
-//                return;
-//            }
             lastUpdateTime.set(now);
             update(now);
         }
@@ -223,7 +223,7 @@ public class Environment {
         if (id == -1){
             id = currentObjID;
         }
-//        System.out.println("size" + gameObjects.size());
+        System.out.println("size" + gameObjects.size());
         obj.setID(id);
         gameObjects.put(id, obj);
 //        System.out.println(id);

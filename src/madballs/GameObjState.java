@@ -98,6 +98,7 @@ public class GameObjState implements Serializable{
     }
 
     public boolean isSimilarTo(GameObjState state){
+        if (state == null) return false;
         return (
                 state.translateX == translateX
                 && state.translateY == translateY

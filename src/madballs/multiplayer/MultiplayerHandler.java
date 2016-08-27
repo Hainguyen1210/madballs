@@ -6,6 +6,9 @@
 package madballs.multiplayer;
 
 import java.util.ArrayList;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import madballs.MadBalls;
@@ -25,8 +28,13 @@ public abstract class MultiplayerHandler {
     private Player localPlayer;
     private ArrayList<Player> players = new ArrayList<>();
     private boolean isHost;
+    private ExecutorService executorService = Executors.newSingleThreadExecutor();
     protected long latency;
-    
+
+    public ExecutorService getExecutorService() {
+        return executorService;
+    }
+
     public MultiplayerHandler(boolean isHost){
         this.isHost = isHost;
     }

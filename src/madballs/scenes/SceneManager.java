@@ -123,6 +123,7 @@ public class SceneManager {
     
     public void displayGameInfo(Group root){
         buffLabels = new HashMap<>();
+        buffBar.getChildren().clear();
 
         hpBar.setPrefSize(250, 25);
         hpBar.setTranslateX(50);

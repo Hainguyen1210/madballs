@@ -293,14 +293,19 @@ public class Player {
     }
 
     public void sendData(Data data){
-        try {
-            out.writeObject(data);
-            out.flush();
+        MadBalls.getMultiplayerHandler().getExecutorService().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    out.writeObject(data);
+//                    out.flush();
 //            System.out.println("sent " + data.getType());
 //            System.out.println(Environment.getInstance().gameNumObjects());
-        } catch (IOException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                } catch (IOException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
     
     public Data readData(){

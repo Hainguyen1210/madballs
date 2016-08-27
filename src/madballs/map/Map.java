@@ -186,7 +186,7 @@ for (String s : presetString) System.out.println(" " + s);
     public static Map chooseMap(){
         ArrayList<String> mapFileList = new ArrayList<>();
         for (String mapFile : Map.getMapFiles()){
-            mapFileList.add(mapFile);
+            mapFileList.add(mapFile.replace(".txt", ""));
         }
         String mapFile = Navigation.getInstance().getTextChoice("Map chooser", "Create map", "Choose the map", "random", mapFileList);
         Map map;
@@ -194,7 +194,7 @@ for (String s : presetString) System.out.println(" " + s);
             map = new Map(-1);
         }
         else {
-            map = new Map(mapFile);
+            map = new Map(mapFile+".txt");
         }
         if (map.getPlayerSpawnLocations().size() < MadBalls.getMultiplayerHandler().getPlayers().size()){
             Navigation.getInstance().showAlert("Create map", "Error", "The chosen map cannot affort current number of connected players", true);

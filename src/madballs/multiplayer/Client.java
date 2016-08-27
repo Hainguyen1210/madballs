@@ -81,6 +81,7 @@ public class Client extends MultiplayerHandler{
     
     @Override
     public void handleData(Data data){
+        if (!data.getType().equals("state")) System.out.println(data.getType());
         super.handleData(data);
         try {
             if (data.getType().equals("player")){

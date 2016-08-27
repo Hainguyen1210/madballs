@@ -103,9 +103,11 @@ public class Server extends MultiplayerHandler{
                     protected Void call() throws Exception {
                         while (true){
                             try {
-                                handleData(player, player.readData());
+                                Data data = player.readData();
+                                handleData(player, data);
                             }
                             catch (NullPointerException ex) {
+                                ex.printStackTrace();
                                 Platform.runLater(new Runnable() {
                                     @Override
                                     public void run() {

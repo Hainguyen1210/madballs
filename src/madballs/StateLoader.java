@@ -30,7 +30,7 @@ public class StateLoader {
     
     public void addServerState(GameObjState state){
         synchronized(serverStates){
-            if (serverStates.size() == 10){
+            if (serverStates.size() == 5){
                 serverStates.remove();
             }
             serverStates.add(state);
@@ -39,7 +39,7 @@ public class StateLoader {
     
     public void addLocalState(GameObjState state){
         synchronized(localStates){
-            if (localStates.size() == 10){
+            if (localStates.size() == 5){
                 localStates.remove();
             }
             localStates.add(state);
@@ -51,7 +51,15 @@ public class StateLoader {
         GameObjState newState = new GameObjState(gameObject);
         if (lastLoadTime == 0) lastLoadTime = now;
         if (MadBalls.isHost()){
-            MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
+            if ((now - lastLoadTime) > 1000000000/50){
+                lastLoadTime = now;
+                if (serverStates.size() > 0 && newState.isSimilarTo(serverStates.getFirst())) {
+                    return;
+                }
+                serverStates.clear();
+                serverStates.add(newState);
+                MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
+            }
         }
         else {
             synchronized (serverStates){
@@ -68,12 +76,11 @@ public class StateLoader {
                             isReconcilated = false;
                         }
                         else if (localState.getUpdateIndex() == serverState.getUpdateIndex()){
-                            if (localState.isSimilarTo(serverState)){
+                            if (loadState(serverState)){
                                 isReconcilated = true;
                                 localStates.remove();
                             }
                             else {
-                                loadState(serverState);
                                 localStates.clear();
                                 isReconcilated = false;
                             }
@@ -95,7 +102,8 @@ public class StateLoader {
 
     }
 
-    public void loadState(GameObjState state){
+    public boolean loadState(GameObjState state){
+        boolean isSimilar = true;
 //        if (state.isDead() && gameObject instanceof Weapon) {
 //            System.out.println("dead state" + gameObject.getID());
 //            System.out.println(gameObject.getClass());
@@ -103,39 +111,81 @@ public class StateLoader {
 //        if (gameObject.isDead() && !state.isDead()){
 //            gameObject.getDisplay().setVisible(true);
 //        }
-        if (state.isDead()){
+        if (state.isDead() && !gameObject.isDead()){
+            isSimilar = false;
 //            System.out.println("dead");
             gameObject.setDead();
         }
-        gameObject.setHpValue(state.getHp());
+        if (state.getHp() != gameObject.getHpValue()){
+            gameObject.setHpValue(state.getHp());
+            isSimilar = false;
+        }
         if (gameObject.getOwner() == null){
-            gameObject.setTranslateX(state.getTranslateX());
-            gameObject.setTranslateY(state.getTranslateY());
-            gameObject.setOldX(state.getOldX());
-            gameObject.setOldY(state.getOldY());
-            gameObject.setRotate(state.getDirection());
-            gameObject.setOldDirection(state.getOldDirection());
+            if (gameObject.getTranslateX() != state.getTranslateX()) {
+                gameObject.setTranslateX(state.getTranslateX());
+                isSimilar = false;
+            }
+            if (gameObject.getTranslateY() != state.getTranslateY()) {
+                gameObject.setTranslateY(state.getTranslateY());
+                isSimilar = false;
+            }
+            if (gameObject.getOldX() != state.getOldX()) {
+                gameObject.setOldX(state.getOldX());
+                isSimilar = false;
+            }
+            if (gameObject.getOldY() != state.getOldY()) {
+                gameObject.setOldY(state.getOldY());
+                isSimilar = false;
+            }
+            if (gameObject.getRotateAngle() != Math.toDegrees(state.getDirection())) {
+                gameObject.setRotate(state.getDirection());
+                isSimilar = false;
+            }
+            if (gameObject.getOldDirection() != state.getOldDirection()) {
+                gameObject.setOldDirection(state.getOldDirection());
+                isSimilar = false;
+            }
         }
         if (gameObject.getMoveBehaviour() != null){
             MoveBehaviour moveBehaviour = gameObject.getMoveBehaviour();
             if (gameObject.getMoveBehaviour() instanceof RotateBehaviour){
                 RotateBehaviour rotateBehaviour = (RotateBehaviour) moveBehaviour;
-                rotateBehaviour.setNewDirection(state.getDirection());
+                if (rotateBehaviour.getNewDirection() != state.getDirection()) {
+                    rotateBehaviour.setNewDirection(state.getDirection());
+                    isSimilar = false;
+                }
 //                rotateBehaviour.setTargetX(state.getTargetX());
 //                rotateBehaviour.setTargetY(state.getTargetY());
             }
             else if (gameObject.getMoveBehaviour() instanceof StraightMove){
                 StraightMove straightMove = (StraightMove)gameObject.getMoveBehaviour();
-                straightMove.setVelocityX(state.getVelocityX());
-                straightMove.setVelocityY(state.getVelocityY());
+                if (straightMove.getVelocityX() != state.getVelocityX()){
+                    straightMove.setVelocityX(state.getVelocityX());
+                    isSimilar = false;
+                }
+                if (straightMove.getVelocityY() != state.getVelocityY()) {
+                    straightMove.setVelocityY(state.getVelocityY());
+                    isSimilar = false;
+                }
             }
-            moveBehaviour.setSpeed(state.getSpeed());
+            if (moveBehaviour.getSpeed() != state.getSpeed()) {
+                moveBehaviour.setSpeed(state.getSpeed());
+                isSimilar = false;
+            }
         }
         if (gameObject instanceof Weapon){
             Weapon weapon = (Weapon) gameObject;
-            weapon.setDamage(state.getDamage());
-            weapon.setFireRate(state.getFireRate());
+            if (weapon.getDamage() != state.getDamage()) {
+                weapon.setDamage(state.getDamage());
+                isSimilar = false;
+            }
+            if (weapon.getFireRate() != weapon.getFireRate()) {
+                weapon.setFireRate(state.getFireRate());
+                isSimilar = false;
+            }
         }
+
+        return isSimilar;
     }
 
 }
