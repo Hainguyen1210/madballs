@@ -107,12 +107,12 @@ public class StraightMove extends MoveBehaviour{
     @Override
     public void moveUnique(long now){
         GameObject obj = getObject();
-//        if (getVelocityX() != 0 || getVelocityY() != 0){
-//            if (getSoundFX() != null){
-//                SoundStudio.getInstance().playAudio(getSoundFX(), 0.2, this.toString(), now,
-//                        obj.getTranslateX(), obj.getTranslateY(), 400, 400);
-//            }
-//        }
+        if (getVelocityX() != 0 || getVelocityY() != 0){
+            if (getSoundFX() != null){
+                SoundStudio.getInstance().playAudio(getSoundFX(), 0.2, this.toString(), now,
+                        obj.getTranslateX(), obj.getTranslateY(), 100, 100);
+            }
+        }
         calculateNewCordinate(now);
 
 //        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());

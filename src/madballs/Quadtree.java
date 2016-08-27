@@ -16,8 +16,8 @@ import javafx.scene.shape.Rectangle;
  */
 public class Quadtree {
  
-    private int MAX_OBJECTS = 5;
-    private int MAX_LEVELS = 5;
+    private int MAX_OBJECTS = 20;
+    private int MAX_LEVELS = 20;
 
     private int level;
     private ArrayList<GameObject> objects;

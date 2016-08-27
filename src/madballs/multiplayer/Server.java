@@ -13,6 +13,7 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import madballs.AI.BotPlayer;
 import madballs.MadBalls;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
@@ -131,15 +132,11 @@ public class Server extends MultiplayerHandler{
     public void addNewPlayer(Socket socket){
         Player newPlayer = new Player(socket, false);
         handleData(newPlayer, newPlayer.readData());
-        System.out.println(1);
         newPlayer.setPlayerNum(++playerIndex);
 //        newPlayer.setSpawnLocation(MadBalls.getMainEnvironment().getMap().getPlayerSpawnLocation(playerIndex));
         sendInfoToNewPlayer(newPlayer);
-        System.out.println(2);
         announceNewPlayer(newPlayer);
-        System.out.println(3);
         getPlayers().add(newPlayer);
-        System.out.println(newPlayer.getName());
         
         Platform.runLater(new Runnable() {
             @Override
@@ -150,6 +147,22 @@ public class Server extends MultiplayerHandler{
         });
         
         waitAndHandleData(newPlayer);
+    }
+
+    public BotPlayer addBotPlayer(){
+        BotPlayer bot = new BotPlayer();
+        bot.setName("BOT");
+        bot.setPlayerNum(++playerIndex);
+        sendData(new PlayerData(bot, false));
+        getPlayers().add(bot);
+        Platform.runLater(new Runnable() {
+            @Override
+            public void run() {
+                ((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()).displayPlayer(bot);
+//                newPlayer.generateBall(MadBalls.getMainEnvironment(), -1);
+            }
+        });
+        return bot;
     }
     
     public void sendInfoToNewPlayer(Player newPlayer){
@@ -164,7 +177,7 @@ public class Server extends MultiplayerHandler{
     
     public void announceNewPlayer(Player newPlayer){
         try {
-            Integer newBallID = MadBalls.getMainEnvironment().getCurrentObjID();
+//            Integer newBallID = MadBalls.getMainEnvironment().getCurrentObjID();
             sendData(new PlayerData(newPlayer, false));
             newPlayer.sendData(new PlayerData(newPlayer, true));
 //            sendData(new SpawnData(newPlayer.getSpawnLocation(), false, newBallID));
@@ -180,21 +193,19 @@ public class Server extends MultiplayerHandler{
     public void sendData(Data data) {
         for (Player player : getPlayers()){
             if (player != getLocalPlayer()){
-                if (data instanceof StateData){
-//                    if (((StateData)data).getState().isDead()){
-//                        System.out.println("dead" + ((StateData)data).getState().getObjID());
-//                    }
-                    if (!player.getRelevantObjIDs().contains(((StateData)data).getState().getObjID())){
-                        continue;
-                    }
+                if (player instanceof BotPlayer){
+                    BotPlayer bot = (BotPlayer) player;
+                    bot.getBotClient().handleData(data);
                 }
-                player.sendData(data);
+                else {
+                    player.sendData(data);
+                }
             }
         }
     }
     
     public void handleData(Player currentPlayer, Data data){
-//        System.out.println("handle" + data.getType());
+        System.out.println("handle" + data.getType());
         super.handleData(data);
         if (data.getType().equals("ready")){
             ReadyData readyData = (ReadyData) data;

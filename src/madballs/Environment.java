@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
+import madballs.item.Item;
 import madballs.item.Spawner;
 import madballs.map.Map;
 import madballs.player.Player;
@@ -79,12 +80,12 @@ public class Environment {
     private final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
-            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
-                return;
-            }
-            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/80 ){
-                return;
-            }
+//            if (MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/120 ){
+//                return;
+//            }
+//            if (!MadBalls.isHost() && (now - lastUpdateTime.get()) < 1000000000/100 ){
+//                return;
+//            }
             updateIndex++;
             lastUpdateTime.set(now);
             update(now);
@@ -96,22 +97,26 @@ public class Environment {
      */
     private void update(long now){
       
-        java.util.Map<Integer, GameObject> copiedGameObjects = new WeakHashMap<>(gameObjects);
+        ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects.values());
+        ArrayList<GameObject> shouldBeCheckedGameObjects = new ArrayList<>();
         quadtree.clear();
 
         // update objects
-        for (GameObject obj : copiedGameObjects.values()){
+        for (GameObject obj : copiedGameObjects){
             obj.update(now);
             if (obj.isDead()) {
                 deadGameObjects.put(obj.getID(), obj);
                 gameObjects.remove(obj.getID());
             }
             else {
+                if (!obj.isDead()
+                        && obj.isMobile()){
+                    shouldBeCheckedGameObjects.add(obj);
+                }
                 quadtree.insert(obj);
             }
         }
-        
-        copiedGameObjects = new WeakHashMap<>(gameObjects);
+
 //        if (!isHost) return;
         // spawn items
         if (MadBalls.isHost()) itemSpawner.spawn(now);
@@ -120,11 +125,14 @@ public class Environment {
         List<GameObject> collidableObjects = new ArrayList();
         ArrayList<GameObject> checked = new ArrayList<>();
 
-        for (GameObject checking : copiedGameObjects.values()){
-            if (checking.isDead() || checking instanceof Obstacle) continue;
+        for (GameObject checking : shouldBeCheckedGameObjects){
+            if (!MadBalls.isHost() && !MadBalls.getMultiplayerHandler().getLocalPlayer().getRelevancy(checking.getTranslateX(), checking.getTranslateY(), 250, 250)) {
+                continue;
+            }
             collidableObjects.clear();
             quadtree.retrieve(collidableObjects, checking);
             for (GameObject target : collidableObjects){
+//            for (GameObject target : copiedGameObjects.values()){
                 if (target != checking && !checked.contains(target) && !target.hasChild(checking) && !target.hasOwner(checking)){
                     checking.checkCollisionWith(target);
                 }
@@ -223,7 +231,7 @@ public class Environment {
         if (id == -1){
             id = currentObjID;
         }
-        System.out.println("size" + gameObjects.size());
+//        System.out.println("size" + gameObjects.size());
         obj.setID(id);
         gameObjects.put(id, obj);
 //        System.out.println(id);

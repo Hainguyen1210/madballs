@@ -16,17 +16,21 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Pane;
+import madballs.AI.BotPlayer;
 import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 import madballs.multiplayer.PlayerData;
+import madballs.multiplayer.Server;
 import madballs.multiplayer.SpawnData;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.ScenesFactory;
 
+import java.io.IOException;
+import java.net.Socket;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
@@ -38,7 +42,7 @@ public class GameRoomController implements Initializable {
     @FXML
     private AnchorPane playersPane;
     @FXML
-    private Button startBtn;
+    private Button startBtn, addBotBtn;
     @FXML
     private ChoiceBox modeChoiceBox;
     @FXML
@@ -58,7 +62,10 @@ public class GameRoomController implements Initializable {
         try {
             System.out.println("game room");
             System.out.println(((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()) == null);
-            startBtn.setVisible(MadBalls.isHost());
+            if (MadBalls.isHost()) {
+                startBtn.setVisible(true);
+                addBotBtn.setVisible(true);
+            }
             sceneHeight.textProperty().addListener(new ChangeListener<String>() {
                 @Override
                 public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -96,11 +103,17 @@ public class GameRoomController implements Initializable {
         MadBalls.getMultiplayerHandler().startMatch();
     }
 
+    @FXML
+    public void addBot(ActionEvent e){
+        Server server = (Server) MadBalls.getMultiplayerHandler();
+        server.addBotPlayer();
+    }
+
     public void displayPlayer(Player player){
         Label nameLabel = new Label(player.getName());
         Pane playerDisplay = new Pane(nameLabel);
         updateTeamChoices();
-        if (player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
+        if (player == MadBalls.getMultiplayerHandler().getLocalPlayer() || (MadBalls.isHost() && player instanceof BotPlayer)){
             ChoiceBox choiceBox = new ChoiceBox(teams);
             choiceBox.setTranslateX(200);
             choiceBox.getSelectionModel().selectedItemProperty().addListener(new ChangeListener() {

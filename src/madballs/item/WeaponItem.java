@@ -31,6 +31,7 @@ public class WeaponItem extends Item {
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(WeaponItem.class.getName()).log(Level.SEVERE, null, ex);
         }
+        weapon.setMobile(false);
         weapon.setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearWithOwnerBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation()))));
         weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
         setCollisionEffect(new NullEffect(null));

@@ -47,6 +47,7 @@ public abstract class GameObject {
     private double oldX, oldY;
     private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
+    private boolean isMobile = true;
     private boolean isDead = false;
     
     private StateLoader stateLoader;
@@ -67,6 +68,14 @@ public abstract class GameObject {
     
     public boolean isDead(){
         return isDead;
+    }
+
+    public boolean isMobile() {
+        return isMobile;
+    }
+
+    public void setMobile(boolean mobile) {
+        isMobile = mobile;
     }
 
     public void setDieSoundFX(String dieSoundFX) {
@@ -553,9 +562,9 @@ public abstract class GameObject {
             updateUnique(now);
             if (moveBehaviour != null) moveBehaviour.move(now);
         }
-        if (MadBalls.isHost()) {
-            updateRelevancy();
-        }
+//        if (MadBalls.isHost()) {
+//            updateRelevancy();
+//        }
 //        else {
 //            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
 //        }
@@ -564,7 +573,7 @@ public abstract class GameObject {
 
     private void updateRelevancy(){
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
-            player.checkRelevancy(this, 1000, 1000);
+            player.checkRelevancy(this, 500, 500);
         }
     }
     

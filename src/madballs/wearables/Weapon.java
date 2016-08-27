@@ -198,7 +198,7 @@ public abstract class Weapon extends GameObject {
 
     public void forceFire(Integer projectileID){
         if (fireSoundFX != null) {
-            SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 600*scope, 600*scope);
+            SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 150*scope, 150*scope);
         }
         Projectile projectile = new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName, projectileID);
         if (MadBalls.isHost()){

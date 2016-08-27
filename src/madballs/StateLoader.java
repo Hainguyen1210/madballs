@@ -5,12 +5,15 @@
  */
 package madballs;
 
+import java.util.HashMap;
 import java.util.LinkedList;
+import java.util.Map;
 
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
 import madballs.multiplayer.StateData;
+import madballs.player.Player;
 import madballs.projectiles.Projectile;
 import madballs.wearables.Weapon;
 
@@ -19,6 +22,7 @@ import madballs.wearables.Weapon;
  * @author caval
  */
 public class StateLoader {
+    private final Map<Player, GameObjState> playerStateMap = new HashMap<>();
     private final LinkedList<GameObjState> serverStates = new LinkedList<>();
     private final LinkedList<GameObjState> localStates = new LinkedList<>();
     private final GameObject gameObject;
@@ -51,14 +55,23 @@ public class StateLoader {
         GameObjState newState = new GameObjState(gameObject);
         if (lastLoadTime == 0) lastLoadTime = now;
         if (MadBalls.isHost()){
-            if ((now - lastLoadTime) > 1000000000/50){
-                lastLoadTime = now;
-                if (serverStates.size() > 0 && newState.isSimilarTo(serverStates.getFirst())) {
-                    return;
+            for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                if (!player.getRelevancy(gameObject.getTranslateX(), gameObject.getTranslateY(), 500, 500)){
+                    continue;
                 }
-                serverStates.clear();
-                serverStates.add(newState);
-                MadBalls.getMultiplayerHandler().sendData(new StateData(newState));
+                GameObjState lastRelevantState = playerStateMap.get(player);
+                if (lastRelevantState != null) {
+                    if (lastRelevantState.isSimilarTo(newState)) {
+                        continue;
+                    }
+                    else {
+                        playerStateMap.replace(player, newState);
+                    }
+                }
+                else {
+                    playerStateMap.put(player, newState);
+                }
+                player.sendData(new StateData(newState));
             }
         }
         else {

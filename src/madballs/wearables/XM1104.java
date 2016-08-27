@@ -50,7 +50,7 @@ public class XM1104 extends Weapon {
     public void forceFire(Integer id){
         if (!MadBalls.isHost()) return;
         if (getFireSoundFX() != null) {
-            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
+            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }
         for (int i = 0; i < 5; i++){
             Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
@@ -65,7 +65,7 @@ public class XM1104 extends Weapon {
 
     public void forceFire(Integer id, double direction){
         if (getFireSoundFX() != null) {
-            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 600, 600);
+            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }
         Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
         ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);

@@ -23,12 +23,12 @@ import madballs.wearables.*;
  * @author haing
  */
 public class Spawner {
+    private final int MAX_ITEMS = 10;
     private Class<Weapon>[] weapons;
     private Class<Item>[] boostItems;
     private Random random = new Random();
     private Environment environment;
     private LongProperty lastItemSpawnTime = new SimpleLongProperty(0);
-    private ArrayList<SpawnLocation> itemSpawnLocations;
     private SpawnLocation currentSpawnLocation;
 
 
@@ -48,12 +48,13 @@ public class Spawner {
 
     public void randomSpawn() {
 //        System.out.print("randomSpawn");
-        itemSpawnLocations = environment.getMap().getItemSpawnLocations();
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
 //    Map map = environment.getMap();
 //    int X = random.nextInt((int) map.getLENGTH());
 //    int Y = random.nextInt((int) map.getHEIGHT());
         do {
-            if (isAllSpawned()) return;
+//            if (isAllSpawned()) return;
+            if (getSpawnedQuantity() >= MAX_ITEMS) return;
             currentSpawnLocation = itemSpawnLocations.get(random.nextInt(itemSpawnLocations.size()));
         } while (currentSpawnLocation.isSpawned());
 
@@ -69,7 +70,19 @@ public class Spawner {
         }
     }
 
+    private int getSpawnedQuantity(){
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
+        int spawnedQuantity = 0;
+        for (SpawnLocation spawnLocation : itemSpawnLocations) {
+            if (spawnLocation.isSpawned()) {
+                spawnedQuantity++;
+            }
+        }
+        return spawnedQuantity;
+    }
+
     private boolean isAllSpawned() {
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
         for (SpawnLocation spawnLocation : itemSpawnLocations) {
             if (!spawnLocation.isSpawned()) {
                 return false;

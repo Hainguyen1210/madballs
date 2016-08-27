@@ -316,7 +316,7 @@ public class Player {
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    ball.die();
+                    if (ball != null) ball.die();
                 }
             });
         }

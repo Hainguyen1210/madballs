@@ -24,6 +24,7 @@ public class Obstacle extends GameObject{
 
     public Obstacle(Environment environment, double x, double y, double length, double height, Integer id) {
         super(environment, x, y, false, id);
+        setMobile(false);
         this.length = length;
         this.height = height;
         setDisplay(id);

@@ -43,7 +43,7 @@ import java.util.WeakHashMap;
  * @author caval
  */
 public class SceneManager {
-    public static final int numMapParts = 3;
+    public static final int numMapParts = 1;
     public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE};
     private static SceneManager instance = new SceneManager();
     private FlowPane gameInfoDisplay;
