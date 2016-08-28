@@ -40,28 +40,19 @@ public abstract class StackedCollisionEffect implements CollisionEffect, Seriali
         target.getCollisionPassiveBehaviour().getAffected(source, target, this, collisionShape);
         if (wrappedEffect != null) wrappedEffect.affect(source, target, collisionShape);
     }
-    
+
     /**
      * the recursive method to check whether this combo effect contains a specific effect
-     * @param effectClass
-     * @return 
+     * @param c
+     * @return
      */
-//    public boolean hasCollisionEffect(Class effectClass){
-//        if (effectClass.isInstance(this)) return true;
-//        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
-////            return wrappedEffect.hasCollisionEffect(effectClass);
-//        }
-//        else {
-//            return false;
-//        }
-//    }
-    
-    /**
-     * return the total push back amount caused by this combo effect
-     * @return 
-     */
-    public double getPushBackAmount(){
-        double amount = this instanceof PushBackEffect ? this.getPushBackAmount(): 0;
-        return wrappedEffect == null ? amount : wrappedEffect.getPushBackAmount() + amount;
+    public boolean hasCollisionEffect(Class c){
+        if (c.isInstance(this)) return true;
+        if (wrappedEffect != null && wrappedEffect instanceof StackedCollisionEffect){
+            return ((StackedCollisionEffect) wrappedEffect).hasCollisionEffect(c);
+        }
+        else {
+            return false;
+        }
     }
 }

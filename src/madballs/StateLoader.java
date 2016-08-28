@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 
+import madballs.AI.BotPlayer;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
@@ -56,6 +57,7 @@ public class StateLoader {
         if (lastLoadTime == 0) lastLoadTime = now;
         if (MadBalls.isHost()){
             for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                if (player instanceof BotPlayer) continue;
                 if (!player.getRelevancy(gameObject.getTranslateX(), gameObject.getTranslateY(), 500, 500)){
                     continue;
                 }

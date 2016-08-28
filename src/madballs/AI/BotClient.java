@@ -1,20 +1,11 @@
 package madballs.AI;
 
 import javafx.application.Platform;
-import madballs.Ball;
-import madballs.GameObject;
 import madballs.MadBalls;
-import madballs.StateLoader;
-import madballs.buffState.BuffState;
-import madballs.map.Map;
-import madballs.multiplayer.*;
-import madballs.player.Player;
-import madballs.scenes.Navigation;
-import madballs.scenes.SceneManager;
-import madballs.scenes.ScenesFactory;
-import madballs.scenes.controller.GameRoomController;
-import madballs.wearables.Weapon;
-import madballs.wearables.XM1104;
+import madballs.multiplayer.Client;
+import madballs.multiplayer.Data;
+import madballs.multiplayer.MultiplayerHandler;
+import madballs.multiplayer.ReadyData;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -34,8 +25,8 @@ public class BotClient extends MultiplayerHandler {
 
     @Override
     public void handleData(Data data){
-        System.out.println("botclient" + data.getType());
-//        super.handleData(data);
+        System.out.println("botclient " + data.getType());
+        super.handleData(data);
         try {
             if (data.getType().equals("check_ready")){
                 Platform.runLater(new Runnable() {

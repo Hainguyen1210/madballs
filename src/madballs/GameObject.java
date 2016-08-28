@@ -8,6 +8,7 @@ package madballs;
 import javafx.beans.binding.Bindings;
 import javafx.scene.CacheHint;
 import javafx.scene.image.Image;
+import madballs.AI.BotPlayer;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
@@ -562,9 +563,9 @@ public abstract class GameObject {
             updateUnique(now);
             if (moveBehaviour != null) moveBehaviour.move(now);
         }
-//        if (MadBalls.isHost()) {
-//            updateRelevancy();
-//        }
+        if (MadBalls.isHost()) {
+            updateBotRelevancy();
+        }
 //        else {
 //            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
 //        }
@@ -574,6 +575,12 @@ public abstract class GameObject {
     private void updateRelevancy(){
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
             player.checkRelevancy(this, 500, 500);
+        }
+    }
+
+    private void updateBotRelevancy(){
+        for (BotPlayer bot : BotPlayer.getBotPlayers()){
+            bot.checkRelevancy(this, 500, 500);
         }
     }
     

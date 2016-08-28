@@ -226,6 +226,9 @@ public class Server extends MultiplayerHandler{
                 @Override
                 public void run() {
                     MadBalls.getMainEnvironment().startAnimation();
+                    for (BotPlayer bot: BotPlayer.getBotPlayers()){
+                        bot.play();
+                    }
                 }
             });
         }

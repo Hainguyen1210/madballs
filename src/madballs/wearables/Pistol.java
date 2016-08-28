@@ -36,7 +36,7 @@ public class Pistol extends Weapon{
         setAmmo(-1);
         setFireRate(1);
         setRange(700);
-        setProjectileSpeed(800);
+        setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
         setProjectileImageName("bullet1");

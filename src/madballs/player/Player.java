@@ -139,11 +139,15 @@ public class Player {
 
     public void checkRelevancy(GameObject obj, double varianceX, double varianceY){
         if (obj.isDead()) {
-            relevantObjIDs.add(obj.getID());
+            if (!relevantObjIDs.contains(obj.getID())) {
+                relevantObjIDs.add(obj.getID());
+            }
             return;
         }
         if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) {
-            relevantObjIDs.add(obj.getID());
+            if (!relevantObjIDs.contains(obj.getID())) {
+                relevantObjIDs.add(obj.getID());
+            }
         }
         else {
             relevantObjIDs.remove(obj.getID());
@@ -293,6 +297,7 @@ public class Player {
     }
 
     public void sendData(Data data){
+        if (out == null) return;
         MadBalls.getMultiplayerHandler().getExecutorService().execute(new Runnable() {
             @Override
             public void run() {
