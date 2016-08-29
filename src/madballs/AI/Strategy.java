@@ -10,11 +10,11 @@ import java.util.ArrayList;
  * Created by caval on 28/08/2016.
  */
 public abstract class Strategy {
-    private Player player;
+    private BotPlayer bot;
     private double importance = 0;
 
-    public Player getPlayer() {
-        return player;
+    public BotPlayer getBot() {
+        return bot;
     }
 
     public double getImportance() {
@@ -29,8 +29,8 @@ public abstract class Strategy {
         importance += amount;
     }
 
-    public Strategy(Player player) {
-        this.player = player;
+    public Strategy(BotPlayer bot) {
+        this.bot = bot;
     }
 
     public abstract void prepare();

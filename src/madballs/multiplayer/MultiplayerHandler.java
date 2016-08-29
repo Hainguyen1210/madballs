@@ -11,6 +11,7 @@ import java.util.concurrent.Executors;
 
 import javafx.application.Platform;
 import javafx.concurrent.Service;
+import madballs.AI.BotPlayer;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.player.Player;
@@ -149,6 +150,9 @@ public abstract class MultiplayerHandler {
 
     public void newMatch(boolean isNewGame){
         for (Player player : players){
+            if (player instanceof BotPlayer){
+                ((BotPlayer) player).stop();
+            }
             player.setReady(isHost && player == getLocalPlayer());
             player.getKeyHandler().clear();
             player.getMouseHandler().clear();

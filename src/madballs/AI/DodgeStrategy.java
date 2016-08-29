@@ -2,13 +2,12 @@ package madballs.AI;
 
 import javafx.geometry.Bounds;
 import madballs.GameObject;
-import madballs.MadBalls;
 import madballs.collision.DamageEffect;
 import madballs.collision.ExplosiveBehaviour;
 import madballs.collision.StackedCollisionEffect;
 import madballs.collision.StackedCollisionPassiveBehaviour;
 import madballs.moveBehaviour.StraightMove;
-import madballs.player.Player;
+import madballs.projectiles.Projectile;
 
 /**
  * Created by caval on 28/08/2016.
@@ -16,20 +15,22 @@ import madballs.player.Player;
 public class DodgeStrategy extends Strategy {
     private GameObject dangerousObj;
     private double secondsUntilDanger = -1;
-    private final double REACTION_TIME_LIMIT = 5;
+    private final double REACTION_TIME_LIMIT = 3;
+    private boolean isNoDanger = true;
     private double myX, myY;
     double myRadius = 20;
 
-    public DodgeStrategy(Player player) {
-        super(player);
+    public DodgeStrategy(BotPlayer bot) {
+        super(bot);
+        setImportance(10);
     }
 
     @Override
     public void prepare() {
-        myX = getPlayer().getBall().getTranslateX();
-        myY = getPlayer().getBall().getTranslateY();
+        myX = getBot().getBall().getTranslateX();
+        myY = getBot().getBall().getTranslateY();
 
-        dangerousObj = null;
+        isNoDanger = true;
         secondsUntilDanger = -1;
     }
 
@@ -44,7 +45,7 @@ public class DodgeStrategy extends Strategy {
         }
         if (object.getMoveBehaviour() instanceof StraightMove){
             StraightMove objMovement = (StraightMove) object.getMoveBehaviour();
-            double velocityX= objMovement.getVelocityX();
+            double velocityX = objMovement.getVelocityX();
             double velocityY = objMovement.getVelocityY();
             if (velocityX == 0 && velocityY == 0){
                 return;
@@ -52,31 +53,36 @@ public class DodgeStrategy extends Strategy {
 
             Bounds objBounds = object.getDisplay().getBoundsInParent();
             double objX = object.getTranslateX();
-            double objLeftWidth = objX - objBounds.getMinX();
-            double objRightWidth = objBounds.getMaxX() - objX;
             double objY = object.getTranslateY();
-            double objTopHeight = objY - objBounds.getMinY();
-            double objBottomHeight = objBounds.getMaxY() - objY;
+
+            if (object instanceof Projectile){
+                double distance = Math.sqrt(Math.pow(objX - myX,2) + Math.pow(objY - myY, 2));
+                if (objMovement.getMovedDistance() + distance > ((Projectile)object).getSourceWeapon().getRange() + myRadius) {
+                    return;
+                }
+            }
 
             if (Math.abs(velocityY) >= Math.abs(velocityX)){
                 double deltaTime = (myY - objY) / velocityY;
                 if (isDeltaTimeDangerous(deltaTime)){
+                    double objLeftWidth = objX - objBounds.getMinX();
+                    double objRightWidth = objBounds.getMaxX() - objX;
                     double objExpectedX = objX + velocityX * deltaTime;
                     if ((objExpectedX - objLeftWidth >= myX - myRadius && objExpectedX - objLeftWidth <= myX + myRadius)
                             || (objExpectedX + objRightWidth >= myX - myRadius && objExpectedX + objRightWidth <= myX + myRadius)) {
-                        dangerousObj = object;
-                        secondsUntilDanger = deltaTime;
+                        updateDangerObj(object, deltaTime);
                     }
                 }
             }
             else if (Math.abs(velocityX) > Math.abs(velocityY)){
                 double deltaTime = (myX - objX) / velocityX;
                 if (isDeltaTimeDangerous(deltaTime)){
+                    double objTopHeight = objY - objBounds.getMinY();
+                    double objBottomHeight = objBounds.getMaxY() - objY;
                     double objExpectedY = objY + velocityY * deltaTime;
                     if ((objExpectedY - objTopHeight >= myY - myRadius && objExpectedY - objTopHeight <= myY + myRadius)
                             || (objExpectedY + objBottomHeight >= myY - myRadius && objExpectedY + objBottomHeight <= myY + myRadius)){
-                        dangerousObj = object;
-                        secondsUntilDanger = deltaTime;
+                        updateDangerObj(object, deltaTime);
                     }
                 }
             }
@@ -84,6 +90,13 @@ public class DodgeStrategy extends Strategy {
         else {
             return;
         }
+    }
+
+    private void updateDangerObj(GameObject object, double deltaTime){
+        if (object == dangerousObj) setImportance(getImportance() + 1);
+        dangerousObj = object;
+        secondsUntilDanger = deltaTime;
+        isNoDanger= false;
     }
 
     private boolean isDeltaTimeDangerous(double deltaTime){
@@ -103,7 +116,11 @@ public class DodgeStrategy extends Strategy {
 
     @Override
     public void act() {
-        StraightMove straightMove = ((StraightMove)getPlayer().getBall().getMoveBehaviour());
+        if (isNoDanger) {
+            dangerousObj = null;
+            setImportance(10);
+        }
+        StraightMove straightMove = ((StraightMove)getBot().getBall().getMoveBehaviour());
         if (dangerousObj != null){
 //            double myX = getPlayer().getBall().getTranslateX();
 //            double myY = getPlayer().getBall().getTranslateY();
@@ -147,14 +164,14 @@ public class DodgeStrategy extends Strategy {
                 straightMove.setVelocityX(-speed);
             }
         }
-        else {
-            straightMove.setVelocityX(0);
-            straightMove.setVelocityY(0);
-        }
+//        else {
+//            straightMove.setVelocityX(0);
+//            straightMove.setVelocityY(0);
+//        }
     }
 
     @Override
     public void updateImportance() {
-        setImportance(10 / secondsUntilDanger);
+        setImportance(getImportance() / secondsUntilDanger);
     }
 }

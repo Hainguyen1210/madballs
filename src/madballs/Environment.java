@@ -16,6 +16,7 @@ import javafx.beans.property.SimpleLongProperty;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.shape.Rectangle;
+import madballs.AI.BotPlayer;
 import madballs.item.Item;
 import madballs.item.Spawner;
 import madballs.map.Map;
@@ -37,6 +38,10 @@ public class Environment {
     private Quadtree quadtree;
     private Scene scene;
     private int updateIndex = 0;
+
+    public Quadtree getQuadtree() {
+        return quadtree;
+    }
 
     public Group getDisplay() {
         return display;
@@ -215,6 +220,17 @@ public class Environment {
     }
     
     public void startAnimation(){
+        if (MadBalls.isHost()) {
+            for (GameObject obj: gameObjects.values()){
+                if (obj instanceof Obstacle){
+                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                        if (player instanceof BotPlayer){
+                            player.getRelevantObjIDs().add(obj.getID());
+                        }
+                    }
+                }
+            }
+        }
         animation.start();
 //        Navigation.getInstance().showInterupt("", "Game started", "Let's rock and roll!", false);
     }

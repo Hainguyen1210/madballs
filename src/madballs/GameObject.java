@@ -434,6 +434,11 @@ public abstract class GameObject {
 //            if(this instanceof Item && target instanceof Obstacle){  System.out.println(" Item checked Obstacle");  }
             onCollision(target, collisionShape);
             target.onCollision(this, collisionShape);
+//            System.out.println("collide ");
+//            System.out.println(target.getTranslateX());
+//            System.out.println(target.getTranslateY());
+//            System.out.println(target.getDisplay().getBoundsInParent().getWidth());
+//            System.out.println(target.getDisplay().getBoundsInParent().getHeight());
             return true;
         }
         return false;
@@ -564,7 +569,9 @@ public abstract class GameObject {
             if (moveBehaviour != null) moveBehaviour.move(now);
         }
         if (MadBalls.isHost()) {
-            updateBotRelevancy();
+            if (!(this instanceof Obstacle)) {
+                updateBotRelevancy();
+            }
         }
 //        else {
 //            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
@@ -580,7 +587,7 @@ public abstract class GameObject {
 
     private void updateBotRelevancy(){
         for (BotPlayer bot : BotPlayer.getBotPlayers()){
-            bot.checkRelevancy(this, 500, 500);
+            bot.checkRelevancy(this, 0, 0);
         }
     }
     

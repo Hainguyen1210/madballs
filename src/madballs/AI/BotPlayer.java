@@ -21,6 +21,10 @@ public class BotPlayer extends Player {
     private ArrayList<Strategy> strategies = new ArrayList<>();
     private long lastThoughtTime = 0;
 
+    public long getLastThoughtTime() {
+        return lastThoughtTime;
+    }
+
     public static ArrayList<BotPlayer> getBotPlayers() {
         return botPlayers;
     }
@@ -36,7 +40,7 @@ public class BotPlayer extends Player {
                 for (Integer id: getRelevantObjIDs()){
                     for (Strategy strategy: strategies){
                         GameObject object = environment.getObject(id);
-                        if (object != null){
+                        if (object != null && object != getBall() && object != getBall().getWeapon()){
                             if (object instanceof Projectile) counter++;
                             strategy.consider(object);
                         }
@@ -80,6 +84,7 @@ public class BotPlayer extends Player {
 
     public void stop(){
         animation.stop();
+        getRelevantObjIDs().clear();
     }
 
     public BotPlayer() {
@@ -87,6 +92,9 @@ public class BotPlayer extends Player {
         botPlayers.add(this);
         botClient.setLocalPlayer(this);
         strategies.add(new DodgeStrategy(this));
+        strategies.add(new AvoidObstacleStrategy(this));
+        strategies.add(new AttackStrategy(this));
+        strategies.add(new MoveStrategy(this));
     }
 
     @Override

@@ -151,7 +151,6 @@ public class Server extends MultiplayerHandler{
 
     public BotPlayer addBotPlayer(){
         BotPlayer bot = new BotPlayer();
-        bot.setName("BOT");
         bot.setPlayerNum(++playerIndex);
         sendData(new PlayerData(bot, false));
         getPlayers().add(bot);

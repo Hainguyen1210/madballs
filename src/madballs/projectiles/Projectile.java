@@ -20,6 +20,10 @@ import madballs.wearables.Weapon;
 public class Projectile extends GameObject {
     private Weapon sourceWeapon;
 
+    public Weapon getSourceWeapon() {
+        return sourceWeapon;
+    }
+
     public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName, Integer id) {
         super(sourceWeapon.getEnvironment(), 0, 0, false, id);
         
