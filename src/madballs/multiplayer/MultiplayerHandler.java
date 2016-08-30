@@ -139,12 +139,12 @@ public abstract class MultiplayerHandler {
         }
 
         if (!allyAlive){
-            Navigation.getInstance().showAlert("Game over", "You lose!", "Better luck next time.", false);
             MadBalls.setGameOver(true);
+            Navigation.getInstance().showAlert("Game over", "You lose!", "Better luck next time.", false);
         }
         else if (!enemyAlive) {
-            Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
             MadBalls.setGameOver(true);
+            Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
         }
     }
 

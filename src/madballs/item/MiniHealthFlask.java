@@ -18,6 +18,7 @@ public class MiniHealthFlask extends BuffItem{
     
     public MiniHealthFlask(Environment environment, SpawnLocation spawnLocation, Integer id) {
         super(environment, spawnLocation, new Rejuvenation(null, 5, 30), id);
+        setImage("teal_potion");
     }
     
     

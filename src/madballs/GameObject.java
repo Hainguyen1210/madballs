@@ -264,7 +264,7 @@ public abstract class GameObject {
         return hitBox;
     }
     
-    public ImageView getImage() {
+    public ImageView getImageView() {
         return imageView;
     }
 
@@ -337,8 +337,8 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(Image image) {
-        this.imageView.setImage(image);
+    public void setImage(String imageName) {
+        this.imageView.setImage(ImageGenerator.getInstance().getImage(imageName));
     }
 
     public DoubleProperty getHp(){
@@ -565,8 +565,8 @@ public abstract class GameObject {
     
     public void update(long now){
         if (!isDead) {
-            updateUnique(now);
             if (moveBehaviour != null) moveBehaviour.move(now);
+            updateUnique(now);
         }
         if (MadBalls.isHost()) {
             if (!(this instanceof Obstacle)) {

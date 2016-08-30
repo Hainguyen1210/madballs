@@ -14,13 +14,16 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import madballs.*;
 import madballs.map.SpawnLocation;
@@ -208,15 +211,23 @@ public class Player {
 
         Label nameLabel = new Label(name);
         nameLabel.setFont(new Font(10));
-        nameLabel.setTranslateY(-55);
-        ball.getStatusG().getChildren().add(nameLabel);
+        nameLabel.setTextFill(Color.WHITE);
+
+        ImageView badge = new ImageView(ImageGenerator.getInstance().getImage("blue_badge"));
+        badge.setFitWidth(60);
+        badge.setFitHeight(18);
+        Pane namePane = new Pane(badge, nameLabel);
+        namePane.setTranslateY(-60);
+        namePane.setTranslateX(-15);
+        ball.getStatusG().getChildren().add(namePane);
+        nameLabel.translateXProperty().bind(Bindings.subtract(50, nameLabel.widthProperty()));
 
         double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
-        ball.setImage(ImageGenerator.getInstance().getImage("ball"+teamNum.get()));
-        ball.getImage().setFitHeight(ballSize);
-        ball.getImage().setFitWidth(ballSize);
-        ball.getImage().setTranslateX(-ballSize/2);
-        ball.getImage().setTranslateY(-ballSize/2);
+        ball.setImage("ball"+teamNum.get());
+        ball.getImageView().setFitHeight(ballSize);
+        ball.getImageView().setFitWidth(ballSize);
+        ball.getImageView().setTranslateX(-ballSize/2);
+        ball.getImageView().setTranslateY(-ballSize/2);
 
         if (isLocal) {
             bindInput(MadBalls.getMainScene());

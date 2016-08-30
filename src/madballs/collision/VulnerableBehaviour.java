@@ -28,7 +28,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
         SoundStudio.getInstance().playAudio("penetrate", target.getTranslateX(), target.getTranslateY(), 500, 500);
         DamageEffect damageEffect = (DamageEffect) effect;
         target.setHpValue(target.getHpValue() - damageEffect.getDamage());
-        System.out.println(target.getHpValue());
+//        System.out.println(target.getHpValue());
         if (target.getHpValue() <= 0){
             target.setHpValue(0);
             target.die();

@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class BotPlayer extends Player {
     private static ArrayList<BotPlayer> botPlayers = new ArrayList<>();
-    private final int THOUGHTS_PER_SECONDS = 20;
+    private final int THOUGHTS_PER_SECONDS = 60;
     private BotClient botClient = new BotClient();
     private ArrayList<Strategy> strategies = new ArrayList<>();
     private long lastThoughtTime = 0;

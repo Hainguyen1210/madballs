@@ -42,7 +42,7 @@ public class Obstacle extends GameObject{
         getHitBox().setOpacity(0);
 
 //        double boxSize;if (length<height)boxSize=length;else boxSize=height;
-//        Image background = ImageGenerator.getInstance().getImage("obstacle/stripebox");
+//        Image background = ImageGenerator.getInstance().getImageView("obstacle/stripebox");
 //        backgroundPane = new Pane();
 //        backgroundPane.setBackground(
 //            new Background(
@@ -58,7 +58,7 @@ public class Obstacle extends GameObject{
 //        backgroundPane.setPrefSize(length, height);
 //        getAnimationG().getChildren().addAll(backgroundPane);
 //        setImage(background);
-//        getImage().setFitWidth(boxSize);getImage().setFitHeight(boxSize);
+//        getImageView().setFitWidth(boxSize);getImageView().setFitHeight(boxSize);
     }
 
     @Override

@@ -52,7 +52,7 @@ public class Minigun extends Weapon{
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2-5);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("blue")));
-        setImage(ImageGenerator.getInstance().getImage("minigun"));
+        setImage("minigun");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
 

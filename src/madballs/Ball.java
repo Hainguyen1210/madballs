@@ -11,8 +11,6 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
@@ -144,7 +142,7 @@ public class Ball extends GameObject{
 //        hpBar.setLayoutY(getTranslateY() - 1);
         
         setHitBox(new Circle(15));
-        getImage().setEffect(new DropShadow(10, Color.BLACK));
+        getImageView().setEffect(new DropShadow(10, Color.BLACK));
     }
     @Override
     public void updateUnique(long now) {

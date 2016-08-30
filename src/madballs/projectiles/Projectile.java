@@ -6,7 +6,6 @@
 package madballs.projectiles;
 
 
-import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
 import madballs.ImageGenerator;
@@ -29,7 +28,7 @@ public class Projectile extends GameObject {
         
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
-        setImage(ImageGenerator.getInstance().getImage(projectImageName));
+        setImage(projectImageName);
         setDisplay(id);
 
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
@@ -41,10 +40,11 @@ public class Projectile extends GameObject {
         setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
         setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
 
-//        getImage().setFitWidth(hitBox.getLayoutBounds().getWidth());
-        getImage().setFitHeight(hitBox.getLayoutBounds().getHeight());
-        getImage().setTranslateX(-hitBox.getLayoutBounds().getWidth()/2);
-        getImage().setTranslateY(-hitBox.getLayoutBounds().getHeight()/2);
+//        getImageView().setFitWidth(hitBox.getLayoutBounds().getWidth());
+        getImageView().setFitHeight(hitBox.getLayoutBounds().getHeight());
+        getImageView().setPreserveRatio(true);
+        getImageView().setTranslateX(-hitBox.getLayoutBounds().getWidth()/2);
+        getImageView().setTranslateY(-hitBox.getLayoutBounds().getHeight()/2);
         setRotate(Math.toRadians(sourceWeapon.getRotateAngle()));
 
         // set collision characteristics and move behaviour

@@ -204,7 +204,7 @@ public class Server extends MultiplayerHandler{
     }
     
     public void handleData(Player currentPlayer, Data data){
-        System.out.println("handle" + data.getType());
+//        System.out.println("handle" + data.getType());
         super.handleData(data);
         if (data.getType().equals("ready")){
             ReadyData readyData = (ReadyData) data;

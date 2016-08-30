@@ -47,7 +47,7 @@ public class M4A1 extends Weapon{
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("gray")));
-        setImage(ImageGenerator.getInstance().getImage("m4a1"));
+        setImage("m4a1");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

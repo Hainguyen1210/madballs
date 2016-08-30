@@ -76,7 +76,7 @@ public class XM1104 extends Weapon {
         setWidth(WIDTH);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("grey")));
-        setImage(ImageGenerator.getInstance().getImage("shotgun"));
+        setImage("shotgun");
         configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
 

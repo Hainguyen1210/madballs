@@ -41,7 +41,7 @@ public class Bazooka extends Weapon {
         setWidth(WIDTH-30);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage(ImageGenerator.getInstance().getImage("bazooka"));
+        setImage("bazooka");
         configImageView(-30, -HEIGHT/2, HEIGHT, WIDTH);
     }
 }

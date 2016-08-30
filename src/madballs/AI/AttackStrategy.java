@@ -53,6 +53,7 @@ public class AttackStrategy extends Strategy {
     public void consider(GameObject obj) {
         if (weapon == null) return;
         if (obj instanceof Ball){
+            // find Ball target
             Ball target = (Ball) obj;
             if (enemy != null && enemy.getHpValue() <= target.getHpValue()){
                 return;
@@ -61,6 +62,7 @@ public class AttackStrategy extends Strategy {
                 return;
             }
 
+            // calculate target shot coordinates
             double targetX = target.getTranslateX();
             double targetY = target.getTranslateY();
             if (currentAimMode == 0){
@@ -84,6 +86,7 @@ public class AttackStrategy extends Strategy {
                 return;
             }
 
+            // check if there is any blocking objects
             for (Integer id: getBot().getRelevantObjIDs()){
                 GameObject checkingObj = weapon.getEnvironment().getObject(id);
                 if (checkingObj != null) {

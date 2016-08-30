@@ -25,7 +25,6 @@ public class BotClient extends MultiplayerHandler {
 
     @Override
     public void handleData(Data data){
-        System.out.println("botclient " + data.getType());
         super.handleData(data);
         try {
             if (data.getType().equals("check_ready")){

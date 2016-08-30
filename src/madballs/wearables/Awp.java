@@ -47,7 +47,7 @@ public class Awp extends Weapon{
         setWidth(WIDTH-15);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("yellow")));
-        setImage(ImageGenerator.getInstance().getImage("awp"));
+        setImage("awp");
         configImageView(-15, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

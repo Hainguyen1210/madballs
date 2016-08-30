@@ -51,7 +51,7 @@ public class Uzi extends Weapon{
         setWidth(WIDTH);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage(ImageGenerator.getInstance().getImage("uzi"));
+        setImage("uzi");
         configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

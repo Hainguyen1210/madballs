@@ -147,9 +147,9 @@ public class DodgeStrategy extends Strategy {
             if (dodgeAngle < -180){
                 dodgeAngle += 360;
             }
-            System.out.println("avoid danger" + dodgeAngle);
-            System.out.println(angleFromDanger);
-            System.out.println(dangerMovementAngle);
+//            System.out.println("avoid danger" + dodgeAngle);
+//            System.out.println(angleFromDanger);
+//            System.out.println(dangerMovementAngle);
             double speed = straightMove.getSpeed();
 //            if (dodgeAngle > 180){
 //                dodgeAngle -= 360;

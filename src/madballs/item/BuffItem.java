@@ -21,6 +21,10 @@ public class BuffItem extends Item {
         super(environment, spawnLocation, id);
         giveBuffEffect = new GiveBuffEffect(null, effectState);
         setCollisionEffect(giveBuffEffect);
+        getImageView().setFitHeight(30);
+        getImageView().setFitWidth(30);
+        getImageView().setTranslateX(-15);
+        getImageView().setTranslateY(-15);
     }
 
     @Override

@@ -47,7 +47,7 @@ public class Ak47 extends Weapon{
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("orange")));
-        setImage(ImageGenerator.getInstance().getImage("ak47"));
+        setImage("ak47");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
     
