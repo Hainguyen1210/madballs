@@ -44,7 +44,6 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
                         System.out.println("ranked" + player.getName() + player.getRanking());
                     }
                     MadBalls.getMultiplayerHandler().sendData(new PlayerData(sourceBall.getPlayer()));
-                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(targetBall.getPlayer()));
                 }
             }
         }

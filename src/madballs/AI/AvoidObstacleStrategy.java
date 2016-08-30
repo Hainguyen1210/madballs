@@ -15,6 +15,8 @@ public class AvoidObstacleStrategy extends Strategy {
     private double secondsUntilCollision = -1;
     private final double REACTION_TIME_LIMIT = 0.3;
     private boolean isNoCollision = true;
+    private GameObject lastConsiderableObj;
+    private long changeConsiderationTime = 0;
 
     public AvoidObstacleStrategy(BotPlayer bot) {
         super(bot);
@@ -73,14 +75,20 @@ public class AvoidObstacleStrategy extends Strategy {
     }
 
     private void updatePushBackObj(GameObject obj, double deltaTime){
-        if (obj == pushBackObj) setImportance(getImportance() + 1);
+        if (obj == pushBackObj) {
+            setImportance(getImportance() + 1);
+        }
         pushBackObj = obj;
         secondsUntilCollision = deltaTime;
         isNoCollision = false;
     }
 
     private boolean isDeltaTimeConsiderable(double deltaTime){
-        if (deltaTime < 0 || deltaTime > REACTION_TIME_LIMIT) {
+        double timeLimit = REACTION_TIME_LIMIT;
+        if ((getBot().getLastThoughtTime() - changeConsiderationTime) < 1000000000){
+            timeLimit /= 3;
+        }
+        if (deltaTime < 0 || deltaTime > timeLimit) {
             return false;
         }
         else if (secondsUntilCollision != -1 && deltaTime > secondsUntilCollision){
@@ -94,6 +102,12 @@ public class AvoidObstacleStrategy extends Strategy {
         if (isNoCollision) {
             pushBackObj = null;
             setImportance(12);
+        }
+        else {
+            if (lastConsiderableObj == null || lastConsiderableObj != pushBackObj){
+                changeConsiderationTime = getBot().getLastThoughtTime();
+                lastConsiderableObj = pushBackObj;
+            }
         }
         if (pushBackObj != null) {
             StraightMove straightMove = (StraightMove) getBot().getBall().getMoveBehaviour();

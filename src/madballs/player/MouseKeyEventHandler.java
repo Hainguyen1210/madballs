@@ -7,7 +7,6 @@ import javafx.beans.property.SimpleDoubleProperty;
 import javafx.event.EventHandler;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.input.MouseEvent;
-import madballs.Environment;
 import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.scenes.SceneManager;
@@ -59,7 +58,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
         if (event.getEventType() == MouseEvent.MOUSE_RELEASED){
             isMousePressed.set(false);
             if (player.getBall().isDead()){
-                SceneManager.getInstance().setZoomOut(SceneManager.numMapParts*1.1);
+                SceneManager.getInstance().setZoomOut(SceneManager.NUM_MAP_PARTS *1.1);
                 PerspectiveCamera camera = SceneManager.getInstance().getCamera();
                 Map map = player.getBall().getEnvironment().getMap();
                 camera.translateXProperty().unbind();

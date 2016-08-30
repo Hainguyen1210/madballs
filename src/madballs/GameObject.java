@@ -587,7 +587,7 @@ public abstract class GameObject {
 
     private void updateBotRelevancy(){
         for (BotPlayer bot : BotPlayer.getBotPlayers()){
-            bot.checkRelevancy(this, 0, 0);
+            bot.checkRelevancy(this, -50, -50);
         }
     }
     

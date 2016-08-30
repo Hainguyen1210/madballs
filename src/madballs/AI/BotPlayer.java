@@ -16,10 +16,14 @@ import java.util.*;
  */
 public class BotPlayer extends Player {
     private static ArrayList<BotPlayer> botPlayers = new ArrayList<>();
-    private final int THOUGHTS_PER_SECONDS = 60;
+    private final int THOUGHTS_PER_SECONDS = 20;
     private BotClient botClient = new BotClient();
     private ArrayList<Strategy> strategies = new ArrayList<>();
     private long lastThoughtTime = 0;
+
+    public ArrayList<Strategy> getStrategies() {
+        return strategies;
+    }
 
     public long getLastThoughtTime() {
         return lastThoughtTime;
@@ -79,6 +83,7 @@ public class BotPlayer extends Player {
     }
 
     public void play(){
+        strategies.add(new MoveStrategy(this, getBall().getEnvironment().getMap()));
         animation.start();
     }
 
@@ -94,7 +99,6 @@ public class BotPlayer extends Player {
         strategies.add(new DodgeStrategy(this));
         strategies.add(new AvoidObstacleStrategy(this));
         strategies.add(new AttackStrategy(this));
-        strategies.add(new MoveStrategy(this));
     }
 
     @Override

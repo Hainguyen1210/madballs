@@ -43,7 +43,7 @@ import java.util.WeakHashMap;
  * @author caval
  */
 public class SceneManager {
-    public static final int numMapParts = 3;
+    public static final double NUM_MAP_PARTS = 3;
     public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE};
     private static SceneManager instance = new SceneManager();
     private FlowPane gameInfoDisplay;
@@ -253,16 +253,16 @@ public class SceneManager {
     
     public void bindCamera(GameObject obj){
         System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
-        scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * numMapParts, zoomOut));
+        scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * NUM_MAP_PARTS, zoomOut));
 //        scale.bind(Bindings.divide(
-//                Bindings.divide(MadBalls.getAnimationScene().heightProperty(), MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts)
+//                Bindings.divide(MadBalls.getAnimationScene().heightProperty(), MadBalls.getMainEnvironment().getMap().getHeight() / NUM_MAP_PARTS)
 //                , zoomOut));
         camera = new PerspectiveCamera(true);
         camera.setNearClip(0.1);
         camera.setFarClip(8000);
         // display the map by how many vertical parts it has been divided into and how much it has been zoom out
         // e.g. if the map is 720px high, divided into 3 parts, and zoomed out by 1.5, the displaying height is 720/3*1.5 = 360
-        camera.translateZProperty().bind(Bindings.multiply(zoomOut, -MadBalls.getMainEnvironment().getMap().getHeight() / numMapParts / Math.tan(Math.toRadians(30))));
+        camera.translateZProperty().bind(Bindings.multiply(zoomOut, -MadBalls.getMainEnvironment().getMap().getHeight() / NUM_MAP_PARTS / Math.tan(Math.toRadians(30))));
         camera.setFieldOfView(30);
         camera.translateXProperty().bind(obj.getTranslateXProperty());
         camera.translateYProperty().bind(obj.getTranslateYProperty());

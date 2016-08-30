@@ -80,7 +80,7 @@ public class MadBalls extends Application {
         SoundStudio.getInstance();
 
 
-//        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
+        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
         Map.searchFiles();
 
         primaryStage.setTitle("MAD BALL");
