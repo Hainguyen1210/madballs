@@ -23,10 +23,10 @@ public class Minigun extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 15;
 
-    public Minigun(GameObject owner) {
+    public Minigun(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -39,9 +39,10 @@ public class Minigun extends Weapon{
         setProjectileSpeed(600);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("blue"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet2"));
+        setProjectileImageName("bullet2");
         
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setFireSoundFX("minigun");
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
@@ -51,7 +52,7 @@ public class Minigun extends Weapon{
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2-5);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("blue")));
-        setImage(ImageGenerator.getInstance().getImage("minigun"));
+        setImage("minigun");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
 

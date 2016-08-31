@@ -23,10 +23,10 @@ public class Uzi extends Weapon{
     private final double WIDTH = 25;
     private final double HEIGHT = 7;
 
-    public Uzi(GameObject owner) {
+    public Uzi(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -39,9 +39,10 @@ public class Uzi extends Weapon{
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet1"));
+        setProjectileImageName("bullet1");
         
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setFireSoundFX("uzi");
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
     
@@ -50,7 +51,7 @@ public class Uzi extends Weapon{
         setWidth(WIDTH);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage(ImageGenerator.getInstance().getImage("uzi"));
+        setImage("uzi");
         configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

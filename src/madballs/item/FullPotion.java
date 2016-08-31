@@ -16,8 +16,8 @@ import madballs.map.SpawnLocation;
  */
 public class FullPotion extends BuffItem{
 
-    public FullPotion(Environment environment, SpawnLocation spawnLocation) {
-        super(environment, spawnLocation, new InstantHeal(null, 100));
+    public FullPotion(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new InstantHeal(null, 100), id);
     }
     
     

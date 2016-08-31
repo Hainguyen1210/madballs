@@ -12,3 +12,10 @@ and open the template in the editor.
     -fx-padding: 0.20em;
 }
 
+.scroll-pane > .viewport {
+    -fx-background-color: transparent;
+}
+
+.scroll-pane {
+    -fx-background-color: transparent;
+}

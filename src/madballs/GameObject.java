@@ -6,7 +6,9 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.scene.CacheHint;
 import javafx.scene.image.Image;
+import madballs.AI.BotPlayer;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
 import javafx.beans.property.DoubleProperty;
@@ -46,6 +48,7 @@ public abstract class GameObject {
     private double oldX, oldY;
     private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
+    private boolean isMobile = true;
     private boolean isDead = false;
     
     private StateLoader stateLoader;
@@ -68,6 +71,14 @@ public abstract class GameObject {
         return isDead;
     }
 
+    public boolean isMobile() {
+        return isMobile;
+    }
+
+    public void setMobile(boolean mobile) {
+        isMobile = mobile;
+    }
+
     public void setDieSoundFX(String dieSoundFX) {
         this.dieSoundFX = dieSoundFX;
     }
@@ -75,7 +86,7 @@ public abstract class GameObject {
 //        return environment.getObjectIndex(this);
 //    }
     
-    public GameObject(Environment environment, double x, double y, boolean isSettingDisplay){
+    public GameObject(Environment environment, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("1" + this.getClass());
         stateLoader = new StateLoader(this);
         translateX.set(x);
@@ -87,7 +98,7 @@ public abstract class GameObject {
 
         this.environment = environment;
 
-        if (isSettingDisplay) setDisplay();
+        if (isSettingDisplay) setDisplay(id);
     }
     
     /**
@@ -96,7 +107,7 @@ public abstract class GameObject {
      * @param x the varied X coordinate compared to the owner (child's X = owner's X + x)
      * @param y the varied Y coordinate compared to the owner (child's Y = owner's Y + y)
      */
-    public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay){
+    public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
         owner.child = this;
@@ -111,7 +122,7 @@ public abstract class GameObject {
         rotation.angleProperty().bind(owner.rotation.angleProperty());
         environment = owner.getEnvironment();
         
-        if (isSettingDisplay) setDisplay();
+        if (isSettingDisplay) setDisplay(id);
     }
     
     public void setOwner(GameObject newOwner, double x, double y){
@@ -253,7 +264,7 @@ public abstract class GameObject {
         return hitBox;
     }
     
-    public ImageView getImage() {
+    public ImageView getImageView() {
         return imageView;
     }
 
@@ -326,8 +337,8 @@ public abstract class GameObject {
         this.hitBox = hitBox;
     }
 
-    public void setImage(Image image) {
-        this.imageView.setImage(image);
+    public void setImage(String imageName) {
+        this.imageView.setImage(ImageGenerator.getInstance().getImage(imageName));
     }
 
     public DoubleProperty getHp(){
@@ -423,6 +434,11 @@ public abstract class GameObject {
 //            if(this instanceof Item && target instanceof Obstacle){  System.out.println(" Item checked Obstacle");  }
             onCollision(target, collisionShape);
             target.onCollision(this, collisionShape);
+//            System.out.println("collide ");
+//            System.out.println(target.getTranslateX());
+//            System.out.println(target.getTranslateY());
+//            System.out.println(target.getDisplay().getBoundsInParent().getWidth());
+//            System.out.println(target.getDisplay().getBoundsInParent().getHeight());
             return true;
         }
         return false;
@@ -440,12 +456,12 @@ public abstract class GameObject {
     /**
      * put all the display component inside the display HBox
      */
-    public void setDisplay(){
+    public void setDisplay(Integer id){
         display = new Group();
         animationG = new Group();
         statusG = new Group();
         statusG.setVisible(false);
-        statusG.setTranslateZ(1);
+        statusG.setTranslateZ(-1);
         statusG.setTranslateX(-20);
         statusG.setTranslateY(20);
 //        display.setPrefSize(0, 0);
@@ -473,8 +489,11 @@ public abstract class GameObject {
             statusG.setVisible(false);
           }
         });
-        hitBox.setOpacity(0);
-        environment.registerGameObj(this, true);
+//        hitBox.setVisible(false);
+//        hitBox.setOpacity(0);
+        hitBox.setCache(true);
+        hitBox.setCacheHint(CacheHint.SPEED);
+        environment.registerGameObj(this, true, id);
     }
 
     public void configImageView(double translateX, double translateY, double height, double width){
@@ -496,25 +515,45 @@ public abstract class GameObject {
     public Rectangle getBoundsRectangle(){
         return boundsRectangle;
     }
+
+    public void revive(){
+        if (isDead == true){
+            isDead = false;
+            if (!environment.getDisplay().getChildren().contains(display)){
+                environment.getDisplay().getChildren().add(display);
+            }
+        }
+
+    }
     
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
-        if (dieSoundFX != null) SoundStudio.getInstance().playAudio(dieSoundFX);
-        isDead = true;
-        if (owner != null) {
-            owner.child = null;
+        if (dieSoundFX != null) {
+            SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
         }
+        isDead = true;
+//        if (owner != null) {
+//            owner.child = null;
+//        }
+        getEnvironment().removeGameObj(this);
     }
     
     public void die(){
-        if (MadBalls.isHost()){
-//            System.out.println("die " + getClass() + getID());
-            setDead();
-            getEnvironment().removeGameObj(this);
-            if (child != null) {
-                child.die();
-            }
+        if (this instanceof Ball && !MadBalls.isHost()) return;
+        setDead();
+        if (child != null && !child.isDead()) {
+            child.die();
         }
+//        if (MadBalls.isHost()){
+////            System.out.println("die " + getClass() + getID());
+//            setDead();
+//            if (child != null) {
+//                child.die();
+//            }
+//        }
+//        else {
+//            getDisplay().setVisible(false);
+//        }
     }
 
     public void dieWithOwner(){
@@ -526,16 +565,29 @@ public abstract class GameObject {
     
     public void update(long now){
         if (!isDead) {
-            updateUnique(now);
             if (moveBehaviour != null) moveBehaviour.move(now);
+            updateUnique(now);
         }
-        updateRelevancy();
+        if (MadBalls.isHost()) {
+            if (!(this instanceof Obstacle)) {
+                updateBotRelevancy();
+            }
+        }
+//        else {
+//            MadBalls.getMultiplayerHandler().getLocalPlayer().checkRelevancy(this, 500, 500);
+//        }
         stateLoader.update(now);
     }
 
     private void updateRelevancy(){
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
-            player.checkRelevancy(this);
+            player.checkRelevancy(this, 500, 500);
+        }
+    }
+
+    private void updateBotRelevancy(){
+        for (BotPlayer bot : BotPlayer.getBotPlayers()){
+            bot.checkRelevancy(this, -50, -50);
         }
     }
     

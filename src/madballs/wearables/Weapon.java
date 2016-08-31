@@ -22,6 +22,7 @@ import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.FireData;
+import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 
 /**
@@ -29,7 +30,7 @@ import madballs.projectiles.Projectile;
  * @author Caval
  */
 public abstract class Weapon extends GameObject {
-    private Image projectileImage;
+    private String projectileImageName;
     private double projectileHitBoxSize;
     private Paint projectileColor;
     private String fireSoundFX;
@@ -79,15 +80,13 @@ public abstract class Weapon extends GameObject {
         return projectileColor;
     }
 
-    public void setProjectileImage(Image projectileImage) {
-        this.projectileImage = projectileImage;
+    public String getProjectileImageName() {
+        return projectileImageName;
     }
 
-    public Image getProjectileImage() {
-        return projectileImage;
+    public void setProjectileImageName(String projectileImageName) {
+        this.projectileImageName = projectileImageName;
     }
-
-
 
     public void setProjectileColor(Paint projectileColor) {
         this.projectileColor = projectileColor;
@@ -146,9 +145,10 @@ public abstract class Weapon extends GameObject {
         this.projectileMoveBehaviour = projectileMoveBehaviour;
     }
 
-    public Weapon(GameObject owner, double x, double y) {
-        super(owner, x, y, true);
+    public Weapon(GameObject owner, double x, double y, Integer id) {
+        super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
+        getHitBox().setOpacity(0);
     }
 //    public Weapon(Environment environment, double x, double y) {
 //        super(environment, x, y, true);
@@ -196,31 +196,32 @@ public abstract class Weapon extends GameObject {
         return fireSoundFX;
     }
 
-    public void forceFire(){
-
-        if (fireSoundFX != null) SoundStudio.getInstance().playAudio(fireSoundFX);
-        new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImage);
+    public void forceFire(Integer projectileID){
+        if (fireSoundFX != null) {
+            SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 150*scope, 150*scope);
+        }
+        Projectile projectile = new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName, projectileID);
+        if (MadBalls.isHost()){
+            MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), -1));
+        }
         checkAmmo();
     }
     
     public void attack(long now){
+        if (!MadBalls.isHost()) return;
         if ((now - getLastShotTime()) / 1_000_000_000.0  >  1  / fireRate){
-            if (MadBalls.isHost()){
-                if (getLastShotTime() == 0) setLastShotTime(getEnvironment().getLastUpdateTime());
-                MadBalls.getMultiplayerHandler().sendData(new FireData(getID()));
-                forceFire();
-                setLastShotTime(now);
-            }
+            forceFire(-1);
+            setLastShotTime(now);
         }
     }
 
     public boolean checkAmmo(){
         if (getAmmo() == 0){
-            ((Ball)getOwner()).setWeapon(Pistol.class);
-//            if (MadBalls.isHost()){
-//                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName()));
-//                ((Ball)getOwner()).setWeapon(Pistol.class);
-//            }
+//            ((Ball)getOwner()).setWeapon(Pistol.class);
+            if (MadBalls.isHost()){
+                ((Ball)getOwner()).setWeapon(Pistol.class, -1);
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName(), ((Ball)getOwner()).getWeapon().getID()));
+            }
         }
         return getAmmo() == 0;
     }

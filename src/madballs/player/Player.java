@@ -14,18 +14,28 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import javafx.application.Platform;
+import javafx.beans.binding.Bindings;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
+import javafx.scene.control.Label;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import madballs.*;
-import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
+import madballs.scenes.SceneManager;
 
 /**
  *
  * @author Caval
  */
 public class Player {
+    private String name;
     private Ball ball;
     private Controller controller;
     private Socket socket;
@@ -34,9 +44,57 @@ public class Player {
     private boolean isLocal;
     private boolean isReady;
     private int playerNum;
-    private int teamNum;
+    private IntegerProperty teamNum = new SimpleIntegerProperty();
     private SpawnLocation spawnLocation;
     private ArrayList<Integer> relevantObjIDs = new ArrayList<>();
+
+    private IntegerProperty killsCount = new SimpleIntegerProperty(0);
+    private IntegerProperty deathsCount = new SimpleIntegerProperty(0);
+    private IntegerProperty ranking = new SimpleIntegerProperty(0);
+
+    public int getRanking() {
+        return ranking.get();
+    }
+
+    public IntegerProperty rankingProperty() {
+        return ranking;
+    }
+
+    public void setRanking(int ranking) {
+        this.ranking.set(ranking);
+    }
+
+    public int getKillsCount() {
+        return killsCount.get();
+    }
+
+    public IntegerProperty killsCountProperty() {
+        return killsCount;
+    }
+
+    public void setKillsCount(int killsCount) {
+        this.killsCount.set(killsCount);
+    }
+
+    public int getDeathsCount() {
+        return deathsCount.get();
+    }
+
+    public IntegerProperty deathsCountProperty() {
+        return deathsCount;
+    }
+
+    public void setDeathsCount(int deathsCount) {
+        this.deathsCount.set(deathsCount);
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public ArrayList<Integer> getRelevantObjIDs() {
         return relevantObjIDs;
@@ -82,22 +140,61 @@ public class Player {
         return isLocal;
     }
 
-    public void checkRelevancy(GameObject obj){
-        double xDiff = Math.abs(obj.getTranslateX() - ball.getTranslateX());
-        double yDiff = Math.abs(obj.getTranslateY() - ball.getTranslateY());
-        SubScene animationScene = MadBalls.getAnimationScene();
-        double scale = SceneManager.getInstance().getScale();
-        if (xDiff < animationScene.getWidth()/2/scale + 100 && yDiff < animationScene.getHeight()/2/scale + 100){
-            relevantObjIDs.add(obj.getID());
+    public void checkRelevancy(GameObject obj, double varianceX, double varianceY){
+        if (obj.isDead()) {
+            if (!relevantObjIDs.contains(obj.getID())) {
+                relevantObjIDs.add(obj.getID());
+            }
+            return;
         }
-//        relevantObjIDs.add(obj.getID());
+        if (getRelevancy(obj.getTranslateX(), obj.getTranslateY(), varianceX, varianceY)) {
+            if (!relevantObjIDs.contains(obj.getID())) {
+                relevantObjIDs.add(obj.getID());
+            }
+        }
+        else {
+            relevantObjIDs.remove(obj.getID());
+        }
 
+    }
+
+    public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
+        double xDiff = Math.abs(x - ball.getTranslateX());
+        double yDiff = Math.abs(y - ball.getTranslateY());
+        double scale = SceneManager.getInstance().getScale();
+        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
     }
 
     public Player(Socket socket, boolean isLocal){
         controller = new Controller(this);
         this.isLocal = isLocal;
         this.socket = socket;
+        setSocket(socket);
+
+        ranking.addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                SceneManager.getInstance().reorderScoreBoard();
+            }
+        });
+    }
+
+    public void updateRanking(){
+        for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
+            if (player == this) continue;
+            if (getKillsCount() > player.getKillsCount() || (getKillsCount() == player.getKillsCount() && getDeathsCount() < player.getDeathsCount())){
+                if (getRanking() >= player.getRanking()){
+                    int newRanking = player.getRanking();
+                    player.setRanking(getRanking());
+                    setRanking(newRanking);
+                    System.out.println("update rank" + name + getRanking());
+                    player.updateRanking();
+                }
+            }
+        }
+    }
+
+    public void setSocket(Socket socket){
         if (socket != null){
             try {
                 out = new ObjectOutputStream(socket.getOutputStream());
@@ -107,20 +204,36 @@ public class Player {
             }
         }
     }
-    
-    public void generateBall(Environment environment){
-        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY());
-        double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
-        ball.setImage(ImageGenerator.getInstance().getImage("ball"+2));
-        ball.getImage().setFitHeight(ballSize);
-        ball.getImage().setFitWidth(ballSize);
-        ball.getImage().setTranslateX(-ballSize/2);
-        ball.getImage().setTranslateY(-ballSize/2);
 
-        if (ImageGenerator.getInstance().getImage("ball"+teamNum) == null) System.out.print("11111111111111111111111111111111111111111111111111111111111111111111111");
+    public void generateBall(Environment environment, Integer id){
+        ball = new Ball(environment, spawnLocation.getX(), spawnLocation.getY(), id, this);
+        SceneManager.getInstance().bindBallToScoreBoard(ball);
+
+        Label nameLabel = new Label(name);
+        nameLabel.setFont(new Font(10));
+        nameLabel.setTextFill(Color.WHITE);
+
+        ImageView badge = new ImageView(ImageGenerator.getInstance().getImage("blue_badge"));
+        badge.setFitWidth(60);
+        badge.setFitHeight(18);
+        Pane namePane = new Pane(badge, nameLabel);
+        namePane.setTranslateY(-60);
+        namePane.setTranslateX(-15);
+        ball.getStatusG().getChildren().add(namePane);
+        nameLabel.translateXProperty().bind(Bindings.subtract(50, nameLabel.widthProperty()));
+
+        double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
+        ball.setImage("ball"+teamNum.get());
+        ball.getImageView().setFitHeight(ballSize);
+        ball.getImageView().setFitWidth(ballSize);
+        ball.getImageView().setTranslateX(-ballSize/2);
+        ball.getImageView().setTranslateY(-ballSize/2);
+
         if (isLocal) {
             bindInput(MadBalls.getMainScene());
             SceneManager.getInstance().bindBall(ball);
+            controller.setSceneWidth(MadBalls.getAnimationScene().getWidth());
+            controller.setSceneHeight(MadBalls.getAnimationScene().getHeight());
         }
     }
     
@@ -136,12 +249,16 @@ public class Player {
         this.playerNum = playerNum;
     }
 
-    public int getTeamNum() {
+    public IntegerProperty teamNumProperty() {
         return teamNum;
+    }
+
+    public int getTeamNum() {
+        return teamNum.get();
     }
     
     public void setTeamNum(int teamNum){
-        this.teamNum = teamNum;
+        this.teamNum.set(teamNum);
     }
     
     private final MultiplePressedKeysEventHandler keyHandler = 
@@ -191,27 +308,31 @@ public class Player {
     }
 
     public void sendData(Data data){
-        try {
-            out.writeObject(data);
-            out.flush();
+        if (out == null) return;
+        MadBalls.getMultiplayerHandler().getExecutorService().execute(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    out.writeObject(data);
+//                    out.flush();
 //            System.out.println("sent " + data.getType());
 //            System.out.println(Environment.getInstance().gameNumObjects());
-        } catch (IOException ex) {
-            Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
-        }
+                } catch (IOException ex) {
+                    Logger.getLogger(Player.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        });
     }
     
     public Data readData(){
         try {
             return (Data) in.readObject();
-        } catch (ClassNotFoundException | IOException ex){
-            Platform.exit();
-        } catch (NullPointerException ex){
+        } catch (ClassNotFoundException | IOException | NullPointerException ex){
             MadBalls.getMultiplayerHandler().getPlayers().remove(this);
             Platform.runLater(new Runnable() {
                 @Override
                 public void run() {
-                    ball.die();
+                    if (ball != null) ball.die();
                 }
             });
         }

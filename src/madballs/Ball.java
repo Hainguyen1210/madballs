@@ -11,10 +11,11 @@ import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.binding.Bindings;
-import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
+import javafx.scene.effect.DropShadow;
 import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
+import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
@@ -24,6 +25,9 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.GetWeaponData;
+import madballs.player.Player;
+import madballs.scenes.SceneManager;
 import madballs.wearables.*;
 
 /**
@@ -37,6 +41,11 @@ public class Ball extends GameObject{
     private BuffState buffState;
     private HBox buffBar;
     private Map<String, Circle> buffIndicators = new HashMap<>();
+    private Player player;
+
+    public Player getPlayer() {
+        return player;
+    }
 
     public BuffState getBuffState() {
         return buffState;
@@ -68,15 +77,17 @@ public class Ball extends GameObject{
     }
 
 
-    public Ball(Environment environment, double x, double y) {
-        super(environment, x , y, true);
+    public Ball(Environment environment, double x, double y, Integer id, Player pLayer) {
+        super(environment, x , y, true, id);
+        this.player = pLayer;
         setMoveBehaviour(new StraightMove(this, SPEED));
         getMoveBehaviour().setSoundFX("footstep2");
         setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
-        
-        setWeapon(Pistol.class);
+
+        weapon = new Pistol(this, -1);
+        SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
 
     public Image getBallImage() {
@@ -91,16 +102,24 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-    public <W extends Weapon> void setWeapon(Class<W> weaponClass) {
+    public <W extends Weapon> void setWeapon(Class<W> weaponClass, Integer weaponID) {
         try {
-            if (weapon != null) weapon.die();
-            weapon = weaponClass.getDeclaredConstructor(GameObject.class).newInstance(this);
-            if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().setZoomOut(weapon.getScope());
+            if (weapon != null) {
+                System.out.println("old weap: " + weapon.getID());
+                weapon.die();
+            }
+            weapon = weaponClass.getDeclaredConstructor(GameObject.class, Integer.class).newInstance(this, weaponID);
+            if (MadBalls.isHost()) {
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getID(), weapon.getClass().getName(), weapon.getID()));
+            }
             SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (buffState != null) buffState.reApply(WeaponBuff.class);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
+                SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
+            System.out.println("Get weapon " + weaponClass);
+            System.out.println("new weap: " + weapon.getID());
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -117,12 +136,13 @@ public class Ball extends GameObject{
         hpBar.getStyleClass().add("hp-bar");
 
         buffBar = new HBox(1);
-        buffBar.setTranslateY(5);
+        buffBar.setTranslateY(10);
         
         getStatusG().getChildren().addAll(hpBar, buffBar);
 //        hpBar.setLayoutY(getTranslateY() - 1);
         
         setHitBox(new Circle(15));
+        getImageView().setEffect(new DropShadow(10, Color.BLACK));
     }
     @Override
     public void updateUnique(long now) {

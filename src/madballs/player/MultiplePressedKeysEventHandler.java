@@ -6,6 +6,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import madballs.MadBalls;
+import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.KeyInputData;
  
 /**
@@ -30,6 +31,10 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
         final KeyCode code = event.getCode();
 //        System.out.println("type" + event.getEventType());
         if (KeyEvent.KEY_RELEASED.equals(event.getEventType())) {
+            if (code == KeyCode.SPACE){
+                RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) player.getBall().getWeapon().getMoveBehaviour();
+                weaponRotateBehaviour.setMousePressed(false);
+            }
             buffer.remove(code);
         }
         else if (KeyEvent.KEY_PRESSED.equals(event.getEventType())) {
@@ -38,12 +43,19 @@ public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
         multiKeyEventHandler.handle(multiKeyEvent);
         event.consume();
     }
+
+    public void clear(){
+        buffer.clear();
+    }
      
     public interface MultiKeyEventHandler {
         void handle(final MultiKeyEvent event);
     }
      
     public class MultiKeyEvent {
+        public void clearBuffer(){
+            buffer.clear();
+        }
         public boolean isPressed(final KeyCode key) {
             return buffer.contains(key);
         }

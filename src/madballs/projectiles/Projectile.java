@@ -6,9 +6,9 @@
 package madballs.projectiles;
 
 
-import javafx.scene.image.Image;
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
+import madballs.ImageGenerator;
 import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Weapon;
 
@@ -19,13 +19,17 @@ import madballs.wearables.Weapon;
 public class Projectile extends GameObject {
     private Weapon sourceWeapon;
 
-    public Projectile(Weapon sourceWeapon, Shape hitBox, Image image) {
-        super(sourceWeapon.getEnvironment(), 0, 0, false);
+    public Weapon getSourceWeapon() {
+        return sourceWeapon;
+    }
+
+    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName, Integer id) {
+        super(sourceWeapon.getEnvironment(), 0, 0, false, id);
         
         this.sourceWeapon = sourceWeapon;
         setHitBox(hitBox);
-        setImage(image);
-        setDisplay();
+        setImage(projectImageName);
+        setDisplay(id);
 
         // calculate the spawning location of the projectile based on the real coordinate of the weapon
         double distanceFromWeapon = sourceWeapon.getWidth() + hitBox.getBoundsInLocal().getWidth() / 2 + 5;
@@ -36,10 +40,11 @@ public class Projectile extends GameObject {
         setTranslateX(realX + Math.cos(rotateDirection) * distanceFromWeapon);
         setTranslateY(realY + Math.sin(rotateDirection) * distanceFromWeapon);
 
-//        getImage().setFitWidth(hitBox.getLayoutBounds().getWidth());
-        getImage().setFitHeight(hitBox.getLayoutBounds().getHeight());
-        getImage().setTranslateX(-hitBox.getLayoutBounds().getWidth()/2);
-        getImage().setTranslateY(-hitBox.getLayoutBounds().getHeight()/2);
+//        getImageView().setFitWidth(hitBox.getLayoutBounds().getWidth());
+        getImageView().setFitHeight(hitBox.getLayoutBounds().getHeight());
+        getImageView().setPreserveRatio(true);
+        getImageView().setTranslateX(-hitBox.getLayoutBounds().getWidth()/2);
+        getImageView().setTranslateY(-hitBox.getLayoutBounds().getHeight()/2);
         setRotate(Math.toRadians(sourceWeapon.getRotateAngle()));
 
         // set collision characteristics and move behaviour
@@ -49,7 +54,7 @@ public class Projectile extends GameObject {
         StraightMove straightMoveBehaviour = new StraightMove(this, sourceWeapon.getProjectileSpeed());
         straightMoveBehaviour.setNewDirection(Math.toRadians(sourceWeapon.getRotateAngle()));
         setMoveBehaviour(straightMoveBehaviour);
-
+        getHitBox().setOpacity(0);
         sourceWeapon.setAmmo(sourceWeapon.getAmmo() - 1);
     }
 

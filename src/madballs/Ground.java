@@ -15,8 +15,8 @@ import madballs.collision.PushBackEffect;
  */
 public class Ground extends GameObject{
 
-    public Ground(Environment environment, double x, double y) {
-        super(environment, x, y, false);
+    public Ground(Environment environment, double x, double y, Integer id) {
+        super(environment, x, y, false, id);
         setCollisionEffect(new PushBackEffect(null , 0));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }

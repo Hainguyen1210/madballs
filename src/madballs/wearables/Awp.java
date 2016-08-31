@@ -19,10 +19,10 @@ public class Awp extends Weapon{
     private final double WIDTH = 50;
     private final double HEIGHT = 5;
     
-    public Awp(GameObject owner) {
+    public Awp(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -35,10 +35,10 @@ public class Awp extends Weapon{
         setProjectileSpeed(1000);
         setProjectileHitBoxSize(5);
         setProjectileColor(Paint.valueOf("yellow"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet3"));
+        setProjectileImageName("bullet3");
 
         setFireSoundFX("awp");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
@@ -47,7 +47,7 @@ public class Awp extends Weapon{
         setWidth(WIDTH-15);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("yellow")));
-        setImage(ImageGenerator.getInstance().getImage("awp"));
+        setImage("awp");
         configImageView(-15, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

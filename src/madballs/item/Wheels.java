@@ -16,8 +16,8 @@ import madballs.map.SpawnLocation;
  * @author haing
  */
 public class Wheels extends BuffItem{
-    public Wheels(Environment environment, SpawnLocation spawnLocation) {
-        super(environment, spawnLocation, new Haste(null, 5, 50));
+    public Wheels(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new Haste(null, 5, 50), id);
     }
     
     @Override

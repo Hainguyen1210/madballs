@@ -19,10 +19,10 @@ public class Ak47 extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 5;
     
-    public Ak47(GameObject owner) {
+    public Ak47(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -35,9 +35,10 @@ public class Ak47 extends Weapon{
         setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("orange"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet2"));
+        setProjectileImageName("bullet2");
         
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setFireSoundFX("ak47");
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
@@ -46,7 +47,7 @@ public class Ak47 extends Weapon{
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("orange")));
-        setImage(ImageGenerator.getInstance().getImage("ak47"));
+        setImage("ak47");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

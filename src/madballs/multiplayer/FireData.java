@@ -10,15 +10,27 @@ package madballs.multiplayer;
  * @author caval
  */
 public class FireData extends Data{
-    private int weaponIndex;
+    private Integer weaponID;
+    private Integer projectileID;
+    private double direction;
 
-    public int getWeaponIndex() {
-        return weaponIndex;
+    public Integer getWeaponID() {
+        return weaponID;
     }
-    
-    public FireData(int weaponIndex) {
+
+    public int getProjectileID() {
+        return projectileID;
+    }
+
+    public double getDirection() {
+        return direction;
+    }
+
+    public FireData(Integer weaponID, Integer projectileID, double direction) {
         super("fire");
-        this.weaponIndex = weaponIndex;
+        this.weaponID = weaponID;
+        this.projectileID = projectileID;
+        this.direction = direction;
     }
     
 }

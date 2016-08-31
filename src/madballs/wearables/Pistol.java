@@ -24,10 +24,10 @@ public class Pistol extends Weapon{
     private final double WIDTH = 20;
     private final double HEIGHT = 7;
 
-    public Pistol(GameObject owner) {
+    public Pistol(GameObject owner, Integer id) {
         super(owner, 
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
-                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25);
+                owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
@@ -36,13 +36,13 @@ public class Pistol extends Weapon{
         setAmmo(-1);
         setFireRate(1);
         setRange(700);
-        setProjectileSpeed(800);
+        setProjectileSpeed(500);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImage(ImageGenerator.getInstance().getImage("bullet1"));
+        setProjectileImageName("bullet1");
 
         setFireSoundFX("pistol");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage()));
+        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
         setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
 
     }
@@ -52,7 +52,7 @@ public class Pistol extends Weapon{
         setWidth(WIDTH);
         setHeight(HEIGHT/2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage(ImageGenerator.getInstance().getImage("pistol"));
+        setImage("pistol");
         configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
     

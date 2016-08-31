@@ -21,14 +21,13 @@ import java.io.File;
 public class Obstacle extends GameObject{
     public double length;
     public double height;
-    private Pane backgroundPane;
 
-    public Obstacle(Environment environment, double x, double y, double length, double height) {
-        super(environment, x, y, false);
-
+    public Obstacle(Environment environment, double x, double y, double length, double height, Integer id) {
+        super(environment, x, y, false, id);
+        setMobile(false);
         this.length = length;
         this.height = height;
-        setDisplay();
+        setDisplay(id);
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }
@@ -40,9 +39,10 @@ public class Obstacle extends GameObject{
 //        rect.setArcWidth(15);
 //        setHitBox(rect);
         setHitBox(new Rectangle(length, height, Paint.valueOf("green")));
+        getHitBox().setOpacity(0);
 
 //        double boxSize;if (length<height)boxSize=length;else boxSize=height;
-//        Image background = ImageGenerator.getInstance().getImage("obstacle/stripebox");
+//        Image background = ImageGenerator.getInstance().getImageView("obstacle/stripebox");
 //        backgroundPane = new Pane();
 //        backgroundPane.setBackground(
 //            new Background(
@@ -58,7 +58,7 @@ public class Obstacle extends GameObject{
 //        backgroundPane.setPrefSize(length, height);
 //        getAnimationG().getChildren().addAll(backgroundPane);
 //        setImage(background);
-//        getImage().setFitWidth(boxSize);getImage().setFitHeight(boxSize);
+//        getImageView().setFitWidth(boxSize);getImageView().setFitHeight(boxSize);
     }
 
     @Override

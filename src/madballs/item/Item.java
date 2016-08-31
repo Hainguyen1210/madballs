@@ -15,62 +15,49 @@ import madballs.collision.ReleaseSpawnLocation;
 import madballs.map.SpawnLocation;
 
 /**
- *
  * @author chim-
  */
-public abstract class Item extends GameObject{
-  private ImageView image;
-  private SpawnLocation spawnLocation;
-  private int size;
-  private Paint color;
+public abstract class Item extends GameObject {
+    private SpawnLocation spawnLocation;
+    private int size;
+    private Paint color;
 
-  public ImageView getImage() {
-    return image;
-  }
+    public int getSize() {
+        return size;
+    }
 
-  public int getSize() {
-    return size;
-  }
+    public Paint getColor() {
+        return color;
+    }
 
-  public Paint getColor() {
-    return color;
-  }
+    public void setColor(Paint color) {
+        this.color = color;
+    }
 
-  public void setColor(Paint color) {
-    this.color = color;
-  }
+    public void setSize(int size) {
+        this.size = size;
+    }
 
-  public void setSize(int size) {
-    this.size = size;
-  }
+    public SpawnLocation getSpawnLocation() {
+        return spawnLocation;
+    }
 
-  public SpawnLocation getSpawnLocation() {
-    return spawnLocation;
-  }
+    public void setSpawnLocation(SpawnLocation spawnLocation) {
+        this.spawnLocation = spawnLocation;
+    }
 
-  public void setSpawnLocation(SpawnLocation spawnLocation) {
-    this.spawnLocation = spawnLocation;
-  }
-
-  public Item(Environment environment, SpawnLocation spawnLocation) {
-      super(environment, spawnLocation.getX(), spawnLocation.getY(), true);
-    setSpawnLocation(spawnLocation);
+    public Item(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation.getX(), spawnLocation.getY(), true, id);
+        setMobile(false);
+        setSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
-      setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation))));
-  }
+        setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation))));
+    }
 
-  public boolean canSpawn(){
-      return false;
-  }
+    @Override
+    public void updateUnique(long now) {
 
-  @Override
-  public void updateUnique(long now) {
-
-  }
-
-  private void setImage(ImageView image) {
-//    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+    }
 
 }

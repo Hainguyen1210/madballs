@@ -16,8 +16,8 @@ import madballs.map.SpawnLocation;
  */
 public class SpicyBiscuit extends BuffItem{
 
-    public SpicyBiscuit(Environment environment, SpawnLocation spawnLocation) {
-        super(environment, spawnLocation, new Frenzy(null, 5, 1.5));
+    public SpicyBiscuit(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new Frenzy(null, 5, 1.5), id);
     }
     
     @Override

@@ -15,7 +15,6 @@ import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
 import madballs.MadBalls;
-import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.SpawnData;
 import madballs.wearables.*;
@@ -24,18 +23,18 @@ import madballs.wearables.*;
  * @author haing
  */
 public class Spawner {
+    private final int MAX_ITEMS = 10;
     private Class<Weapon>[] weapons;
     private Class<Item>[] boostItems;
     private Random random = new Random();
     private Environment environment;
     private LongProperty lastItemSpawnTime = new SimpleLongProperty(0);
-    private ArrayList<SpawnLocation> itemSpawnLocations;
     private SpawnLocation currentSpawnLocation;
 
 
     public Spawner(Environment environment) {
         this.environment = environment;
-        weapons = new Class[]{Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Pistol.class, RocketLauncher.class, XM1104.class};
+        weapons = new Class[]{Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Pistol.class, Bazooka.class, XM1104.class};
 //        boostItems = new Class[]{DivinePotion.class};
         boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
     }
@@ -48,13 +47,14 @@ public class Spawner {
     }
 
     public void randomSpawn() {
-        System.out.print("randomSpawn");
-        itemSpawnLocations = environment.getMap().getItemSpawnLocations();
+//        System.out.print("randomSpawn");
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
 //    Map map = environment.getMap();
 //    int X = random.nextInt((int) map.getLENGTH());
 //    int Y = random.nextInt((int) map.getHEIGHT());
         do {
-            if (isAllSpawned()) return;
+//            if (isAllSpawned()) return;
+            if (getSpawnedQuantity() >= MAX_ITEMS) return;
             currentSpawnLocation = itemSpawnLocations.get(random.nextInt(itemSpawnLocations.size()));
         } while (currentSpawnLocation.isSpawned());
 
@@ -62,15 +62,27 @@ public class Spawner {
         currentSpawnLocation.setSpawned(true);
         int itemOrWeapon = random.nextInt(2);
         if (itemOrWeapon == 0) {
-            System.out.println("Weapon spawned");
-            spawnWeapon(currentSpawnLocation, -1);
+//            System.out.println("Weapon spawned");
+            spawnWeapon(currentSpawnLocation, -1, -1);
         } else {
-            System.out.println("Item spawned");
-            spawnItem(currentSpawnLocation, -1);
+//            System.out.println("Item spawned");
+            spawnItem(currentSpawnLocation, -1, -1);
         }
     }
 
+    private int getSpawnedQuantity(){
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
+        int spawnedQuantity = 0;
+        for (SpawnLocation spawnLocation : itemSpawnLocations) {
+            if (spawnLocation.isSpawned()) {
+                spawnedQuantity++;
+            }
+        }
+        return spawnedQuantity;
+    }
+
     private boolean isAllSpawned() {
+        ArrayList<SpawnLocation> itemSpawnLocations = environment.getMap().getItemSpawnLocations();
         for (SpawnLocation spawnLocation : itemSpawnLocations) {
             if (!spawnLocation.isSpawned()) {
                 return false;
@@ -79,7 +91,7 @@ public class Spawner {
         return true;
     }
 
-    public void spawnWeapon(SpawnLocation spawnLocation, int weaponIndex) {
+    public void spawnWeapon(SpawnLocation spawnLocation, int weaponIndex, Integer id) {
         double X = spawnLocation.getX();
         double Y = spawnLocation.getY();
         if (weaponIndex < 0) {
@@ -88,30 +100,36 @@ public class Spawner {
         spawnLocation.setTypeNumber(weaponIndex);
         spawnLocation.setType("weapon");
         Class<Weapon> weaponClass = weapons[weaponIndex];
+        WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation, id);
         if (MadBalls.isHost()) {
-            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
+            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
         }
-        new WeaponItem(environment, weaponClass, spawnLocation);
 
 
-        System.out.println(weaponClass);
+//        System.out.print(weaponClass);
+//        System.out.println(newItem.getID());
     }
 
-    public void spawnItem(SpawnLocation spawnLocation, int itemIndex) {
+    public void spawnItem(SpawnLocation spawnLocation, int itemIndex, Integer id) {
         double X = spawnLocation.getX();
         double Y = spawnLocation.getY();
         if (itemIndex < 0) {
             itemIndex = random.nextInt(boostItems.length);
         }
         spawnLocation.setTypeNumber(itemIndex);
+        spawnLocation.setType("item");
         Class<Item> itemClass = boostItems[itemIndex];
-        if (MadBalls.isHost()) {
-            MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false));
-        }
         try {
-            itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class).newInstance(environment, spawnLocation);
+            Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class, Integer.class).newInstance(environment, spawnLocation, id);
+//            System.out.print(itemClass);
+//            System.out.println(newItem.getID());
+            if (MadBalls.isHost()) {
+                MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
+            }
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
         }
+
+
     }
 }

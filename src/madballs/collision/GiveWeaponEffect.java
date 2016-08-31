@@ -8,19 +8,18 @@ package madballs.collision;
 import madballs.wearables.Weapon;
 
 /**
- *
  * @author haing
  */
-public class GiveWeaponEffect extends StackedCollisionEffect{
+public class GiveWeaponEffect extends StackedCollisionEffect {
     private Weapon weapon;
 
-    public Weapon getWeapon(){
-      return weapon;
+    public Weapon getWeapon() {
+        return weapon;
     }
-  
+
     public GiveWeaponEffect(StackedCollisionEffect effect, Weapon weapon) {
-      super(effect);
-      this.weapon = weapon;
+        super(effect);
+        this.weapon = weapon;
     }
 
 }

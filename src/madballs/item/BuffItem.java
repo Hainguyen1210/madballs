@@ -12,21 +12,24 @@ import madballs.buffState.BuffState;
 import madballs.map.SpawnLocation;
 
 /**
- *
  * @author haing
  */
-public class BuffItem extends Item{
-  protected GiveBuffEffect giveBuffEffect;
-  
-  public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState) {
-    super(environment, spawnLocation);
-    giveBuffEffect = new GiveBuffEffect(null, effectState);
-    setCollisionEffect(giveBuffEffect);
-  }  
-  
-  @Override
-  public void setDisplayComponents() {
-    setSize(15);
-    setHitBox(new Circle(getSize(), getColor()));
-  }
+public class BuffItem extends Item {
+    protected GiveBuffEffect giveBuffEffect;
+
+    public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState, Integer id) {
+        super(environment, spawnLocation, id);
+        giveBuffEffect = new GiveBuffEffect(null, effectState);
+        setCollisionEffect(giveBuffEffect);
+        getImageView().setFitHeight(30);
+        getImageView().setFitWidth(30);
+        getImageView().setTranslateX(-15);
+        getImageView().setTranslateY(-15);
+    }
+
+    @Override
+    public void setDisplayComponents() {
+        setSize(15);
+        setHitBox(new Circle(getSize(), getColor()));
+    }
 }
