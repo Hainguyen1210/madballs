@@ -42,7 +42,10 @@ public class ScenesFactory {
     public Scene newScene(String sceneName){
         Scene scene = null;
         try {
-            if (sceneName.equals("prepare")){
+            if (sceneName.equals("welcome")){
+                fxmlLoader = new FXMLLoader(getClass().getResource("fxml/welcome.fxml"));
+            }
+            else if (sceneName.equals("prepare")){
                 fxmlLoader = new FXMLLoader(getClass().getResource("fxml/gameRoom.fxml"));
             }
             else if (sceneName.equals("hof")){

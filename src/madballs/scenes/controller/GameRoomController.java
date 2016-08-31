@@ -8,10 +8,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
+import javafx.scene.control.*;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
@@ -19,6 +16,8 @@ import javafx.scene.layout.Pane;
 import madballs.AI.BotPlayer;
 import madballs.ImageGenerator;
 import madballs.MadBalls;
+import madballs.gameMode.NormalMode;
+import madballs.item.Spawner;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
@@ -44,7 +43,7 @@ public class GameRoomController implements Initializable {
     @FXML
     private Button startBtn, addBotBtn;
     @FXML
-    private ChoiceBox modeChoiceBox;
+    private ListView<String> weaponChoiceList;
     @FXML
     private TextArea sceneHeight;
     @FXML
@@ -60,11 +59,16 @@ public class GameRoomController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
         try {
-            System.out.println("game room");
-            System.out.println(((GameRoomController) ScenesFactory.getInstance().getFxmlLoader().getController()) == null);
             if (MadBalls.isHost()) {
                 startBtn.setVisible(true);
                 addBotBtn.setVisible(true);
+                weaponChoiceList.setVisible(true);
+                ArrayList<String> weaponNames = new ArrayList<>();
+                for (Class weaponClass: Spawner.getWeapons()){
+                    weaponNames.add(weaponClass.getSimpleName());
+                }
+                ObservableList<String> weaponList = FXCollections.observableArrayList(weaponNames);
+                weaponChoiceList.setItems(weaponList);
             }
             sceneHeight.textProperty().addListener(new ChangeListener<String>() {
                 @Override
@@ -91,6 +95,13 @@ public class GameRoomController implements Initializable {
 
     @FXML
     public void startGame(ActionEvent e){
+        if (MadBalls.getGameMode() instanceof NormalMode){
+            int weaponChoiceIndex = weaponChoiceList.getSelectionModel().getSelectedIndex();
+            if (weaponChoiceIndex >= 0){
+                ((NormalMode)MadBalls.getGameMode()).setWeaponClassIndex(weaponChoiceIndex);
+            }
+        }
+
         int ranking = 1;
         for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
             if (player.getTeamNum() == 0){
@@ -136,9 +147,6 @@ public class GameRoomController implements Initializable {
 
 
         int i = MadBalls.getMultiplayerHandler().getPlayers().indexOf(player);
-        System.out.println("display" + i);
-        System.out.println(i%2);
-        System.out.println(i/2);
         playersGrid.add(playerDisplay, i % 2, i / 2);
     }
 

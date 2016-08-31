@@ -7,12 +7,9 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
-import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
 
 /**
@@ -31,19 +28,19 @@ public class Minigun extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
+        setWeight(6);
         setScope(1.3);
         setDamage(15);
         setAmmo(50);
         setFireRate(10);
         setRange(800);
-        setProjectileSpeed(600);
+        setProjectileSpeed(700);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("blue"));
         setProjectileImageName("bullet2");
         
         setFireSoundFX("minigun");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     

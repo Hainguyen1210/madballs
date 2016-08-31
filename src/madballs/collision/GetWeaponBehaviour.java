@@ -24,7 +24,7 @@ public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        System.out.println("give weap by " + source);
+//        System.out.println("give weap by " + source);
         Weapon weapon = ((GiveWeaponEffect)effect).getWeapon();
         if(weapon != null && MadBalls.isHost()) {
             ((Ball)target).setWeapon(weapon.getClass(), -1);

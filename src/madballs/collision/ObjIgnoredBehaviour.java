@@ -6,33 +6,38 @@
 package madballs.collision;
 
 import javafx.scene.shape.Shape;
-import madballs.Ball;
 import madballs.GameObject;
-import madballs.Obstacle;
 
 /**
  *
- * @author chim-
+ * @author Caval
  */
-public class Ball_n_WallBehaviour extends StackedCollisionPassiveBehaviour{
+public class ObjIgnoredBehaviour extends StackedCollisionPassiveBehaviour{
+    private Class[] ignoredObjClasses;
     
-    public Ball_n_WallBehaviour(CollisionPassiveBehaviour behaviour) {
+    public ObjIgnoredBehaviour(CollisionPassiveBehaviour behaviour, Class[] ignoredObjClasses) {
         super(behaviour);
+        this.ignoredObjClasses = ignoredObjClasses;
     }
+    
     @Override
     public void getAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (source instanceof  Ball || source instanceof Obstacle) {
-            super.getAffected(source, target, effect, collisionShape);
+        for (Class objClass: ignoredObjClasses){
+            if (objClass.isInstance(source)){
+                return;
+            }
         }
+        super.getAffected(source, target, effect, collisionShape);
     }
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-
+        
     }
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         return false;
     }
+
 }

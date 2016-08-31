@@ -23,7 +23,7 @@ public class DivinePotion extends BuffItem{
 
     public DivinePotion(Environment environment, SpawnLocation spawnLocation, Integer id) {
         super(environment, spawnLocation, new Haste(new Frenzy(new PowerUp(new InstantHeal(null, 100), 5, 2), 5, 2), 5, 50), id);
-        System.out.println(((GiveBuffEffect)getCollisionEffect()).getBuffState().getWrappedBuffState() == null);
+//        System.out.println(((GiveBuffEffect)getCollisionEffect()).getBuffState().getWrappedBuffState() == null);
         setImage("purple_potion");
     }
     

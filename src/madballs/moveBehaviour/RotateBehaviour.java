@@ -44,7 +44,7 @@ public class RotateBehaviour extends MoveBehaviour{
     }
 
     @Override
-    void calculateNewCordinate(long now) {
+    void calculateNewCoordinate(long now) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

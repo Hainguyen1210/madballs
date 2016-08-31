@@ -10,7 +10,6 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleLongProperty;
-import javafx.scene.image.Image;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Ball;
@@ -18,6 +17,8 @@ import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.collision.CollisionEffect;
 import madballs.collision.CollisionPassiveBehaviour;
+import madballs.collision.DisappearBehaviour;
+import madballs.collision.ObjIgnoredBehaviour;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
@@ -34,7 +35,8 @@ public abstract class Weapon extends GameObject {
     private double projectileHitBoxSize;
     private Paint projectileColor;
     private String fireSoundFX;
-    
+    private double weight = 0;
+
     private CollisionEffect projectileCollisionEffect;
     private CollisionPassiveBehaviour projectileCollisionBehaviour;
     private MoveBehaviour projectileMoveBehaviour;
@@ -43,6 +45,14 @@ public abstract class Weapon extends GameObject {
     private double height, width;
     private double damage = -1, fireRate = -1, range = -1, projectileSpeed = -1;
     private IntegerProperty ammo = new SimpleIntegerProperty(-1);
+
+    public void setWeight(double weight) {
+        this.weight = weight;
+    }
+
+    public double getWeight() {
+        return weight;
+    }
 
     public double getScope() {
         return scope;
@@ -149,6 +159,7 @@ public abstract class Weapon extends GameObject {
         super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
         getHitBox().setOpacity(0);
+        setProjectileCollisionBehaviour(new ObjIgnoredBehaviour(new DisappearBehaviour(null), new Class[]{Weapon.class}));
     }
 //    public Weapon(Environment environment, double x, double y) {
 //        super(environment, x, y, true);
@@ -200,7 +211,7 @@ public abstract class Weapon extends GameObject {
         if (fireSoundFX != null) {
             SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 150*scope, 150*scope);
         }
-        Projectile projectile = new Projectile(this, new Circle(projectileHitBoxSize, projectileColor), projectileImageName, projectileID);
+        Projectile projectile = new Projectile(this, getRange(), new Circle(projectileHitBoxSize, projectileColor), projectileImageName, projectileID);
         if (MadBalls.isHost()){
             MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), -1));
         }

@@ -11,8 +11,10 @@ import java.util.logging.Logger;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
+import madballs.Ball;
 import madballs.Environment;
 import madballs.GameObject;
+import madballs.Obstacle;
 import madballs.collision.*;
 import madballs.map.SpawnLocation;
 import madballs.wearables.Weapon;
@@ -24,6 +26,10 @@ import madballs.wearables.Weapon;
 public class WeaponItem extends Item {
     private Weapon weapon;
 
+    public Weapon getWeapon() {
+        return weapon;
+    }
+
     public WeaponItem(Environment environment, Class<Weapon> weaponClass, SpawnLocation spawnLocation, Integer id) {
         super(environment, spawnLocation, id);
         try {
@@ -33,7 +39,7 @@ public class WeaponItem extends Item {
         }
 
         weapon.setMobile(false);
-        weapon.setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearWithOwnerBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation()))));
+        weapon.setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new DisappearWithOwnerBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation())), new Class[]{Ball.class, Obstacle.class}));
         weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
         setCollisionEffect(new NullEffect(null));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));

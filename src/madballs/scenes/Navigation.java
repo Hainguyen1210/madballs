@@ -140,7 +140,12 @@ public class Navigation {
 
 // Traditional way to get the response value.
         Optional<String> result = dialog.showAndWait();
-        return result.get();
+        if (result.isPresent()) {
+            return result.get();
+        }
+        else {
+            return "random";
+        }
     }
     
     /**

@@ -98,8 +98,7 @@ public class AttackStrategy extends Strategy {
                     else if (!(checkingObj instanceof Obstacle)){
                         continue;
                     }
-                    if (angle > 180) angle -= 360;
-                    else if (angle < -180) angle += 360;
+
 
                     Bounds checkingBounds = checkingObj.getDisplay().getBoundsInParent();
                     double checkingMinDiffY = checkingBounds.getMinY() - weaponY;
@@ -125,10 +124,14 @@ public class AttackStrategy extends Strategy {
                         else {
                             checkingMinAngle += 360;
                         }
-                        angle += 360;
+                        if (angle < 0) angle += 360;
+                    }
+                    else {
+                        if (angle > 180) angle -= 360;
                     }
                     if ((angle <= checkingMaxAngle && angle >= checkingMinAngle)
                             || (angle >= checkingMaxAngle && angle <= checkingMinAngle)){
+
                         double checkingDistance;
                         double intersectX = 0, intersectY = 0;
                         if (diffX != 0){

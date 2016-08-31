@@ -69,7 +69,7 @@ public abstract class MultiplayerHandler {
     
     public void handleData(Data data){
         if (data.getType().equals("update_player")){
-            System.out.println("update");
+//            System.out.println("update");
             PlayerData playerData = (PlayerData) data;
             for (Player player : players){
                 if (player.getPlayerNum() == playerData.getNumber()){

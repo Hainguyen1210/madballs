@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="351.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="madballs.scenes.controller.WelcomeController">
+   <children>
+      <Button fx:id="hostBtn" layoutX="93.0" layoutY="210.0" mnemonicParsing="false" onAction="#hostGame" prefHeight="59.0" prefWidth="118.0" text="Host" />
+      <Button fx:id="joinBtn" layoutX="380.0" layoutY="236.0" mnemonicParsing="false" onAction="#joinGame" prefHeight="52.0" prefWidth="126.0" text="Join" />
+      <TextArea fx:id="hostIPArea" layoutX="349.0" layoutY="186.0" prefHeight="32.0" prefWidth="186.0" text="127.0.0.1" />
+      <Text layoutX="66.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Create a new Game Room" />
+      <Text layoutX="357.0" layoutY="164.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Join a created game room" />
+      <Text fill="RED" layoutX="189.0" layoutY="64.0" strokeType="OUTSIDE" strokeWidth="0.0" style="-fx-font-size: 20;" text="Welcome to Mad Balls" />
+   </children>
+</AnchorPane>

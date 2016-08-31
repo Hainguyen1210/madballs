@@ -18,15 +18,17 @@ import madballs.wearables.Weapon;
  */
 public class Projectile extends GameObject {
     private Weapon sourceWeapon;
+    private double range;
 
     public Weapon getSourceWeapon() {
         return sourceWeapon;
     }
 
-    public Projectile(Weapon sourceWeapon, Shape hitBox, String projectImageName, Integer id) {
+    public Projectile(Weapon sourceWeapon, double range, Shape hitBox, String projectImageName, Integer id) {
         super(sourceWeapon.getEnvironment(), 0, 0, false, id);
-        
+
         this.sourceWeapon = sourceWeapon;
+        this.range = range;
         setHitBox(hitBox);
         setImage(projectImageName);
         setDisplay(id);
@@ -60,7 +62,7 @@ public class Projectile extends GameObject {
 
     @Override
     public void updateUnique(long now) {
-        if (getMoveBehaviour().getMovedDistance() >= sourceWeapon.getRange()){
+        if (getMoveBehaviour().getMovedDistance() >= range){
             getEnvironment().getGround().onCollision(this, getHitBox());
         }
     }

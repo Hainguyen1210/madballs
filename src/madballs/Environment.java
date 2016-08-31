@@ -230,6 +230,7 @@ public class Environment {
                 }
             }
         }
+        MadBalls.getGameMode().organize();
         animation.start();
 //        Navigation.getInstance().showInterupt("", "Game started", "Let's rock and roll!", false);
     }

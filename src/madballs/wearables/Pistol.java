@@ -7,14 +7,10 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
-import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
-import madballs.projectiles.Projectile;
 
 /**
  *
@@ -32,7 +28,7 @@ public class Pistol extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
-        setDamage(10);
+        setDamage(15);
         setAmmo(-1);
         setFireRate(1);
         setRange(700);
@@ -43,7 +39,6 @@ public class Pistol extends Weapon{
 
         setFireSoundFX("pistol");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
 
     }
     
