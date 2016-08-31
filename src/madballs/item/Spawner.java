@@ -24,7 +24,7 @@ import madballs.wearables.*;
  */
 public class Spawner {
     private final int MAX_ITEMS = 10;
-    private static Class<Weapon>[] weapons = new Class[]{Pistol.class, Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Bazooka.class, XM1104.class, GrenadeLauncher.class};
+    private static Class<Weapon>[] weapons = new Class[]{Pistol.class, Awp.class, Uzi.class, Ak47.class, Minigun.class, M4A1.class, Bazooka.class, XM1104.class, GrenadeLauncher.class, Shield.class};
     private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
     private Random random = new Random();
     private Environment environment;

@@ -17,6 +17,7 @@ import javafx.scene.image.Image;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import madballs.AI.BotPlayer;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
@@ -86,7 +87,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
 
-        weapon = new Pistol(this, -1);
+        weapon = new GrenadeLauncher(this, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
 

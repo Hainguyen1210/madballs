@@ -158,7 +158,7 @@ public abstract class Weapon extends GameObject {
     public Weapon(GameObject owner, double x, double y, Integer id) {
         super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
-        getHitBox().setOpacity(0);
+//        getHitBox().setOpacity(0);
         setProjectileCollisionBehaviour(new ObjIgnoredBehaviour(new DisappearBehaviour(null), new Class[]{Weapon.class}));
     }
 //    public Weapon(Environment environment, double x, double y) {
@@ -227,14 +227,14 @@ public abstract class Weapon extends GameObject {
     }
 
     public boolean checkAmmo(){
-        if (getAmmo() == 0){
+        if (getAmmo() == 0 || getAmmo() < -1){
 //            ((Ball)getOwner()).setWeapon(Pistol.class);
             if (MadBalls.isHost()){
                 ((Ball)getOwner()).setWeapon(Pistol.class, -1);
                 MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName(), ((Ball)getOwner()).getWeapon().getID()));
             }
         }
-        return getAmmo() == 0;
+        return getAmmo() == 0 || getAmmo() < -1;
     }
     
     @Override

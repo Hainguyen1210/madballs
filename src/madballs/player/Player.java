@@ -168,12 +168,12 @@ public class Player {
     public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
         double xDiff = Math.abs(x - ball.getTranslateX());
         double yDiff = Math.abs(y - ball.getTranslateY());
-        double numMapParts = SceneManager.NUM_MAP_PARTS;
-        double zoomOut = getBall().getWeapon().getScope();
-        double scale = 1 / numMapParts * zoomOut / 2;
-//        double scale = controller.getScale();
-//        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
-        return  (xDiff < controller.getSceneWidth()*scale + varianceX && yDiff < controller.getSceneHeight()*scale + varianceY);
+//        double numMapParts = SceneManager.NUM_MAP_PARTS;
+//        double zoomOut = getBall().getWeapon().getScope();
+//        double scale = 1 / numMapParts * zoomOut / 2;
+        double scale = controller.getScale();
+        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
+//        return  (xDiff < controller.getSceneWidth()*scale + varianceX && yDiff < controller.getSceneHeight()*scale + varianceY);
     }
 
     public Player(Socket socket, boolean isLocal){
@@ -304,11 +304,10 @@ public class Player {
         scene.setOnKeyPressed(keyHandler);
         scene.setOnKeyReleased(keyHandler);
 
-        Group environmentDisplay = ball.getEnvironment().getDisplay();
-        environmentDisplay.setOnMousePressed(mouseHandler);
-        environmentDisplay.setOnMouseReleased(mouseHandler);
-        environmentDisplay.setOnMouseMoved(mouseHandler);
-        environmentDisplay.setOnMouseDragged(mouseHandler);
+        scene.setOnMousePressed(mouseHandler);
+        scene.setOnMouseReleased(mouseHandler);
+        scene.setOnMouseMoved(mouseHandler);
+        scene.setOnMouseDragged(mouseHandler);
     }
 
     public void sendData(Data data){

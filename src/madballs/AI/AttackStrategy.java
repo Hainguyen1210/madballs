@@ -18,7 +18,7 @@ import java.util.Random;
  * Created by caval on 29/08/2016.
  */
 public class AttackStrategy extends Strategy {
-    private Ball enemy, aimedEnemy;
+    private Ball target, aimedTarget;
     private int currentAimMode = 0;
     private double initialHp;
     private long initialAimTime;
@@ -33,14 +33,14 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void prepare() {
-        enemy = null;
+        target = null;
         angleToEnemy = 0;
         weapon = getBot().getBall().getWeapon();
         if (((StackedCollisionEffect)weapon.getProjectileCollisionEffect()).hasCollisionEffect(DamageEffect.class)
                 || ((StackedCollisionPassiveBehaviour)weapon.getProjectileCollisionBehaviour()).hasCollisionBehaviour(ExplosiveBehaviour.class)){
-            double[] realCordinates = weapon.getRealCoordinate();
-            weaponX = realCordinates[0];
-            weaponY = realCordinates[1];
+            double[] realCoordinates = weapon.getRealCoordinate();
+            weaponX = realCoordinates[0];
+            weaponY = realCoordinates[1];
             projectileSpeed = weapon.getProjectileSpeed();
             projectileSize = weapon.getProjectileHitBoxSize();
         }
@@ -51,14 +51,15 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void consider(GameObject obj) {
-        if (weapon == null) return;
+        if (weapon == null ) return;
         if (obj instanceof Ball){
             // find Ball target
             Ball target = (Ball) obj;
-            if (enemy != null && enemy.getHpValue() <= target.getHpValue()){
+            if (this.target != null && this.target.getHpValue() <= target.getHpValue()){
                 return;
             }
-            if (target.getPlayer().getTeamNum() == getBot().getTeamNum()){
+            if ((weapon.getDamage() >= 0 && target.getPlayer().getTeamNum() == getBot().getTeamNum())
+                    || (weapon.getDamage() < 0 && target.getPlayer().getTeamNum() != getBot().getTeamNum())){
                 return;
             }
 
@@ -91,7 +92,9 @@ public class AttackStrategy extends Strategy {
                 GameObject checkingObj = weapon.getEnvironment().getObject(id);
                 if (checkingObj != null) {
                     if (checkingObj instanceof Ball){
-                        if (checkingObj == getBot().getBall() || ((Ball) checkingObj).getPlayer().getTeamNum() != getBot().getTeamNum()){
+                        if (checkingObj == getBot().getBall()
+                                || (((Ball) checkingObj).getPlayer().getTeamNum() != getBot().getTeamNum() && weapon.getDamage() >= 0)
+                                || (((Ball) checkingObj).getPlayer().getTeamNum() == getBot().getTeamNum() && weapon.getDamage() < 0)){
                             continue;
                         }
                     }
@@ -156,7 +159,7 @@ public class AttackStrategy extends Strategy {
                 }
             }
 
-            enemy = target;
+            this.target = target;
             angleToEnemy = Math.toDegrees(Math.atan2(diffY, diffX));
         }
     }
@@ -164,17 +167,17 @@ public class AttackStrategy extends Strategy {
     @Override
     public void act() {
         RotateBehaviour rotateBehaviour = (RotateBehaviour) weapon.getMoveBehaviour();
-        if (enemy != null){
-            if (aimedEnemy == null || enemy != aimedEnemy) {
+        if (target != null){
+            if (aimedTarget == null || target != aimedTarget) {
                 initialAimTime = getBot().getLastThoughtTime();
-                initialHp = enemy.getHpValue();
-                aimedEnemy = enemy;
+                initialHp = target.getHpValue();
+                aimedTarget = target;
             }
-            if (enemy == aimedEnemy){
+            if (target == aimedTarget){
                 if ((getBot().getLastThoughtTime() - initialAimTime) / 1000000000 > 4 + (new Random()).nextInt(3)){
-                    if (enemy.getHpValue() == initialHp) currentAimMode = currentAimMode == 0 ? 1 : 0;
+                    if (target.getHpValue() == initialHp) currentAimMode = currentAimMode == 0 ? 1 : 0;
                     initialAimTime = getBot().getLastThoughtTime();
-                    initialHp = enemy.getHpValue();
+                    initialHp = target.getHpValue();
                 }
             }
             rotateBehaviour.setNewDirection(Math.toRadians(angleToEnemy));
@@ -187,11 +190,11 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void updateImportance() {
-        if (enemy == null){
+        if (target == null){
             setImportance(0);
         }
         else {
-            setImportance(getImportance() / (enemy.getHpValue() / 10));
+            setImportance(getImportance() / (target.getHpValue() / 10));
         }
     }
 }

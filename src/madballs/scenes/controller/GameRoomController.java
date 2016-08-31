@@ -97,9 +97,7 @@ public class GameRoomController implements Initializable {
     public void startGame(ActionEvent e){
         if (MadBalls.getGameMode() instanceof NormalMode){
             int weaponChoiceIndex = weaponChoiceList.getSelectionModel().getSelectedIndex();
-            if (weaponChoiceIndex >= 0){
-                ((NormalMode)MadBalls.getGameMode()).setWeaponClassIndex(weaponChoiceIndex);
-            }
+            ((NormalMode)MadBalls.getGameMode()).setWeaponClassIndex(weaponChoiceIndex);
         }
 
         int ranking = 1;

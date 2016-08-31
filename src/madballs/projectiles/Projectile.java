@@ -57,7 +57,9 @@ public class Projectile extends GameObject {
         straightMoveBehaviour.setNewDirection(Math.toRadians(sourceWeapon.getRotateAngle()));
         setMoveBehaviour(straightMoveBehaviour);
         getHitBox().setOpacity(0);
-        sourceWeapon.setAmmo(sourceWeapon.getAmmo() - 1);
+        if (sourceWeapon.getAmmo() > 0) {
+            sourceWeapon.setAmmo(sourceWeapon.getAmmo() - 1);
+        }
     }
 
     @Override

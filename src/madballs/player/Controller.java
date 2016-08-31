@@ -22,11 +22,11 @@ import madballs.wearables.Weapon;
  */
 public class Controller {
     private Player player;
-    private double sceneWidth, sceneHeight;
+    private double sceneWidth, sceneHeight, scale;
 
-//    public double getScale() {
-//        return scale;
-//    }
+    public double getScale() {
+        return scale;
+    }
 
     public double getSceneWidth() {
         return sceneWidth;
@@ -118,18 +118,24 @@ public class Controller {
 //        System.out.println(player.getBall().getWeapon().getClass());
 //        weaponRotateBehaviour.setTargetX(event.getMouseX());
 //        weaponRotateBehaviour.setTargetY(event.getMouseY());
-//        double yDiff = event.getMouseY() - sceneHeight/2 - playerWeapon.getOwnerDiffY()*scale;
-//        double xDiff = event.getMouseX() - sceneWidth/2 - playerWeapon.getOwnerDiffX()*scale;
-        double[] realCoordinate = playerWeapon.getRealCoordinate();
-        double yDiff = event.getMouseY() - realCoordinate[1];
-        double xDiff = event.getMouseX() - realCoordinate[0];
+        scale = event.getScale();
+        double yDiff = event.getMouseY() - sceneHeight/2 - playerWeapon.getOwnerDiffY()*scale;
+        double xDiff = event.getMouseX() - sceneWidth/2 - playerWeapon.getOwnerDiffX()*scale;
+//        double[] realCoordinate = playerWeapon.getRealCoordinate();
+//        double yDiff = event.getMouseY() - realCoordinate[1];
+//        double xDiff = event.getMouseX() - realCoordinate[0];
         double newDirection = Math.atan2(yDiff, xDiff);
 //        System.out.println(Math.toDegrees(newDirection));
         weaponRotateBehaviour.setNewDirection(newDirection);
-        if (event.isPressed() && playerWeapon instanceof GrenadeLauncher){
-            double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff) - playerWeapon.getWidth();
-            if (playerWeapon.getRange() >= distance) {
-                playerWeapon.setRange(distance);
+        if (playerWeapon instanceof GrenadeLauncher){
+            if (event.isPressed()){
+                double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff)/scale - playerWeapon.getWidth() - 15;
+                if (playerWeapon.getRange() >= distance) {
+                    playerWeapon.setRange(distance);
+                }
+            }
+            else {
+                playerWeapon.setRange(700);
             }
         }
         weaponRotateBehaviour.setMousePressed(event.isPressed());

@@ -31,7 +31,6 @@ public class GrenadeLauncher extends Weapon {
         setDamage(60);
         setAmmo(5);
         setFireRate(1);
-        setRange(700);
         setProjectileSpeed(400);
         setProjectileHitBoxSize(2);
         setProjectileColor(Paint.valueOf("red"));
@@ -40,12 +39,6 @@ public class GrenadeLauncher extends Weapon {
 //        setFireSoundFX("bazooka");
         setProjectileCollisionEffect(new NullEffect(null));
         setProjectileCollisionBehaviour(new ObjExclusiveBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 30, getDamage(), owner.getID()), new Class[]{Ground.class}));
-    }
-
-    @Override
-    public void forceFire(Integer projectileID){
-        super.forceFire(projectileID);
-        setRange(700);
     }
 
     @Override

@@ -74,7 +74,7 @@ public class MoveStrategy extends Strategy {
         if (shouldFindObjective){
             double value = 0;
             if (obj instanceof Item){
-                System.out.println("potential objective " + obj.getClass());
+//                System.out.println("potential objective " + obj.getClass());
                 value = 18;
                 if (obj instanceof WeaponItem){
                     if (getBot().getBall().getWeapon().getAmmo() > 15){
@@ -115,12 +115,6 @@ public class MoveStrategy extends Strategy {
 
     @Override
     public void act() {
-        if (objective != null) {
-            System.out.println(objective);
-            System.out.println(objective.getTranslateX());
-            System.out.println(objective.getTranslateY());
-            System.out.println(objectivePath.size());
-        }
         if (objective == null && shouldFindObjective){
             if (isCenterReached){
                 straightMove.setVelocityX(straightMove.getSpeed() * (random.nextInt(3) - 1));
