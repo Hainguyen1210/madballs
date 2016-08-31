@@ -21,7 +21,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
     private final BooleanProperty isMousePressed = new SimpleBooleanProperty(false);
     private final DoubleProperty mouseX = new SimpleDoubleProperty();
     private final DoubleProperty mouseY = new SimpleDoubleProperty();
-    private final DoubleProperty scale = new SimpleDoubleProperty();
+//    private final DoubleProperty scale = new SimpleDoubleProperty();
     private final MouseKeyEvent multiKeyEvent = new MouseKeyEvent();
     private Player player;
      
@@ -38,11 +38,12 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
      
     public void handle(final MouseEvent event) {
         SceneManager sceneManager = SceneManager.getInstance();
-        scale.set(sceneManager.getScale());
-        double targetX = event.getSceneX();
-        double targetY = event.getSceneY();
+//        scale.set(1/sceneManager.getZoomOut());
+//        System.out.println("scale" + scale);
+        double targetX = event.getX();
+        double targetY = event.getY();
 
-        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), targetX, targetY, scale.get()));
+        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), targetX, targetY));
         if (event.getEventType() == MouseEvent.MOUSE_MOVED){
             mouseX.set(targetX);
             mouseY.set(targetY);
@@ -87,7 +88,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
         if (data.getEventType().equals("MOUSE_RELEASED")){
             isMousePressed.set(false);
         }
-        scale.set(data.getScale());
+//        scale.set(data.getScale());
         multiKeyEventHandler.handle(multiKeyEvent);
     }
      
@@ -108,6 +109,6 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
             return mouseY.get();
         }
 
-        public double getScale() { return scale.get(); }
+//        public double getScale() { return scale.get(); }
     }
 }

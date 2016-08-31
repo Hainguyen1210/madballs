@@ -114,7 +114,9 @@ public class MadBalls extends Application {
         if (mainEnvironment != null) map = new Map(mainEnvironment.getMap().getMapNumber());
         isGameOver = false;
         Group root = new Group();
-        root.getChildren().add(new ImageView(ImageGenerator.getInstance().getImage("map_" + Map.getMapFiles().get(map.getMapNumber()).replace(".txt", ""))));
+        ImageView background = new ImageView(ImageGenerator.getInstance().getImage("map_" + Map.getMapFiles().get(map.getMapNumber()).replace(".txt", "")));
+        root.getChildren().add(background);
+
         System.out.println("map_" + Map.getMapFiles().get(map.getMapNumber()).replace(".txt", ""));
         animationScene = new SubScene(root, sceneHeight/9*16, sceneHeight, true, SceneAntialiasing.BALANCED);
 

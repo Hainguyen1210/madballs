@@ -4,7 +4,6 @@ import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
-import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.collision.*;
 import madballs.gameFX.SoundStudio;
@@ -31,10 +30,11 @@ public class XM1104 extends Weapon {
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
-        setDamage(15);
-        setAmmo(25);
-        setFireRate(0.6);
-        setRange(500);
+        setWeight(1.5);
+        setDamage(22);
+        setAmmo(30);
+        setFireRate(1);
+        setRange(400);
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("red"));
@@ -43,7 +43,6 @@ public class XM1104 extends Weapon {
         setFireSoundFX("shotgun");
 
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     @Override
@@ -53,7 +52,7 @@ public class XM1104 extends Weapon {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }
         for (int i = 0; i < 5; i++){
-            Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
+            Projectile projectile = new Projectile(this, getRange(), new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
             double direction = Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1));
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
             MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), direction));
@@ -67,7 +66,7 @@ public class XM1104 extends Weapon {
         if (getFireSoundFX() != null) {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }
-        Projectile projectile = new Projectile(this, new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
+        Projectile projectile = new Projectile(this, getRange(), new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
         ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
     }
 

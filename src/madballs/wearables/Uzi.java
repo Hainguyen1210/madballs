@@ -7,12 +7,9 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
-import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
 
 /**
@@ -34,7 +31,7 @@ public class Uzi extends Weapon{
         setScope(1.1);
         setDamage(10);
         setAmmo(40);
-        setFireRate(4);
+        setFireRate(5);
         setRange(700);
         setProjectileSpeed(800);
         setProjectileHitBoxSize(3);
@@ -43,7 +40,6 @@ public class Uzi extends Weapon{
         
         setFireSoundFX("uzi");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
     
     @Override

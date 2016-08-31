@@ -13,6 +13,7 @@ import madballs.moveBehaviour.StraightMove;
 import madballs.multiplayer.MapData;
 import madballs.multiplayer.PlayerData;
 import madballs.scenes.SceneManager;
+import madballs.wearables.GrenadeLauncher;
 import madballs.wearables.Weapon;
 
 /**
@@ -22,6 +23,10 @@ import madballs.wearables.Weapon;
 public class Controller {
     private Player player;
     private double sceneWidth, sceneHeight;
+
+//    public double getScale() {
+//        return scale;
+//    }
 
     public double getSceneWidth() {
         return sceneWidth;
@@ -113,12 +118,20 @@ public class Controller {
 //        System.out.println(player.getBall().getWeapon().getClass());
 //        weaponRotateBehaviour.setTargetX(event.getMouseX());
 //        weaponRotateBehaviour.setTargetY(event.getMouseY());
-        double scale = event.getScale();
-        double yDiff = event.getMouseY() - sceneHeight/2 - playerWeapon.getOwnerDiffY()*scale;
-        double xDiff = event.getMouseX() - sceneWidth/2 - playerWeapon.getOwnerDiffX()*scale;
+//        double yDiff = event.getMouseY() - sceneHeight/2 - playerWeapon.getOwnerDiffY()*scale;
+//        double xDiff = event.getMouseX() - sceneWidth/2 - playerWeapon.getOwnerDiffX()*scale;
+        double[] realCoordinate = playerWeapon.getRealCoordinate();
+        double yDiff = event.getMouseY() - realCoordinate[1];
+        double xDiff = event.getMouseX() - realCoordinate[0];
         double newDirection = Math.atan2(yDiff, xDiff);
 //        System.out.println(Math.toDegrees(newDirection));
         weaponRotateBehaviour.setNewDirection(newDirection);
+        if (event.isPressed() && playerWeapon instanceof GrenadeLauncher){
+            double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff) - playerWeapon.getWidth();
+            if (playerWeapon.getRange() >= distance) {
+                playerWeapon.setRange(distance);
+            }
+        }
         weaponRotateBehaviour.setMousePressed(event.isPressed());
     }
 }

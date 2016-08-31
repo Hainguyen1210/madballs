@@ -60,7 +60,7 @@ public class SceneManager {
     private double screenWidth, screenHeight;
     // scale: the ratio of the visual/scene size to the actual game element size.
     // i.e. multiplying an element's size by this scale would give the visual size of the element (the size on scene)
-    private DoubleProperty scale = new SimpleDoubleProperty(1);
+//    private DoubleProperty scale = new SimpleDoubleProperty(1);
     // zoomOut: the ratio of how much the game elements have been zoomed out compared to its initial size
     private DoubleProperty zoomOut = new SimpleDoubleProperty(1);
     private PerspectiveCamera camera;
@@ -93,13 +93,13 @@ public class SceneManager {
         return gameInfoDisplay;
     }
 
-    public double getScale() {
-        return scale.get();
-    }
-
-    public void setScale(double scale) {
-        this.scale.set(scale);
-    }
+//    public double getScale() {
+//        return scale.get();
+//    }
+//
+//    public void setScale(double scale) {
+//        this.scale.set(scale);
+//    }
 
     public double getZoomOut() {
         return zoomOut.get();
@@ -253,7 +253,7 @@ public class SceneManager {
     
     public void bindCamera(GameObject obj){
         System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
-        scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * NUM_MAP_PARTS, zoomOut));
+//        scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() / MadBalls.getMainEnvironment().getMap().getHeight() * NUM_MAP_PARTS, zoomOut));
 //        scale.bind(Bindings.divide(
 //                Bindings.divide(MadBalls.getAnimationScene().heightProperty(), MadBalls.getMainEnvironment().getMap().getHeight() / NUM_MAP_PARTS)
 //                , zoomOut));

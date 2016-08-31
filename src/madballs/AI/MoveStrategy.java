@@ -4,13 +4,16 @@ import madballs.Ball;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.item.Item;
+import madballs.item.WeaponItem;
 import madballs.map.Map;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
+import madballs.wearables.Weapon;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.regex.Matcher;
 
 /**
  * Created by caval on 30/08/2016.
@@ -47,8 +50,6 @@ public class MoveStrategy extends Strategy {
             pathsToNodes.add(arrayList);
         }
 
-        objective = null;
-
         straightMove = (StraightMove) getBot().getBall().getMoveBehaviour();
 
         int myColumn = (int) (getBot().getBall().getTranslateX() / map.getColumnWidth());
@@ -61,6 +62,7 @@ public class MoveStrategy extends Strategy {
 
         shouldFindObjective = (getBot().getLastThoughtTime() - objectiveChangeTime) / 1000000000 > (5 + random.nextInt(4));
         if (shouldFindObjective){
+            objective = null;
             objectivePath.clear();
             objectiveValue = -1;
         }
@@ -72,22 +74,38 @@ public class MoveStrategy extends Strategy {
         if (shouldFindObjective){
             double value = 0;
             if (obj instanceof Item){
-                value = 15;
+                System.out.println("potential objective " + obj.getClass());
+                value = 18;
+                if (obj instanceof WeaponItem){
+                    if (getBot().getBall().getWeapon().getAmmo() > 15){
+                        double damageDiff = (((WeaponItem)obj).getWeapon().getDamage() - getBot().getBall().getWeapon().getDamage());
+                        if (damageDiff < 0) return;
+                    }
+                    value *= ((WeaponItem)obj).getWeapon().getDamage() / 5;
+                }
             }
             else if (obj instanceof Ball){
-                if (((Ball)obj).getPlayer().getTeamNum() != getBot().getTeamNum()){
+                Ball ball = (Ball) obj;
+                double distance = Math.sqrt(Math.pow(ball.getTranslateY() - getBot().getBall().getTranslateY(), 2) + Math.pow(ball.getTranslateX() - getBot().getBall().getTranslateX(), 2));
+                if (distance < getBot().getBall().getWeapon().getRange()) return;
+                if (ball.getPlayer().getTeamNum() != getBot().getTeamNum()){
                     value = (100 - obj.getHpValue()) / 5;
+                    double damageDiff = (ball.getWeapon().getDamage() - getBot().getBall().getWeapon().getDamage());
+                    if (damageDiff > 0) return;
+                    value -= damageDiff / 10;
                 }
             }
             if (value != 0){
                 findPath(obj);
                 if (tempPath.size() != 0){
+//                    System.out.println("found path");
                     value /= (tempPath.size() / 4);
                     if (value > objectiveValue){
+                        System.out.println("new objective " + obj.getClass());
                         objective = obj;
                         objectiveValue = value;
                         objectiveChangeTime = getBot().getLastThoughtTime();
-                        objectivePath = tempPath;
+                        objectivePath = new LinkedList<>(tempPath);
                     }
                 }
             }
@@ -97,6 +115,12 @@ public class MoveStrategy extends Strategy {
 
     @Override
     public void act() {
+        if (objective != null) {
+            System.out.println(objective);
+            System.out.println(objective.getTranslateX());
+            System.out.println(objective.getTranslateY());
+            System.out.println(objectivePath.size());
+        }
         if (objective == null && shouldFindObjective){
             if (isCenterReached){
                 straightMove.setVelocityX(straightMove.getSpeed() * (random.nextInt(3) - 1));
@@ -106,7 +130,7 @@ public class MoveStrategy extends Strategy {
                 tempPath.clear();
                 objectiveValue = -1;
                 findPath(map.getNumRows() / 2, map.getNumColumns() / 2, myNode[0], myNode[1], new LinkedList<>(), -1);
-                objectivePath = tempPath;
+                objectivePath = new LinkedList<>(tempPath);
             }
             objectiveChangeTime = getBot().getLastThoughtTime();
         }
@@ -119,10 +143,17 @@ public class MoveStrategy extends Strategy {
             double nodeX = myNode[1] * map.getColumnWidth() + 25;
             double nodeY = myNode[0] * map.getRowHeight() + 25;
 
+
             boolean shouldTargetObjective = false;
-            if (objectivePath.size() == 1 && objective != null){
-                shouldTargetObjective = true;
+            if (objective != null){
+//                System.out.println(objective.getClass());
+//                System.out.println("path " + objectivePath.size());
+                if (objectivePath.size() == 1 && objective != null){
+//                    System.out.println("last step");
+                    shouldTargetObjective = true;
+                }
             }
+
             if (objectivePath.size() > 1 && myNode[0] == nextNode[0] && myNode[1] == nextNode[1]){
                 objectivePath.removeFirst();
                 nextNode = objectivePath.getFirst();
@@ -147,7 +178,7 @@ public class MoveStrategy extends Strategy {
             }
 
             straightMove.setNewDirection(myDirection);
-            ((RotateBehaviour)getBot().getBall().getWeapon().getMoveBehaviour()).setNewDirection(myDirection);
+            ((RotateBehaviour)getBot().getBall().getWeapon().getMoveBehaviour()).setNewDirection(myDirection + Math.PI);
         }
     }
 
@@ -169,6 +200,7 @@ public class MoveStrategy extends Strategy {
     }
 
     private void findPath(int targetRow, int targetColumn, int currentRow, int currentColumn, LinkedList<int[]> path, int lastDirection){
+//        if (tempPath.size() > 0) return;
         if (path.size() < PATH_LENGTH_LIMIT || (targetColumn == map.getNumColumns() / 2 && targetRow == map.getNumRows() /2)){
             int[][] adjacentNodes = new int[][] {
                     new int[] {currentRow, currentColumn - 1},
@@ -177,7 +209,7 @@ public class MoveStrategy extends Strategy {
                     new int[] {currentRow - 1, currentColumn}
             };
 
-            for (int direction = 0; direction < adjacentNodes.length; direction++){
+            for (int direction = 0; direction < 4; direction++){
                 if (direction == lastDirection) continue;
                 int[] adjacentNode = adjacentNodes[direction];
                 if (adjacentNode[0] < 0 || adjacentNode[0] >= map.getNumRows() || adjacentNode[1] < 0 || adjacentNode[1] >= map.getNumColumns()){
@@ -204,6 +236,7 @@ public class MoveStrategy extends Strategy {
                         pathsToNodes.get(adjacentNode[0]).add(adjacentNode[1], newPath);
                         if (adjacentNode[0] == targetRow && adjacentNode[1] == targetColumn){
                             if (tempPath.size() == 0 || path.size() + 1 < tempPath.size()){
+//                            if (tempPath.size() == 0){
                                 tempPath = newPath;
 //                                System.out.println("new path");
 //                                for (int[] step : tempPath){

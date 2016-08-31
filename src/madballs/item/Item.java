@@ -5,9 +5,10 @@
  */
 package madballs.item;
 
-import javafx.scene.image.ImageView;
 import javafx.scene.paint.Paint;
-import madballs.collision.Ball_n_WallBehaviour;
+import madballs.Ball;
+import madballs.Obstacle;
+import madballs.collision.ObjExclusiveBehaviour;
 import madballs.collision.DisappearBehaviour;
 import madballs.Environment;
 import madballs.GameObject;
@@ -52,7 +53,7 @@ public abstract class Item extends GameObject {
         setSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
-        setCollisionPassiveBehaviour(new Ball_n_WallBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation))));
+        setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation)), new Class[]{Ball.class, Obstacle.class}));
     }
 
     @Override

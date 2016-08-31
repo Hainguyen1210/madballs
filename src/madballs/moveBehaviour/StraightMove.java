@@ -9,6 +9,7 @@ import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
 import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
+import madballs.projectiles.Projectile;
 
 /**
  *
@@ -67,12 +68,12 @@ public class StraightMove extends MoveBehaviour{
     }
 
     @Override
-    void calculateNewCordinate(long now) {
+    void calculateNewCoordinate(long now) {
         // get the time elapsed and update lastUpdateTime
-        if (getLastMoveTime() == 0) setLastMoveTime(getObject().getEnvironment().getLastUpdateTime());
+        if (getLastMoveTime() == 0) setLastMoveTime(now);
+        double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;
 //        if (now - getLastMoveTime() < 5000000) return;
-        
-        final double elapsedSeconds = (now - getLastMoveTime()) / 1_000_000_000.0 ;
+
         setLastMoveTime(now);
         
         // calculate new coordinates
@@ -91,9 +92,10 @@ public class StraightMove extends MoveBehaviour{
             getObject().setOldY(oldY);
         }
         setNewY(newY);
-        
-        setMovedDistance(getMovedDistance() + getSpeed() * elapsedSeconds);
-        
+
+        double newDistance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+        setMovedDistance(getMovedDistance() + newDistance);
+
 //        MadBalls.getMultiplayerHandler().sendData(new MoveData(getObject().getIndex(), now, oldX, newX, oldY, newY, getMovedDistance()));
         
         // set the coordinate to the target if the obj has passed the target
@@ -113,7 +115,7 @@ public class StraightMove extends MoveBehaviour{
                         obj.getTranslateX(), obj.getTranslateY(), 100, 100);
             }
         }
-        calculateNewCordinate(now);
+        calculateNewCoordinate(now);
 
 //        if (obj.getTranslateX() != getNewX()) obj.setOldX(obj.getTranslateX());
 //        if (obj.getTranslateY() != getNewY()) obj.setOldY(obj.getTranslateY());

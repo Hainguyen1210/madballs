@@ -103,7 +103,7 @@ public class BotPlayer extends Player {
 
     @Override
     public void sendData(Data data){
-        System.out.println("bot send " + data.getType());
+//        System.out.println("bot send " + data.getType());
         Server server = (Server) MadBalls.getMultiplayerHandler();
         server.handleData(this, data);
     }

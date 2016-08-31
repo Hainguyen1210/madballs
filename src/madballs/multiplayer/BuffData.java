@@ -57,7 +57,7 @@ public class BuffData extends Data {
         duration = buffState.getDuration();
         lastTick = buffState.getLastTick();
         tickInterval = buffState.getTickInterval();
-        System.out.println("asd" + buffState.getClass());
+//        System.out.println("asd" + buffState.getClass());
         ballID = buffState.getBall().getID();
         parameters = buffState.getParameters();
     }

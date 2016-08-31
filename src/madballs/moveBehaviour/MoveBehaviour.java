@@ -79,7 +79,7 @@ public abstract class MoveBehaviour {
      * method for the move behavior to calculate the result coordinate of the obj after the move
      * @param now current timestamp
      */
-    abstract void calculateNewCordinate(long now);
+    abstract void calculateNewCoordinate(long now);
     
     public abstract void moveUnique(long now);
 

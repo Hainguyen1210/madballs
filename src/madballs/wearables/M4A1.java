@@ -7,12 +7,9 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
-import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
 
 public class M4A1 extends Weapon{
@@ -27,19 +24,19 @@ public class M4A1 extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
+        setWeight(2);
         setScope(1.2);
         setDamage(18);
         setAmmo(45);
         setFireRate(4);
         setRange(600);
-        setProjectileSpeed(500);
+        setProjectileSpeed(700);
         setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("gray"));
         setProjectileImageName("bullet2");
         
         setFireSoundFX("m4a1");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     @Override

@@ -19,6 +19,7 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.ImageView;
@@ -26,6 +27,7 @@ import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import madballs.*;
+import madballs.AI.BotPlayer;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
 import madballs.scenes.SceneManager;
@@ -142,8 +144,13 @@ public class Player {
 
     public void checkRelevancy(GameObject obj, double varianceX, double varianceY){
         if (obj.isDead()) {
-            if (!relevantObjIDs.contains(obj.getID())) {
-                relevantObjIDs.add(obj.getID());
+            if (this instanceof BotPlayer){
+                relevantObjIDs.remove(obj);
+            }
+            else {
+                if (!relevantObjIDs.contains(obj.getID())) {
+                    relevantObjIDs.add(obj.getID());
+                }
             }
             return;
         }
@@ -161,8 +168,12 @@ public class Player {
     public boolean getRelevancy(double x, double y, double varianceX, double varianceY){
         double xDiff = Math.abs(x - ball.getTranslateX());
         double yDiff = Math.abs(y - ball.getTranslateY());
-        double scale = SceneManager.getInstance().getScale();
-        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
+        double numMapParts = SceneManager.NUM_MAP_PARTS;
+        double zoomOut = getBall().getWeapon().getScope();
+        double scale = 1 / numMapParts * zoomOut / 2;
+//        double scale = controller.getScale();
+//        return  (xDiff < controller.getSceneWidth()/2/scale + varianceX && yDiff < controller.getSceneHeight()/2/scale + varianceY);
+        return  (xDiff < controller.getSceneWidth()*scale + varianceX && yDiff < controller.getSceneHeight()*scale + varianceY);
     }
 
     public Player(Socket socket, boolean isLocal){
@@ -187,7 +198,7 @@ public class Player {
                     int newRanking = player.getRanking();
                     player.setRanking(getRanking());
                     setRanking(newRanking);
-                    System.out.println("update rank" + name + getRanking());
+//                    System.out.println("update rank" + name + getRanking());
                     player.updateRanking();
                 }
             }
@@ -230,7 +241,7 @@ public class Player {
         ball.getImageView().setTranslateY(-ballSize/2);
 
         if (isLocal) {
-            bindInput(MadBalls.getMainScene());
+            bindInput();
             SceneManager.getInstance().bindBall(ball);
             controller.setSceneWidth(MadBalls.getAnimationScene().getWidth());
             controller.setSceneHeight(MadBalls.getAnimationScene().getHeight());
@@ -288,23 +299,16 @@ public class Player {
         return mouseHandler;
     }
     
-    public void bindInput(Scene scene){
-//
-//        camera.setTranslateX(ball.getTranslateX());
-//        camera.setTranslateY(ball.getTranslateY());
-//        System.out.println("123");
-//        scene.setOnKeyPressed(ball.getMoveBehaviour().keyHandler);
-//        scene.setOnKeyReleased(ball.getMoveBehaviour().keyHandler);
-//        scene.setOnMousePressed(ball.getWeapon().getMoveBehaviour().mouseHandler);
-//        scene.setOnMouseReleased(ball.getWeapon().getMoveBehaviour().mouseHandler);
-//        scene.setOnMouseMoved(ball.getWeapon().getMoveBehaviour().mouseHandler);
-//        scene.setOnMouseDragged(ball.getWeapon().getMoveBehaviour().mouseHandler);
+    public void bindInput(){
+        Scene scene = MadBalls.getMainScene();
         scene.setOnKeyPressed(keyHandler);
         scene.setOnKeyReleased(keyHandler);
-        scene.setOnMousePressed(mouseHandler);
-        scene.setOnMouseReleased(mouseHandler);
-        scene.setOnMouseMoved(mouseHandler);
-        scene.setOnMouseDragged(mouseHandler);
+
+        Group environmentDisplay = ball.getEnvironment().getDisplay();
+        environmentDisplay.setOnMousePressed(mouseHandler);
+        environmentDisplay.setOnMouseReleased(mouseHandler);
+        environmentDisplay.setOnMouseMoved(mouseHandler);
+        environmentDisplay.setOnMouseDragged(mouseHandler);
     }
 
     public void sendData(Data data){

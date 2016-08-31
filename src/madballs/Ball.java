@@ -86,7 +86,7 @@ public class Ball extends GameObject{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
 
-        weapon = new Pistol(this, -1);
+        weapon = new GrenadeLauncher(this, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());
     }
 
@@ -104,11 +104,14 @@ public class Ball extends GameObject{
 
     public <W extends Weapon> void setWeapon(Class<W> weaponClass, Integer weaponID) {
         try {
+            StraightMove straightMove = (StraightMove) getMoveBehaviour();
             if (weapon != null) {
-                System.out.println("old weap: " + weapon.getID());
+                straightMove.setSpeed(straightMove.getSpeed() + weapon.getWeight() * 5);
+//                System.out.println("old weap: " + weapon.getID());
                 weapon.die();
             }
             weapon = weaponClass.getDeclaredConstructor(GameObject.class, Integer.class).newInstance(this, weaponID);
+            straightMove.setSpeed(straightMove.getSpeed() - weapon.getWeight() * 5);
             if (MadBalls.isHost()) {
                 MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getID(), weapon.getClass().getName(), weapon.getID()));
             }
@@ -118,8 +121,8 @@ public class Ball extends GameObject{
                 SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
-            System.out.println("Get weapon " + weaponClass);
-            System.out.println("new weap: " + weapon.getID());
+//            System.out.println("Get weapon " + weaponClass);
+//            System.out.println("new weap: " + weapon.getID());
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }

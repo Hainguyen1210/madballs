@@ -7,12 +7,9 @@ package madballs.wearables;
 
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
-import madballs.ImageGenerator;
 import madballs.collision.DamageEffect;
-import madballs.collision.DisappearBehaviour;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
-import madballs.collision.WeaponIgnoredBehaviour;
 import madballs.GameObject;
 
 public class Awp extends Weapon{
@@ -27,10 +24,11 @@ public class Awp extends Weapon{
         setCollisionEffect(new PushBackEffect(null, -1));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
+        setWeight(3);
         setScope(2);
         setDamage(75);
-        setAmmo(20);
-        setFireRate(0.35);
+        setAmmo(10);
+        setFireRate(0.4);
         setRange(1000);
         setProjectileSpeed(1000);
         setProjectileHitBoxSize(5);
@@ -39,7 +37,6 @@ public class Awp extends Weapon{
 
         setFireSoundFX("awp");
         setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
-        setProjectileCollisionBehaviour(new WeaponIgnoredBehaviour(new DisappearBehaviour(null)));
     }
 
     @Override
