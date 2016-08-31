@@ -12,10 +12,10 @@
           <AnchorPane fx:id="playersPane" minHeight="0.0" minWidth="0.0" />
         </content>
       </ScrollPane>
-      <ChoiceBox fx:id="modeChoiceBox" layoutX="13.0" layoutY="689.0" prefHeight="25.0" prefWidth="280.0" />
       <Button fx:id="startBtn" layoutX="612.0" layoutY="678.0" mnemonicParsing="false" onAction="#startGame" prefHeight="48.0" prefWidth="167.0" text="Start" visible="false" />
-      <TextArea fx:id="sceneHeight" layoutX="324.0" layoutY="687.0" prefHeight="30.0" prefWidth="208.0" promptText="Scene Height" />
-      <ImageView fx:id="mapPreview" fitHeight="200.0" fitWidth="200.0" layoutX="303.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true" />
+      <TextArea fx:id="sceneHeight" layoutX="416.0" layoutY="687.0" prefHeight="30.0" prefWidth="116.0" promptText="Scene Height" />
+      <ImageView fx:id="mapPreview" fitHeight="200.0" fitWidth="200.0" layoutX="382.0" layoutY="458.0" pickOnBounds="true" preserveRatio="true" />
       <Button fx:id="addBotBtn" layoutX="13.0" layoutY="500.0" mnemonicParsing="false" onAction="#addBot" text="Add BOT" visible="false" />
+      <ListView fx:id="weaponChoiceList" layoutX="24.0" layoutY="656.0" prefHeight="64.0" prefWidth="275.0" visible="false" />
    </children>
 </AnchorPane>

@@ -24,17 +24,17 @@ import madballs.wearables.XM1104;
  * @author Caval
  */
 public class Client extends MultiplayerHandler{
+    private String address;
 
-    public Client() {
+    public Client(String address) {
         super(false);
+        this.address = address;
     }
     
     /**
      * connect to the server as client via socket
      */
     public void init(){
-        // get the server ip
-        String address = Navigation.getInstance().getTextResponse("Start game", "Join a game", "Enter host's server address", "127.0.0.1");
         setService(new Service<Void>() {
             @Override
             protected Task<Void> createTask() {

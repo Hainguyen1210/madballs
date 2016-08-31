@@ -17,6 +17,8 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
+import madballs.gameMode.GameMode;
+import madballs.gameMode.NormalMode;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
 import madballs.multiplayer.MultiplayerHandler;
@@ -38,6 +40,12 @@ public class MadBalls extends Application {
 
     private static Scene mainScene;
     private static SubScene animationScene;
+
+    private static GameMode gameMode;
+
+    public static GameMode getGameMode() {
+        return gameMode;
+    }
 
     public static void setSceneHeight(double sceneHeight) {
         MadBalls.sceneHeight = sceneHeight;
@@ -70,7 +78,11 @@ public class MadBalls extends Application {
     public static void setGameOver(boolean isGameOver) {
         MadBalls.isGameOver = isGameOver;
     }
-    
+
+    public static void setMultiplayerHandler(MultiplayerHandler multiplayerHandler) {
+        MadBalls.multiplayerHandler = multiplayerHandler;
+    }
+
     @Override
     public void start(Stage primaryStage) {
         Navigation.getInstance().setMainStage(primaryStage);
@@ -78,7 +90,6 @@ public class MadBalls extends Application {
 //        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
-
 
         MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
         Map.searchFiles();
@@ -91,19 +102,21 @@ public class MadBalls extends Application {
                 System.exit(0);
             }
         });
+        Scene scene = ScenesFactory.getInstance().newScene("welcome");
         primaryStage.show();
+        Navigation.getInstance().navigate(scene);
+//        boolean isHost = Navigation.getInstance().getConfirmation("", "Start game", "Do you want to host?");
+//        if (isHost){
+//            multiplayerHandler = new Server();
+//
+//            loadMap(Map.chooseMap());
+//        }
+//        else {
+//            multiplayerHandler = new Client();
+//            multiplayerHandler.setLocalPlayer(new Player(null, true));
+//        }
+//        multiplayerHandler.init();
 
-        boolean isHost = Navigation.getInstance().getConfirmation("", "Start game", "Do you want to host?");
-        if (isHost){
-            multiplayerHandler = new Server();
-
-            loadMap(Map.chooseMap());
-        }
-        else {
-            multiplayerHandler = new Client();
-            multiplayerHandler.setLocalPlayer(new Player(null, true));
-        }
-        multiplayerHandler.init();
 
 //        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
 //        SceneManager.getInstance().displayGameInfo(mainRoot);
@@ -140,6 +153,7 @@ public class MadBalls extends Application {
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
         mainEnvironment.loadMap(map);
+        gameMode = new NormalMode(0);
         SceneManager.getInstance().resetTeamScoreBoard();
         Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
     }
