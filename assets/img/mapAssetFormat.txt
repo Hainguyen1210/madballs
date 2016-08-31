@@ -1,0 +1,13 @@
+asset name format
+- [map-name].txt
+- background_[map-name].png 
+- obstacle_[map-name][0-1].png
+-> map_[map-name].png
+
+example: 
+- desert.txt
+- background_desert.png
+- obstacle_desert0.png
+- obstacle_desert1.png
+-> map_desert.png
+
