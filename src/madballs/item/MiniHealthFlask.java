@@ -21,8 +21,6 @@ public class MiniHealthFlask extends BuffItem{
         setImage("teal_potion");
     }
     
-    
-    
     @Override
     public void setDisplayComponents(){
         setColor(Color.LIGHTGREEN);

@@ -6,19 +6,13 @@
 package madballs.wearables;
 
 
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.LongProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.SimpleLongProperty;
+import javafx.beans.property.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import madballs.Ball;
 import madballs.GameObject;
 import madballs.MadBalls;
-import madballs.collision.CollisionEffect;
-import madballs.collision.CollisionPassiveBehaviour;
-import madballs.collision.DisappearBehaviour;
-import madballs.collision.ObjIgnoredBehaviour;
+import madballs.collision.*;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
@@ -43,8 +37,22 @@ public abstract class Weapon extends GameObject {
     private double scope = 1;
     private LongProperty lastShotTime = new SimpleLongProperty(0);
     private double height, width;
-    private double damage = -1, fireRate = -1, range = -1, projectileSpeed = -1;
+    private double fireRate = -1, range = -1, projectileSpeed = -1;
+    private DoubleProperty damage = new SimpleDoubleProperty();
+    private double maxRange = -1;
     private IntegerProperty ammo = new SimpleIntegerProperty(-1);
+
+    public LongProperty lastShotTimeProperty() {
+        return lastShotTime;
+    }
+
+    public double getMaxRange() {
+        return maxRange;
+    }
+
+    public void setMaxRange(double maxRange) {
+        this.maxRange = maxRange;
+    }
 
     public void setWeight(double weight) {
         this.weight = weight;
@@ -63,11 +71,15 @@ public abstract class Weapon extends GameObject {
     }
 
     public double getDamage() {
+        return damage.get();
+    }
+
+    public DoubleProperty damageProperty() {
         return damage;
     }
 
-    final public void setDamage(double damage) {
-        this.damage = damage;
+    public void setDamage(double damage) {
+        this.damage.set(damage);
     }
 
     public double getHeight() {
@@ -159,7 +171,11 @@ public abstract class Weapon extends GameObject {
         super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
 //        getHitBox().setOpacity(0);
-        setProjectileCollisionBehaviour(new ObjIgnoredBehaviour(new DisappearBehaviour(null), new Class[]{Weapon.class}));
+    }
+
+    public void generateProjectileCollisionType(){
+        setProjectileCollisionEffect(new DamageEffect(damageProperty(), 1.1, getOwner().getID(), null));
+        setProjectileCollisionBehaviour(new ObjIgnoredBehaviour(new Class[]{Weapon.class}, new DisappearBehaviour(null)));
     }
 //    public Weapon(Environment environment, double x, double y) {
 //        super(environment, x, y, true);
@@ -207,7 +223,8 @@ public abstract class Weapon extends GameObject {
         return fireSoundFX;
     }
 
-    public void forceFire(Integer projectileID){
+    public Projectile forceFire(Integer projectileID){
+        generateProjectileCollisionType();
         if (fireSoundFX != null) {
             SoundStudio.getInstance().playAudio(fireSoundFX, getTranslateX(), getTranslateY(), 150*scope, 150*scope);
         }
@@ -215,7 +232,8 @@ public abstract class Weapon extends GameObject {
         if (MadBalls.isHost()){
             MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), -1));
         }
-        checkAmmo();
+        checkOutOfAmmo();
+        return projectile;
     }
     
     public void attack(long now){
@@ -226,7 +244,7 @@ public abstract class Weapon extends GameObject {
         }
     }
 
-    public boolean checkAmmo(){
+    public boolean checkOutOfAmmo(){
         if (getAmmo() == 0 || getAmmo() < -1){
 //            ((Ball)getOwner()).setWeapon(Pistol.class);
             if (MadBalls.isHost()){

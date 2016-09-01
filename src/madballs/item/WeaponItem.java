@@ -39,8 +39,8 @@ public class WeaponItem extends Item {
         }
 
         weapon.setMobile(false);
-        weapon.setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new DisappearWithOwnerBehaviour(new ReleaseSpawnLocation(null, getSpawnLocation())), new Class[]{Ball.class, Obstacle.class}));
-        weapon.setCollisionEffect(new GiveWeaponEffect(null, weapon));
+        weapon.setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new Class[]{Ball.class, Obstacle.class}, new DisappearWithOwnerBehaviour(new ReleaseSpawnLocation(getSpawnLocation(), null))));
+        weapon.setCollisionEffect(new GiveWeaponEffect(weapon, null));
         setCollisionEffect(new NullEffect(null));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }

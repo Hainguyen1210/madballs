@@ -13,14 +13,14 @@ import madballs.multiplayer.BuffData;
  *
  * @author chim-
  */
-public class Haste extends BuffState{
+public class Speed extends BuffState{
     private double speed;
 
-    public Haste(BuffData data){
+    public Speed(BuffData data){
         super(data);
     }
     
-    public Haste(BuffState effectState, int duration, double speed) {
+    public Speed(BuffState effectState, int duration, double speed) {
         super(effectState, duration);
         this.speed = speed;
     }
@@ -52,6 +52,13 @@ public class Haste extends BuffState{
 
     @Override
     public void apply() {
+        if (speed >= 0){
+            setName("Haste");
+        }
+        else {
+            setName("Heavy");
+        }
+
         SoundStudio.getInstance().playAudio("speedUp", getBall().getTranslateX(), getBall().getTranslateY(), 100, 100);
         getBall().getMoveBehaviour().setSpeed(getBall().getMoveBehaviour().getSpeed() + speed);
     }

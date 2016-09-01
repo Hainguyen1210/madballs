@@ -49,25 +49,26 @@ public class Controller {
     }
     
     public void handleKey(MultiplePressedKeysEventHandler.MultiKeyEvent ke){
-        if (ke.isPressed(KeyCode.I) && ke.isPressed(KeyCode.O) && ke.isPressed(KeyCode.P)) {
+        if (ke.isPressed(KeyCode.I) && ke.isPressed(KeyCode.O)) {
             if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
-                if (ke.isPressed(KeyCode.U)){
-                    Map map = Map.chooseMap();
-                    MadBalls.getMultiplayerHandler().sendData(new MapData(map.getMapNumber()));
-                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
-                        player.setTeamNum(0);
-                        player.setReady(player == MadBalls.getMultiplayerHandler().getLocalPlayer());
-                        player.getKeyHandler().clear();
-                        player.getMouseHandler().clear();
-                        player.setKillsCount(0);
-                        player.setDeathsCount(0);
-                        MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
-                    }
-                    MadBalls.loadMap(map);
+                MadBalls.getMultiplayerHandler().newMatch(true);
+                ke.clearBuffer();
+            }
+        }
+        if (ke.isPressed(KeyCode.N) && ke.isPressed(KeyCode.M)) {
+            if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
+                Map map = Map.chooseMap();
+                MadBalls.getMultiplayerHandler().sendData(new MapData(map.getMapNumber()));
+                for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                    player.setTeamNum(0);
+                    player.setReady(player == MadBalls.getMultiplayerHandler().getLocalPlayer());
+                    player.getKeyHandler().clear();
+                    player.getMouseHandler().clear();
+                    player.setKillsCount(0);
+                    player.setDeathsCount(0);
+                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
                 }
-                else {
-                    MadBalls.getMultiplayerHandler().newMatch(true);
-                }
+                MadBalls.loadMap(map);
                 ke.clearBuffer();
             }
         }
@@ -127,15 +128,13 @@ public class Controller {
         double newDirection = Math.atan2(yDiff, xDiff);
 //        System.out.println(Math.toDegrees(newDirection));
         weaponRotateBehaviour.setNewDirection(newDirection);
-        if (playerWeapon instanceof GrenadeLauncher){
+        if (playerWeapon.getMaxRange() != -1){
+//            System.out.println("targeted weapon");
             if (event.isPressed()){
                 double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff)/scale - playerWeapon.getWidth() - 15;
-                if (playerWeapon.getRange() >= distance) {
+                if (playerWeapon.getMaxRange() >= distance) {
                     playerWeapon.setRange(distance);
                 }
-            }
-            else {
-                playerWeapon.setRange(700);
             }
         }
         weaponRotateBehaviour.setMousePressed(event.isPressed());

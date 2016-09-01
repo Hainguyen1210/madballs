@@ -5,9 +5,6 @@
  */
 package madballs.collision;
 
-import javafx.scene.shape.Shape;
-import madballs.GameObject;
-
 /**
  *
  * @author Caval
@@ -15,7 +12,7 @@ import madballs.GameObject;
 public class PushBackEffect extends StackedCollisionEffect{
     private double pushBackAmount;
 
-    public PushBackEffect(StackedCollisionEffect effect, double pushBackAmount) {
+    public PushBackEffect(double pushBackAmount, StackedCollisionEffect effect) {
         super(effect);
         this.pushBackAmount = pushBackAmount;
     }

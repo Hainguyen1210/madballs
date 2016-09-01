@@ -60,7 +60,7 @@ public class MoveStrategy extends Strategy {
         }
         myNode = new int[] {myRow, myColumn};
 
-        shouldFindObjective = (getBot().getLastThoughtTime() - objectiveChangeTime) / 1000000000 > (5 + random.nextInt(4));
+        shouldFindObjective = (getBot().getLastThoughtTime() - objectiveChangeTime) / 1000000000 > (5 + random.nextInt(10));
         if (shouldFindObjective){
             objective = null;
             objectivePath.clear();
@@ -145,6 +145,10 @@ public class MoveStrategy extends Strategy {
                 if (objectivePath.size() == 1 && objective != null){
 //                    System.out.println("last step");
                     shouldTargetObjective = true;
+                    double distance = Math.sqrt(Math.pow(myX - objective.getTranslateX(), 2) + Math.pow(myY - objective.getTranslateY(), 2));
+                    if (distance < 10){
+                        shouldFindObjective = true;
+                    }
                 }
             }
 

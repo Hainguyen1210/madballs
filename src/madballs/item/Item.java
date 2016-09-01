@@ -53,7 +53,7 @@ public abstract class Item extends GameObject {
         setSpawnLocation(spawnLocation);
 //      setDisplay();
 //      setCollisionEffect(new NullEffect(null));
-        setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new DisappearBehaviour(new ReleaseSpawnLocation(null, spawnLocation)), new Class[]{Ball.class, Obstacle.class}));
+        setCollisionPassiveBehaviour(new ObjExclusiveBehaviour(new Class[]{Ball.class, Obstacle.class}, new DisappearBehaviour(new ReleaseSpawnLocation(spawnLocation, null))));
     }
 
     @Override

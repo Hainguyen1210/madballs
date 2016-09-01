@@ -42,7 +42,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
         double targetX = event.getSceneX();
         double targetY = event.getSceneY();
 
-        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), targetX, targetY));
+        if (!MadBalls.isHost()) player.sendData(new MouseInputData(event.getEventType().getName(), targetX, targetY, scale.get()));
         if (event.getEventType() == MouseEvent.MOUSE_MOVED){
             mouseX.set(targetX);
             mouseY.set(targetY);
@@ -72,6 +72,7 @@ public class MouseKeyEventHandler implements EventHandler<MouseEvent> {
     }
     
     public void handle(MouseInputData data){
+        scale.set(data.getScale());
         if (data.getEventType().equals("MOUSE_MOVED")){
             mouseX.set(data.getX());
             mouseY.set(data.getY());

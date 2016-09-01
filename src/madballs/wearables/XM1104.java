@@ -27,7 +27,7 @@ public class XM1104 extends Weapon {
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
 
-        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionEffect(new PushBackEffect(-1, null));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
         setWeight(1.5);
@@ -41,28 +41,29 @@ public class XM1104 extends Weapon {
         setProjectileImageName("bullet1");
 
         setFireSoundFX("shotgun");
-
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
     }
 
     @Override
-    public void forceFire(Integer id){
-        if (!MadBalls.isHost()) return;
+    public Projectile forceFire(Integer id){
+        if (!MadBalls.isHost()) return null;
         if (getFireSoundFX() != null) {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }
         for (int i = 0; i < 5; i++){
+            generateProjectileCollisionType();
             Projectile projectile = new Projectile(this, getRange(), new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
             double direction = Math.toRadians(getRotateAngle() + random.nextInt(varyingAngle / 2) * (random.nextBoolean() ? 1 : -1));
             ((StraightMove)projectile.getMoveBehaviour()).setNewDirection(direction);
             MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), direction));
-            if (checkAmmo()){
-                return;
+            if (checkOutOfAmmo()){
+                return null;
             }
         }
+        return null;
     }
 
     public void forceFire(Integer id, double direction){
+        generateProjectileCollisionType();
         if (getFireSoundFX() != null) {
             SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150, 150);
         }

@@ -330,7 +330,7 @@ public class SceneManager {
     }
 
     public void registerBuffState(BuffState buffState){
-        Label label = new Label(buffState.getClass().getSimpleName());
+        Label label = new Label(buffState.getName());
         label.setTextFill(buffState.getColor());
         buffBar.getChildren().add(label);
         buffLabels.put(buffState.toString(), label);

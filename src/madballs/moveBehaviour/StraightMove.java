@@ -5,8 +5,11 @@
  */
 package madballs.moveBehaviour;
 
+import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 import madballs.projectiles.Projectile;
@@ -29,6 +32,8 @@ public class StraightMove extends MoveBehaviour{
         this.direction = direction;
         setVelocityX(Math.cos(direction) * getSpeed());
         setVelocityY(Math.sin(direction) * getSpeed());
+//        velocityX.bind(Bindings.multiply(speedProperty(), Math.cos(direction)));
+//        velocityY.bind(Bindings.multiply(speedProperty(), Math.sin(direction)));
     }
 
     public double getVelocityX() {
@@ -65,6 +70,14 @@ public class StraightMove extends MoveBehaviour{
     
     public StraightMove(GameObject obj, double speed) {
         super(obj, speed);
+        speedProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                double ratio = 1 / (double)oldValue * (double)newValue;
+                if (getVelocityX() != 0) setVelocityX(getVelocityX() * ratio);
+                if (getVelocityY() != 0) setVelocityY(getVelocityY() * ratio);
+            }
+        });
     }
 
     @Override

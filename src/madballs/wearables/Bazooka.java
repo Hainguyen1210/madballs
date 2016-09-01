@@ -3,7 +3,6 @@ package madballs.wearables;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
-import madballs.ImageGenerator;
 import madballs.collision.*;
 
 /**
@@ -18,7 +17,7 @@ public class Bazooka extends Weapon {
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
 
-        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionEffect(new PushBackEffect(-1, null));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
         setWeight(6);
@@ -33,8 +32,13 @@ public class Bazooka extends Weapon {
         setProjectileImageName("bullet4");
 
         setFireSoundFX("bazooka");
+
+    }
+
+    @Override
+    public void generateProjectileCollisionType(){
         setProjectileCollisionEffect(new NullEffect(null));
-        setProjectileCollisionBehaviour(new ExplosiveBehaviour(new DisappearBehaviour(null), 100, getDamage(), owner.getID()));
+        setProjectileCollisionBehaviour(new ExplosiveBehaviour(100, damageProperty(), 1, getOwner().getID(), new DisappearBehaviour(null)));
     }
 
     @Override

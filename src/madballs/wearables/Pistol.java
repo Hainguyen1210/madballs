@@ -25,7 +25,7 @@ public class Pistol extends Weapon{
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
-        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionEffect(new PushBackEffect(-1, null));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
         
         setDamage(15);
@@ -38,7 +38,6 @@ public class Pistol extends Weapon{
         setProjectileImageName("bullet1");
 
         setFireSoundFX("pistol");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
 
     }
     

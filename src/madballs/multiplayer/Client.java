@@ -306,7 +306,9 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        new Explosion(MadBalls.getMainEnvironment(), data.getParameters()[0], data.getParameters()[1], data.getParameters()[2], data.getParameters()[3], data.getId(), -1);
+                        new Explosion(MadBalls.getMainEnvironment(),
+                                data.getParameters()[0], data.getParameters()[1], data.getParameters()[2],
+                                data.getParameters()[3], data.getParameters()[4], data.getId(), -1);
                     }
                 });
             }

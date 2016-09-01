@@ -2,26 +2,22 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
-import madballs.map.SpawnLocation;
 
 /**
- * Created by hainguyen on 8/17/16.
+ * Created by caval on 01/09/2016.
  */
-public class ReleaseSpawnLocation extends StackedCollisionPassiveBehaviour {
-    private SpawnLocation spawnLocation;
-
-    public ReleaseSpawnLocation(SpawnLocation spawnLocation, CollisionPassiveBehaviour behaviour) {
+public class ImmobalizedBehaviour extends StackedCollisionPassiveBehaviour {
+    public ImmobalizedBehaviour(CollisionPassiveBehaviour behaviour) {
         super(behaviour);
-        this.spawnLocation = spawnLocation;
     }
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (spawnLocation != null ) spawnLocation.setSpawned(false);
+        target.getMoveBehaviour().setSpeed(0);
     }
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return true;
+        return target.getMoveBehaviour() != null;
     }
 }

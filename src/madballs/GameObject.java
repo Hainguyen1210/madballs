@@ -48,6 +48,7 @@ public abstract class GameObject {
     private double oldX, oldY;
     private double oldDirection;
     private DoubleProperty hp = new SimpleDoubleProperty(100);
+    private double maxHp = 100;
     private boolean isMobile = true;
     private boolean isDead = false;
     
@@ -346,8 +347,16 @@ public abstract class GameObject {
     }
 
     public void setHpValue(double hp) {
-        if (hp > 100) hp = 100; 
+        if (hp > maxHp) hp = maxHp;
         this.hp.set(hp);
+    }
+
+    public double getMaxHp() {
+        return maxHp;
+    }
+
+    public void setMaxHp(double maxHp) {
+        this.maxHp = maxHp;
     }
 
     public void setTranslateX(double newX) {

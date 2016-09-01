@@ -21,14 +21,14 @@ import madballs.gameFX.SoundStudio;
 public abstract class MoveBehaviour {
     private final LongProperty lastMoveTime = new SimpleLongProperty(0);
     private final BooleanProperty mousePressed = new SimpleBooleanProperty(false);
-    private double speed;
+    private DoubleProperty speed = new SimpleDoubleProperty();
     private double movedDistance = 0;
     private GameObject obj;
     private String soundFX;
     
     public MoveBehaviour(GameObject obj, double speed){
         this.obj = obj;
-        this.speed = speed;
+        setSpeed(speed);
     }
     
     public GameObject getObject(){
@@ -52,11 +52,15 @@ public abstract class MoveBehaviour {
     }
 
     public double getSpeed() {
+        return speed.get();
+    }
+
+    public DoubleProperty speedProperty() {
         return speed;
     }
 
     public void setSpeed(double speed) {
-        this.speed = speed;
+        this.speed.set(speed);
     }
 
     public double getMovedDistance() {

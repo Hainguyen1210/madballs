@@ -25,6 +25,16 @@ public abstract class BuffState{
     private long tickInterval = 1;
     private Ball ball;
     private Paint color = Paint.valueOf("red");
+    private boolean hasFaded = false;
+    private String name = getClass().getSimpleName();
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Paint getColor() {
         return color;
@@ -65,13 +75,18 @@ public abstract class BuffState{
                 uniqueUpdate(timestamp);
             }
         }
-        else {
-            fade();
-            ball.removeBuffState(this);
-            if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().removeBuffState(this);
-            ball.setBuffState(removeFromBuffState(ball.getBuffState()));
+        else if (!hasFaded) {
+            forceFade();
         }
         if (wrappedBuffState != null) wrappedBuffState.update(timestamp);
+    }
+
+    public void forceFade(){
+        fade();
+        ball.removeBuffState(this);
+        if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().removeBuffState(this);
+        ball.setBuffState(removeFromBuffState(ball.getBuffState()));
+        hasFaded = true;
     }
 
     public void setWrappedBuffState(BuffState wrappedBuffState) {
@@ -105,9 +120,9 @@ public abstract class BuffState{
 
     public void castOn(Ball ball, int index) {
         this.ball = ball;
-        SceneManager.getInstance().displayLabel(getClass().getSimpleName(), color, 0.75, ball, index * 0.375);
-        if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().registerBuffState(this);
         apply();
+        SceneManager.getInstance().displayLabel(name, color, 0.75, ball, index * 0.375);
+        if (ball == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()) SceneManager.getInstance().registerBuffState(this);
         if (wrappedBuffState != null) {
             wrappedBuffState.castOn(ball, index + 1);
         }

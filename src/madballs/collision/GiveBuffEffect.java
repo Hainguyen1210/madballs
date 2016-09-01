@@ -18,7 +18,7 @@ public class GiveBuffEffect extends StackedCollisionEffect{
       return buffState;
     }
     
-    public GiveBuffEffect(StackedCollisionEffect effect, BuffState buffState) {
+    public GiveBuffEffect(BuffState buffState, StackedCollisionEffect effect) {
       super(effect);
       this.buffState = buffState;
     }

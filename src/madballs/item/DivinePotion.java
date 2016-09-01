@@ -7,12 +7,10 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.ImageGenerator;
-import madballs.collision.GiveBuffEffect;
-import madballs.buffState.PowerUp;
+import madballs.buffState.Speed;
+import madballs.buffState.Power;
 import madballs.buffState.Frenzy;
 import madballs.buffState.InstantHeal;
-import madballs.buffState.Haste;
 import madballs.map.SpawnLocation;
 
 /**
@@ -22,7 +20,7 @@ import madballs.map.SpawnLocation;
 public class DivinePotion extends BuffItem{
 
     public DivinePotion(Environment environment, SpawnLocation spawnLocation, Integer id) {
-        super(environment, spawnLocation, new Haste(new Frenzy(new PowerUp(new InstantHeal(null, 100), 5, 2), 5, 2), 5, 50), id);
+        super(environment, spawnLocation, new Speed(new Frenzy(new Power(new InstantHeal(null, 100), 5, 2), 5, 2), 5, 50), id);
 //        System.out.println(((GiveBuffEffect)getCollisionEffect()).getBuffState().getWrappedBuffState() == null);
         setImage("purple_potion");
     }

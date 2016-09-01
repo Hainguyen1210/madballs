@@ -17,7 +17,7 @@ public class Ground extends GameObject{
 
     public Ground(Environment environment, double x, double y, Integer id) {
         super(environment, x, y, false, id);
-        setCollisionEffect(new PushBackEffect(null , 0));
+        setCollisionEffect(new PushBackEffect(0, null));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }
 

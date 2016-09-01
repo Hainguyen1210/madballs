@@ -17,7 +17,7 @@ public class GiveWeaponEffect extends StackedCollisionEffect {
         return weapon;
     }
 
-    public GiveWeaponEffect(StackedCollisionEffect effect, Weapon weapon) {
+    public GiveWeaponEffect(Weapon weapon, StackedCollisionEffect effect) {
         super(effect);
         this.weapon = weapon;
     }

@@ -5,14 +5,10 @@
  */
 package madballs;
 
-import javafx.scene.image.Image;
-import javafx.scene.layout.*;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
 import madballs.collision.InvulnerableBehaviour;
 import madballs.collision.PushBackEffect;
-
-import java.io.File;
 
 /**
  *
@@ -28,7 +24,7 @@ public class Obstacle extends GameObject{
         this.length = length;
         this.height = height;
         setDisplay(id);
-        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionEffect(new PushBackEffect(-1, null));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
     }
 

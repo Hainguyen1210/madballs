@@ -21,7 +21,7 @@ public class Ak47 extends Weapon{
                 owner.getHitBox().getBoundsInLocal().getWidth() * 0.25,
                 owner.getHitBox().getBoundsInLocal().getHeight() * 0.25, id);
         
-        setCollisionEffect(new PushBackEffect(null, -1));
+        setCollisionEffect(new PushBackEffect(-1, null));
         setCollisionPassiveBehaviour(new PushableBehaviour(null));
 
         setWeight(2);
@@ -36,7 +36,6 @@ public class Ak47 extends Weapon{
         setProjectileImageName("bullet2");
         
         setFireSoundFX("ak47");
-        setProjectileCollisionEffect(new DamageEffect(null, getDamage(), owner.getID()));
     }
 
     @Override

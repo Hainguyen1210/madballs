@@ -4,7 +4,6 @@
  * and open the template in the editor.
  */
 package madballs.buffState;
-import javafx.scene.paint.Paint;
 import madballs.collision.DamageEffect;
 import madballs.multiplayer.BuffData;
 
@@ -12,14 +11,14 @@ import madballs.multiplayer.BuffData;
  *
  * @author chim-
  */
-public class PowerUp extends WeaponBuff{
+public class Power extends WeaponBuff{
     private double damageRatio;
 
-    public PowerUp(BuffData data){
+    public Power(BuffData data){
         super(data);
     }
 
-    public PowerUp(BuffState effectState, int duration, double damageRatio) {
+    public Power(BuffState effectState, int duration, double damageRatio) {
         super(effectState, duration);
         this.damageRatio = damageRatio;
     }
@@ -32,7 +31,6 @@ public class PowerUp extends WeaponBuff{
     @Override
     public void fade() {
         getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() / damageRatio);
-        getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage(), getBall().getID()));
     }
 
     @Override
@@ -51,7 +49,12 @@ public class PowerUp extends WeaponBuff{
 
     @Override
     public void apply() {
+        if (damageRatio >= 1){
+            setName("Lock n Load");
+        }
+        else {
+            setName("Air Soft");
+        }
         getBall().getWeapon().setDamage(getBall().getWeapon().getDamage() * damageRatio);
-        getBall().getWeapon().setProjectileCollisionEffect(new DamageEffect(null, getBall().getWeapon().getDamage(), getBall().getID()));
     }
 }

@@ -19,7 +19,7 @@ public class BuffItem extends Item {
 
     public BuffItem(Environment environment, SpawnLocation spawnLocation, BuffState effectState, Integer id) {
         super(environment, spawnLocation, id);
-        giveBuffEffect = new GiveBuffEffect(null, effectState);
+        giveBuffEffect = new GiveBuffEffect(effectState, null);
         setCollisionEffect(giveBuffEffect);
         getImageView().setFitHeight(30);
         getImageView().setFitWidth(30);
