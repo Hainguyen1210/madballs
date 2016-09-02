@@ -73,6 +73,10 @@ public class Controller {
             }
         }
 
+        if (player.isLocal()) SceneManager.getInstance().getScoreBoardContainer().setVisible(ke.isPressed(KeyCode.TAB));
+
+        if (player.getBall().isDead()) return;
+
         StraightMove ballMoveBehaviour = (StraightMove) player.getBall().getMoveBehaviour();
 //                try {
         if (!((ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) && (ke.isPressed(KeyCode.RIGHT) || ke.isPressed(KeyCode.D)))) {
@@ -83,7 +87,6 @@ public class Controller {
             ballMoveBehaviour.setVelocityY(0);
 //                        MadBalls.out.writeObject("y 0");
         }
-        if (player.isLocal()) SceneManager.getInstance().getScoreBoardContainer().setVisible(ke.isPressed(KeyCode.TAB));
 
         if (ke.isPressed(KeyCode.LEFT)  || ke.isPressed(KeyCode.A)) {
             ballMoveBehaviour.setVelocityX(-ballMoveBehaviour.getSpeed());
@@ -113,6 +116,7 @@ public class Controller {
     }
     
     public void handleMouse(MouseKeyEventHandler.MouseKeyEvent event){
+        if (player.getBall().isDead()) return;
         Weapon playerWeapon = player.getBall().getWeapon();
         RotateBehaviour weaponRotateBehaviour = (RotateBehaviour) playerWeapon.getMoveBehaviour();
 //        System.out.println("ahihi");

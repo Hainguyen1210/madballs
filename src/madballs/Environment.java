@@ -36,7 +36,6 @@ public class Environment {
     private Map map;
     private Ground ground;
     private Quadtree quadtree;
-    private Scene scene;
     private int updateIndex = 0;
 
     public Quadtree getQuadtree() {
@@ -101,7 +100,8 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
-      
+        if (MadBalls.isHost()) MadBalls.getGameMode().manage(now);
+
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects.values());
         ArrayList<GameObject> shouldBeCheckedGameObjects = new ArrayList<>();
         quadtree.clear();
@@ -146,7 +146,7 @@ public class Environment {
         }
 
         // check winner
-        MadBalls.getMultiplayerHandler().checkWinner();
+        MadBalls.getGameMode().checkWinner(now);
     }
 
   public Map getMap() {

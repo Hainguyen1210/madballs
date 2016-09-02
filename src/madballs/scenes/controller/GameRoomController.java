@@ -164,7 +164,7 @@ public class GameRoomController implements Initializable {
             }
             tempTeams = new ArrayList<>(teams);
         }
-        System.out.println("update team choices");
+//        System.out.println("update team choices");
     }
 
     public void updatePlayersPane(){

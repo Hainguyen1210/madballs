@@ -100,54 +100,6 @@ public abstract class MultiplayerHandler {
 //        System.out.println(data.getType());
 //        System.out.println(Environment.getInstance().getNumObjects());
     }
-    
-    public void checkWinner(){
-        if (MadBalls.isGameOver()){
-            if (MadBalls.isHost()){
-                int survivingTeamNum = -1;
-                for (Player player : players){
-                    if (!player.getBall().isDead()){
-                        if (survivingTeamNum < 0){
-                            survivingTeamNum = player.getTeamNum();
-                        }
-                        else if (survivingTeamNum != player.getTeamNum()){
-                            return;
-                        }
-                    }
-                }
-                if (SceneManager.getInstance().getTeamScoreBoard().size() == 1) return;
-                System.out.println("survive" + survivingTeamNum);
-                if (survivingTeamNum != -1){
-                    sendData(new WinnerData(survivingTeamNum));
-                    SceneManager.getInstance().addScore(survivingTeamNum, 1);
-                }
-                newMatch(players.size() == 1);
-            }
-            return;
-        }
-//        for (Player player : players){
-//            if (player != localPlayer && !player.getBall().isDead()) return;
-//        }
-////        MadBalls.setGameOver(true);
-//        Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
-        int teamNum = localPlayer.getTeamNum();
-        boolean allyAlive = false, enemyAlive = false;
-        for (Player player: players){
-            if (!player.getBall().isDead()){
-                if (player.getTeamNum() == teamNum) allyAlive = true;
-                if (player.getTeamNum() != teamNum) enemyAlive = true;
-            }
-        }
-
-        if (!allyAlive){
-            MadBalls.setGameOver(true);
-            Navigation.getInstance().showAlert("Game over", "You lose!", "Better luck next time.", false);
-        }
-        else if (!enemyAlive) {
-            MadBalls.setGameOver(true);
-            Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
-        }
-    }
 
     public void newMatch(boolean isNewGame){
         for (Player player : players){
@@ -174,6 +126,8 @@ public abstract class MultiplayerHandler {
             startMatch();
         }
     }
+
+
 
     public void startMatch(){
         System.out.println("stMat");

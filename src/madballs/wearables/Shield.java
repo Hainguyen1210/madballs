@@ -20,7 +20,7 @@ public class Shield extends Weapon {
         super(owner, 0, 0, id);
 
         setCollisionEffect(new PushBackEffect(-1, null));
-        setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(new ObjExclusiveBehaviour(new Class[] {Projectile.class}, new DeflectiveBehaviour(null)))));
+        setCollisionPassiveBehaviour(new VulnerableBehaviour(new PushableBehaviour(new ObjExclusiveBehaviour(new Class[] {Projectile.class}, new DeflectiveBehaviour(true, null)))));
 
         setWeight(2.5);
         setDamage(0);

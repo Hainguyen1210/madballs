@@ -10,8 +10,10 @@ import madballs.Ball;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.gameFX.SoundStudio;
+import madballs.multiplayer.KillData;
 import madballs.multiplayer.PlayerData;
 import madballs.player.Player;
+import madballs.scenes.SceneManager;
 
 /**
  *
@@ -34,15 +36,17 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
             target.die();
             if (MadBalls.isHost()){
                 if (target instanceof Ball && damageEffect.getBallID() >= 0){
-                    Ball sourceBall = (Ball)source.getEnvironment().getObject(damageEffect.getBallID());
+                    Ball sourceBall = (Ball)(source.getEnvironment().getObject(damageEffect.getBallID()));
                     Ball targetBall = (Ball) target;
                     int newKill =  sourceBall.getPlayer().getTeamNum() == targetBall.getPlayer().getTeamNum() ? -1 : 1;
                     sourceBall.getPlayer().setKillsCount(sourceBall.getPlayer().getKillsCount() + newKill);
                     targetBall.getPlayer().setDeathsCount(targetBall.getPlayer().getDeathsCount() + 1);
+                    SceneManager.getInstance().displayKill(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName());
+                    MadBalls.getMultiplayerHandler().sendData(new KillData(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName()));
                     sourceBall.getPlayer().updateRanking();
-                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
-                        System.out.println("ranked" + player.getName() + player.getRanking());
-                    }
+//                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+//                        System.out.println("ranked" + player.getName() + player.getRanking());
+//                    }
                     MadBalls.getMultiplayerHandler().sendData(new PlayerData(sourceBall.getPlayer()));
                     MadBalls.getMultiplayerHandler().sendData(new PlayerData(targetBall.getPlayer()));
                 }

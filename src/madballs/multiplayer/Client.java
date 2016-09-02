@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 import javafx.application.Platform;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.EventHandler;
 import madballs.*;
 import madballs.buffState.BuffState;
 import madballs.map.Map;
@@ -182,8 +184,6 @@ public class Client extends MultiplayerHandler{
                     });
 
                 }
-                
-
             }
             else if (data.getType().equals("spawn")){
                 spawn((SpawnData)data);
@@ -220,17 +220,35 @@ public class Client extends MultiplayerHandler{
             }
             else if (data.getType().equals("get_weapon")){
                 final GetWeaponData getWeaponData = (GetWeaponData) data;
-                Platform.runLater(new Runnable() {
+                Class<Weapon> weaponClass = (Class<Weapon>) Class.forName(getWeaponData.getWeaponClassName());
+                Service<Ball> service = new Service<Ball>() {
                     @Override
-                    public void run() {
-                        try {
-                            Class<Weapon> weaponClass = (Class<Weapon>) Class.forName(getWeaponData.getWeaponClassName());
-                            ((Ball)MadBalls.getMainEnvironment().getObject(getWeaponData.getBallID())).setWeapon(weaponClass, getWeaponData.getWeaponID());
-                        } catch (ClassNotFoundException ex) {
-                            Logger.getLogger(Client.class.getName()).log(Level.SEVERE, null, ex);
-                        }
+                    protected Task<Ball> createTask() {
+                        return new Task<Ball>() {
+                            @Override
+                            protected Ball call() throws Exception {
+                                Ball ball;
+                                do {
+                                    ball = ((Ball)MadBalls.getMainEnvironment().getObject(getWeaponData.getBallID()));
+                                }
+                                while (ball == null);
+                                return ball;
+                            }
+                        };
+                    }
+                };
+                service.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                    @Override
+                    public void handle(WorkerStateEvent event) {
+                        Platform.runLater(new Runnable() {
+                            @Override
+                            public void run() {
+                                service.getValue().setWeapon(weaponClass, getWeaponData.getWeaponID());
+                            }
+                        });
                     }
                 });
+                service.start();
             }
             else if (data.getType().equals("buff")){
                 Platform.runLater(new Runnable() {
@@ -241,6 +259,22 @@ public class Client extends MultiplayerHandler{
                         BuffState buffState = BuffState.recreateBuffState(buffData);
                         buffState.castOn(ball, 0);
                         ball.addEffectState(buffState);
+                    }
+                });
+            }
+            else if (data.getType().equals("banner")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((BannerData)data).displayBanner();
+                    }
+                });
+            }
+            else if (data.getType().equals("kill")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        ((KillData)data).displayKill();
                     }
                 });
             }

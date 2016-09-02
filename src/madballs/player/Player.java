@@ -221,6 +221,7 @@ public class Player {
         SceneManager.getInstance().bindBallToScoreBoard(ball);
 
         Label nameLabel = new Label(name);
+        nameLabel.setPrefWidth(50);
         nameLabel.setFont(new Font(10));
         nameLabel.setTextFill(Color.WHITE);
 

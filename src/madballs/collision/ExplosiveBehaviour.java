@@ -43,6 +43,6 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect instanceof PushBackEffect;
+        return effect instanceof PushBackEffect && !target.isDead();
     }
 }

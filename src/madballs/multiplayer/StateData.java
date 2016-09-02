@@ -13,7 +13,7 @@ import madballs.GameObjState;
  */
 public class StateData extends Data{
     private GameObjState state;
-    
+
     public GameObjState getState(){
         return state;
     }

@@ -19,6 +19,7 @@ import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
 import madballs.gameMode.GameMode;
 import madballs.gameMode.NormalMode;
+import madballs.gameMode.RespawnMode;
 import madballs.map.Map;
 import madballs.multiplayer.Client;
 import madballs.multiplayer.MultiplayerHandler;
@@ -153,7 +154,8 @@ public class MadBalls extends Application {
         mainEnvironment = new Environment();
         mainEnvironment.setDisplay(root);
         mainEnvironment.loadMap(map);
-        gameMode = new NormalMode(0);
+        gameMode = new RespawnMode(0, 3);
+//        gameMode = new NormalMode(0);
         SceneManager.getInstance().resetTeamScoreBoard();
         Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
     }

@@ -10,7 +10,9 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -22,6 +24,7 @@ import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
@@ -30,6 +33,7 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 import madballs.Ball;
 import madballs.GameObject;
+import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.buffState.BuffState;
 import madballs.player.Player;
@@ -50,12 +54,16 @@ public class SceneManager {
     private ScrollPane scoreBoardContainer;
     private GridPane scoreBoardGrid;
     private Map<Player, HBox> scoreBoard;
+    private VBox killsBox;
+    private int killsRowCounter = 0;
     private Map<Integer, Integer> teamScoreBoard = new WeakHashMap<>();
     private HBox teamScoresDisplay;
     private ProgressBar hpBar = new ProgressBar();
     private Label weaponLabel = new Label();
     private HBox buffBar = new HBox(10);
     private Map<String, Label> buffLabels;
+    private Label bannerLabel;
+    private Pane banner;
     private Rectangle2D primaryScreenBounds;
     private double screenWidth, screenHeight;
     // scale: the ratio of the visual/scene size to the actual game element size.
@@ -64,6 +72,10 @@ public class SceneManager {
     // zoomOut: the ratio of how much the game elements have been zoomed out compared to its initial size
     private DoubleProperty zoomOut = new SimpleDoubleProperty(1);
     private PerspectiveCamera camera;
+
+    public Label getBannerLabel() {
+        return bannerLabel;
+    }
 
     public Map<Integer, Integer> getTeamScoreBoard() {
         return teamScoreBoard;
@@ -131,6 +143,16 @@ public class SceneManager {
         buffBar.setTranslateX(140);
         buffBar.setTranslateY(3);
 
+        bannerLabel = new Label();
+        bannerLabel.setFont(new Font(40));
+        bannerLabel.setTextFill(Color.RED);
+        bannerLabel.translateXProperty().bind(Bindings.divide(Bindings.subtract(MadBalls.getAnimationScene().getWidth(), bannerLabel.widthProperty()), 2));
+        banner = new Pane(bannerLabel);
+        banner.setVisible(false);
+        banner.setTranslateY(200);
+//        banner.setStyle("-fx-background-color: rgba(255, 255, 255, 0.2);");
+        banner.setPrefWidth(MadBalls.getAnimationScene().getWidth());
+
         gameInfoDisplay = new FlowPane(hpBar, weaponLabel, buffBar);
         gameInfoDisplay.setAlignment(Pos.CENTER_LEFT);
         gameInfoDisplay.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
@@ -138,8 +160,13 @@ public class SceneManager {
         gameInfoDisplay.setPrefHeight(30);
         gameInfoDisplay.translateYProperty().bind(Bindings.subtract(MadBalls.getAnimationScene().getHeight(), gameInfoDisplay.heightProperty()));
 //        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
-        gameInfoDisplay.setTranslateZ(-1);
+//        gameInfoDisplay.setTranslateZ(-1);
 
+        killsBox = new VBox(10);
+        killsBox.setPrefWidth(MadBalls.getAnimationScene().getWidth() / 3);
+        killsBox.setTranslateX(MadBalls.getAnimationScene().getWidth() * 2 / 3);
+        killsBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
+        killsBox.setAlignment(Pos.CENTER);
 
         teamScoresDisplay = new HBox(20);
         teamScoresDisplay.setPrefHeight(40);
@@ -148,14 +175,79 @@ public class SceneManager {
         scoreBoardContainer = new ScrollPane(anchorPane);
         scoreBoardContainer.setStyle("-fx-background-color: rgba(255, 255, 255, 0.5);");
         scoreBoardContainer.setPrefSize(400, MadBalls.getAnimationScene().getHeight()*2/3);
-        scoreBoardContainer.setTranslateZ(-1);
+//        scoreBoardContainer.setTranslateZ(-1);
         scoreBoardContainer.setTranslateX((MadBalls.getAnimationScene().getWidth() - 400)/2);
         scoreBoardContainer.setTranslateY((MadBalls.getAnimationScene().getHeight() - scoreBoardContainer.getPrefHeight())/2);
         scoreBoardContainer.setHbarPolicy(ScrollPane.ScrollBarPolicy.NEVER);
         scoreBoardContainer.setVisible(false);
         reloadScoreBoard();
 
-        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer);
+        root.setTranslateZ(-1);
+        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer, banner, killsBox);
+    }
+
+    public void displayKill(Integer sourceID, Integer targetID, String weaponImage){
+        Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
+        Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
+
+        Label sourceName = new Label(source.getPlayer().getName());
+        sourceName.setFont(new Font(20));
+        sourceName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
+
+        Label targetName = new Label(target.getPlayer().getName());
+        targetName.setFont(new Font(20));
+        targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
+
+        ImageView weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
+        weaponImageView.setFitHeight(10);
+        weaponImageView.setPreserveRatio(true);
+
+        HBox killInfo = new HBox(10, sourceName, weaponImageView, targetName);
+        killInfo.setAlignment(Pos.CENTER);
+        killsBox.getChildren().add(killInfo);
+
+        while (killsBox.getChildren().size() > 5){
+            killsBox.getChildren().remove(0);
+        }
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                VBox vBox = killsBox;
+                if (vBox.getChildren().contains(killInfo)){
+                    vBox.getChildren().remove(killInfo);
+                }
+            }
+        }));
+        timeline.play();
+    }
+
+    public void displayBanner(String bannerText, int duration){
+        bannerLabel.setText(bannerText);
+        banner.setVisible(true);
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(duration), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                banner.setVisible(false);
+                bannerLabel.textProperty().unbind();
+            }
+        }));
+        timeline.play();
+    }
+
+    public void displayCountdown(int duration){
+        IntegerProperty counter = new SimpleIntegerProperty(duration);
+        bannerLabel.textProperty().bind(Bindings.format("%d", counter));
+        banner.setVisible(true);
+
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(duration), new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                banner.setVisible(false);
+                bannerLabel.textProperty().unbind();
+            }
+        }, new KeyValue(counter, 0)));
+        timeline.play();
     }
 
     public void resetTeamScoreBoard(){
@@ -220,7 +312,7 @@ public class SceneManager {
         for (Player player: scoreBoard.keySet()){
             if (player.getRanking() == 0) continue;
             scoreBoardGrid.add(scoreBoard.get(player), 0, player.getRanking());
-            System.out.println("reorder"+player.getName() + player.getRanking());
+//            System.out.println("reorder"+player.getName() + player.getRanking());
         }
     }
 
@@ -252,7 +344,7 @@ public class SceneManager {
     }
     
     public void bindCamera(GameObject obj){
-        System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
+//        System.out.println("asd" + MadBalls.getAnimationScene().getHeight());
         scale.bind(Bindings.divide(MadBalls.getAnimationScene().getHeight() * 1.07735026918962555 / MadBalls.getMainEnvironment().getMap().getHeight() * NUM_MAP_PARTS, zoomOut));
 //        scale.bind(Bindings.divide(
 //                Bindings.divide(MadBalls.getAnimationScene().heightProperty(), MadBalls.getMainEnvironment().getMap().getHeight() / NUM_MAP_PARTS)

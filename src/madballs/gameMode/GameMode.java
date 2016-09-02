@@ -11,4 +11,6 @@ public abstract class GameMode {
     }
 
     public abstract void organize();
+    public abstract void manage(long now);
+    public abstract void checkWinner(long now);
 }

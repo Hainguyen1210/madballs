@@ -131,6 +131,10 @@ public class StateLoader {
 //            System.out.println("dead");
             gameObject.setDead();
         }
+        else if (!state.isDead() && gameObject.isDead()){
+            isSimilar = false;
+            gameObject.revive();
+        }
         if (state.getHp() != gameObject.getHpValue()){
             gameObject.setHpValue(state.getHp());
             isSimilar = false;

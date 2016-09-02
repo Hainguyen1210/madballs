@@ -117,6 +117,12 @@ public class Ball extends GameObject{
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    @Override
+    public void revive(){
+        if (player.isLocal()) SceneManager.getInstance().bindCamera(this);
+        super.revive();
+    }
     
     /**
      * set the hitBox and image of the Ball
@@ -137,6 +143,7 @@ public class Ball extends GameObject{
         setHitBox(new Circle(15));
         getImageView().setEffect(new DropShadow(10, Color.BLACK));
     }
+
     @Override
     public void updateUnique(long now) {
         if (buffState != null) {

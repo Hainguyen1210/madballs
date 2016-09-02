@@ -35,6 +35,7 @@ public abstract class GameObject {
     private GameObject owner, child;
     private Shape hitBox;
     private ImageView imageView = new ImageView();
+    private String imageName;
     private Group display, animationG, statusG;
     private String dieSoundFX;
     private Rectangle boundsRectangle;
@@ -339,7 +340,12 @@ public abstract class GameObject {
     }
 
     public void setImage(String imageName) {
+        this.imageName = imageName;
         this.imageView.setImage(ImageGenerator.getInstance().getImage(imageName));
+    }
+
+    public String getImageName(){
+        return imageName;
     }
 
     public DoubleProperty getHp(){
