@@ -38,10 +38,6 @@ public class DeflectiveBehaviour extends StackedCollisionPassiveBehaviour {
             incomingAngle += 360;
         }
 
-        System.out.println("deflect");
-        System.out.println(myAngle);
-        System.out.println(incomingAngle);
-
         double deflectionAngle = (myAngle - incomingAngle) * 2;
         if (deflectionAngle > 180){
             deflectionAngle -= 360;
