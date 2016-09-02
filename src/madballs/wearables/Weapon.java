@@ -136,6 +136,9 @@ public abstract class Weapon extends GameObject {
     }
 
     final public void setRange(double range) {
+        if (maxRange != -1) {
+            if (range > maxRange) range = maxRange;
+        }
         this.range = range;
     }
 
@@ -170,6 +173,7 @@ public abstract class Weapon extends GameObject {
     public Weapon(GameObject owner, double x, double y, Integer id) {
         super(owner, x, y, true, id);
         setMoveBehaviour(new RotateBehaviour(this, -1));
+        generateProjectileCollisionType();
 //        getHitBox().setOpacity(0);
     }
 

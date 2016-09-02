@@ -10,6 +10,8 @@ import madballs.collision.StackedCollisionEffect;
 import madballs.collision.StackedCollisionPassiveBehaviour;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
+import madballs.wearables.Shield;
+import madballs.wearables.TrapLauncher;
 import madballs.wearables.Weapon;
 
 import java.util.Random;
@@ -36,8 +38,12 @@ public class AttackStrategy extends Strategy {
         target = null;
         angleToEnemy = 0;
         weapon = getBot().getBall().getWeapon();
+        if (weapon.getProjectileCollisionEffect() == null || weapon.getProjectileCollisionBehaviour() == null) {
+            weapon = null;
+            return;
+        }
         if (((StackedCollisionEffect)weapon.getProjectileCollisionEffect()).hasCollisionEffect(DamageEffect.class)
-                || ((StackedCollisionPassiveBehaviour)weapon.getProjectileCollisionBehaviour()).hasCollisionBehaviour(ExplosiveBehaviour.class)){
+                || ((StackedCollisionPassiveBehaviour)weapon.getProjectileCollisionBehaviour()).hasCollisionBehaviour(ExplosiveBehaviour.class)) {
             double[] realCoordinates = weapon.getRealCoordinate();
             weaponX = realCoordinates[0];
             weaponY = realCoordinates[1];
@@ -51,7 +57,7 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void consider(GameObject obj) {
-        if (weapon == null ) return;
+        if (weapon == null || weapon instanceof TrapLauncher) return;
         if (obj instanceof Ball){
             // find Ball target
             Ball target = (Ball) obj;
@@ -83,81 +89,90 @@ public class AttackStrategy extends Strategy {
             double distance = Math.sqrt(diffX * diffX + diffY * diffY);
             double angle = Math.toDegrees(Math.atan2(diffY, diffX));
 
-            if (distance > weapon.getRange()){
+            if (weapon.getMaxRange() == -1){
+                if (distance > weapon.getRange()) return;
+            }
+            else if (distance > weapon.getMaxRange()) {
                 return;
             }
 
             // check if there is any blocking objects
-            for (Integer id: getBot().getRelevantObjIDs()){
-                GameObject checkingObj = weapon.getEnvironment().getObject(id);
-                if (checkingObj != null) {
-                    if (checkingObj instanceof Ball){
-                        if (checkingObj == getBot().getBall()
-                                || (((Ball) checkingObj).getPlayer().getTeamNum() != getBot().getTeamNum() && weapon.getDamage() >= 0)
-                                || (((Ball) checkingObj).getPlayer().getTeamNum() == getBot().getTeamNum() && weapon.getDamage() < 0)){
+            if (weapon.getMaxRange() == -1){
+                for (Integer id: getBot().getRelevantObjIDs()){
+                    GameObject checkingObj = weapon.getEnvironment().getObject(id);
+                    if (checkingObj != null) {
+                        if (checkingObj instanceof Ball){
+                            if (checkingObj == getBot().getBall()
+                                    || (((Ball) checkingObj).getPlayer().getTeamNum() != getBot().getTeamNum() && weapon.getDamage() >= 0)
+                                    || (((Ball) checkingObj).getPlayer().getTeamNum() == getBot().getTeamNum() && weapon.getDamage() < 0)){
+                                continue;
+                            }
+                        }
+                        else if (!(checkingObj instanceof Obstacle)){
                             continue;
                         }
-                    }
-                    else if (!(checkingObj instanceof Obstacle)){
-                        continue;
-                    }
 
 
-                    Bounds checkingBounds = checkingObj.getDisplay().getBoundsInParent();
-                    double checkingMinDiffY = checkingBounds.getMinY() - weaponY;
-                    double checkingMaxDiffY = checkingBounds.getMaxY() - weaponY;
-                    double checkingMinX, checkingMaxX;
-                    if (Math.signum(diffX) == Math.signum(diffY)){
-                        checkingMinX = checkingBounds.getMaxX();
-                        checkingMaxX = checkingBounds.getMinX();
-                    }
-                    else {
-                        checkingMinX = checkingBounds.getMinX();
-                        checkingMaxX = checkingBounds.getMaxX();
-                    }
-                    double checkingMinDiffX = checkingMinX - weaponX;
-                    double checkingMaxDiffX = checkingMaxX - weaponX;
-                    double checkingMinAngle = Math.toDegrees(Math.atan2(checkingMinDiffY, checkingMinDiffX));
-                    double checkingMaxAngle = Math.toDegrees(Math.atan2(checkingMaxDiffY, checkingMaxDiffX));
-
-                    if (Math.abs(checkingMaxAngle - checkingMinAngle) > 180){
-                        if (checkingMaxAngle < 0) {
-                            checkingMaxAngle += 360;
+                        Bounds checkingBounds = checkingObj.getDisplay().getBoundsInParent();
+                        double checkingMinDiffY = checkingBounds.getMinY() - weaponY;
+                        double checkingMaxDiffY = checkingBounds.getMaxY() - weaponY;
+                        double checkingMinX, checkingMaxX;
+                        if (Math.signum(diffX) == Math.signum(diffY)){
+                            checkingMinX = checkingBounds.getMaxX();
+                            checkingMaxX = checkingBounds.getMinX();
                         }
                         else {
-                            checkingMinAngle += 360;
+                            checkingMinX = checkingBounds.getMinX();
+                            checkingMaxX = checkingBounds.getMaxX();
                         }
-                        if (angle < 0) angle += 360;
-                    }
-                    else {
-                        if (angle > 180) angle -= 360;
-                    }
-                    if ((angle <= checkingMaxAngle && angle >= checkingMinAngle)
-                            || (angle >= checkingMaxAngle && angle <= checkingMinAngle)){
+                        double checkingMinDiffX = checkingMinX - weaponX;
+                        double checkingMaxDiffX = checkingMaxX - weaponX;
+                        double checkingMinAngle = Math.toDegrees(Math.atan2(checkingMinDiffY, checkingMinDiffX));
+                        double checkingMaxAngle = Math.toDegrees(Math.atan2(checkingMaxDiffY, checkingMaxDiffX));
 
-                        double checkingDistance;
-                        double intersectX = 0, intersectY = 0;
-                        if (diffX != 0){
-                            double projectileLineSlope = diffY / diffX;
-                            double projectileLineIntercept = targetY - targetX * projectileLineSlope;
-                            double checkingLineSlope = (checkingBounds.getHeight()) / (checkingMaxX - checkingMinX);
-                            double checkingLineIntercept = checkingBounds.getMaxY() - checkingMaxX * checkingLineSlope;
-                            intersectX = (checkingLineIntercept - projectileLineIntercept) / (projectileLineSlope - checkingLineSlope);
-                            intersectY = intersectX * projectileLineSlope + projectileLineIntercept;
-                            checkingDistance = Math.sqrt(Math.pow(intersectY - weaponY, 2) + Math.pow(intersectX - weaponX, 2));
+                        if (Math.abs(checkingMaxAngle - checkingMinAngle) > 180){
+                            if (checkingMaxAngle < 0) {
+                                checkingMaxAngle += 360;
+                            }
+                            else {
+                                checkingMinAngle += 360;
+                            }
+                            if (angle < 0) angle += 360;
                         }
                         else {
-                            checkingDistance = Math.abs((checkingBounds.getMaxY() + checkingBounds.getMinY()) / 2 - weaponY);
+                            if (angle > 180) angle -= 360;
+                        }
+                        if ((angle <= checkingMaxAngle && angle >= checkingMinAngle)
+                                || (angle >= checkingMaxAngle && angle <= checkingMinAngle)){
+
+                            double checkingDistance;
+                            double intersectX = 0, intersectY = 0;
+                            if (diffX != 0){
+                                double projectileLineSlope = diffY / diffX;
+                                double projectileLineIntercept = targetY - targetX * projectileLineSlope;
+                                double checkingLineSlope = (checkingBounds.getHeight()) / (checkingMaxX - checkingMinX);
+                                double checkingLineIntercept = checkingBounds.getMaxY() - checkingMaxX * checkingLineSlope;
+                                intersectX = (checkingLineIntercept - projectileLineIntercept) / (projectileLineSlope - checkingLineSlope);
+                                intersectY = intersectX * projectileLineSlope + projectileLineIntercept;
+                                checkingDistance = Math.sqrt(Math.pow(intersectY - weaponY, 2) + Math.pow(intersectX - weaponX, 2));
+                            }
+                            else {
+                                checkingDistance = Math.abs((checkingBounds.getMaxY() + checkingBounds.getMinY()) / 2 - weaponY);
+                            }
+
+                            if (checkingDistance < distance){
+
+                                return;
+                            }
                         }
 
-                        if (checkingDistance < distance){
-
-                            return;
-                        }
                     }
-
                 }
             }
+            else {
+                weapon.setRange(distance);
+            }
+
 
             this.target = target;
             angleToEnemy = Math.toDegrees(Math.atan2(diffY, diffX));
@@ -166,6 +181,7 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void act() {
+        if (weapon == null) return;
         RotateBehaviour rotateBehaviour = (RotateBehaviour) weapon.getMoveBehaviour();
         if (target != null){
             if (aimedTarget == null || target != aimedTarget) {

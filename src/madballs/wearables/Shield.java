@@ -14,7 +14,7 @@ import madballs.projectiles.Projectile;
  */
 public class Shield extends Weapon {
     private final double WIDTH = 12;
-    private final double HEIGHT = 50;
+    private final double HEIGHT = 40;
 
     public Shield(GameObject owner, Integer id) {
         super(owner, 0, 0, id);

@@ -10,8 +10,11 @@ import madballs.projectiles.Projectile;
  * Created by caval on 31/08/2016.
  */
 public class DeflectiveBehaviour extends StackedCollisionPassiveBehaviour {
-    public DeflectiveBehaviour(CollisionPassiveBehaviour behaviour) {
+    private boolean shouldResetDistance = false;
+
+    public DeflectiveBehaviour(boolean shouldResetDistance, CollisionPassiveBehaviour behaviour) {
         super(behaviour);
+        this.shouldResetDistance = shouldResetDistance;
     }
 
     @Override
@@ -49,6 +52,8 @@ public class DeflectiveBehaviour extends StackedCollisionPassiveBehaviour {
 
         incomingMovement.setNewDirection(Math.toRadians(incomingAngle + deflectionAngle));
         source.setRotate(Math.toRadians(source.getRotateAngle() + deflectionAngle));
+
+        if (shouldResetDistance) incomingMovement.setMovedDistance(0);
 
     }
 

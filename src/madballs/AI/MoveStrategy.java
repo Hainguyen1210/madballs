@@ -8,6 +8,7 @@ import madballs.item.WeaponItem;
 import madballs.map.Map;
 import madballs.moveBehaviour.RotateBehaviour;
 import madballs.moveBehaviour.StraightMove;
+import madballs.wearables.Shield;
 import madballs.wearables.Weapon;
 
 import java.util.ArrayList;
@@ -41,14 +42,7 @@ public class MoveStrategy extends Strategy {
 
     @Override
     public void prepare() {
-        pathsToNodes.clear();
-        for (int i = 0; i < map.getNumRows(); i++){
-            ArrayList<LinkedList<int[]>> arrayList = new ArrayList<>();
-            for (int j = 0; j < map.getNumColumns(); j ++){
-                arrayList.add(new LinkedList<>());
-            }
-            pathsToNodes.add(arrayList);
-        }
+        clearPathsToNodes();
 
         straightMove = (StraightMove) getBot().getBall().getMoveBehaviour();
 
@@ -60,7 +54,7 @@ public class MoveStrategy extends Strategy {
         }
         myNode = new int[] {myRow, myColumn};
 
-        shouldFindObjective = (getBot().getLastThoughtTime() - objectiveChangeTime) / 1000000000 > (5 + random.nextInt(10));
+        if (!shouldFindObjective) shouldFindObjective = (getBot().getLastThoughtTime() - objectiveChangeTime) / 1000000000 > (3 + random.nextInt(10));
         if (shouldFindObjective){
             objective = null;
             objectivePath.clear();
@@ -77,6 +71,7 @@ public class MoveStrategy extends Strategy {
 //                System.out.println("potential objective " + obj.getClass());
                 value = 18;
                 if (obj instanceof WeaponItem){
+                    if (((WeaponItem)obj).getWeapon() instanceof Shield) return;
                     if (getBot().getBall().getWeapon().getAmmo() > 15){
                         double damageDiff = (((WeaponItem)obj).getWeapon().getDamage() - getBot().getBall().getWeapon().getDamage());
                         if (damageDiff < 0) return;
@@ -96,21 +91,35 @@ public class MoveStrategy extends Strategy {
                 }
             }
             if (value != 0){
-                findPath(obj);
+                int targetColumn = (int)(obj.getTranslateX() / map.getColumnWidth());
+                int targetRow = (int)(obj.getTranslateY() / map.getRowHeight());
+                findPath(targetRow, targetColumn);
                 if (tempPath.size() != 0){
 //                    System.out.println("found path");
                     value /= (tempPath.size() / 4);
                     if (value > objectiveValue){
-                        System.out.println("new objective " + obj.getClass());
+//                        System.out.println("new objective " + obj.getClass());
                         objective = obj;
                         objectiveValue = value;
                         objectiveChangeTime = getBot().getLastThoughtTime();
                         objectivePath = new LinkedList<>(tempPath);
+//                        System.out.println("origin size " + objectivePath.size());
                     }
                 }
             }
         }
 
+    }
+
+    private void clearPathsToNodes(){
+        pathsToNodes.clear();
+        for (int i = 0; i < map.getNumRows(); i++){
+            ArrayList<LinkedList<int[]>> arrayList = new ArrayList<>();
+            for (int j = 0; j < map.getNumColumns(); j ++){
+                arrayList.add(new LinkedList<>());
+            }
+            pathsToNodes.add(arrayList);
+        }
     }
 
     @Override
@@ -121,15 +130,18 @@ public class MoveStrategy extends Strategy {
                 straightMove.setVelocityY(straightMove.getSpeed() * (random.nextInt(3) - 1));
             }
             else{
+//                clearPathsToNodes();
                 tempPath.clear();
                 objectiveValue = -1;
-                findPath(map.getNumRows() / 2, map.getNumColumns() / 2, myNode[0], myNode[1], new LinkedList<>(), -1);
+                findPath(map.getNumRows() / 2, map.getNumColumns() / 2);
+//                findPath(map.getNumRows() / 2, map.getNumColumns() / 2, myNode[0], myNode[1], new LinkedList<>(), -1);
                 objectivePath = new LinkedList<>(tempPath);
             }
             objectiveChangeTime = getBot().getLastThoughtTime();
         }
         if (objectivePath.size() != 0) {
-//            System.out.println("go");
+            shouldFindObjective = false;
+//            System.out.println("act size " + objectivePath.size());
             int[] nextNode = objectivePath.getFirst();
             double myX = getBot().getBall().getTranslateX();
             double myY = getBot().getBall().getTranslateY();
@@ -140,15 +152,10 @@ public class MoveStrategy extends Strategy {
 
             boolean shouldTargetObjective = false;
             if (objective != null){
-//                System.out.println(objective.getClass());
-//                System.out.println("path " + objectivePath.size());
-                if (objectivePath.size() == 1 && objective != null){
-//                    System.out.println("last step");
+                int[] targetNode = objectivePath.getLast();
+                if (myNode[0] == targetNode[0] && myNode[1] == targetNode[1]){
                     shouldTargetObjective = true;
-                    double distance = Math.sqrt(Math.pow(myX - objective.getTranslateX(), 2) + Math.pow(myY - objective.getTranslateY(), 2));
-                    if (distance < 10){
-                        shouldFindObjective = true;
-                    }
+                    if (objective.isDead()) shouldFindObjective = true;
                 }
             }
 
@@ -188,28 +195,49 @@ public class MoveStrategy extends Strategy {
         setImportance(getImportance() * objectiveValue);
     }
 
-    private void findPath(GameObject obj){
+    private void findPath(int targetRow, int targetColumn){
+//        clearPathsToNodes();
         tempPath.clear();
-        int targetColumn = (int)(obj.getTranslateX() / map.getColumnWidth());
-        int targetRow = (int)(obj.getTranslateY() / map.getRowHeight());
         if (!map.getMAP_ARRAY()[targetColumn][targetRow].equals("x") && !map.getMAP_ARRAY()[targetColumn][targetRow].equals("+")){
-            findPath(targetRow, targetColumn, myNode[0], myNode[1], new LinkedList<>(), -1);
+            LinkedList<int[]> foundPath = pathsToNodes.get(targetRow).get(targetColumn);
+            if (foundPath.size() != 0){
+                tempPath = new LinkedList<>(foundPath);
+            }
+            else {
+                boolean noPathFound = true;
+                for (int i = 0; i < pathsToNodes.size(); i++){
+                    for (int j = 0; j < pathsToNodes.get(i).size(); j++){
+                        foundPath = pathsToNodes.get(i).get(j);
+                        if (foundPath.size() > 0){
+                            noPathFound = false;
+                            findPath(targetRow, targetColumn, i, j, new LinkedList<>(foundPath), -1);
+                        }
+                    }
+                }
+                if (noPathFound){
+                    findPath(targetRow, targetColumn, myNode[0], myNode[1], new LinkedList<>(), -1);
+                }
+            }
         }
     }
 
     private void findPath(int targetRow, int targetColumn, int currentRow, int currentColumn, LinkedList<int[]> path, int lastDirection){
 //        if (tempPath.size() > 0) return;
         if (path.size() < PATH_LENGTH_LIMIT || (targetColumn == map.getNumColumns() / 2 && targetRow == map.getNumRows() /2)){
+//            System.out.print("finding");
             int[][] adjacentNodes = new int[][] {
                     new int[] {currentRow, currentColumn - 1},
                     new int[] {currentRow + 1, currentColumn},
                     new int[] {currentRow, currentColumn + 1},
                     new int[] {currentRow - 1, currentColumn}
             };
-
-            for (int direction = 0; direction < 4; direction++){
+//            System.out.println("finding");
+//            System.out.println(targetRow);
+//            System.out.println(targetColumn);
+            for (int direction = 0; direction < adjacentNodes.length; direction++){
                 if (direction == lastDirection) continue;
                 int[] adjacentNode = adjacentNodes[direction];
+                if (adjacentNode[0] == myNode[0] && adjacentNode[1] == myNode[1]) continue;
                 if (adjacentNode[0] < 0 || adjacentNode[0] >= map.getNumRows() || adjacentNode[1] < 0 || adjacentNode[1] >= map.getNumColumns()){
                     continue;
                 }
@@ -225,6 +253,8 @@ public class MoveStrategy extends Strategy {
 //                    }
                     LinkedList<int[]> foundPath = pathsToNodes.get(adjacentNode[0]).get(adjacentNode[1]);
                     if (foundPath.size() == 0 || path.size() + 1 < foundPath.size()){
+//                        System.out.println();
+//                        System.out.println("new node path");
 //                        if (adjacentNode[0] == 4 && adjacentNode[1] == 23) {
 //                            System.out.println("new path node");
 //                        }
@@ -232,15 +262,18 @@ public class MoveStrategy extends Strategy {
                         newPath.add(adjacentNode);
                         pathsToNodes.get(adjacentNode[0]).remove(adjacentNode[1]);
                         pathsToNodes.get(adjacentNode[0]).add(adjacentNode[1], newPath);
+
+//                        System.out.println(targetRow);
+//                        System.out.println(targetColumn);
                         if (adjacentNode[0] == targetRow && adjacentNode[1] == targetColumn){
                             if (tempPath.size() == 0 || path.size() + 1 < tempPath.size()){
 //                            if (tempPath.size() == 0){
-                                tempPath = newPath;
+                                tempPath = new LinkedList<>(newPath);
 //                                System.out.println("new path");
 //                                for (int[] step : tempPath){
 //                                    System.out.print(step[0] + " " + step[1] + ", ");
 //                                }
-//                                System.out.println();
+//                                System.out.println("temp size " + tempPath.size());
 //                                System.out.println(myNode[0]);
 //                                System.out.println(myNode[1]);
                                 return;

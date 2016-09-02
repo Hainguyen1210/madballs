@@ -132,9 +132,7 @@ public class Controller {
 //            System.out.println("targeted weapon");
             if (event.isPressed()){
                 double distance = Math.sqrt(xDiff*xDiff + yDiff*yDiff)/scale - playerWeapon.getWidth() - 15;
-                if (playerWeapon.getMaxRange() >= distance) {
-                    playerWeapon.setRange(distance);
-                }
+                playerWeapon.setRange(distance);
             }
         }
         weaponRotateBehaviour.setMousePressed(event.isPressed());
