@@ -10,7 +10,7 @@ public abstract class GameMode {
         this.mode = mode;
     }
 
-    public abstract void organize();
-    public abstract void manage(long now);
-    public abstract void checkWinner(long now);
+    public abstract void organize(); // setup how the game starts
+    public abstract void manage(long now); // rule during the game
+    public abstract void checkWinner(long now); // how the game ends
 }

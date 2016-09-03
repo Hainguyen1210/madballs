@@ -27,6 +27,7 @@ import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.Obstacle;
 import madballs.scenes.Navigation;
+import madballs.wearables.Weapon;
 
 import javax.imageio.ImageIO;
 
@@ -45,6 +46,7 @@ public class Map {
     private String[][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
+    private ArrayList<String> excludedItems = new ArrayList<>();
     private final static ArrayList<String> MAP_FILES = new ArrayList<>();
     private Random random = new Random();
     private int mapNumber = -1;
@@ -134,6 +136,12 @@ public class Map {
             width = columnWidth * numColumns;
             generatedMap = new String[numRows][numColumns];
 
+            String excludedItemLine = mapFile.nextLine();
+            System.out.println(excludedItemLine);
+            String[] excludedItemString = excludedItemLine.split(" ");
+            for (String item : excludedItemString) if(!item.equals("excludedItems:")) excludedItems.add(item);
+
+            // get map design
             for (int i = 0; i < numRows; i++) {
 
                 String line = mapFile.nextLine();
