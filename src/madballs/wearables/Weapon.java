@@ -41,10 +41,19 @@ public abstract class Weapon extends GameObject {
     private DoubleProperty damage = new SimpleDoubleProperty();
     private double maxRange = -1;
     private IntegerProperty ammo = new SimpleIntegerProperty(-1);
+//    private int spawnProbability = 10;
 
     public LongProperty lastShotTimeProperty() {
         return lastShotTime;
     }
+//
+//    public int getSpawnProbability() {
+//        return spawnProbability;
+//    }
+//
+//    public void setSpawnProbability(int spawnProbability) {
+//        this.spawnProbability = spawnProbability;
+//    }
 
     public double getMaxRange() {
         return maxRange;
