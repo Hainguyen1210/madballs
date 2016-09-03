@@ -17,12 +17,9 @@ public class ImageGenerator {
             {"ak47", "awp", "bazooka", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi",
                     "bullet1","bullet2","bullet3","bullet4",
                     "purple_potion", "teal_potion",
-                    "background1", "background0",
-                    "obstacle10", "obstacle11",
-                    "obstacle00", "obstacle01",
-                    "ball1", "ball2", "ball3","ball4","ball5","ball6",
+                    "ball1", "ball2", "ball3","ball4","ball5","ball6","ball7","ball8",
                     "blue_badge",
-                    "map_desert", "map_warehouse"
+                    "map_desert", "map_warehouse", "map_arena", "map_arena", "map_arena_team"
             };
 
     public static ImageGenerator getInstance(){

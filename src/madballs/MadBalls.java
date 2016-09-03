@@ -21,10 +21,7 @@ import madballs.gameMode.GameMode;
 import madballs.gameMode.NormalMode;
 import madballs.gameMode.RespawnMode;
 import madballs.map.Map;
-import madballs.multiplayer.Client;
 import madballs.multiplayer.MultiplayerHandler;
-import madballs.multiplayer.Server;
-import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
 import madballs.scenes.ScenesFactory;
@@ -92,10 +89,9 @@ public class MadBalls extends Application {
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
 
-        MapGenerator.getInstance().generateMapImage(); // EXPORT MAP BACKGROUND
         Map.searchFiles();
 
-        primaryStage.setTitle("MAD BALL");
+        primaryStage.setTitle("MAD BALLS");
         primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {

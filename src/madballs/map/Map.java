@@ -135,8 +135,10 @@ public class Map {
             generatedMap = new String[numRows][numColumns];
 
             for (int i = 0; i < numRows; i++) {
+
                 String line = mapFile.nextLine();
                 line = line.replace(".", "");
+                line = line.replace(" ", "");
 
                 String[] characterString = line.split("");
                 // collecting info
@@ -155,10 +157,11 @@ public class Map {
             }
 
             System.out.println("complete reading file");
-            System.out.println("Item spawn location: ");
+            System.out.print("Item spawn location: ");
             for (SpawnLocation sl : itemSpawnLocations) {
-                System.out.println(sl.getX() + " " + sl.getY());
+                System.out.print(sl.getX() + " " + sl.getY() + " | ");
             }
+            System.out.println();
         } catch (FileNotFoundException ex) {
             System.out.println("Map File not Found!");
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);

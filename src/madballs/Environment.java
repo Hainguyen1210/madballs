@@ -190,7 +190,6 @@ public class Environment {
                 } else if (mapArray[row][col] != null && !(mapArray[row][col]).equals("x")){
                     if (isStartedRow){
                         new Obstacle(this, locationRowX, locationRowY, currentBoxSizeRow, boxSize, -1); //end point
-                        System.out.print("#");
                         currentBoxSizeRow = 0;
                         isStartedRow = false;
                     }
