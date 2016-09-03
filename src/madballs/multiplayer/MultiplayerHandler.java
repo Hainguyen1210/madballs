@@ -61,7 +61,7 @@ public abstract class MultiplayerHandler {
     }
     
     public void setLocalPlayer(Player player){
-        player.setName(Navigation.getInstance().getTextResponse("Create player", "Welcome!", "Please enter your name", "Ball"));
+        player.setName(Navigation.getInstance().getTextResponse("Create player", "Welcome!", "Please enter your name", "MadBall"));
         this.localPlayer = player;
 //        player.getBall().getEnvironment().
 //        System.out.println(((GameRoomController)ScenesFactory.getInstance().getFxmlLoader().getController()) == null);

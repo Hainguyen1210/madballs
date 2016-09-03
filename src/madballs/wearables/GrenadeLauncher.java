@@ -10,8 +10,8 @@ import madballs.collision.*;
  * Created by caval on 31/08/2016.
  */
 public class GrenadeLauncher extends Weapon {
-    private final double WIDTH = 60;
-    private final double HEIGHT = 15;
+    private final double WIDTH = 40;
+    private final double HEIGHT = 10;
 
     public GrenadeLauncher(GameObject owner, Integer id) {
         super(owner,
@@ -31,9 +31,9 @@ public class GrenadeLauncher extends Weapon {
         setProjectileSpeed(400);
         setProjectileHitBoxSize(2);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImageName("bullet1");
+        setProjectileImageName("grenadeammo");
 
-//        setFireSoundFX("bazooka");
+        setFireSoundFX("bazooka");
 
     }
 
@@ -48,10 +48,10 @@ public class GrenadeLauncher extends Weapon {
 
     @Override
     public void setDisplayComponents() {
-        setWidth(WIDTH-30);
-        setHeight(HEIGHT/2);
+        setWidth(WIDTH-10);
+        setHeight(HEIGHT/2-2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-//        setImage("bazooka");
-//        configImageView(-30, -HEIGHT/2, HEIGHT, WIDTH);
+        setImage("grenadelauncher");
+        configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
 }

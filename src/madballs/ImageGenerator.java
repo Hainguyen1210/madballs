@@ -14,8 +14,8 @@ public class ImageGenerator {
 
     private Map<String, Image> images = new HashMap<>();
     private String[] imageNames = new String[]
-            {"ak47", "awp", "bazooka", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi",
-                    "bullet1","bullet2","bullet3","bullet4",
+            {"ak47", "awp", "bazooka","grenadelauncher", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi",
+                    "bullet1","bullet2","bullet3","bullet4","grenadeammo",
                     "purple_potion", "teal_potion",
                     "ball1", "ball2", "ball3","ball4","ball5","ball6","ball7","ball8",
                     "blue_badge",
