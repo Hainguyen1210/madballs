@@ -143,9 +143,9 @@ public class Spawner {
             if (MadBalls.isHost()) {
                 MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
             }
-            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString() + "*");
+//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString() + "*");
         } else {
-            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString());
+//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString());
         }
 
 //        System.out.print(weaponClass);
@@ -176,9 +176,9 @@ public class Spawner {
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
             }
-            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString() + "*");
+//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString() + "*");
         } else {
-            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString());
+//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString());
         }
 
     }
