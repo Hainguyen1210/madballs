@@ -191,6 +191,7 @@ public class Client extends MultiplayerHandler{
             else if (data.getType().equals("choose_map")){
                 System.out.println("map");
                 Map map = new Map(((MapData)data).getMapNumber());
+                map.setGameMode(((MapData)data).getGameMode());
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {

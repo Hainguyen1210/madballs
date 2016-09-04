@@ -165,7 +165,7 @@ public class Server extends MultiplayerHandler{
     }
     
     public void sendInfoToNewPlayer(Player newPlayer){
-        newPlayer.sendData(new MapData(MadBalls.getMainEnvironment().getMap().getMapNumber()));
+        newPlayer.sendData(new MapData(MadBalls.getMainEnvironment().getMap()));
         System.out.println(4);
         for (Player player : getPlayers()){
             System.out.println("1");

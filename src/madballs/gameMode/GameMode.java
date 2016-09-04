@@ -14,7 +14,18 @@ public abstract class GameMode {
         this.mode = mode;
     }
 
-    public abstract void organize();
-    public abstract void manage(long now);
-    public abstract void checkWinner(long now);
+    public abstract void organize(); // setup how the game starts
+    public abstract void manage(long now); // rule during the game
+    public abstract void checkWinner(long now); // how the game ends
+
+    public static GameMode getGameMode(int mode){
+        switch (mode) {
+            case 1:
+                return new RespawnMode(0, 3);
+            case 2:
+                return new FlagMode(0, 3);
+            default:
+                return new NormalMode(0);
+        }
+    }
 }

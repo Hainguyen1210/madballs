@@ -5,20 +5,28 @@
  */
 package madballs.multiplayer;
 
+import madballs.map.Map;
+
 /**
  *
  * @author caval
  */
 public class MapData extends Data{
     private int mapNumber;
-    
+    private int gameMode;
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
     public int getMapNumber(){
         return mapNumber;
     }
     
-    public MapData(int mapNumber) {
+    public MapData(Map map) {
         super("choose_map");
-        this.mapNumber = mapNumber;
+        this.mapNumber = map.getMapNumber();
+        this.gameMode = map.getGameMode();
     }
     
 }

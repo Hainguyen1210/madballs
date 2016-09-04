@@ -26,7 +26,9 @@ import madballs.Common;
 import madballs.ImageGenerator;
 import madballs.MadBalls;
 import madballs.Obstacle;
+import madballs.gameMode.GameMode;
 import madballs.scenes.Navigation;
+import madballs.wearables.Weapon;
 
 import javax.imageio.ImageIO;
 
@@ -42,13 +44,23 @@ public class Map {
     private int rowHeight;
     private int obstacleSize;
     private int numTeams = 0;
+    private int gameMode = -1;
     private String[][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> flagSpawnLocations = new ArrayList<>();
+    private ArrayList<String> excludedItems = new ArrayList<>();
     private final static ArrayList<String> MAP_FILES = new ArrayList<>();
     private Random random = new Random();
     private int mapNumber = -1;
+
+    public int getGameMode() {
+        return gameMode;
+    }
+
+    public void setGameMode(int gameMode) {
+        this.gameMode = gameMode;
+    }
 
     public ArrayList<SpawnLocation> getFlagSpawnLocations() {
         return flagSpawnLocations;
@@ -139,9 +151,17 @@ public class Map {
             width = columnWidth * numColumns;
             generatedMap = new String[numRows][numColumns];
 
+            String excludedItemLine = mapFile.nextLine();
+            System.out.println(excludedItemLine);
+            String[] excludedItemString = excludedItemLine.split(" ");
+            for (String item : excludedItemString) if(!item.equals("excludedItems:")) excludedItems.add(item);
+
+            // get map design
             for (int i = 0; i < numRows; i++) {
+
                 String line = mapFile.nextLine();
                 line = line.replace(".", "");
+                line = line.replace(" ", "");
 
                 String[] characterString = line.split("");
                 // collecting info
@@ -164,10 +184,11 @@ public class Map {
             }
 
             System.out.println("complete reading file");
-            System.out.println("Item spawn location: ");
+            System.out.print("Item spawn location: ");
             for (SpawnLocation sl : itemSpawnLocations) {
-                System.out.println(sl.getX() + " " + sl.getY());
+                System.out.print(sl.getX() + " " + sl.getY() + " | ");
             }
+            System.out.println();
         } catch (FileNotFoundException ex) {
             System.out.println("Map File not Found!");
             Logger.getLogger(Map.class.getName()).log(Level.SEVERE, null, ex);
@@ -207,6 +228,19 @@ public class Map {
             Navigation.getInstance().showAlert("Create map", "Error", "The chosen map cannot affort current number of connected players", true);
             return chooseMap();
         } else {
+            if (mapFile.contains("flag")){
+                map.setGameMode(2);
+            }
+            else {
+                int newGameMode;
+                try {
+                    newGameMode = Integer.parseInt(Navigation.getInstance().getTextResponse("Create game", "Enter game mode", "", "0"));
+                }
+                catch (NumberFormatException ex){
+                    newGameMode = 0;
+                }
+                map.setGameMode(newGameMode);
+            }
             return map;
         }
     }

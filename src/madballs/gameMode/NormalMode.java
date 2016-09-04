@@ -30,6 +30,7 @@ public class NormalMode extends GameMode {
 
     @Override
     public void organize() {
+        //set default weapon
         if (MadBalls.isHost() && weaponClassIndex >= 0){
             for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
                 player.getBall().setWeapon(Spawner.getWeapons()[weaponClassIndex], -1);
