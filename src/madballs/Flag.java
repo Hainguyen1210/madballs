@@ -22,6 +22,7 @@ public class Flag extends GameObject {
     private SpawnLocation spawnLocation;
     private IntegerProperty carrierID = new SimpleIntegerProperty(-1);
     private final double WEIGHT = 2;
+    private final double HEIGHT = 30, WIDTH = 2;
 
     public Integer getCarrierID() {
         return carrierID.get();
@@ -44,7 +45,10 @@ public class Flag extends GameObject {
         this.teamNum = spawnLocation.getTypeNumber();
         this.spawnLocation = spawnLocation;
 
-        getHitBox().setFill(SceneManager.teamColors[teamNum - 1]);
+//        getHitBox().setFill(SceneManager.teamColors[teamNum - 1]);
+        getHitBox().setOpacity(1);
+        setImage("flag" + teamNum);
+        configImageView(-12.5, 0, HEIGHT, 12.5);
 
         carrierID.addListener(new ChangeListener<Number>() {
             @Override
@@ -64,7 +68,7 @@ public class Flag extends GameObject {
         setCollisionEffect(new NullEffect(null));
 
         Map<StackedCollisionPassiveBehaviour, Callback> stackedCollisionPassiveBehaviours = new HashMap<>();
-        stackedCollisionPassiveBehaviours.put(new BindingBehaviour(5, -40, false, null), new Callback() {
+        stackedCollisionPassiveBehaviours.put(new BindingBehaviour(-WIDTH/2, -HEIGHT, false, null), new Callback() {
             @Override
             public boolean checkCondition(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
                 boolean result = false;
@@ -89,7 +93,7 @@ public class Flag extends GameObject {
 
     @Override
     public void setDisplayComponents() {
-        setHitBox(new Rectangle(5, 40));
+        setHitBox(new Rectangle(WIDTH, HEIGHT));
     }
 
     @Override

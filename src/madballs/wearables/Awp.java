@@ -30,8 +30,8 @@ public class Awp extends Weapon{
         setAmmo(10);
         setFireRate(0.4);
         setRange(1000);
-        setProjectileSpeed(1000);
-        setProjectileHitBoxSize(5);
+        setProjectileSpeed(1100);
+        setProjectileHitBoxSize(3);
         setProjectileColor(Paint.valueOf("yellow"));
         setProjectileImageName("bullet3");
 

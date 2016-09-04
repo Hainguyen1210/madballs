@@ -30,6 +30,7 @@ import madballs.*;
 import madballs.AI.BotPlayer;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.Data;
+import madballs.multiplayer.PlayerData;
 import madballs.scenes.SceneManager;
 
 /**
@@ -233,7 +234,7 @@ public class Player {
         namePane.setTranslateY(-60);
         namePane.setTranslateX(-15);
         ball.getStatusG().getChildren().add(namePane);
-        nameLabel.translateXProperty().bind(Bindings.divide(Bindings.subtract(60, nameLabel.widthProperty()), 2));
+        nameLabel.translateXProperty().bind(Bindings.divide(Bindings.subtract(55, nameLabel.widthProperty()), 2));
 
         double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
         ball.setImage("ball"+teamNum.get());

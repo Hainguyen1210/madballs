@@ -42,13 +42,14 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
                     sourceBall.getPlayer().setKillsCount(sourceBall.getPlayer().getKillsCount() + newKill);
                     targetBall.getPlayer().setDeathsCount(targetBall.getPlayer().getDeathsCount() + 1);
                     SceneManager.getInstance().displayKill(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName());
-                    MadBalls.getMultiplayerHandler().sendData(new KillData(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName()));
                     sourceBall.getPlayer().updateRanking();
+                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                        MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
+                    }
+                    MadBalls.getGameMode().updateKill(sourceBall.getPlayer(), targetBall.getPlayer());
 //                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
 //                        System.out.println("ranked" + player.getName() + player.getRanking());
 //                    }
-                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(sourceBall.getPlayer()));
-                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(targetBall.getPlayer()));
                 }
             }
         }
@@ -56,7 +57,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect instanceof DamageEffect;
+        return effect instanceof DamageEffect && !target.isDead();
     }
 
 }

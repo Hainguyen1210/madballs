@@ -1,4 +1,5 @@
 preset: 30 30 50 50 50 (MapSizeX--MapSizeY--boxLocationX--boxLocationY--boxSize)
+excludedItems: MiniHealthFlask DivinePotion FullPotion SpicyBiscuit PlasmaAmmo Wheels
 xxxxxxxxxx.xxxxxxxxxx.xxxxxxxxxx
 +_________.__+__a____.__+______+
 +_____1_ss._s+_______._1____s__+

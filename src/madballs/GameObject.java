@@ -518,15 +518,15 @@ public abstract class GameObject {
           }
         });
 //        hitBox.setVisible(false);
-//        hitBox.setOpacity(0);
+        hitBox.setOpacity(0);
         hitBox.setCache(true);
         hitBox.setCacheHint(CacheHint.SPEED);
         environment.registerGameObj(this, true, id);
     }
 
-    public void configImageView(double translateX, double translateY, double height, double width){
-        this.imageView.setTranslateX(translateX);
-        this.imageView.setTranslateY(translateY);
+    public void configImageView(double relativeX, double relativeY, double height, double width){
+        this.imageView.setTranslateX(relativeX);
+        this.imageView.setTranslateY(relativeY);
         this.imageView.setFitHeight(height);
         this.imageView.setFitWidth(width);
     }

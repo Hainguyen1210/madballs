@@ -40,12 +40,10 @@ public class BotPlayer extends Player {
                 prepareStrategies();
                 lastThoughtTime = now;
                 Environment environment = getBall().getEnvironment();
-                int counter = 0;
                 for (Integer id: getRelevantObjIDs()){
                     for (Strategy strategy: strategies){
                         GameObject object = environment.getObject(id);
                         if (object != null && object != getBall() && object != getBall().getWeapon()){
-                            if (object instanceof Projectile) counter++;
                             strategy.consider(object);
                         }
                     }
@@ -83,7 +81,11 @@ public class BotPlayer extends Player {
     }
 
     public void play(){
-        strategies.add(new MoveStrategy(this, getBall().getEnvironment().getMap()));
+        for (Strategy strategy: strategies){
+            if (strategy instanceof MoveStrategy){
+                ((MoveStrategy) strategy).setMap(getBall().getEnvironment().getMap());
+            }
+        }
         animation.start();
     }
 
@@ -99,6 +101,7 @@ public class BotPlayer extends Player {
         strategies.add(new DodgeStrategy(this));
         strategies.add(new AvoidObstacleStrategy(this));
         strategies.add(new AttackStrategy(this));
+        strategies.add(new MoveStrategy(this));
     }
 
     @Override

@@ -7,22 +7,23 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.buffState.Speed;
+import madballs.buffState.Frenzy;
 import madballs.map.SpawnLocation;
-
 
 /**
  *
- * @author haing
+ * @author chim-
  */
-public class Wheels extends BuffItem{
-    public Wheels(Environment environment, SpawnLocation spawnLocation, Integer id) {
-        super(environment, spawnLocation, new Speed(null, 5, 50), id);
+public class Adrenaline extends BuffItem{
+
+    public Adrenaline(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new Frenzy(null, 5, 1.5), id);
     }
     
     @Override
     public void setDisplayComponents(){
-        setColor(Paint.valueOf("yellow"));
+        setColor(Paint.valueOf("blue"));
         super.setDisplayComponents();
+        setImage("blue_syringe");
     }
 }

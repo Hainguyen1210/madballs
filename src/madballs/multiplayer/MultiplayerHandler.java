@@ -81,7 +81,6 @@ public abstract class MultiplayerHandler {
                                 player.setKillsCount(playerData.getKillsCount());
                                 player.setDeathsCount(playerData.getDeathsCount());
                                 player.setRanking(playerData.getRanking());
-                                if (!isHost) player.updateRanking();
                             }
                             else {
                                 getPlayers().remove(player);

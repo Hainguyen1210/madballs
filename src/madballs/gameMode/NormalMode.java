@@ -2,7 +2,7 @@ package madballs.gameMode;
 
 import madballs.MadBalls;
 import madballs.item.Spawner;
-import madballs.multiplayer.WinnerData;
+import madballs.multiplayer.ScoreData;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
@@ -62,7 +62,6 @@ public class NormalMode extends GameMode {
                 if (SceneManager.getInstance().getTeamScoreBoard().size() == 1) return;
 //                System.out.println("survive" + survivingTeamNum);
                 if (survivingTeamNum != -1){
-                    MadBalls.getMultiplayerHandler().sendData(new WinnerData(survivingTeamNum));
                     SceneManager.getInstance().addScore(survivingTeamNum, 1);
                 }
                 MadBalls.getMultiplayerHandler().newMatch(players.size() == 1);
@@ -91,5 +90,10 @@ public class NormalMode extends GameMode {
             MadBalls.setGameOver(true);
             Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
         }
+    }
+
+    @Override
+    public void updateKill(Player killer, Player victim) {
+
     }
 }

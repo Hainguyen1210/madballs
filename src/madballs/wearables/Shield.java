@@ -24,8 +24,8 @@ public class Shield extends Weapon {
 
         setWeight(2.5);
         setDamage(0);
-        setMaxHp(150);
-        setHpValue(150);
+        setMaxHp(200);
+        setHpValue(200);
         ammoProperty().bind(getHp());
         setFireRate(0.1);
         setRange(0);

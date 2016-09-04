@@ -95,11 +95,11 @@ public class RespawnMode extends NormalMode {
             return;
         }
 
-        for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
-            if (player.getKillsCount() >= winningKillsCount){
+        for (Integer teamNum: SceneManager.getInstance().getTeamScoreBoard().keySet()){
+            if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum).get() >= winningKillsCount){
                 MadBalls.setGameOver(true);
                 SceneManager.getInstance().getScoreBoardContainer().setVisible(true);
-                if (player.isLocal()){
+                if (MadBalls.getMultiplayerHandler().getLocalPlayer().getTeamNum() == teamNum){
                     Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
                 }
                 else {
@@ -117,5 +117,11 @@ public class RespawnMode extends NormalMode {
                 return;
             }
         }
+    }
+
+
+    @Override
+    public void updateKill(Player killer, Player victim) {
+        SceneManager.getInstance().addScore(killer.getTeamNum(), killer.getTeamNum() == victim.getTeamNum() ? -1 : 1);
     }
 }

@@ -6,11 +6,12 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.util.Duration;
 import madballs.Flag;
+import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.KillData;
-import madballs.multiplayer.WinnerData;
+import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
 
@@ -50,23 +51,24 @@ public class FlagMode extends RespawnMode {
             }
             Map map = MadBalls.getMainEnvironment().getMap();
             for (Flag flag: flags){
-                int flagRow = (int) (flag.getTranslateY() / map.getRowHeight());
-                int flagColumn = (int) (flag.getTranslateX() / map.getColumnWidth());
+                if (flag.getCarrierID() != -1){
+                    GameObject carrier = flag.getEnvironment().getObject(flag.getCarrierID());
+                    int carrierRow = (int) (carrier.getTranslateY() / map.getRowHeight());
+                    int carrierColumn = (int) (carrier.getTranslateX() / map.getColumnWidth());
 
-                for (SpawnLocation spawnLocation: map.getFlagSpawnLocations()){
-                    if (flag.getTeamNum() == spawnLocation.getTypeNumber()) continue;
-                    int baseRow = (int) (spawnLocation.getY() / map.getRowHeight() - 1);
-                    int baseColumn = (int) (spawnLocation.getX() / map.getColumnWidth());
+                    for (SpawnLocation spawnLocation: map.getFlagSpawnLocations()){
+                        if (flag.getTeamNum() == spawnLocation.getTypeNumber()) continue;
+                        int baseRow = (int) (spawnLocation.getY() / map.getRowHeight());
+                        int baseColumn = (int) (spawnLocation.getX() / map.getColumnWidth());
 
-                    int teamNum = spawnLocation.getTypeNumber();
-                    if (flagRow == baseRow && flagColumn == baseColumn) {
-                        MadBalls.getMultiplayerHandler().sendData(new WinnerData(teamNum));
-                        SceneManager.getInstance().addScore(teamNum, 1);
-                        SceneManager.getInstance().displayKill(flag.getCarrierID(), flag.getID(), "flag");
-                        MadBalls.getMultiplayerHandler().sendData(new KillData(flag.getCarrierID(), flag.getID(), "flag"));
-                        flag.setOwner(null, flag.getSpawnLocation().getX(), flag.getSpawnLocation().getY());
-                        flag.setCarrierID(-1);
-                        flag.getStateLoader().update(now);
+                        int teamNum = spawnLocation.getTypeNumber();
+                        if (carrierRow == baseRow && carrierColumn == baseColumn) {
+                            SceneManager.getInstance().addScore(teamNum, 1);
+                            SceneManager.getInstance().displayKill(flag.getCarrierID(), flag.getID(), "flag");
+                            flag.setOwner(null, flag.getSpawnLocation().getX(), flag.getSpawnLocation().getY());
+                            flag.setCarrierID(-1);
+                            flag.getStateLoader().update(now);
+                        }
                     }
                 }
             }
@@ -77,7 +79,7 @@ public class FlagMode extends RespawnMode {
 
         for (Flag flag: flags){
             int teamNum = flag.getTeamNum();
-            if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum) >= 5){
+            if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum).get() >= 5){
                 MadBalls.setGameOver(true);
                 SceneManager.getInstance().getScoreBoardContainer().setVisible(true);
                 if (MadBalls.getMultiplayerHandler().getLocalPlayer().getTeamNum() == teamNum){
@@ -89,5 +91,10 @@ public class FlagMode extends RespawnMode {
                 return;
             }
         }
+    }
+
+    @Override
+    public void updateKill(Player killer, Player victim) {
+
     }
 }

@@ -33,6 +33,8 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 import madballs.*;
 import madballs.buffState.BuffState;
+import madballs.multiplayer.KillData;
+import madballs.multiplayer.ScoreData;
 import madballs.player.Player;
 
 import java.util.HashMap;
@@ -45,15 +47,14 @@ import java.util.WeakHashMap;
  */
 public class SceneManager {
     public static final double NUM_MAP_PARTS = 3;
-    public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE};
+    public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE, Color.BLACK, Color.PURPLE};
     private static SceneManager instance = new SceneManager();
     private FlowPane gameInfoDisplay;
     private ScrollPane scoreBoardContainer;
     private GridPane scoreBoardGrid;
     private Map<Player, HBox> scoreBoard;
     private VBox killsBox;
-    private int killsRowCounter = 0;
-    private Map<Integer, Integer> teamScoreBoard = new WeakHashMap<>();
+    private Map<Integer, IntegerProperty> teamScoreBoard = new WeakHashMap<>();
     private HBox teamScoresDisplay;
     private ProgressBar hpBar = new ProgressBar();
     private Label weaponLabel = new Label();
@@ -74,7 +75,7 @@ public class SceneManager {
         return bannerLabel;
     }
 
-    public Map<Integer, Integer> getTeamScoreBoard() {
+    public Map<Integer, IntegerProperty> getTeamScoreBoard() {
         return teamScoreBoard;
     }
 
@@ -184,6 +185,7 @@ public class SceneManager {
     }
 
     public void displayKill(Integer sourceID, Integer targetID, String weaponImage){
+        MadBalls.getMultiplayerHandler().sendData(new KillData(sourceID, targetID, weaponImage));
         Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
 
         Label sourceName = new Label(source.getPlayer().getName());
@@ -268,9 +270,10 @@ public class SceneManager {
     public void reloadTeamScores(){
         teamScoresDisplay.getChildren().clear();
         for (Integer teamNum : teamScoreBoard.keySet()){
-            Label score = new Label(String.format("%d", teamScoreBoard.get(teamNum)));
-            System.out.println("score" + teamScoreBoard.get(teamNum));
-            System.out.println(teamNum);
+            Label score = new Label();
+            score.textProperty().bind(Bindings.format("%d", teamScoreBoard.get(teamNum)));
+//            System.out.println("score" + teamScoreBoard.get(teamNum));
+//            System.out.println(teamNum);
             score.setFont(new Font(20));
             score.setTextFill(teamColors[teamNum-1]);
             teamScoresDisplay.getChildren().add(score);
@@ -279,18 +282,20 @@ public class SceneManager {
     }
 
     public void addScore(int teamNum, int additionalScore){
-        int oldScore = teamScoreBoard.get(teamNum);
-        System.out.println("oldScore" + oldScore);
-        teamScoreBoard.replace(teamNum, oldScore + additionalScore);
-        System.out.println("newScore" + teamScoreBoard.get(teamNum));
-        reloadTeamScores();
+        teamScoreBoard.get(teamNum).set(teamScoreBoard.get(teamNum).get() + additionalScore);
+        if (MadBalls.isHost()) MadBalls.getMultiplayerHandler().sendData(new ScoreData(teamNum, additionalScore));
+//        int oldScore = teamScoreBoard.get(teamNum);
+////        System.out.println("oldScore" + oldScore);
+//        teamScoreBoard.replace(teamNum, oldScore + additionalScore);
+////        System.out.println("newScore" + teamScoreBoard.get(teamNum));
+//        reloadTeamScores();
     }
 
     public void reloadScoreBoard(){
         scoreBoard = new WeakHashMap<>();
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
             if (!teamScoreBoard.containsKey(player.getTeamNum())){
-                teamScoreBoard.put(player.getTeamNum(), 0);
+                teamScoreBoard.put(player.getTeamNum(), new SimpleIntegerProperty(0));
             }
 
             HBox playerHBox = new HBox(15);

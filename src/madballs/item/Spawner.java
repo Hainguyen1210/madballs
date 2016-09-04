@@ -15,7 +15,6 @@ import java.util.logging.Logger;
 import javafx.beans.property.LongProperty;
 import javafx.beans.property.SimpleLongProperty;
 import madballs.Environment;
-import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 import madballs.multiplayer.SpawnData;
@@ -29,8 +28,8 @@ public class Spawner {
     private static Class<Weapon>[] weapons = new Class[]{
             Pistol.class, Awp.class, Uzi.class, Ak47.class, Minigun.class,
             M4A1.class, Bazooka.class, XM1104.class, GrenadeLauncher.class, Shield.class, TrapLauncher.class};
-    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, SpicyBiscuit.class, PlasmaAmmo.class, Wheels.class};
-//    private static Class<Item>[] boostItems = new Class[] {HeavyPlate.class};
+    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, Adrenaline.class, PlasmaAmmo.class, Lightning.class};
+//    private static Class<Item>[] boostItems = new Class[] {HeavyKevlar.class};
     private static HashMap<Class, Integer> itemSpawnProbability = new HashMap<Class, Integer>()
     {{
         put(Pistol.class, 10);
@@ -48,9 +47,9 @@ public class Spawner {
         put(MiniHealthFlask.class, 8);
         put(DivinePotion.class, 2);
         put(FullPotion.class, 3);
-        put(SpicyBiscuit.class, 10);
+        put(Adrenaline.class, 10);
         put(PlasmaAmmo.class, 8);
-        put(Wheels.class, 8);
+        put(Lightning.class, 8);
     }};
 
     private Random random = new Random();

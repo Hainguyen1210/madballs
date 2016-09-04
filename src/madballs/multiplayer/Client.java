@@ -148,11 +148,11 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
-            else if (data.getType().equals("winner")){
+            else if (data.getType().equals("score")){
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        SceneManager.getInstance().addScore(((WinnerData)data).getWinnerTeamNum(), 1);
+                        SceneManager.getInstance().addScore(((ScoreData)data).getWinnerTeamNum(), ((ScoreData)data).getValue());
                     }
                 });
             }
