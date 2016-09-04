@@ -33,7 +33,7 @@ import javafx.stage.Screen;
 import javafx.util.Duration;
 import madballs.*;
 import madballs.buffState.BuffState;
-import madballs.multiplayer.KillData;
+import madballs.multiplayer.AnnouncementData;
 import madballs.multiplayer.ScoreData;
 import madballs.player.Player;
 
@@ -53,7 +53,7 @@ public class SceneManager {
     private ScrollPane scoreBoardContainer;
     private GridPane scoreBoardGrid;
     private Map<Player, HBox> scoreBoard;
-    private VBox killsBox;
+    private VBox announcementBoard;
     private Map<Integer, IntegerProperty> teamScoreBoard = new WeakHashMap<>();
     private HBox teamScoresDisplay;
     private ProgressBar hpBar = new ProgressBar();
@@ -160,11 +160,11 @@ public class SceneManager {
 //        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
 //        gameInfoDisplay.setTranslateZ(-1);
 
-        killsBox = new VBox(10);
-        killsBox.setPrefWidth(MadBalls.getAnimationScene().getWidth() / 3);
-        killsBox.setTranslateX(MadBalls.getAnimationScene().getWidth() * 2 / 3);
-        killsBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
-        killsBox.setAlignment(Pos.CENTER);
+        announcementBoard = new VBox(10);
+        announcementBoard.setPrefWidth(MadBalls.getAnimationScene().getWidth() / 3);
+        announcementBoard.setTranslateX(MadBalls.getAnimationScene().getWidth() * 2 / 3);
+        announcementBoard.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
+        announcementBoard.setAlignment(Pos.CENTER);
 
         teamScoresDisplay = new HBox(20);
         teamScoresDisplay.setPrefHeight(40);
@@ -181,54 +181,69 @@ public class SceneManager {
         reloadScoreBoard();
 
         root.setTranslateZ(-1);
-        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer, banner, killsBox);
+        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer, banner, announcementBoard);
     }
 
-    public void displayKill(Integer sourceID, Integer targetID, String weaponImage){
-        MadBalls.getMultiplayerHandler().sendData(new KillData(sourceID, targetID, weaponImage));
+    public void announceKill(Integer sourceID, Integer targetID, String weaponImage){
+        MadBalls.getMultiplayerHandler().sendData(new AnnouncementData(sourceID, targetID, weaponImage, "kill"));
         Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
 
         Label sourceName = new Label(source.getPlayer().getName());
         sourceName.setFont(new Font(20));
         sourceName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
 
-        Label targetName;
-        ImageView weaponImageView;
-        if (weaponImage.equals("flag")){
-            Flag target = (Flag) MadBalls.getMainEnvironment().getObject(targetID);
+        Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
 
-            targetName = new Label(String.format("captured team %d's flag", target.getTeamNum()));
-            targetName.setFont(new Font(20));
-            targetName.setTextFill(teamColors[target.getTeamNum() - 1]);
+        Label targetName = new Label(target.getPlayer().getName());
+        targetName.setFont(new Font(20));
+        targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
 
-            weaponImageView = new ImageView();
-        }
-        else {
-            Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
+        ImageView weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
+        weaponImageView.setFitHeight(10);
+        weaponImageView.setPreserveRatio(true);
 
-            targetName = new Label(target.getPlayer().getName());
-            targetName.setFont(new Font(20));
-            targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
+        HBox announcement = new HBox(10, sourceName, weaponImageView, targetName);
+        announcement.setAlignment(Pos.CENTER);
 
-            weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
-            weaponImageView.setFitHeight(10);
-            weaponImageView.setPreserveRatio(true);
-        }
+        displayAnnnouncement(announcement);
+    }
 
-        HBox killInfo = new HBox(10, sourceName, weaponImageView, targetName);
-        killInfo.setAlignment(Pos.CENTER);
-        killsBox.getChildren().add(killInfo);
+    public void announceFlag(Integer ballID, Integer flagID, String action){
+        MadBalls.getMultiplayerHandler().sendData(new AnnouncementData(ballID, flagID, action, "flag"));
+        Ball source = (Ball) MadBalls.getMainEnvironment().getObject(ballID);
 
-        while (killsBox.getChildren().size() > 5){
-            killsBox.getChildren().remove(0);
+        Label ballName = new Label(source.getPlayer().getName());
+        ballName.setFont(new Font(20));
+        ballName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
+
+        Label actionLabel = new Label(action);
+
+        Flag flag = (Flag) MadBalls.getMainEnvironment().getObject(flagID);
+
+        Label flagName = new Label(String.format("team %d's flag", flag.getTeamNum()));
+        flagName.setFont(new Font(20));
+        flagName.setTextFill(teamColors[flag.getTeamNum() - 1]);
+
+
+        HBox announcement = new HBox(10, ballName, actionLabel, flagName);
+        announcement.setAlignment(Pos.CENTER);
+
+        displayAnnnouncement(announcement);
+    }
+
+    public void displayAnnnouncement(HBox announcement){
+        announcementBoard.getChildren().add(announcement);
+
+        while (announcementBoard.getChildren().size() > 5){
+            announcementBoard.getChildren().remove(0);
         }
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                VBox vBox = killsBox;
-                if (vBox.getChildren().contains(killInfo)){
-                    vBox.getChildren().remove(killInfo);
+                VBox vBox = announcementBoard;
+                if (vBox.getChildren().contains(announcement)){
+                    vBox.getChildren().remove(announcement);
                 }
             }
         }));

@@ -9,6 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.collision.*;
 import madballs.map.SpawnLocation;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.BindingData;
 import madballs.scenes.SceneManager;
 
 import java.util.HashMap;
@@ -48,6 +49,7 @@ public class Flag extends GameObject {
 //        getHitBox().setFill(SceneManager.teamColors[teamNum - 1]);
         getHitBox().setOpacity(1);
         setImage("flag" + teamNum);
+        getAnimationG().setTranslateZ(-1);
         configImageView(-12.5, 0, HEIGHT, 12.5);
 
         carrierID.addListener(new ChangeListener<Number>() {
@@ -83,12 +85,12 @@ public class Flag extends GameObject {
             public boolean checkCondition(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
                 boolean result = false;
                 if (source instanceof Ball) {
-                    result = ((Ball)source).getPlayer().getTeamNum() == ((Flag)target).getTeamNum();
+                    result = ((Flag)target).getCarrierID() == -1 && ((Ball)source).getPlayer().getTeamNum() == ((Flag)target).getTeamNum();
                 }
                 return result;
             }
         });
-        setCollisionPassiveBehaviour(new ComboCollisionPassiveBehaviour(stackedCollisionPassiveBehaviours, new InvulnerableBehaviour(null)));
+        setCollisionPassiveBehaviour(new ComboCollisionPassiveBehaviour(stackedCollisionPassiveBehaviours, null));
     }
 
     @Override
@@ -103,9 +105,8 @@ public class Flag extends GameObject {
 
     @Override
     public void die(){
+        MadBalls.getMultiplayerHandler().sendData(new BindingData(-1, getID(), -1, -1));
         carrierID.set(-1);
-        getTranslateXProperty().unbind();
-        getTranslateYProperty().unbind();
-        getRotate().angleProperty().unbind();
+        unbindDisplay();
     }
 }

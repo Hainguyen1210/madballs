@@ -6,8 +6,9 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.CacheHint;
-import javafx.scene.image.Image;
 import madballs.AI.BotPlayer;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
@@ -24,7 +25,6 @@ import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.player.Player;
-import madballs.projectiles.Projectile;
 
 /**
  *
@@ -51,7 +51,7 @@ public abstract class GameObject {
     private DoubleProperty hp = new SimpleDoubleProperty(100);
     private double maxHp = 100;
     private boolean isMobile = true;
-    private boolean isDead = false;
+    private BooleanProperty deadProperty = new SimpleBooleanProperty(false);
     
     private StateLoader stateLoader;
     private MoveBehaviour moveBehaviour;
@@ -70,7 +70,11 @@ public abstract class GameObject {
     }
     
     public boolean isDead(){
-        return isDead;
+        return deadProperty.get();
+    }
+
+    public BooleanProperty deadProperty() {
+        return deadProperty;
     }
 
     public boolean isMobile() {
@@ -152,13 +156,24 @@ public abstract class GameObject {
         if (translateY.isBound()) translateY.unbind();
         if (rotation.angleProperty().isBound()) rotation.angleProperty().unbind();
 
-        translateX.bind(Bindings.add(x, obj.translateX));
-        translateY.bind(Bindings.add(y, obj.translateY));
+        owner = obj;
+
+        if (obj != null){
+            translateX.bind(Bindings.add(x, obj.translateX));
+            translateY.bind(Bindings.add(y, obj.translateY));
 
 //        rotation = new Rotate(0 , -x , -y);
-        rotation.setPivotX(-x);
-        rotation.setPivotY(-y);
-        rotation.angleProperty().bind(obj.rotation.angleProperty());
+            rotation.setPivotX(-x);
+            rotation.setPivotY(-y);
+            rotation.angleProperty().bind(obj.rotation.angleProperty());
+        }
+    }
+
+    public void unbindDisplay(){
+        owner = null;
+        translateX.unbind();
+        translateY.unbind();
+        rotation.angleProperty().unbind();
     }
 
     public Environment getEnvironment() {
@@ -282,11 +297,6 @@ public abstract class GameObject {
         return imageView;
     }
 
-
-    public void setImageView(ImageView imageView){
-        this.imageView = imageView;
-    }
-
     public Group getDisplay() {
         return display;
     }
@@ -300,11 +310,11 @@ public abstract class GameObject {
     }
     
     public void setRotate(double direction){
-        double angle = Math.toDegrees(direction);
         if (owner != null) {
-            owner.rotation.setAngle(angle);
+            owner.setRotate(direction);
         }
         else {
+            double angle = Math.toDegrees(direction);
             rotation.setAngle(angle);
         }
     }
@@ -545,8 +555,8 @@ public abstract class GameObject {
     }
 
     public void revive(){
-        if (isDead){
-            isDead = false;
+        if (isDead()){
+            deadProperty.set(false);
             if (!environment.getDisplay().getChildren().contains(display)){
                 environment.getDisplay().getChildren().add(display);
             }
@@ -558,7 +568,8 @@ public abstract class GameObject {
         if (dieSoundFX != null) {
             SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
         }
-        isDead = true;
+        unbindDisplay();
+        deadProperty.set(true);
 //        if (owner != null) {
 //            owner.child = null;
 //        }
@@ -569,6 +580,7 @@ public abstract class GameObject {
         if (this instanceof Ball && !MadBalls.isHost()) return;
         setDead();
         if (child != null && !child.isDead()) {
+            child.owner = null;
             child.die();
         }
 //        if (MadBalls.isHost()){
@@ -591,7 +603,7 @@ public abstract class GameObject {
     }
     
     public void update(long now){
-        if (!isDead) {
+        if (!isDead()) {
             if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
         }

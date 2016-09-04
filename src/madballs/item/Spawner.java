@@ -28,7 +28,7 @@ public class Spawner {
     private static Class<Weapon>[] weapons = new Class[]{
             Pistol.class, Awp.class, Uzi.class, Ak47.class, Minigun.class,
             M4A1.class, Bazooka.class, XM1104.class, GrenadeLauncher.class, Shield.class, TrapLauncher.class};
-    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, Adrenaline.class, PlasmaAmmo.class, Lightning.class};
+    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, Adrenaline.class, PlasmaAmmo.class, Lightning.class, HeavyKevlar.class};
 //    private static Class<Item>[] boostItems = new Class[] {HeavyKevlar.class};
     private static HashMap<Class, Integer> itemSpawnProbability = new HashMap<Class, Integer>()
     {{
@@ -50,6 +50,7 @@ public class Spawner {
         put(Adrenaline.class, 10);
         put(PlasmaAmmo.class, 8);
         put(Lightning.class, 8);
+        put(HeavyKevlar.class, 5);
     }};
 
     private Random random = new Random();
@@ -131,57 +132,71 @@ public class Spawner {
         }
         Class<Weapon> weaponClass = weapons[weaponIndex];
 
-        // random probability
-        int probability = random.nextInt(10)+1 ;
-        if (probability <= itemSpawnProbability.get(weaponClass)){
+        if (MadBalls.isHost()){
+            // random probability
+            int probability = random.nextInt(10)+1 ;
+            if (probability <= itemSpawnProbability.get(weaponClass)){
 
+                spawnLocation.setSpawned(true);
+                spawnLocation.setTypeNumber(weaponIndex);
+                spawnLocation.setType("weapon");
+                WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation, id);
+                MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
+//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString() + "*");
+            } else {
+//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString());
+                randomSpawn();
+            }
+        }
+        else {
             spawnLocation.setSpawned(true);
             spawnLocation.setTypeNumber(weaponIndex);
             spawnLocation.setType("weapon");
             WeaponItem newItem = new WeaponItem(environment, weaponClass, spawnLocation, id);
-            if (MadBalls.isHost()) {
-                MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
-            }
-//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString() + "*");
-        } else {
-//            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString());
-            randomSpawn();
         }
+
 
 //        System.out.print(weaponClass);
 //        System.out.println(newItem.getID());
     }
 
     public void spawnItem(SpawnLocation spawnLocation, int itemIndex, Integer id) {
-        double X = spawnLocation.getX();
-        double Y = spawnLocation.getY();
         if (itemIndex < 0) {
             itemIndex = random.nextInt(boostItems.length);
         }
         Class<Item> itemClass = boostItems[itemIndex];
-        // random probability
-        int probability = random.nextInt(10)+1 ;
-        if (probability <= itemSpawnProbability.get(itemClass)) {
 
-            spawnLocation.setSpawned(true);
-            spawnLocation.setTypeNumber(itemIndex);
-            spawnLocation.setType("item");
+        if (MadBalls.isHost()){
+            // random probability
+            int probability = random.nextInt(10)+1 ;
+            if (probability <= itemSpawnProbability.get(itemClass)) {
+
+                spawnLocation.setSpawned(true);
+                spawnLocation.setTypeNumber(itemIndex);
+                spawnLocation.setType("item");
+                try {
+                    Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class, Integer.class).newInstance(environment, spawnLocation, id);
+                    //            System.out.print(itemClass);
+                    //            System.out.println(newItem.getID());
+                    MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
+                } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
+                }
+//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString() + "*");
+            } else {
+
+//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString());
+                randomSpawn();
+            }
+        }
+        else {
             try {
                 Item newItem = itemClass.getDeclaredConstructor(Environment.class, SpawnLocation.class, Integer.class).newInstance(environment, spawnLocation, id);
-                //            System.out.print(itemClass);
-                //            System.out.println(newItem.getID());
-                if (MadBalls.isHost()) {
-                    MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, newItem.getID()));
-                }
             } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(Spawner.class.getName()).log(Level.SEVERE, null, ex);
             }
-//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString() + "*");
-        } else {
-
-//            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString());
-            randomSpawn();
         }
+
 
     }
 }

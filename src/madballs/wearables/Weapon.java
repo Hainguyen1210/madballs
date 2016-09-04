@@ -261,8 +261,9 @@ public abstract class Weapon extends GameObject {
         if (getAmmo() == 0 || getAmmo() < -1){
 //            ((Ball)getOwner()).setWeapon(Pistol.class);
             if (MadBalls.isHost()){
-                ((Ball)getOwner()).setWeapon(Pistol.class, -1);
-                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getOwner().getID(), Pistol.class.getName(), ((Ball)getOwner()).getWeapon().getID()));
+                Ball owner = (Ball) getOwner();
+                owner.setWeapon(Pistol.class, -1);
+                MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(owner.getID(), Pistol.class.getName(), owner.getWeapon().getID()));
             }
         }
         return getAmmo() == 0 || getAmmo() < -1;

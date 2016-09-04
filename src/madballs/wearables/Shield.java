@@ -5,8 +5,11 @@ import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Rectangle;
+import madballs.Ball;
 import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.collision.*;
+import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 
 /**
@@ -34,12 +37,17 @@ public class Shield extends Weapon {
         setProjectileColor(Paint.valueOf("red"));
         setProjectileImageName("bullet1");
 
-        ammoProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                checkOutOfAmmo();
-            }
-        });
+        if (MadBalls.isHost()) {
+            ammoProperty().addListener(new ChangeListener<Number>() {
+                @Override
+                public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                    if ((int)newValue <= 0 && owner instanceof Ball){
+                        ((Ball)owner).setWeapon(Pistol.class, -1);
+                        MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(owner.getID(), Pistol.class.getName(), ((Ball)owner).getWeapon().getID()));
+                    }
+                }
+            });
+        }
 
 //        setFireSoundFX("pistol");
         setProjectileCollisionEffect(new NullEffect(null));

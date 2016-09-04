@@ -263,6 +263,17 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
+            else if (data.getType().equals("binding")){
+                BindingData bindingData = (BindingData) data;
+                GameObject binder = MadBalls.getMainEnvironment().getObject(bindingData.getBinderID());
+                if (bindingData.getOriginID() == -1){
+                    binder.unbindDisplay();
+                }
+                else {
+                    GameObject origin = MadBalls.getMainEnvironment().getObject(bindingData.getOriginID());
+                    binder.bindDisplay(origin, bindingData.getXDiff(), bindingData.getYDiff());
+                }
+            }
             else if (data.getType().equals("banner")){
                 Platform.runLater(new Runnable() {
                     @Override
@@ -275,7 +286,7 @@ public class Client extends MultiplayerHandler{
                 Platform.runLater(new Runnable() {
                     @Override
                     public void run() {
-                        ((KillData)data).displayKill();
+                        ((AnnouncementData)data).displayAnnouncement();
                     }
                 });
             }
@@ -321,6 +332,14 @@ public class Client extends MultiplayerHandler{
                     }
                 });
             }
+            else if (data.getSpawntype().equals("flag")){
+                Platform.runLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        Flag flag = new Flag(MadBalls.getMainEnvironment(), data.getId(), data.getSpawnLocation());
+                    }
+                });
+            }
             else if (data.getSpawntype().equals("weapon")){
                 Platform.runLater(new Runnable() {
                     @Override
@@ -343,7 +362,7 @@ public class Client extends MultiplayerHandler{
                     public void run() {
                         new Explosion(MadBalls.getMainEnvironment(),
                                 data.getParameters()[0], data.getParameters()[1], data.getParameters()[2],
-                                data.getParameters()[3], data.getParameters()[4], data.getId(), -1);
+                                data.getParameters()[3], data.getParameters()[4], data.getId(), -1, -1);
                     }
                 });
             }

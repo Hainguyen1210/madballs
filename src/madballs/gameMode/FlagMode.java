@@ -10,7 +10,8 @@ import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.map.Map;
 import madballs.map.SpawnLocation;
-import madballs.multiplayer.KillData;
+import madballs.multiplayer.BindingData;
+import madballs.multiplayer.SpawnData;
 import madballs.player.Player;
 import madballs.scenes.Navigation;
 import madballs.scenes.SceneManager;
@@ -31,8 +32,13 @@ public class FlagMode extends RespawnMode {
     @Override
     public void organize() {
         super.organize();
-        for (SpawnLocation spawnLocation: MadBalls.getMainEnvironment().getMap().getFlagSpawnLocations()){
-            flags.add(new Flag(MadBalls.getMainEnvironment(), -1, spawnLocation));
+        if (MadBalls.isHost()) {
+            for (SpawnLocation spawnLocation: MadBalls.getMainEnvironment().getMap().getFlagSpawnLocations()){
+                Flag flag = new Flag(MadBalls.getMainEnvironment(), -1, spawnLocation);
+                System.out.println("flag " + flag.getID());
+                flags.add(flag);
+                MadBalls.getMultiplayerHandler().sendData(new SpawnData(spawnLocation, false, flag.getID()));
+            }
         }
     }
 
@@ -64,8 +70,12 @@ public class FlagMode extends RespawnMode {
                         int teamNum = spawnLocation.getTypeNumber();
                         if (carrierRow == baseRow && carrierColumn == baseColumn) {
                             SceneManager.getInstance().addScore(teamNum, 1);
-                            SceneManager.getInstance().displayKill(flag.getCarrierID(), flag.getID(), "flag");
-                            flag.setOwner(null, flag.getSpawnLocation().getX(), flag.getSpawnLocation().getY());
+                            SceneManager.getInstance().announceFlag(flag.getCarrierID(), flag.getID(), "CAPTURED");
+                            flag.unbindDisplay();
+                            MadBalls.getMultiplayerHandler().sendData(new BindingData(-1, flag.getID(), -1, -1));
+                            flag.setTranslateX(flag.getSpawnLocation().getX());
+                            flag.setTranslateY(flag.getSpawnLocation().getY());
+                            flag.setRotate(0);
                             flag.setCarrierID(-1);
                             flag.getStateLoader().update(now);
                         }
@@ -77,8 +87,7 @@ public class FlagMode extends RespawnMode {
             if (MadBalls.isGameOver()) return;
         }
 
-        for (Flag flag: flags){
-            int teamNum = flag.getTeamNum();
+        for (Integer teamNum: SceneManager.getInstance().getTeamScoreBoard().keySet()){
             if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum).get() >= 5){
                 MadBalls.setGameOver(true);
                 SceneManager.getInstance().getScoreBoardContainer().setVisible(true);

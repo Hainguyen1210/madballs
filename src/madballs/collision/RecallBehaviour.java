@@ -2,6 +2,7 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.GameObject;
+import madballs.MadBalls;
 import madballs.map.SpawnLocation;
 
 /**
@@ -21,10 +22,11 @@ public class RecallBehaviour extends StackedCollisionPassiveBehaviour {
         target.setTranslateY(spawnLocation.getY());
         target.setOldX(spawnLocation.getX());
         target.setOldY(spawnLocation.getY());
+        target.setRotate(0);
     }
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return true;
+        return MadBalls.isHost();
     }
 }

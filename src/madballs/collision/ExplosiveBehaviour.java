@@ -9,6 +9,7 @@ import madballs.Explosion;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.multiplayer.SpawnData;
+import madballs.projectiles.Projectile;
 
 /**
  * Created by caval on 16/08/2016.
@@ -37,7 +38,10 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (MadBalls.isHost()){
-            Explosion explosion = new Explosion(target.getEnvironment(), target.getTranslateX(), target.getTranslateY(), radius, damage.get(), duration, -1, ballID);
+            Explosion explosion = new Explosion(
+                    target.getEnvironment(), target.getTranslateX(), target.getTranslateY(),
+                    radius, damage.get(), duration,
+                    -1, ballID, ((Projectile)target).getSourceWeapon().getID());
         }
     }
 
