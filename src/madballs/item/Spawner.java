@@ -32,7 +32,7 @@ public class Spawner {
 //    private static Class<Item>[] boostItems = new Class[] {HeavyKevlar.class};
     private static HashMap<Class, Integer> itemSpawnProbability = new HashMap<Class, Integer>()
     {{
-        put(Pistol.class, 10);
+        put(Pistol.class, 5);
         put(Awp.class, 4);
         put(Uzi.class, 8);
         put(Ak47.class, 8);
@@ -145,6 +145,7 @@ public class Spawner {
 //            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString() + "*");
         } else {
 //            System.out.println(probability + "/" + itemSpawnProbability.get(weaponClass)+ " " + weaponClass.toString());
+            randomSpawn();
         }
 
 //        System.out.print(weaponClass);
@@ -177,7 +178,9 @@ public class Spawner {
             }
 //            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString() + "*");
         } else {
+
 //            System.out.println(probability + "/" + itemSpawnProbability.get(itemClass) + " " + itemClass.toString());
+            randomSpawn();
         }
 
     }

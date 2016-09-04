@@ -38,6 +38,9 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
                 if (target instanceof Ball && damageEffect.getBallID() >= 0){
                     Ball sourceBall = (Ball)(source.getEnvironment().getObject(damageEffect.getBallID()));
                     Ball targetBall = (Ball) target;
+                    if (sourceBall == null){
+                        sourceBall = (Ball) source.getEnvironment().getDeadObject(damageEffect.getBallID());
+                    }
                     int newKill =  sourceBall.getPlayer().getTeamNum() == targetBall.getPlayer().getTeamNum() ? -1 : 1;
                     sourceBall.getPlayer().setKillsCount(sourceBall.getPlayer().getKillsCount() + newKill);
                     targetBall.getPlayer().setDeathsCount(targetBall.getPlayer().getDeathsCount() + 1);

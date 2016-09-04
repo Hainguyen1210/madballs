@@ -104,5 +104,8 @@ public class Flag extends GameObject {
     @Override
     public void die(){
         carrierID.set(-1);
+        getTranslateXProperty().unbind();
+        getTranslateYProperty().unbind();
+        getRotate().angleProperty().unbind();
     }
 }

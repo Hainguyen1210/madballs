@@ -31,7 +31,7 @@ public class GrenadeLauncher extends Weapon {
         setProjectileSpeed(400);
         setProjectileHitBoxSize(2);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImageName("grenadeammo");
+        setProjectileImageName("grenade_ammo");
 
         setFireSoundFX("bazooka");
 
@@ -51,7 +51,7 @@ public class GrenadeLauncher extends Weapon {
         setWidth(WIDTH-10);
         setHeight(HEIGHT/2-2);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
-        setImage("grenadelauncher");
+        setImage("grenade_launcher");
         configImageView(-10, -HEIGHT/2, HEIGHT, WIDTH);
     }
 }

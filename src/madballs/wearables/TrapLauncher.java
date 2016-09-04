@@ -32,7 +32,7 @@ public class TrapLauncher extends Weapon {
         setProjectileSpeed(400);
         setProjectileHitBoxSize(10);
         setProjectileColor(Paint.valueOf("red"));
-        setProjectileImageName("bullet1");
+        setProjectileImageName("trap");
 
 //        setFireSoundFX("bazooka");
     }
@@ -71,7 +71,9 @@ public class TrapLauncher extends Weapon {
     @Override
     public void setDisplayComponents() {
         setWidth(WIDTH);
-        setHeight(HEIGHT);
+        setHeight(HEIGHT - 10);
         setHitBox(new Rectangle(getWidth(), getHeight(), Paint.valueOf("red")));
+        setImage("trap_launcher");
+        configImageView(0, -HEIGHT/2, HEIGHT, WIDTH);
     }
 }
