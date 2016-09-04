@@ -57,5 +57,7 @@ public class Shield extends Weapon {
         setHitBox(new Rectangle(WIDTH, HEIGHT, Color.LIGHTBLUE));
         getHitBox().setTranslateX(getOwner().getHitBox().getBoundsInLocal().getWidth()/2);
         getHitBox().setTranslateY(-HEIGHT/2);
+        setImage("shield");
+        configImageView(getHitBox().getTranslateX(), getHitBox().getTranslateY(), HEIGHT, WIDTH);
     }
 }
