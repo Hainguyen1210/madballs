@@ -17,7 +17,7 @@ import madballs.Obstacle;
  */
 public class MakeUpItem extends StackedCollisionPassiveBehaviour{
   
-  public MakeUpItem(CollisionPassiveBehaviour behaviour) {
+  public MakeUpItem(StackedCollisionPassiveBehaviour behaviour) {
     super(behaviour);
   }
 

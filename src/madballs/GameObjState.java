@@ -24,6 +24,7 @@ public class GameObjState implements Serializable{
 //    private double targetX, targetY;
     private double direction;
     private double oldDirection;
+    private double pivotX, pivotY;
     private double hp;
     private boolean isDead;
     private double speed;
@@ -85,6 +86,14 @@ public class GameObjState implements Serializable{
         return oldDirection;
     }
 
+    public double getPivotX() {
+        return pivotX;
+    }
+
+    public double getPivotY() {
+        return pivotY;
+    }
+
     public double getHp() {
         return hp;
     }
@@ -124,6 +133,8 @@ public class GameObjState implements Serializable{
         translateX = obj.getTranslateX();
         translateY = obj.getTranslateY();
         direction = Math.toRadians(obj.getRotateAngle());
+        pivotX = obj.getRotate().getPivotX();
+        pivotY = obj.getRotate().getPivotY();
         oldX = obj.getOldX();
         oldY = obj.getOldY();
         oldDirection = obj.getOldDirection();

@@ -45,9 +45,14 @@ public class Map {
     private String[][] MAP_ARRAY;
     private ArrayList<SpawnLocation> itemSpawnLocations = new ArrayList<>();
     private ArrayList<SpawnLocation> playerSpawnLocations = new ArrayList<>();
+    private ArrayList<SpawnLocation> flagSpawnLocations = new ArrayList<>();
     private final static ArrayList<String> MAP_FILES = new ArrayList<>();
     private Random random = new Random();
     private int mapNumber = -1;
+
+    public ArrayList<SpawnLocation> getFlagSpawnLocations() {
+        return flagSpawnLocations;
+    }
 
     public int getNumTeams() {
         return numTeams;
@@ -141,12 +146,16 @@ public class Map {
                 String[] characterString = line.split("");
                 // collecting info
                 for (int j = 0; j < characterString.length; j++) {
+                    int charCode = (int)(characterString[j].toCharArray()[0]) - 96;
                     if (characterString[j].equals("s")) {
                         itemSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "item", 0));
                     } else if (Common.isNumeric(characterString[j])) {
                         int teamNum = Integer.parseInt(characterString[j]);
                         if (teamNum > numTeams) numTeams = teamNum;
                         playerSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "ball", teamNum));
+                    }
+                    else if (charCode > 0 && charCode < 13){
+                        flagSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "flag", charCode));
                     }
                 }
                 generatedMap[counter] = characterString;

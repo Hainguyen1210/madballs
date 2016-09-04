@@ -7,7 +7,7 @@ import madballs.GameObject;
  * Created by caval on 01/09/2016.
  */
 public class ImmobalizedBehaviour extends StackedCollisionPassiveBehaviour {
-    public ImmobalizedBehaviour(CollisionPassiveBehaviour behaviour) {
+    public ImmobalizedBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

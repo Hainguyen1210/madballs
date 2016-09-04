@@ -112,41 +112,53 @@ public abstract class GameObject {
     public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
-        owner.child = this;
-        this.owner = owner;
+//        owner.child = this;
+//        this.owner = owner;
         
         distanceToOwner = Math.sqrt(x * x + y * y);
-        
-        translateX.bind(Bindings.add(x, owner.translateX));
-        translateY.bind(Bindings.add(y, owner.translateY));
-        
-        rotation = new Rotate(0 , -x , -y);
-        rotation.angleProperty().bind(owner.rotation.angleProperty());
-        environment = owner.getEnvironment();
+
+        rotation = new Rotate(0);
+
+        setOwner(owner, x, y);
         
         if (isSettingDisplay) setDisplay(id);
     }
     
     public void setOwner(GameObject newOwner, double x, double y){
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println("owner");
-        System.out.println(owner.getClass());
-        System.out.println(newOwner.getClass());
-        System.out.println(environment.getLastUpdateTime());
         if (owner != null){
             owner.child = null;
         }
-        newOwner.child = this;
-        owner = newOwner;
-        
-        translateX.bind(Bindings.add(x, owner.translateX));
-        translateY.bind(Bindings.add(y, owner.translateY));
-        
-//        rotation = new Rotate(0 , -x , -y);
-        rotation.angleProperty().bind(owner.rotation.angleProperty());
-        environment = owner.getEnvironment();
+        if (newOwner != null){
+            newOwner.child = this;
+            owner = newOwner;
 
+            bindDisplay(owner, x, y);
+
+            environment = owner.getEnvironment();
+        }
+        else {
+            owner = null;
+            translateX.unbind();
+            translateY.unbind();
+            rotation.angleProperty().unbind();
+            setTranslateX(x);
+            setTranslateY(y);
+            rotation.setAngle(0);
+        }
+    }
+
+    public void bindDisplay(GameObject obj, double x, double y){
+        if (translateX. isBound()) translateX.unbind();
+        if (translateY.isBound()) translateY.unbind();
+        if (rotation.angleProperty().isBound()) rotation.angleProperty().unbind();
+
+        translateX.bind(Bindings.add(x, obj.translateX));
+        translateY.bind(Bindings.add(y, obj.translateY));
+
+//        rotation = new Rotate(0 , -x , -y);
+        rotation.setPivotX(-x);
+        rotation.setPivotY(-y);
+        rotation.angleProperty().bind(obj.rotation.angleProperty());
     }
 
     public Environment getEnvironment() {
@@ -363,6 +375,7 @@ public abstract class GameObject {
 
     public void setMaxHp(double maxHp) {
         this.maxHp = maxHp;
+        if (getHpValue() > maxHp) setHpValue(maxHp);
     }
 
     public void setTranslateX(double newX) {
@@ -532,13 +545,12 @@ public abstract class GameObject {
     }
 
     public void revive(){
-        if (isDead == true){
+        if (isDead){
             isDead = false;
             if (!environment.getDisplay().getChildren().contains(display)){
                 environment.getDisplay().getChildren().add(display);
             }
         }
-
     }
     
     public void setDead(){

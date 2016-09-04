@@ -8,7 +8,7 @@ import madballs.GameObject;
  */
 public class DisappearWithOwnerBehaviour extends DisappearBehaviour {
 
-    public DisappearWithOwnerBehaviour(CollisionPassiveBehaviour behaviour) {
+    public DisappearWithOwnerBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

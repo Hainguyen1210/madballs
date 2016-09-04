@@ -21,7 +21,7 @@ import madballs.scenes.SceneManager;
  */
 public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
-    public VulnerableBehaviour(CollisionPassiveBehaviour behaviour) {
+    public VulnerableBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

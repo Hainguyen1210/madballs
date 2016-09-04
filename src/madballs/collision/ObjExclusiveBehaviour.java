@@ -15,7 +15,7 @@ import madballs.GameObject;
 public class ObjExclusiveBehaviour extends StackedCollisionPassiveBehaviour{
     private Class[] exclusiveObjClasses;
     
-    public ObjExclusiveBehaviour(Class[] exclusiveObjClasses, CollisionPassiveBehaviour behaviour) {
+    public ObjExclusiveBehaviour(Class[] exclusiveObjClasses, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.exclusiveObjClasses = exclusiveObjClasses;
     }

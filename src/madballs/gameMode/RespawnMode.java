@@ -32,8 +32,8 @@ public class RespawnMode extends NormalMode {
     }
 
     public RespawnMode(int weaponClassIndex, int respawnTime) {
-        super(1);
-        setWeaponClassIndex(weaponClassIndex);
+        super(weaponClassIndex);
+        setMode(1);
         this.respawnTime = respawnTime;
 //        try {
 //            this.winningKillsCount = Integer.parseInt(Navigation.getInstance().getTextResponse("New Game", "Respawn Game Mode", "Enter the winning number of kills", "30"));

@@ -17,6 +17,7 @@ import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import madballs.gameFX.SoundStudio;
+import madballs.gameMode.FlagMode;
 import madballs.gameMode.GameMode;
 import madballs.gameMode.NormalMode;
 import madballs.gameMode.RespawnMode;
@@ -131,7 +132,6 @@ public class MadBalls extends Application {
         ImageView background = new ImageView(ImageGenerator.getInstance().getImage("map_" + Map.getMapFiles().get(map.getMapNumber()).replace(".txt", "")));
         root.getChildren().add(background);
 
-        System.out.println("map_" + Map.getMapFiles().get(map.getMapNumber()).replace(".txt", ""));
         animationScene = new SubScene(root, sceneHeight/9*16, sceneHeight, true, SceneAntialiasing.BALANCED);
 
         Group mainRoot = new Group(animationScene);
@@ -155,6 +155,10 @@ public class MadBalls extends Application {
         mainEnvironment.setDisplay(root);
         mainEnvironment.loadMap(map);
         gameMode = new RespawnMode(0, 3);
+
+        if (Map.getMapFiles().get(map.getMapNumber()).contains("flag")){
+            gameMode = new FlagMode(0, 3);
+        }
 //        gameMode = new NormalMode(0);
         SceneManager.getInstance().resetTeamScoreBoard();
         Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));

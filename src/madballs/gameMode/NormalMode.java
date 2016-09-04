@@ -24,7 +24,7 @@ public class NormalMode extends GameMode {
     }
 
     public NormalMode(int weaponClassIndex) {
-        super(0);
+        setMode(0);
         this.weaponClassIndex = weaponClassIndex;
     }
 

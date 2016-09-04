@@ -31,10 +31,7 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import madballs.Ball;
-import madballs.GameObject;
-import madballs.ImageGenerator;
-import madballs.MadBalls;
+import madballs.*;
 import madballs.buffState.BuffState;
 import madballs.player.Player;
 
@@ -188,19 +185,33 @@ public class SceneManager {
 
     public void displayKill(Integer sourceID, Integer targetID, String weaponImage){
         Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
-        Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
 
         Label sourceName = new Label(source.getPlayer().getName());
         sourceName.setFont(new Font(20));
         sourceName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
 
-        Label targetName = new Label(target.getPlayer().getName());
-        targetName.setFont(new Font(20));
-        targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
+        Label targetName;
+        ImageView weaponImageView;
+        if (weaponImage.equals("flag")){
+            Flag target = (Flag) MadBalls.getMainEnvironment().getObject(targetID);
 
-        ImageView weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
-        weaponImageView.setFitHeight(10);
-        weaponImageView.setPreserveRatio(true);
+            targetName = new Label(String.format("captured team %d's flag", target.getTeamNum()));
+            targetName.setFont(new Font(20));
+            targetName.setTextFill(teamColors[target.getTeamNum() - 1]);
+
+            weaponImageView = new ImageView();
+        }
+        else {
+            Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
+
+            targetName = new Label(target.getPlayer().getName());
+            targetName.setFont(new Font(20));
+            targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
+
+            weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
+            weaponImageView.setFitHeight(10);
+            weaponImageView.setPreserveRatio(true);
+        }
 
         HBox killInfo = new HBox(10, sourceName, weaponImageView, targetName);
         killInfo.setAlignment(Pos.CENTER);

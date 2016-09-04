@@ -5,19 +5,22 @@ import madballs.GameObject;
 import madballs.map.SpawnLocation;
 
 /**
- * Created by hainguyen on 8/17/16.
+ * Created by caval on 03/09/2016.
  */
-public class ReleaseSpawnLocation extends StackedCollisionPassiveBehaviour {
+public class RecallBehaviour extends StackedCollisionPassiveBehaviour {
     private SpawnLocation spawnLocation;
 
-    public ReleaseSpawnLocation(SpawnLocation spawnLocation, StackedCollisionPassiveBehaviour behaviour) {
+    public RecallBehaviour(SpawnLocation spawnLocation, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.spawnLocation = spawnLocation;
     }
 
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        if (spawnLocation != null ) spawnLocation.setSpawned(false);
+        target.setTranslateX(spawnLocation.getX());
+        target.setTranslateY(spawnLocation.getY());
+        target.setOldX(spawnLocation.getX());
+        target.setOldY(spawnLocation.getY());
     }
 
     @Override

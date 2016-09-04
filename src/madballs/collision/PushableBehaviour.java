@@ -22,7 +22,7 @@ public class PushableBehaviour extends StackedCollisionPassiveBehaviour{
         return collidedDirection;
     }
     
-    public PushableBehaviour(CollisionPassiveBehaviour behaviour) {
+    public PushableBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

@@ -15,7 +15,7 @@ import madballs.GameObject;
 public class ObjIgnoredBehaviour extends StackedCollisionPassiveBehaviour{
     private Class[] ignoredObjClasses;
     
-    public ObjIgnoredBehaviour(Class[] ignoredObjClasses, CollisionPassiveBehaviour behaviour) {
+    public ObjIgnoredBehaviour(Class[] ignoredObjClasses, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.ignoredObjClasses = ignoredObjClasses;
     }

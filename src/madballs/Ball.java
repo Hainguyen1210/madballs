@@ -16,6 +16,7 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import madballs.buffState.Invulnerable;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
@@ -24,6 +25,7 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
+import madballs.multiplayer.BuffData;
 import madballs.multiplayer.GetWeaponData;
 import madballs.player.Player;
 import madballs.scenes.SceneManager;
@@ -120,8 +122,27 @@ public class Ball extends GameObject{
 
     @Override
     public void revive(){
-        if (player.isLocal()) SceneManager.getInstance().bindCamera(this);
+        boolean isReviving = isDead();
         super.revive();
+        if (isReviving) {
+            if (player.isLocal()) SceneManager.getInstance().bindCamera(this);
+            BuffState buffState = new Invulnerable(null, 3);
+            buffState.castOn(this, 0);
+            addEffectState(buffState);
+        }
+    }
+
+    @Override
+    public void setDead(){
+        clearBuff();
+        super.setDead();
+    }
+
+    public void clearBuff(){
+        if (buffState != null){
+            buffState.forceFade();
+            clearBuff();
+        }
     }
     
     /**
