@@ -24,9 +24,9 @@ public abstract class GameMode {
     public static GameMode getGameMode(int mode){
         switch (mode) {
             case 1:
-                return new RespawnMode(0, 3);
+                return new RespawnMode(0, 5);
             case 2:
-                return new FlagMode(0, 3);
+                return new FlagMode(0, 7);
             default:
                 return new NormalMode(0);
         }

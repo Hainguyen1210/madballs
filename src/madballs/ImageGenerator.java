@@ -16,7 +16,7 @@ public class ImageGenerator {
     private String[] imageNames = new String[]
             {"ak47", "awp", "bazooka","grenade_launcher", "trap_launcher", "flameThrower", "m4a1", "minigun", "pistol", "shotgun", "uzi", "shield",
                     "bullet1","bullet2","bullet3","bullet4","grenade_ammo", "trap", "explosion",
-                    "purple_potion", "teal_potion", "red_potion", "blue_syringe", "kevlar", "plasma_ammo",
+                    "purple_potion", "teal_potion", "red_potion", "blue_syringe", "kevlar", "plasma_ammo", "lightning",
                     "flag1", "flag2", "flag3", "flag4",
                     "ball1", "ball2", "ball3","ball4","ball5","ball6","ball7","ball8",
                     "blue_badge", "crosshair",

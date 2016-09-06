@@ -34,6 +34,10 @@ public class MoveStrategy extends Strategy {
     private boolean shouldFindObjective = false;
     private ArrayList<ArrayList<LinkedList<int[]>>> pathsToNodes = new ArrayList<>();
 
+    public void setCenterReached(boolean centerReached) {
+        isCenterReached = centerReached;
+    }
+
     public void setMap(Map map) {
         this.map = map;
     }

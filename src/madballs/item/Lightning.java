@@ -24,5 +24,6 @@ public class Lightning extends BuffItem{
     public void setDisplayComponents(){
         setColor(Paint.valueOf("yellow"));
         super.setDisplayComponents();
+        setImage("lightning");
     }
 }

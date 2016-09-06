@@ -84,7 +84,7 @@ public class Ball extends GameObject{
         getMoveBehaviour().setSoundFX("footstep2");
         setDieSoundFX("die1");
         setCollisionEffect(new PushBackEffect(-1, null));
-        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new VulnerableBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(null)))));
+        setCollisionPassiveBehaviour(new GetWeaponBehaviour(new PushableBehaviour(new BuffReceivableBehaviour(new VulnerableBehaviour(null)))));
 
         weapon = new Pistol(this, -1);
         SceneManager.getInstance().setZoomOut(weapon.getScope());

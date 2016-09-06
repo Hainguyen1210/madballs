@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class BotPlayer extends Player {
     private static ArrayList<BotPlayer> botPlayers = new ArrayList<>();
-    private final int THOUGHTS_PER_SECONDS = 20;
+    private final double THOUGHTS_PER_SECONDS = 5;
     private BotClient botClient = new BotClient();
     private ArrayList<Strategy> strategies = new ArrayList<>();
     private long lastThoughtTime = 0;
@@ -36,6 +36,15 @@ public class BotPlayer extends Player {
     private final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
+            if (getBall().isDead()){
+                for (Strategy strategy: strategies){
+                    if (strategy instanceof MoveStrategy){
+                        ((MoveStrategy) strategy).setCenterReached(false);
+                        break;
+                    }
+                }
+                return;
+            }
             if (now - lastThoughtTime >= 1000000000 / THOUGHTS_PER_SECONDS){
                 prepareStrategies();
                 lastThoughtTime = now;
