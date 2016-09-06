@@ -12,7 +12,7 @@ import madballs.projectiles.Projectile;
 public class DeflectiveBehaviour extends StackedCollisionPassiveBehaviour {
     private boolean shouldResetDistance = false;
 
-    public DeflectiveBehaviour(boolean shouldResetDistance, CollisionPassiveBehaviour behaviour) {
+    public DeflectiveBehaviour(boolean shouldResetDistance, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.shouldResetDistance = shouldResetDistance;
     }

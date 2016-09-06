@@ -54,13 +54,14 @@ public class TrapLauncher extends Weapon {
     public Projectile forceFire(Integer id){
         generateProjectileCollisionType();
         Projectile projectile = super.forceFire(id);
-        projectile.setHpValue(50);
         if (projectile != null){
+            projectile.setHpValue(50);
+            int ownerID = getOwner().getID();
             projectile.getHp().addListener(new ChangeListener<Number>() {
                 @Override
                 public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                     if (MadBalls.isHost() && (double)newValue <= 0){
-                        new Explosion(projectile.getEnvironment(), projectile.getTranslateX(), projectile.getTranslateY(), 30, getDamage(), 0.5, -1, getOwner().getID());
+                        new Explosion(projectile.getEnvironment(), projectile.getTranslateX(), projectile.getTranslateY(), 30, getDamage(), 0.5, -1, ownerID, getID());
                     }
                 }
             });

@@ -53,6 +53,9 @@ public class Environment {
     public GameObject getObject(Integer id){
         return gameObjects.get(id);
     }
+    public GameObject getDeadObject(Integer id) {
+        return deadGameObjects.get(id);
+    }
     
 //    public int getObjectIndex(GameObject object){
 //        return gameObjects.indexOf(object);

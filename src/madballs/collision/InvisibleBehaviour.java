@@ -7,7 +7,7 @@ import madballs.GameObject;
  * Created by caval on 01/09/2016.
  */
 public class InvisibleBehaviour extends StackedCollisionPassiveBehaviour {
-    public InvisibleBehaviour(CollisionPassiveBehaviour behaviour) {
+    public InvisibleBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

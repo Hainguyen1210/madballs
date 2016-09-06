@@ -28,6 +28,7 @@ public class StateLoader {
     private final LinkedList<GameObjState> localStates = new LinkedList<>();
     private final GameObject gameObject;
     private long lastLoadTime = 0;
+    private boolean wasNotRelevant = false;
     
     public StateLoader(GameObject obj){
         gameObject = obj;
@@ -57,11 +58,16 @@ public class StateLoader {
         if (lastLoadTime == 0) lastLoadTime = now;
         if (MadBalls.isHost()){
             for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                GameObjState lastRelevantState = playerStateMap.get(player);
                 if (player instanceof BotPlayer) continue;
                 if (!player.getRelevancy(gameObject.getTranslateX(), gameObject.getTranslateY(), 500, 500)){
-                    continue;
+                    if (!wasNotRelevant) {
+                        wasNotRelevant = true;
+                    }
+                    else {
+                        continue;
+                    }
                 }
-                GameObjState lastRelevantState = playerStateMap.get(player);
                 if (lastRelevantState != null) {
                     if (lastRelevantState.isSimilarTo(newState)) {
                         continue;
@@ -73,6 +79,7 @@ public class StateLoader {
                 else {
                     playerStateMap.put(player, newState);
                 }
+                wasNotRelevant = false;
                 player.sendData(new StateData(newState));
             }
         }
@@ -162,6 +169,14 @@ public class StateLoader {
             }
             if (gameObject.getOldDirection() != state.getOldDirection()) {
                 gameObject.setOldDirection(state.getOldDirection());
+                isSimilar = false;
+            }
+            if (gameObject.getRotate().getPivotX() != state.getPivotX()){
+                gameObject.getRotate().setPivotX(state.getPivotX());
+                isSimilar = false;
+            }
+            if (gameObject.getRotate().getPivotY() != state.getPivotY()){
+                gameObject.getRotate().setPivotY(state.getPivotY());
                 isSimilar = false;
             }
         }

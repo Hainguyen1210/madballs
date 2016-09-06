@@ -20,5 +20,6 @@ public class PlasmaAmmo extends BuffItem{
     public void setDisplayComponents(){
         setColor(Paint.valueOf("red"));
         super.setDisplayComponents();
+        setImage("plasma_ammo");
     }
 }

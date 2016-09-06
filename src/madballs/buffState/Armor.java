@@ -8,7 +8,7 @@ import madballs.multiplayer.BuffData;
  */
 public class Armor extends BuffState {
     private double value;
-    private double lastHP;
+    private double originHp;
 
     public Armor(BuffState buffState, int duration, double value) {
         super(buffState, duration);
@@ -21,23 +21,25 @@ public class Armor extends BuffState {
 
     @Override
     public double[] getParameters() {
-        return new double[] {value, lastHP};
+        return new double[] {value, originHp};
     }
 
     @Override
     public void recreateFromData(BuffData data) {
         this.value = data.getParameters()[0];
-        this.lastHP = data.getParameters()[1];
+        this.originHp = data.getParameters()[1];
     }
 
     @Override
     public void apply() {
-        lastHP = getBall().getHpValue();
+        getBall().setMaxHp(getBall().getMaxHp() + value);
+        originHp = getBall().getHpValue();
+        getBall().setHpValue(originHp + value);
     }
 
     @Override
     public void fade() {
-
+        getBall().setMaxHp(getBall().getMaxHp() - value);
     }
 
     @Override
@@ -47,15 +49,8 @@ public class Armor extends BuffState {
 
     @Override
     public void uniqueUpdate(long timestamp) {
-        double lostHP = lastHP - getBall().getHpValue();
-        if (lostHP > 0){
-            value -= lostHP;
-            getBall().setHpValue(lastHP);
-            if (value < 0){
-                getBall().setHpValue(lastHP - value);
-                forceFade();
-            }
+        if (getBall().getHpValue() <= originHp){
+            forceFade();
         }
-        lastHP = getBall().getHpValue();
     }
 }

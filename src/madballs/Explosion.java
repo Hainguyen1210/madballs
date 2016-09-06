@@ -14,13 +14,19 @@ public class Explosion extends GameObject {
     private double radius;
     private long explodedTime;
     private double duration;
+    private Integer weaponID;
 
-    public Explosion(Environment environment, double x, double y, double radius, double damage, double duration, Integer id, Integer ballID) {
+    public Integer getWeaponID() {
+        return weaponID;
+    }
+
+    public Explosion(Environment environment, double x, double y, double radius, double damage, double duration, Integer id, Integer ballID, Integer weaponID) {
         super(environment, x, y, false, id);
         SoundStudio.getInstance().playAudio("explosion", x, y, 800, 800);
         explodedTime = getEnvironment().getLastUpdateTime();
         this.radius = radius;
         this.duration = duration;
+        this.weaponID = weaponID;
         setDisplay(id);
         setCollisionEffect(new DamageEffect(damage, 1.1, ballID, null));
         setCollisionPassiveBehaviour(new InvulnerableBehaviour(null));
@@ -35,6 +41,8 @@ public class Explosion extends GameObject {
         Circle circle = new Circle(radius);
         circle.setFill(Paint.valueOf("orange"));
         setHitBox(circle);
+        setImage("explosion");
+        configImageView(-radius, -radius, radius*2, radius*2);
     }
 
     @Override

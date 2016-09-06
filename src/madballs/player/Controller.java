@@ -58,7 +58,7 @@ public class Controller {
         if (ke.isPressed(KeyCode.N) && ke.isPressed(KeyCode.M)) {
             if (MadBalls.isHost() && player == MadBalls.getMultiplayerHandler().getLocalPlayer()){
                 Map map = Map.chooseMap();
-                MadBalls.getMultiplayerHandler().sendData(new MapData(map.getMapNumber()));
+                MadBalls.getMultiplayerHandler().sendData(new MapData(map));
                 for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
                     player.setTeamNum(0);
                     player.setReady(player == MadBalls.getMultiplayerHandler().getLocalPlayer());

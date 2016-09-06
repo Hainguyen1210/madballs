@@ -14,7 +14,7 @@ import madballs.GameObject;
  */
 public class InvulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
-    public InvulnerableBehaviour(CollisionPassiveBehaviour behaviour) {
+    public InvulnerableBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

@@ -10,7 +10,7 @@ public class QuantitativeVulnerableBehaviour extends VulnerableBehaviour {
     private int counter = 1;
     private int quantity;
 
-    public QuantitativeVulnerableBehaviour(int quantity, CollisionPassiveBehaviour behaviour) {
+    public QuantitativeVulnerableBehaviour(int quantity, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.quantity = quantity;
     }

@@ -7,22 +7,23 @@ package madballs.item;
 
 import javafx.scene.paint.Paint;
 import madballs.Environment;
-import madballs.buffState.Frenzy;
+import madballs.buffState.Speed;
 import madballs.map.SpawnLocation;
+
 
 /**
  *
- * @author chim-
+ * @author haing
  */
-public class SpicyBiscuit extends BuffItem{
-
-    public SpicyBiscuit(Environment environment, SpawnLocation spawnLocation, Integer id) {
-        super(environment, spawnLocation, new Frenzy(null, 5, 1.5), id);
+public class Lightning extends BuffItem{
+    public Lightning(Environment environment, SpawnLocation spawnLocation, Integer id) {
+        super(environment, spawnLocation, new Speed(null, 5, 50), id);
     }
     
     @Override
     public void setDisplayComponents(){
-        setColor(Paint.valueOf("blue"));
+        setColor(Paint.valueOf("yellow"));
         super.setDisplayComponents();
+        setImage("lightning");
     }
 }

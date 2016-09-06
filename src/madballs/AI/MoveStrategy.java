@@ -34,10 +34,17 @@ public class MoveStrategy extends Strategy {
     private boolean shouldFindObjective = false;
     private ArrayList<ArrayList<LinkedList<int[]>>> pathsToNodes = new ArrayList<>();
 
-    public MoveStrategy(BotPlayer bot, Map map) {
+    public void setCenterReached(boolean centerReached) {
+        isCenterReached = centerReached;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
+    public MoveStrategy(BotPlayer bot) {
         super(bot);
         setImportance(6);
-        this.map = map;
     }
 
     @Override

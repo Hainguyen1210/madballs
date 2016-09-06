@@ -18,7 +18,7 @@ import madballs.multiplayer.BuffData;
  */
 public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
     
-    public BuffReceivableBehaviour(CollisionPassiveBehaviour behaviour) {
+    public BuffReceivableBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
     
@@ -27,7 +27,7 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
         GiveBuffEffect receivedEffect = (GiveBuffEffect)effect;
         BuffState buffState = receivedEffect.getBuffState();
         buffState.castOn((Ball)target, 0);
-        if (MadBalls.isHost()) MadBalls.getMultiplayerHandler().sendData(new BuffData(buffState));
+        MadBalls.getMultiplayerHandler().sendData(new BuffData(buffState));
         ((Ball)target).addEffectState(buffState);
     }
 

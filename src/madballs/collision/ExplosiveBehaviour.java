@@ -9,6 +9,7 @@ import madballs.Explosion;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.multiplayer.SpawnData;
+import madballs.projectiles.Projectile;
 
 /**
  * Created by caval on 16/08/2016.
@@ -18,7 +19,7 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
     private DoubleProperty damage = new SimpleDoubleProperty();
     private Integer ballID;
 
-    public ExplosiveBehaviour(double radius, double damage, double duration, Integer ballID, CollisionPassiveBehaviour behaviour) {
+    public ExplosiveBehaviour(double radius, double damage, double duration, Integer ballID, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.radius = radius;
         this.damage.set(damage);
@@ -26,7 +27,7 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
         this.duration = duration;
     }
 
-    public ExplosiveBehaviour(double radius, DoubleProperty damageProperty, double duration, Integer ballID, CollisionPassiveBehaviour behaviour) {
+    public ExplosiveBehaviour(double radius, DoubleProperty damageProperty, double duration, Integer ballID, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.radius = radius;
         this.damage.bind(damageProperty);
@@ -37,7 +38,10 @@ public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {
     @Override
     public void uniqueGetAffected(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
         if (MadBalls.isHost()){
-            Explosion explosion = new Explosion(target.getEnvironment(), target.getTranslateX(), target.getTranslateY(), radius, damage.get(), duration, -1, ballID);
+            Explosion explosion = new Explosion(
+                    target.getEnvironment(), target.getTranslateX(), target.getTranslateY(),
+                    radius, damage.get(), duration,
+                    -1, ballID, ((Projectile)target).getSourceWeapon().getID());
         }
     }
 

@@ -10,7 +10,7 @@ import madballs.map.SpawnLocation;
 public class ReleaseSpawnLocation extends StackedCollisionPassiveBehaviour {
     private SpawnLocation spawnLocation;
 
-    public ReleaseSpawnLocation(SpawnLocation spawnLocation, CollisionPassiveBehaviour behaviour) {
+    public ReleaseSpawnLocation(SpawnLocation spawnLocation, StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
         this.spawnLocation = spawnLocation;
     }

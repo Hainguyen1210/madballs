@@ -9,8 +9,8 @@ import madballs.map.SpawnLocation;
 /**
  * Created by caval on 01/09/2016.
  */
-public class HeavyPlate extends BuffItem {
-    public HeavyPlate(Environment environment, SpawnLocation spawnLocation, Integer id) {
+public class HeavyKevlar extends BuffItem {
+    public HeavyKevlar(Environment environment, SpawnLocation spawnLocation, Integer id) {
         super(environment, spawnLocation, new Speed(new Armor(null, 8, 100), 8, -5*2.5), id);
     }
 
@@ -18,5 +18,6 @@ public class HeavyPlate extends BuffItem {
     public void setDisplayComponents(){
         setColor(Color.BLACK);
         super.setDisplayComponents();
+        setImage("kevlar");
     }
 }

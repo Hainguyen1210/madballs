@@ -6,8 +6,9 @@
 package madballs;
 
 import javafx.beans.binding.Bindings;
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.scene.CacheHint;
-import javafx.scene.image.Image;
 import madballs.AI.BotPlayer;
 import madballs.collision.CollisionPassiveBehaviour;
 import madballs.collision.CollisionEffect;
@@ -24,7 +25,6 @@ import javafx.scene.transform.Rotate;
 import madballs.gameFX.SoundStudio;
 import madballs.moveBehaviour.MoveBehaviour;
 import madballs.player.Player;
-import madballs.projectiles.Projectile;
 
 /**
  *
@@ -51,7 +51,7 @@ public abstract class GameObject {
     private DoubleProperty hp = new SimpleDoubleProperty(100);
     private double maxHp = 100;
     private boolean isMobile = true;
-    private boolean isDead = false;
+    private BooleanProperty deadProperty = new SimpleBooleanProperty(false);
     
     private StateLoader stateLoader;
     private MoveBehaviour moveBehaviour;
@@ -70,7 +70,11 @@ public abstract class GameObject {
     }
     
     public boolean isDead(){
-        return isDead;
+        return deadProperty.get();
+    }
+
+    public BooleanProperty deadProperty() {
+        return deadProperty;
     }
 
     public boolean isMobile() {
@@ -112,41 +116,64 @@ public abstract class GameObject {
     public GameObject(GameObject owner, double x, double y, boolean isSettingDisplay, Integer id){
 //        System.out.println("2" + this.getClass());
         stateLoader = new StateLoader(this);
-        owner.child = this;
-        this.owner = owner;
+//        owner.child = this;
+//        this.owner = owner;
         
         distanceToOwner = Math.sqrt(x * x + y * y);
-        
-        translateX.bind(Bindings.add(x, owner.translateX));
-        translateY.bind(Bindings.add(y, owner.translateY));
-        
-        rotation = new Rotate(0 , -x , -y);
-        rotation.angleProperty().bind(owner.rotation.angleProperty());
-        environment = owner.getEnvironment();
+
+        rotation = new Rotate(0);
+
+        setOwner(owner, x, y);
         
         if (isSettingDisplay) setDisplay(id);
     }
     
     public void setOwner(GameObject newOwner, double x, double y){
-        System.out.println(x);
-        System.out.println(y);
-        System.out.println("owner");
-        System.out.println(owner.getClass());
-        System.out.println(newOwner.getClass());
-        System.out.println(environment.getLastUpdateTime());
         if (owner != null){
             owner.child = null;
         }
-        newOwner.child = this;
-        owner = newOwner;
-        
-        translateX.bind(Bindings.add(x, owner.translateX));
-        translateY.bind(Bindings.add(y, owner.translateY));
-        
-//        rotation = new Rotate(0 , -x , -y);
-        rotation.angleProperty().bind(owner.rotation.angleProperty());
-        environment = owner.getEnvironment();
+        if (newOwner != null){
+            newOwner.child = this;
+            owner = newOwner;
 
+            bindDisplay(owner, x, y);
+
+            environment = owner.getEnvironment();
+        }
+        else {
+            owner = null;
+            translateX.unbind();
+            translateY.unbind();
+            rotation.angleProperty().unbind();
+            setTranslateX(x);
+            setTranslateY(y);
+            rotation.setAngle(0);
+        }
+    }
+
+    public void bindDisplay(GameObject obj, double x, double y){
+        if (translateX. isBound()) translateX.unbind();
+        if (translateY.isBound()) translateY.unbind();
+        if (rotation.angleProperty().isBound()) rotation.angleProperty().unbind();
+
+        owner = obj;
+
+        if (obj != null){
+            translateX.bind(Bindings.add(x, obj.translateX));
+            translateY.bind(Bindings.add(y, obj.translateY));
+
+//        rotation = new Rotate(0 , -x , -y);
+            rotation.setPivotX(-x);
+            rotation.setPivotY(-y);
+            rotation.angleProperty().bind(obj.rotation.angleProperty());
+        }
+    }
+
+    public void unbindDisplay(){
+        owner = null;
+        translateX.unbind();
+        translateY.unbind();
+        rotation.angleProperty().unbind();
     }
 
     public Environment getEnvironment() {
@@ -270,11 +297,6 @@ public abstract class GameObject {
         return imageView;
     }
 
-
-    public void setImageView(ImageView imageView){
-        this.imageView = imageView;
-    }
-
     public Group getDisplay() {
         return display;
     }
@@ -288,11 +310,11 @@ public abstract class GameObject {
     }
     
     public void setRotate(double direction){
-        double angle = Math.toDegrees(direction);
         if (owner != null) {
-            owner.rotation.setAngle(angle);
+            owner.setRotate(direction);
         }
         else {
+            double angle = Math.toDegrees(direction);
             rotation.setAngle(angle);
         }
     }
@@ -363,6 +385,7 @@ public abstract class GameObject {
 
     public void setMaxHp(double maxHp) {
         this.maxHp = maxHp;
+        if (getHpValue() > maxHp) setHpValue(maxHp);
     }
 
     public void setTranslateX(double newX) {
@@ -505,15 +528,15 @@ public abstract class GameObject {
           }
         });
 //        hitBox.setVisible(false);
-//        hitBox.setOpacity(0);
+        hitBox.setOpacity(0);
         hitBox.setCache(true);
         hitBox.setCacheHint(CacheHint.SPEED);
         environment.registerGameObj(this, true, id);
     }
 
-    public void configImageView(double translateX, double translateY, double height, double width){
-        this.imageView.setTranslateX(translateX);
-        this.imageView.setTranslateY(translateY);
+    public void configImageView(double relativeX, double relativeY, double height, double width){
+        this.imageView.setTranslateX(relativeX);
+        this.imageView.setTranslateY(relativeY);
         this.imageView.setFitHeight(height);
         this.imageView.setFitWidth(width);
     }
@@ -532,13 +555,12 @@ public abstract class GameObject {
     }
 
     public void revive(){
-        if (isDead == true){
-            isDead = false;
+        if (isDead()){
+            deadProperty.set(false);
             if (!environment.getDisplay().getChildren().contains(display)){
                 environment.getDisplay().getChildren().add(display);
             }
         }
-
     }
     
     public void setDead(){
@@ -546,7 +568,8 @@ public abstract class GameObject {
         if (dieSoundFX != null) {
             SoundStudio.getInstance().playAudio(dieSoundFX, getTranslateX(), getTranslateY(), 500, 500);
         }
-        isDead = true;
+        unbindDisplay();
+        deadProperty.set(true);
 //        if (owner != null) {
 //            owner.child = null;
 //        }
@@ -557,6 +580,7 @@ public abstract class GameObject {
         if (this instanceof Ball && !MadBalls.isHost()) return;
         setDead();
         if (child != null && !child.isDead()) {
+            child.owner = null;
             child.die();
         }
 //        if (MadBalls.isHost()){
@@ -579,7 +603,7 @@ public abstract class GameObject {
     }
     
     public void update(long now){
-        if (!isDead) {
+        if (!isDead()) {
             if (moveBehaviour != null) moveBehaviour.move(now);
             updateUnique(now);
         }

@@ -7,13 +7,15 @@ package madballs.collision;
 
 import javafx.scene.shape.Shape;
 import madballs.Ball;
+import madballs.Explosion;
 import madballs.GameObject;
 import madballs.MadBalls;
 import madballs.gameFX.SoundStudio;
-import madballs.multiplayer.KillData;
 import madballs.multiplayer.PlayerData;
 import madballs.player.Player;
+import madballs.projectiles.Projectile;
 import madballs.scenes.SceneManager;
+import madballs.wearables.Weapon;
 
 /**
  *
@@ -21,7 +23,7 @@ import madballs.scenes.SceneManager;
  */
 public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
-    public VulnerableBehaviour(CollisionPassiveBehaviour behaviour) {
+    public VulnerableBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 
@@ -38,17 +40,32 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
                 if (target instanceof Ball && damageEffect.getBallID() >= 0){
                     Ball sourceBall = (Ball)(source.getEnvironment().getObject(damageEffect.getBallID()));
                     Ball targetBall = (Ball) target;
+                    if (sourceBall == null){
+                        sourceBall = (Ball) source.getEnvironment().getDeadObject(damageEffect.getBallID());
+                    }
                     int newKill =  sourceBall.getPlayer().getTeamNum() == targetBall.getPlayer().getTeamNum() ? -1 : 1;
                     sourceBall.getPlayer().setKillsCount(sourceBall.getPlayer().getKillsCount() + newKill);
                     targetBall.getPlayer().setDeathsCount(targetBall.getPlayer().getDeathsCount() + 1);
-                    SceneManager.getInstance().displayKill(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName());
-                    MadBalls.getMultiplayerHandler().sendData(new KillData(sourceBall.getID(), targetBall.getID(), sourceBall.getWeapon().getImageName()));
+                    String weaponImageName = "pistol";
+                    if (source instanceof Projectile){
+                        weaponImageName = ((Projectile)source).getSourceWeapon().getImageName();
+                    }
+                    else if (source instanceof Explosion) {
+                        Weapon sourceWeapon = (Weapon) source.getEnvironment().getObject(((Explosion) source).getWeaponID());
+                        if (sourceWeapon == null){
+                            sourceWeapon = (Weapon) source.getEnvironment().getDeadObject(((Explosion) source).getWeaponID());
+                        }
+                        weaponImageName = sourceWeapon.getImageName();
+                    }
+                    SceneManager.getInstance().announceKill(sourceBall.getID(), targetBall.getID(), weaponImageName);
                     sourceBall.getPlayer().updateRanking();
+                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
+                        MadBalls.getMultiplayerHandler().sendData(new PlayerData(player));
+                    }
+                    MadBalls.getGameMode().updateKill(sourceBall.getPlayer(), targetBall.getPlayer());
 //                    for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
 //                        System.out.println("ranked" + player.getName() + player.getRanking());
 //                    }
-                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(sourceBall.getPlayer()));
-                    MadBalls.getMultiplayerHandler().sendData(new PlayerData(targetBall.getPlayer()));
                 }
             }
         }
@@ -56,7 +73,7 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
 
     @Override
     protected boolean isConditionMet(GameObject source, GameObject target, StackedCollisionEffect effect, Shape collisionShape) {
-        return effect instanceof DamageEffect;
+        return effect instanceof DamageEffect && !target.isDead();
     }
 
 }

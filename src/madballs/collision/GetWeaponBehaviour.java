@@ -18,7 +18,7 @@ import madballs.wearables.Weapon;
  */
 public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{
   
-  public GetWeaponBehaviour(CollisionPassiveBehaviour behaviour) {
+  public GetWeaponBehaviour(StackedCollisionPassiveBehaviour behaviour) {
     super(behaviour);
   }
 

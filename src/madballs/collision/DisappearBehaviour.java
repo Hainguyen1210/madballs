@@ -14,7 +14,7 @@ import madballs.GameObject;
  */
 public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{
 
-    public DisappearBehaviour(CollisionPassiveBehaviour behaviour) {
+    public DisappearBehaviour(StackedCollisionPassiveBehaviour behaviour) {
         super(behaviour);
     }
 

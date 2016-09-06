@@ -16,7 +16,7 @@ import java.util.*;
  */
 public class BotPlayer extends Player {
     private static ArrayList<BotPlayer> botPlayers = new ArrayList<>();
-    private final int THOUGHTS_PER_SECONDS = 20;
+    private final double THOUGHTS_PER_SECONDS = 5;
     private BotClient botClient = new BotClient();
     private ArrayList<Strategy> strategies = new ArrayList<>();
     private long lastThoughtTime = 0;
@@ -36,16 +36,23 @@ public class BotPlayer extends Player {
     private final AnimationTimer animation = new AnimationTimer() {
         @Override
         public void handle(long now) {
+            if (getBall().isDead()){
+                for (Strategy strategy: strategies){
+                    if (strategy instanceof MoveStrategy){
+                        ((MoveStrategy) strategy).setCenterReached(false);
+                        break;
+                    }
+                }
+                return;
+            }
             if (now - lastThoughtTime >= 1000000000 / THOUGHTS_PER_SECONDS){
                 prepareStrategies();
                 lastThoughtTime = now;
                 Environment environment = getBall().getEnvironment();
-                int counter = 0;
                 for (Integer id: getRelevantObjIDs()){
                     for (Strategy strategy: strategies){
                         GameObject object = environment.getObject(id);
                         if (object != null && object != getBall() && object != getBall().getWeapon()){
-                            if (object instanceof Projectile) counter++;
                             strategy.consider(object);
                         }
                     }
@@ -83,7 +90,11 @@ public class BotPlayer extends Player {
     }
 
     public void play(){
-        strategies.add(new MoveStrategy(this, getBall().getEnvironment().getMap()));
+        for (Strategy strategy: strategies){
+            if (strategy instanceof MoveStrategy){
+                ((MoveStrategy) strategy).setMap(getBall().getEnvironment().getMap());
+            }
+        }
         animation.start();
     }
 
@@ -99,6 +110,7 @@ public class BotPlayer extends Player {
         strategies.add(new DodgeStrategy(this));
         strategies.add(new AvoidObstacleStrategy(this));
         strategies.add(new AttackStrategy(this));
+        strategies.add(new MoveStrategy(this));
     }
 
     @Override

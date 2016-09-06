@@ -31,11 +31,10 @@ import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import javafx.stage.Screen;
 import javafx.util.Duration;
-import madballs.Ball;
-import madballs.GameObject;
-import madballs.ImageGenerator;
-import madballs.MadBalls;
+import madballs.*;
 import madballs.buffState.BuffState;
+import madballs.multiplayer.AnnouncementData;
+import madballs.multiplayer.ScoreData;
 import madballs.player.Player;
 
 import java.util.HashMap;
@@ -48,15 +47,14 @@ import java.util.WeakHashMap;
  */
 public class SceneManager {
     public static final double NUM_MAP_PARTS = 3;
-    public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE};
+    public static final Color[] teamColors = new Color[]{Color.BLUE, Color.RED, Color.PINK, Color.GREEN, Color.BROWN, Color.ORANGE, Color.BLACK, Color.PURPLE};
     private static SceneManager instance = new SceneManager();
     private FlowPane gameInfoDisplay;
     private ScrollPane scoreBoardContainer;
     private GridPane scoreBoardGrid;
     private Map<Player, HBox> scoreBoard;
-    private VBox killsBox;
-    private int killsRowCounter = 0;
-    private Map<Integer, Integer> teamScoreBoard = new WeakHashMap<>();
+    private VBox announcementBoard;
+    private Map<Integer, IntegerProperty> teamScoreBoard = new WeakHashMap<>();
     private HBox teamScoresDisplay;
     private ProgressBar hpBar = new ProgressBar();
     private Label weaponLabel = new Label();
@@ -77,7 +75,7 @@ public class SceneManager {
         return bannerLabel;
     }
 
-    public Map<Integer, Integer> getTeamScoreBoard() {
+    public Map<Integer, IntegerProperty> getTeamScoreBoard() {
         return teamScoreBoard;
     }
 
@@ -162,11 +160,11 @@ public class SceneManager {
 //        gameInfoDisplay.setTranslateY(MadBalls.getMainScene().getHeight() - 30);
 //        gameInfoDisplay.setTranslateZ(-1);
 
-        killsBox = new VBox(10);
-        killsBox.setPrefWidth(MadBalls.getAnimationScene().getWidth() / 3);
-        killsBox.setTranslateX(MadBalls.getAnimationScene().getWidth() * 2 / 3);
-        killsBox.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
-        killsBox.setAlignment(Pos.CENTER);
+        announcementBoard = new VBox(10);
+        announcementBoard.setPrefWidth(MadBalls.getAnimationScene().getWidth() / 3);
+        announcementBoard.setTranslateX(MadBalls.getAnimationScene().getWidth() * 2 / 3);
+        announcementBoard.setStyle("-fx-background-color: rgba(255, 255, 255, 0.8);");
+        announcementBoard.setAlignment(Pos.CENTER);
 
         teamScoresDisplay = new HBox(20);
         teamScoresDisplay.setPrefHeight(40);
@@ -183,16 +181,18 @@ public class SceneManager {
         reloadScoreBoard();
 
         root.setTranslateZ(-1);
-        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer, banner, killsBox);
+        root.getChildren().addAll(gameInfoDisplay, scoreBoardContainer, banner, announcementBoard);
     }
 
-    public void displayKill(Integer sourceID, Integer targetID, String weaponImage){
+    public void announceKill(Integer sourceID, Integer targetID, String weaponImage){
+        MadBalls.getMultiplayerHandler().sendData(new AnnouncementData(sourceID, targetID, weaponImage, "kill"));
         Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
-        Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
 
         Label sourceName = new Label(source.getPlayer().getName());
         sourceName.setFont(new Font(20));
         sourceName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
+
+        Ball target = (Ball) MadBalls.getMainEnvironment().getObject(targetID);
 
         Label targetName = new Label(target.getPlayer().getName());
         targetName.setFont(new Font(20));
@@ -202,20 +202,48 @@ public class SceneManager {
         weaponImageView.setFitHeight(10);
         weaponImageView.setPreserveRatio(true);
 
-        HBox killInfo = new HBox(10, sourceName, weaponImageView, targetName);
-        killInfo.setAlignment(Pos.CENTER);
-        killsBox.getChildren().add(killInfo);
+        HBox announcement = new HBox(10, sourceName, weaponImageView, targetName);
+        announcement.setAlignment(Pos.CENTER);
 
-        while (killsBox.getChildren().size() > 5){
-            killsBox.getChildren().remove(0);
+        displayAnnnouncement(announcement);
+    }
+
+    public void announceFlag(Integer ballID, Integer flagID, String action){
+        MadBalls.getMultiplayerHandler().sendData(new AnnouncementData(ballID, flagID, action, "flag"));
+        Ball source = (Ball) MadBalls.getMainEnvironment().getObject(ballID);
+
+        Label ballName = new Label(source.getPlayer().getName());
+        ballName.setFont(new Font(20));
+        ballName.setTextFill(teamColors[source.getPlayer().getTeamNum() - 1]);
+
+        Label actionLabel = new Label(action);
+
+        Flag flag = (Flag) MadBalls.getMainEnvironment().getObject(flagID);
+
+        Label flagName = new Label(String.format("team %d's flag", flag.getTeamNum()));
+        flagName.setFont(new Font(20));
+        flagName.setTextFill(teamColors[flag.getTeamNum() - 1]);
+
+
+        HBox announcement = new HBox(10, ballName, actionLabel, flagName);
+        announcement.setAlignment(Pos.CENTER);
+
+        displayAnnnouncement(announcement);
+    }
+
+    public void displayAnnnouncement(HBox announcement){
+        announcementBoard.getChildren().add(announcement);
+
+        while (announcementBoard.getChildren().size() > 5){
+            announcementBoard.getChildren().remove(0);
         }
 
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(2), new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                VBox vBox = killsBox;
-                if (vBox.getChildren().contains(killInfo)){
-                    vBox.getChildren().remove(killInfo);
+                VBox vBox = announcementBoard;
+                if (vBox.getChildren().contains(announcement)){
+                    vBox.getChildren().remove(announcement);
                 }
             }
         }));
@@ -257,9 +285,10 @@ public class SceneManager {
     public void reloadTeamScores(){
         teamScoresDisplay.getChildren().clear();
         for (Integer teamNum : teamScoreBoard.keySet()){
-            Label score = new Label(String.format("%d", teamScoreBoard.get(teamNum)));
-            System.out.println("score" + teamScoreBoard.get(teamNum));
-            System.out.println(teamNum);
+            Label score = new Label();
+            score.textProperty().bind(Bindings.format("%d", teamScoreBoard.get(teamNum)));
+//            System.out.println("score" + teamScoreBoard.get(teamNum));
+//            System.out.println(teamNum);
             score.setFont(new Font(20));
             score.setTextFill(teamColors[teamNum-1]);
             teamScoresDisplay.getChildren().add(score);
@@ -268,18 +297,20 @@ public class SceneManager {
     }
 
     public void addScore(int teamNum, int additionalScore){
-        int oldScore = teamScoreBoard.get(teamNum);
-        System.out.println("oldScore" + oldScore);
-        teamScoreBoard.replace(teamNum, oldScore + additionalScore);
-        System.out.println("newScore" + teamScoreBoard.get(teamNum));
-        reloadTeamScores();
+        teamScoreBoard.get(teamNum).set(teamScoreBoard.get(teamNum).get() + additionalScore);
+        if (MadBalls.isHost()) MadBalls.getMultiplayerHandler().sendData(new ScoreData(teamNum, additionalScore));
+//        int oldScore = teamScoreBoard.get(teamNum);
+////        System.out.println("oldScore" + oldScore);
+//        teamScoreBoard.replace(teamNum, oldScore + additionalScore);
+////        System.out.println("newScore" + teamScoreBoard.get(teamNum));
+//        reloadTeamScores();
     }
 
     public void reloadScoreBoard(){
         scoreBoard = new WeakHashMap<>();
         for (Player player : MadBalls.getMultiplayerHandler().getPlayers()){
             if (!teamScoreBoard.containsKey(player.getTeamNum())){
-                teamScoreBoard.put(player.getTeamNum(), 0);
+                teamScoreBoard.put(player.getTeamNum(), new SimpleIntegerProperty(0));
             }
 
             HBox playerHBox = new HBox(15);

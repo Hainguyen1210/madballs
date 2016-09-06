@@ -25,5 +25,6 @@ public class FullPotion extends BuffItem{
     public void setDisplayComponents(){
         setColor(Paint.valueOf("green"));
         super.setDisplayComponents();
+        setImage("red_potion");
     }
 }
