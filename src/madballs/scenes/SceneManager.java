@@ -20,10 +20,12 @@ import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.Group;
+import javafx.scene.Node;
 import javafx.scene.PerspectiveCamera;
 import javafx.scene.control.Label;
 import javafx.scene.control.ProgressBar;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
@@ -198,9 +200,17 @@ public class SceneManager {
         targetName.setFont(new Font(20));
         targetName.setTextFill(teamColors[target.getPlayer().getTeamNum() - 1]);
 
-        ImageView weaponImageView = new ImageView(ImageGenerator.getInstance().getImage(weaponImage));
-        weaponImageView.setFitHeight(10);
-        weaponImageView.setPreserveRatio(true);
+        Image image = ImageGenerator.getInstance().getImage(weaponImage);
+        Node weaponImageView;
+        if (image != null){
+            weaponImageView = new ImageView(image);
+            ((ImageView)weaponImageView).setFitHeight(10);
+            ((ImageView)weaponImageView).setPreserveRatio(true);
+        }
+        else {
+            weaponImageView = new Label(weaponImage);
+        }
+
 
         HBox announcement = new HBox(10, sourceName, weaponImageView, targetName);
         announcement.setAlignment(Pos.CENTER);

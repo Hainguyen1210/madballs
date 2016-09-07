@@ -16,7 +16,9 @@ import javafx.scene.effect.DropShadow;
 import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import madballs.AI.BotPlayer;
 import madballs.buffState.Invulnerable;
+import madballs.buffState.NewBorn;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
 import madballs.collision.GetWeaponBehaviour;
@@ -113,6 +115,9 @@ public class Ball extends GameObject{
                 SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
             }
+            if (getPlayer() instanceof BotPlayer){
+                getPlayer().getController().setScale(SceneManager.getInstance().getScale() * MadBalls.getMultiplayerHandler().getLocalPlayer().getBall().getWeapon().getScope() / weapon.getScope());
+            }
 //            System.out.println("Get weapon " + weaponClass);
 //            System.out.println("new weap: " + weapon.getID());
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
@@ -126,7 +131,7 @@ public class Ball extends GameObject{
         super.revive();
         if (isReviving) {
             if (player.isLocal()) SceneManager.getInstance().bindCamera(this);
-            BuffState buffState = new Invulnerable(null, 3);
+            BuffState buffState = new NewBorn(null, 3);
             buffState.castOn(this, 0);
             addEffectState(buffState);
         }

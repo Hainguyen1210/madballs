@@ -28,6 +28,10 @@ public class Controller {
         return scale;
     }
 
+    public void setScale(double scale) {
+        this.scale = scale;
+    }
+
     public double getSceneWidth() {
         return sceneWidth;
     }

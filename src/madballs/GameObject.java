@@ -27,7 +27,10 @@ import madballs.moveBehaviour.MoveBehaviour;
 import madballs.player.Player;
 
 /**
- *
+ *  This class represents the core objects of the game
+ *  GameObject must be created within an Environment so that it can be displayed, managed, and interact with other GameObjects
+ *  Other properties: coordinates, rotation transformation, display, owner and/or child
+ *  Each GameObject has its own effect and behaviour when colliding with other objects
  * @author Caval
  */
 public abstract class GameObject {
@@ -127,11 +130,19 @@ public abstract class GameObject {
         
         if (isSettingDisplay) setDisplay(id);
     }
-    
+
+    /**
+     * change the owner of the GameObject
+     * @param newOwner the GameObject to be the new owner
+     * @param x object's x relative to the new owner
+     * @param y object's y relative to the new owner
+     */
     public void setOwner(GameObject newOwner, double x, double y){
+        // clear the old owner's child reference
         if (owner != null){
             owner.child = null;
         }
+        // bind to the new owner
         if (newOwner != null){
             newOwner.child = this;
             owner = newOwner;
@@ -140,6 +151,7 @@ public abstract class GameObject {
 
             environment = owner.getEnvironment();
         }
+        // if the newOwner argument is null, then make the object orphan with the new coordinates x and y
         else {
             owner = null;
             translateX.unbind();
@@ -151,6 +163,12 @@ public abstract class GameObject {
         }
     }
 
+    /**
+     * bind the coordinates and rotation of the object to another
+     * @param obj GameObject to bind to
+     * @param x relative x to the binding obj
+     * @param y relative y to the binding obj
+     */
     public void bindDisplay(GameObject obj, double x, double y){
         if (translateX. isBound()) translateX.unbind();
         if (translateY.isBound()) translateY.unbind();
@@ -169,6 +187,9 @@ public abstract class GameObject {
         }
     }
 
+    /**
+     * unbind the coordinates and rotation of the object
+     */
     public void unbindDisplay(){
         owner = null;
         translateX.unbind();
@@ -231,7 +252,12 @@ public abstract class GameObject {
             return 0;
         }
     }
-    
+
+    /**
+     * get the coordinates of the object with the rotation put into consideration
+     * (the translateX and translateY of the object do not change when the rotation changes)
+     * @return
+     */
     public double[] getRealCoordinate(){
         double rotateDirection = Math.toRadians(getRotateAngle());
         double xFromPivot = -getRotate().getPivotX();
@@ -492,7 +518,10 @@ public abstract class GameObject {
     }
     
     /**
-     * put all the display component inside the display HBox
+     * put all the display components inside the display Group,
+     * the display Group consists of:
+     *       an AnimationGroup displaying the visualisation of the object itself,
+     *       a StatusGroup displaying the status of the object
      */
     public void setDisplay(Integer id){
         display = new Group();
@@ -534,6 +563,13 @@ public abstract class GameObject {
         environment.registerGameObj(this, true, id);
     }
 
+    /**
+     * adjust the ImageView size and position
+     * @param relativeX
+     * @param relativeY
+     * @param height
+     * @param width
+     */
     public void configImageView(double relativeX, double relativeY, double height, double width){
         this.imageView.setTranslateX(relativeX);
         this.imageView.setTranslateY(relativeY);
@@ -554,6 +590,9 @@ public abstract class GameObject {
         return boundsRectangle;
     }
 
+    /**
+     * return the obj to life
+     */
     public void revive(){
         if (isDead()){
             deadProperty.set(false);
@@ -562,7 +601,12 @@ public abstract class GameObject {
             }
         }
     }
-    
+
+    /**
+     * forcefully kills the object
+     * this method must only be called on the client machine when the obj is certainly dead on the server machine
+     * (see die() for comparison)
+     */
     public void setDead(){
 //        System.out.println("remove " + getClass() + getID());
         if (dieSoundFX != null) {
@@ -575,7 +619,12 @@ public abstract class GameObject {
 //        }
         getEnvironment().removeGameObj(this);
     }
-    
+
+    /**
+     * the natural dying method of the obj.
+     * This action cannot be called by the client machine
+     * because it is very costly and risky to resurrect a dead obj on the client machine that is not dead on the server machine
+     */
     public void die(){
         if (this instanceof Ball && !MadBalls.isHost()) return;
         setDead();
@@ -624,6 +673,9 @@ public abstract class GameObject {
         }
     }
 
+    /**
+     * update the BotPlayer whether this obj is relevant to the bot
+     */
     private void updateBotRelevancy(){
         for (BotPlayer bot : BotPlayer.getBotPlayers()){
             bot.checkRelevancy(this, 0, 0);

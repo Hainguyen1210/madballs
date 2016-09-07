@@ -57,6 +57,9 @@ public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{
                         }
                         weaponImageName = sourceWeapon.getImageName();
                     }
+                    else if (source instanceof Ball){
+                        weaponImageName = "smashed the head of";
+                    }
                     SceneManager.getInstance().announceKill(sourceBall.getID(), targetBall.getID(), weaponImageName);
                     sourceBall.getPlayer().updateRanking();
                     for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
