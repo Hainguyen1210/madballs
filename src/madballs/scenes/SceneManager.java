@@ -189,6 +189,9 @@ public class SceneManager {
     public void announceKill(Integer sourceID, Integer targetID, String weaponImage){
         MadBalls.getMultiplayerHandler().sendData(new AnnouncementData(sourceID, targetID, weaponImage, "kill"));
         Ball source = (Ball) MadBalls.getMainEnvironment().getObject(sourceID);
+        if (source == null){
+            source = (Ball) MadBalls.getMainEnvironment().getDeadObject(sourceID);
+        }
 
         Label sourceName = new Label(source.getPlayer().getName());
         sourceName.setFont(new Font(20));

@@ -3,9 +3,12 @@ package madballs.wearables;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import madballs.*;
 import madballs.collision.*;
+import madballs.gameFX.SoundStudio;
+import madballs.multiplayer.FireData;
 import madballs.projectiles.Projectile;
 
 /**
@@ -53,7 +56,13 @@ public class TrapLauncher extends Weapon {
     @Override
     public Projectile forceFire(Integer id){
         generateProjectileCollisionType();
-        Projectile projectile = super.forceFire(id);
+        if (getFireSoundFX() != null) {
+            SoundStudio.getInstance().playAudio(getFireSoundFX(), getTranslateX(), getTranslateY(), 150*getScope(), 150*getScope());
+        }
+        Projectile projectile = new Projectile(this, getRange(), new Circle(getProjectileHitBoxSize(), getProjectileColor()), getProjectileImageName(), id);
+        if (MadBalls.isHost()){
+            MadBalls.getMultiplayerHandler().sendData(new FireData(getID(), projectile.getID(), -1));
+        }
         if (projectile != null){
             projectile.setHpValue(50);
             int ownerID = getOwner().getID();
@@ -66,6 +75,7 @@ public class TrapLauncher extends Weapon {
                 }
             });
         }
+        checkOutOfAmmo();
         return projectile;
     }
 

@@ -645,10 +645,10 @@ public abstract class GameObject {
     }
 
     public void dieWithOwner(){
-        die();
         if (owner != null){
             owner.dieWithOwner();
         }
+        die();
     }
     
     public void update(long now){

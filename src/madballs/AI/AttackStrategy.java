@@ -57,7 +57,7 @@ public class AttackStrategy extends Strategy {
 
     @Override
     public void consider(GameObject obj) {
-        if (weapon == null || weapon instanceof TrapLauncher) return;
+        if (weapon == null) return;
         if (obj instanceof Ball){
             // find Ball target
             Ball target = (Ball) obj;
@@ -88,7 +88,9 @@ public class AttackStrategy extends Strategy {
             double diffY = targetY - weaponY;
             double distance = Math.sqrt(diffX * diffX + diffY * diffY);
             double angle = Math.toDegrees(Math.atan2(diffY, diffX));
-
+            if (weapon instanceof  TrapLauncher){
+                distance -= 35;
+            }
             if (weapon.getMaxRange() == -1){
                 if (distance > weapon.getRange()) return;
             }
@@ -172,7 +174,6 @@ public class AttackStrategy extends Strategy {
             else {
                 weapon.setRange(distance);
             }
-
 
             this.target = target;
             angleToEnemy = Math.toDegrees(Math.atan2(diffY, diffX));

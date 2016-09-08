@@ -60,7 +60,7 @@ public class StateLoader {
             for (Player player: MadBalls.getMultiplayerHandler().getPlayers()){
                 GameObjState lastRelevantState = playerStateMap.get(player);
                 if (player instanceof BotPlayer) continue;
-                if (!player.getRelevancy(gameObject.getTranslateX(), gameObject.getTranslateY(), 500, 500)){
+                if (!gameObject.isDead() && !player.getRelevancy(gameObject.getTranslateX(), gameObject.getTranslateY(), 500, 500)){
                     if (!wasNotRelevant) {
                         wasNotRelevant = true;
                     }

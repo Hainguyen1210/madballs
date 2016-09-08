@@ -96,6 +96,8 @@ public class Ball extends GameObject{
         return weapon;
     }
 
+
+
     public <W extends Weapon> void setWeapon(Class<W> weaponClass, Integer weaponID) {
         try {
             StraightMove straightMove = (StraightMove) getMoveBehaviour();

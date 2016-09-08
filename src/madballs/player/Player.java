@@ -222,9 +222,9 @@ public class Player {
         SceneManager.getInstance().bindBallToScoreBoard(ball);
 
         Label nameLabel = new Label(name);
-        nameLabel.setTranslateY(2);
+        nameLabel.setTranslateY(4);
         nameLabel.setMaxWidth(40);
-        nameLabel.setFont(new Font(10));
+        nameLabel.setFont(new Font(8));
         nameLabel.setTextFill(Color.WHITE);
 
         ImageView badge = new ImageView(ImageGenerator.getInstance().getImage("blue_badge"));
@@ -234,7 +234,7 @@ public class Player {
         namePane.setTranslateY(-60);
         namePane.setTranslateX(-15);
         ball.getStatusG().getChildren().add(namePane);
-        nameLabel.translateXProperty().bind(Bindings.divide(Bindings.subtract(50, nameLabel.widthProperty()), 2));
+        nameLabel.translateXProperty().bind(Bindings.divide(Bindings.subtract(70, nameLabel.widthProperty()), 2));
 
         double ballSize = ball.getHitBox().getLayoutBounds().getHeight();
         ball.setImage("ball"+teamNum.get());

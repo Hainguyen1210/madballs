@@ -102,7 +102,6 @@ public class MoveStrategy extends Strategy {
                 int targetRow = (int)(obj.getTranslateY() / map.getRowHeight());
                 findPath(targetRow, targetColumn);
                 if (tempPath.size() != 0){
-//                    System.out.println("found path");
                     value /= (tempPath.size() / 4);
                     if (value > objectiveValue){
 //                        System.out.println("new objective " + obj.getClass());
