@@ -64,7 +64,7 @@ public class FlagMode extends RespawnMode {
 
                     for (SpawnLocation spawnLocation: map.getFlagSpawnLocations()){
                         if (flag.getTeamNum() == spawnLocation.getTypeNumber()) continue;
-                        int baseRow = (int) (spawnLocation.getY() / map.getRowHeight());
+                        int baseRow = (int) (spawnLocation.getY() / map.getRowHeight()) + 1;
                         int baseColumn = (int) (spawnLocation.getX() / map.getColumnWidth());
 
                         int teamNum = spawnLocation.getTypeNumber();

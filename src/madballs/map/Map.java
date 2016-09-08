@@ -175,7 +175,7 @@ public class Map {
                         playerSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "ball", teamNum));
                     }
                     else if (charCode > 0 && charCode < 13){
-                        flagSpawnLocations.add(new SpawnLocation(j * columnWidth, counter * rowHeight, "flag", charCode));
+                        flagSpawnLocations.add(new SpawnLocation(j * columnWidth + columnWidth/2, counter * rowHeight - 5, "flag", charCode));
                     }
                 }
                 generatedMap[counter] = characterString;
