@@ -28,7 +28,7 @@ public class Spawner {
     private static Class<Weapon>[] weapons = new Class[]{
             Pistol.class, Awp.class, Uzi.class, Ak47.class, Minigun.class,
             M4A1.class, Bazooka.class, XM1104.class, GrenadeLauncher.class, Shield.class, TrapLauncher.class};
-    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, Adrenaline.class, PlasmaAmmo.class, Lightning.class, HeavyKevlar.class};
+    private static Class<Item>[] boostItems = new Class[] {MiniHealthFlask.class, DivinePotion.class, FullPotion.class, Adrenaline.class, PlasmaAmmo.class, Lightning.class};
 //    private static Class<Item>[] boostItems = new Class[] {HeavyKevlar.class};
     private static HashMap<Class, Integer> itemSpawnProbability = new HashMap<Class, Integer>()
     {{
@@ -41,7 +41,7 @@ public class Spawner {
         put(Bazooka.class, 3);
         put(XM1104.class, 7);
         put(GrenadeLauncher.class, 3);
-        put(Shield.class, 8);
+        put(Shield.class, 5);
         put(TrapLauncher.class, 3);
 
         put(MiniHealthFlask.class, 8);

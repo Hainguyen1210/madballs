@@ -39,6 +39,7 @@ public class Armor extends BuffState {
 
     @Override
     public void fade() {
+        getBall().setHpValue(getBall().getHpValue() - value);
         getBall().setMaxHp(getBall().getMaxHp() - value);
     }
 
@@ -49,7 +50,7 @@ public class Armor extends BuffState {
 
     @Override
     public void uniqueUpdate(long timestamp) {
-        if (getBall().getHpValue() <= originHp){
+        if (getBall().getMaxHp() - getBall().getHpValue() >= value){
             forceFade();
         }
     }

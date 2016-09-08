@@ -205,7 +205,7 @@ public class MoveStrategy extends Strategy {
     private void findPath(int targetRow, int targetColumn){
 //        clearPathsToNodes();
         tempPath.clear();
-        if (!map.getMAP_ARRAY()[targetColumn][targetRow].equals("x") && !map.getMAP_ARRAY()[targetColumn][targetRow].equals("+")){
+        if (!map.getMAP_ARRAY()[targetRow][targetColumn].equals("x") && !map.getMAP_ARRAY()[targetRow][targetColumn].equals("+")){
             LinkedList<int[]> foundPath = pathsToNodes.get(targetRow).get(targetColumn);
             if (foundPath.size() != 0){
                 tempPath = new LinkedList<>(foundPath);
