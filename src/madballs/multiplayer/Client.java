@@ -259,7 +259,7 @@ public class Client extends MultiplayerHandler{
                         Ball ball = (Ball) MadBalls.getMainEnvironment().getObject(buffData.getBallID());
                         BuffState buffState = BuffState.recreateBuffState(buffData);
                         buffState.castOn(ball, 0);
-                        ball.addEffectState(buffState);
+                        ball.addBuffState(buffState);
                     }
                 });
             }

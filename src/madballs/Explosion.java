@@ -8,6 +8,7 @@ import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.SpawnData;
 
 /**
+ * A GameObject that deals damage in a circular area
  * Created by caval on 16/08/2016.
  */
 public class Explosion extends GameObject {

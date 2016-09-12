@@ -17,7 +17,6 @@ import javafx.scene.layout.HBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import madballs.AI.BotPlayer;
-import madballs.buffState.Invulnerable;
 import madballs.buffState.NewBorn;
 import madballs.buffState.WeaponBuff;
 import madballs.collision.BuffReceivableBehaviour;
@@ -27,14 +26,14 @@ import madballs.collision.PushableBehaviour;
 import madballs.collision.VulnerableBehaviour;
 import madballs.buffState.BuffState;
 import madballs.moveBehaviour.StraightMove;
-import madballs.multiplayer.BuffData;
 import madballs.multiplayer.GetWeaponData;
 import madballs.player.Player;
 import madballs.scenes.SceneManager;
 import madballs.wearables.*;
 
 /**
- *
+ * A Ball is the main character of a Player.
+ * Ball can receive Buffs, and carry a Weapon
  * @author Caval
  */
 public class Ball extends GameObject{
@@ -56,13 +55,21 @@ public class Ball extends GameObject{
     public void setBuffState(BuffState effectState) {
         this.buffState = effectState;
     }
-    
-    public void addEffectState(BuffState buffState) {
+
+    /**
+     * receive a new BuffState
+     * @param buffState
+     */
+    public void addBuffState(BuffState buffState) {
         registerBuffState(buffState);
         buffState.wrapBuffState(this.buffState);
         this.buffState = buffState;
     }
 
+    /**
+     * display a new BuffState in the BuffBar
+     * @param buffState
+     */
     public void registerBuffState(BuffState buffState){
         Circle circle = new Circle(3, buffState.getColor());
         buffBar.getChildren().add(circle);
@@ -72,6 +79,10 @@ public class Ball extends GameObject{
         }
     }
 
+    /**
+     * remove a BuffState from the BuffBar
+     * @param buffState
+     */
     public void removeBuffState(BuffState buffState){
         Circle circle = buffIndicators.get(buffState.toString());
         buffBar.getChildren().remove(circle);
@@ -96,23 +107,34 @@ public class Ball extends GameObject{
         return weapon;
     }
 
-
-
+    /**
+     * switch to a new Weapon with the given WeaponClass
+     * @param weaponClass the Class of the new Weapon
+     * @param weaponID the obj id to give to the new weapon
+     * @param <W>
+     */
     public <W extends Weapon> void setWeapon(Class<W> weaponClass, Integer weaponID) {
         try {
             StraightMove straightMove = (StraightMove) getMoveBehaviour();
+
+            // destroy the old weapon
             if (weapon != null) {
                 straightMove.setSpeed(straightMove.getSpeed() + weapon.getWeight() * 5);
-//                System.out.println("old weap: " + weapon.getID());
                 weapon.die();
             }
+
+            // create and wield the new weapon
             weapon = weaponClass.getDeclaredConstructor(GameObject.class, Integer.class).newInstance(this, weaponID);
             straightMove.setSpeed(straightMove.getSpeed() - weapon.getWeight() * 5);
             if (MadBalls.isHost()) {
                 MadBalls.getMultiplayerHandler().sendData(new GetWeaponData(getID(), weapon.getClass().getName(), weapon.getID()));
             }
-            SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
+
+            // reapply weapon buff
             if (buffState != null) buffState.reApply(WeaponBuff.class);
+
+            // display the weapon info and change the view based on the scope
+            SceneManager.getInstance().displayLabel(weaponClass.getSimpleName(), weapon.getHitBox().getFill(), 2.5, this, 0);
             if (this == MadBalls.getMultiplayerHandler().getLocalPlayer().getBall()){
                 SceneManager.getInstance().setZoomOut(weapon.getScope());
                 SceneManager.getInstance().bindWeaponInfo(this);
@@ -120,8 +142,7 @@ public class Ball extends GameObject{
             if (getPlayer() instanceof BotPlayer){
                 getPlayer().getController().setScale(SceneManager.getInstance().getScale() * MadBalls.getMultiplayerHandler().getLocalPlayer().getBall().getWeapon().getScope() / weapon.getScope());
             }
-//            System.out.println("Get weapon " + weaponClass);
-//            System.out.println("new weap: " + weapon.getID());
+
         } catch (NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             Logger.getLogger(Ball.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -131,11 +152,12 @@ public class Ball extends GameObject{
     public void revive(){
         boolean isReviving = isDead();
         super.revive();
+        // apply the NewBorn state onto the Ball when it has just revived
         if (isReviving) {
             if (player.isLocal()) SceneManager.getInstance().bindCamera(this);
             BuffState buffState = new NewBorn(null, 3);
             buffState.castOn(this, 0);
-            addEffectState(buffState);
+            addBuffState(buffState);
         }
     }
 

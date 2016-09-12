@@ -28,7 +28,7 @@ public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{
         BuffState buffState = receivedEffect.getBuffState();
         buffState.castOn((Ball)target, 0);
         MadBalls.getMultiplayerHandler().sendData(new BuffData(buffState));
-        ((Ball)target).addEffectState(buffState);
+        ((Ball)target).addBuffState(buffState);
     }
 
     @Override

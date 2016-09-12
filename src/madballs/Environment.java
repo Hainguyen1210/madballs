@@ -57,10 +57,6 @@ public class Environment {
         return deadGameObjects.get(id);
     }
     
-//    public int getObjectIndex(GameObject object){
-//        return gameObjects.indexOf(object);
-//    }
-    
     public Spawner getItemSpawner() {
       return itemSpawner;
     }
@@ -103,6 +99,7 @@ public class Environment {
      * check through all game objs in the environment to see which obj has collided with one another
      */
     private void update(long now){
+        // call the GameMode manage() method
         if (MadBalls.isHost()) MadBalls.getGameMode().manage(now);
 
         ArrayList<GameObject> copiedGameObjects = new ArrayList<>(gameObjects.values());
@@ -112,13 +109,14 @@ public class Environment {
         // update objects
         for (GameObject obj : copiedGameObjects){
             obj.update(now);
+            // remove dead objects
             if (obj.isDead()) {
                 deadGameObjects.put(obj.getID(), obj);
                 gameObjects.remove(obj.getID());
             }
+            // prepare for collision checking for alive objects
             else {
-                if (!obj.isDead()
-                        && obj.isMobile()){
+                if (obj.isMobile()){
                     shouldBeCheckedGameObjects.add(obj);
                 }
                 quadtree.insert(obj);
@@ -170,8 +168,8 @@ public class Environment {
     public void loadMap(Map map) {
         this.map = map;
         String[][] mapArray = map.getMAP_ARRAY();
-        //add the obstacles
 
+        /* ************** Add the obstacles *************** */
         int boxSize = map.getObstacleSize();
         int currentBoxSizeRow = 0, locationRowX = 0, locationRowY = 0; //define start point and size
         int currentBoxSizeCol = 0, locationColX = 0, locationColY = 0;
@@ -222,6 +220,7 @@ public class Environment {
     }
     
     public void startAnimation(){
+        // prepare the relevant objects for BotPlayers
         if (MadBalls.isHost()) {
             for (GameObject obj: gameObjects.values()){
                 if (obj instanceof Obstacle){
@@ -267,6 +266,11 @@ public class Environment {
         display.getChildren().remove(obj.getDisplay());
     }
 
+    /**
+     * revive a dead object
+     * @param id
+     * @return
+     */
     public GameObject resurrectGameObj(Integer id){
         synchronized (gameObjects){
             GameObject obj = deadGameObjects.get(id);
