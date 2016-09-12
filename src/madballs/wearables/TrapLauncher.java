@@ -11,8 +11,10 @@ import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.FireData;
 import madballs.projectiles.Projectile;
 
-/**
- * Created by caval on 01/09/2016.
+/*
+Trap Launcher is used to place insisible trap on the ground.
+Can deal high damage.
+The traps will explode when it get touched by either ally or enemy.
  */
 public class TrapLauncher extends Weapon {
     private final double WIDTH = 30;

@@ -6,8 +6,9 @@ import madballs.GameObject;
 import madballs.Ground;
 import madballs.collision.*;
 
-/**
- * Created by caval on 31/08/2016.
+/*
+Grenade Launcher allows the player to shoot over obstacle and explode when it 
+reaches its destination 
  */
 public class GrenadeLauncher extends Weapon {
     private final double WIDTH = 40;

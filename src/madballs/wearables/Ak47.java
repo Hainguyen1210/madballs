@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package madballs.wearables;
 
 import javafx.scene.paint.Paint;
@@ -12,6 +7,9 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.GameObject;
 
+/*
+Ak47 is an assault rifle that can deal high damage with average firerate
+ */
 public class Ak47 extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 5;

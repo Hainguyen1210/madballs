@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package madballs.wearables;
 
 import javafx.scene.paint.Paint;
@@ -11,7 +6,9 @@ import madballs.collision.DamageEffect;
 import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.GameObject;
-
+/*
+M4A1 is an assault rifle which can deal average damage with good firerate
+ */
 public class M4A1 extends Weapon{
     private final double WIDTH = 40;
     private final double HEIGHT = 5;
