@@ -21,6 +21,9 @@ import madballs.multiplayer.SpawnData;
 import madballs.wearables.*;
 
 /**
+ * take care of spawning items and weapons
+ * randomly choose to spawn either item or weapon
+ * randomly choose which item or weapon to spawn
  * @author haing
  */
 public class Spawner {

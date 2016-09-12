@@ -12,6 +12,7 @@ import madballs.buffState.BuffState;
 import madballs.map.SpawnLocation;
 
 /**
+ * item give buff to ball
  * @author haing
  */
 public class BuffItem extends Item {

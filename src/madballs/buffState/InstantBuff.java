@@ -10,11 +10,15 @@ import madballs.scenes.SceneManager;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * create buff effect instantly 
  * @author caval
  */
 public abstract class InstantBuff extends BuffState{
 
+    /**
+     * create buff state by data received from server
+     * @param data
+     */
     public InstantBuff(BuffData data){
         super(data);
     }

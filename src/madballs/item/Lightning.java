@@ -12,7 +12,7 @@ import madballs.map.SpawnLocation;
 
 
 /**
- *
+ * increase speed
  * @author haing
  */
 public class Lightning extends BuffItem{

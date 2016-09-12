@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * increase heal by interval time
  * @author caval
  */
 public class Rejuvenation extends BuffState{

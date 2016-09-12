@@ -4,6 +4,7 @@ import javafx.scene.paint.Color;
 import madballs.multiplayer.BuffData;
 
 /**
+ * increase max HP
  * Created by caval on 01/09/2016.
  */
 public class Armor extends BuffState {

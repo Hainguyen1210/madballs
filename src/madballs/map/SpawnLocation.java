@@ -8,7 +8,7 @@ package madballs.map;
 import java.io.Serializable;
 
 /**
- *
+ * to indicate if the spawn location has been occupied
  * @author caval
  */
 public class SpawnLocation implements Serializable{

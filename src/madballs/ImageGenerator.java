@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * return Image by parameter (factory pattern)
  * Created by hainguyen on 8/16/16.
  */
 public class ImageGenerator {

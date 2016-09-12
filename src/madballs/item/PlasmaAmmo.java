@@ -10,6 +10,9 @@ import madballs.Environment;
 import madballs.buffState.Power;
 import madballs.map.SpawnLocation;
 
+/**
+ * give power effect
+ */
 public class PlasmaAmmo extends BuffItem{
     public PlasmaAmmo(Environment environment, SpawnLocation spawnLocation, Integer id) {
         super(environment, spawnLocation, new Power(null, 5, 2), id);

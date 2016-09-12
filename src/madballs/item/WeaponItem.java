@@ -21,6 +21,7 @@ import madballs.wearables.Weapon;
 
 
 /**
+ * give weapons
  * @author haing
  */
 public class WeaponItem extends Item {

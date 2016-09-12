@@ -30,6 +30,7 @@ import madballs.wearables.Weapon;
 import javax.imageio.ImageIO;
 
 /**
+ * get MAP_ARRAY from txt file
  * @author Caval
  */
 public class Map {
@@ -83,8 +84,10 @@ public class Map {
         return MAP_FILES;
     }
 
+    /**
+     * search for all map files in asset/map
+     */
     public static void searchFiles() {
-
         System.out.println("Reading map from assets/map:");
         File folder = new File("assets/map/");
         File[] listOfFiles = folder.listFiles();
@@ -122,6 +125,10 @@ public class Map {
         MAP_ARRAY = loadMap();
     }
 
+    /**
+     * read txt file to get the map array
+     * @return map array
+     */
     private String[][] loadMap() {
         String[][] generatedMap = null;
         //get map from file

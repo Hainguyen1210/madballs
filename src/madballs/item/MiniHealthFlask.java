@@ -11,7 +11,7 @@ import madballs.buffState.Rejuvenation;
 import madballs.map.SpawnLocation;
 
 /**
- *
+ * increase HP by each second
  * @author caval
  */
 public class MiniHealthFlask extends BuffItem{

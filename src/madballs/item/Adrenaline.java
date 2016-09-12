@@ -11,7 +11,7 @@ import madballs.buffState.Frenzy;
 import madballs.map.SpawnLocation;
 
 /**
- *
+ * give Fenzy effect (increase fire rate)
  * @author chim-
  */
 public class Adrenaline extends BuffItem{

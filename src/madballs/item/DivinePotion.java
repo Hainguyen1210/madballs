@@ -14,7 +14,7 @@ import madballs.buffState.InstantHeal;
 import madballs.map.SpawnLocation;
 
 /**
- *
+ * special item give all buff effects
  * @author caval
  */
 public class DivinePotion extends BuffItem{

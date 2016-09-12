@@ -16,6 +16,8 @@ import java.lang.reflect.InvocationTargetException;
 /**
  *
  * @author chim-
+ * give effect for ball for a specific time duration
+ * it can also wrap each other to give multiple effects
  */
 public abstract class BuffState{
     private BuffState wrappedBuffState;
@@ -25,7 +27,7 @@ public abstract class BuffState{
     private long tickInterval = 1;
     private Ball ball;
     private Paint color = Paint.valueOf("red");
-    private boolean hasFaded = false;
+    private boolean hasFaded = false;   //for effect may end before duration eg: kevlar amour
     private String name = getClass().getSimpleName();
 
     public String getName() {
@@ -65,6 +67,12 @@ public abstract class BuffState{
         this.duration = duration;
         setColor();
     }
+
+    /**
+     * common update, each child class has its own behavior
+     * update wrapped effect also
+     * @param timestamp
+     */
     public void update(long timestamp){
         if (createdTime == 0) {
             createdTime = timestamp;
@@ -81,6 +89,11 @@ public abstract class BuffState{
         if (wrappedBuffState != null) wrappedBuffState.update(timestamp);
     }
 
+    /**
+     * release effect,
+     * release the effect indicator in the status group of the Ball,
+     * release the effect indicator in the bottom status bar
+     */
     public void forceFade(){
         fade();
         ball.removeBuffState(this);
@@ -118,6 +131,12 @@ public abstract class BuffState{
         return ball;
     }
 
+    /**
+     * apply the effect
+     * display the effect state in floating label of the ball
+     * @param ball
+     * @param index index of the buff state in all buff states
+     */
     public void castOn(Ball ball, int index) {
         this.ball = ball;
         apply();
@@ -128,6 +147,11 @@ public abstract class BuffState{
         }
     }
 
+    /**
+     * remove a buff state from all buff states
+     * @param originBuffState
+     * @return
+     */
     public BuffState removeFromBuffState(BuffState originBuffState){
         if (this == originBuffState){
             return this.wrappedBuffState;
@@ -155,6 +179,11 @@ public abstract class BuffState{
         recreateFromData(data);
     }
 
+    /**
+     * recreate buff state from buff data received from server
+     * @param data
+     * @return
+     */
     public static BuffState recreateBuffState(BuffData data){
         try {
             Class buffStateClass = Class.forName(data.getBuffStateClass());
@@ -177,10 +206,10 @@ public abstract class BuffState{
             wrappedBuffState.reApply(buffClass);
         }
     }
-    public abstract double[] getParameters();
+    public abstract double[] getParameters();   //prepare date to recreate buff state
     public abstract void recreateFromData(BuffData data);
-    public abstract void apply();
-    public abstract void fade();
+    public abstract void apply();   //give effect the first time
+    public abstract void fade();    //release effect
+    public abstract void uniqueUpdate(long timestamp);  //give effect by interval
     public abstract void setColor();
-    public abstract void uniqueUpdate(long timestamp);
 }

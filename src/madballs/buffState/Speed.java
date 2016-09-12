@@ -10,7 +10,7 @@ import madballs.gameFX.SoundStudio;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * increase speed
  * @author chim-
  */
 public class Speed extends BuffState{

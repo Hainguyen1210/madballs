@@ -7,6 +7,7 @@ import madballs.collision.VulnerableBehaviour;
 import madballs.multiplayer.BuffData;
 
 /**
+ * make ball invulnerable
  * Created by caval on 03/09/2016.
  */
 public class Invulnerable extends BuffState {
@@ -28,6 +29,9 @@ public class Invulnerable extends BuffState {
 
     }
 
+    /**
+     * change vulnerable to invulnerable
+     */
     @Override
     public void apply() {
         if (getBall().getCollisionPassiveBehaviour() instanceof StackedCollisionPassiveBehaviour){
@@ -38,6 +42,9 @@ public class Invulnerable extends BuffState {
         }
     }
 
+    /**
+     * change invulnerable to vulnerable
+     */
     @Override
     public void fade() {
         if (getBall().getCollisionPassiveBehaviour() instanceof StackedCollisionPassiveBehaviour){

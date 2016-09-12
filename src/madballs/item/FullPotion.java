@@ -11,7 +11,7 @@ import madballs.buffState.InstantHeal;
 import madballs.map.SpawnLocation;
 
 /**
- *
+ * Item refill full HP
  * @author chim-
  */
 public class FullPotion extends BuffItem{

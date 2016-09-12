@@ -8,7 +8,7 @@ import madballs.collision.DamageEffect;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * increase / decrease damage effect
  * @author chim-
  */
 public class Power extends WeaponBuff{

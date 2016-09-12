@@ -9,7 +9,7 @@ import javafx.scene.paint.Paint;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * increase fire rate
  * @author chim-
  */
 public class Frenzy extends WeaponBuff{

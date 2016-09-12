@@ -9,7 +9,7 @@ import javafx.scene.paint.Color;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * refill the HP instantly
  * @author caval
  */
 public class InstantHeal extends InstantBuff{

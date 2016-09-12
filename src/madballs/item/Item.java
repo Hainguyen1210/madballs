@@ -16,6 +16,7 @@ import madballs.collision.ReleaseSpawnLocation;
 import madballs.map.SpawnLocation;
 
 /**
+ * Item object
  * @author chim-
  */
 public abstract class Item extends GameObject {

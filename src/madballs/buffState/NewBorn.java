@@ -4,6 +4,7 @@ import madballs.collision.*;
 import madballs.multiplayer.BuffData;
 
 /**
+ * invulnerable and got damage effect when being respawn
  * Created by caval on 07/09/2016.
  */
 public class NewBorn extends Invulnerable {

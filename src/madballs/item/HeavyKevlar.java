@@ -7,6 +7,7 @@ import madballs.buffState.Speed;
 import madballs.map.SpawnLocation;
 
 /**
+ * give amour effect and decrease speed
  * Created by caval on 01/09/2016.
  */
 public class HeavyKevlar extends BuffItem {
