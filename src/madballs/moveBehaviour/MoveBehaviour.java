@@ -15,7 +15,7 @@ import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
 /**
- *
+ * the class determines how the movement of a GameObject is made
  * @author Caval
  */
 public abstract class MoveBehaviour {

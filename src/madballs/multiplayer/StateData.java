@@ -8,7 +8,7 @@ package madballs.multiplayer;
 import madballs.GameObjState;
 
 /**
- *
+ * the Data carrying a GameObjectState
  * @author caval
  */
 public class StateData extends Data{

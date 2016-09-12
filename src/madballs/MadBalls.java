@@ -84,7 +84,6 @@ public class MadBalls extends Application {
     public void start(Stage primaryStage) {
         Navigation.getInstance().setMainStage(primaryStage);
 
-//        primaryStage.setFullScreen(true);
         primaryStage.setResizable(false);
         SoundStudio.getInstance();
 
@@ -101,23 +100,11 @@ public class MadBalls extends Application {
         Scene scene = ScenesFactory.getInstance().newScene("welcome");
         primaryStage.show();
         Navigation.getInstance().navigate(scene);
-//        boolean isHost = Navigation.getInstance().getConfirmation("", "Start game", "Do you want to host?");
-//        if (isHost){
-//            multiplayerHandler = new Server();
-//
-//            loadMap(Map.chooseMap());
-//        }
-//        else {
-//            multiplayerHandler = new Client();
-//            multiplayerHandler.setLocalPlayer(new Player(null, true));
-//        }
-//        multiplayerHandler.init();
-
-
-//        Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
-//        SceneManager.getInstance().displayGameInfo(mainRoot);
     }
 
+    /**
+     * create a new Environment and new game Scene
+     */
     public static void restart(){
         Map map = null;
         if (mainEnvironment != null) map = new Map(mainEnvironment.getMap().getMapNumber());
@@ -133,8 +120,7 @@ public class MadBalls extends Application {
         mainRoot.setCursor(new ImageCursor(cursorImage, cursorImage.getWidth()/2, cursorImage.getHeight()/2));
 
         mainScene = new Scene(mainRoot, sceneHeight/9*16, sceneHeight);
-//        Image cursorImage = ImageGenerator.getInstance().getImage("crosshair");
-//        mainScene.setCursor(new ImageCursor(cursorImage, cursorImage.getWidth()/2, cursorImage.getHeight()/2));
+
         mainScene.setFill(Color.BLACK);
         mainScene.getStylesheets().add(MadBalls.class.getResource("scenes/style.css").toExternalForm());
 
@@ -154,7 +140,7 @@ public class MadBalls extends Application {
         mainEnvironment.loadMap(map);
 
         gameMode = GameMode.getGameMode(map.getGameMode());
-//        gameMode = new NormalMode(0);
+
         SceneManager.getInstance().resetTeamScoreBoard();
         Navigation.getInstance().navigate(ScenesFactory.getInstance().newScene("prepare"));
     }

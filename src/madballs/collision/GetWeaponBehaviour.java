@@ -13,7 +13,7 @@ import madballs.multiplayer.GetWeaponData;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * can receive a new Weapon
  * @author haing
  */
 public class GetWeaponBehaviour extends StackedCollisionPassiveBehaviour{

@@ -5,6 +5,7 @@ import madballs.GameObject;
 import madballs.map.SpawnLocation;
 
 /**
+ * the behaviour created specially for Items when they are picked up, so that new Items can be spawned at their locations
  * Created by hainguyen on 8/17/16.
  */
 public class ReleaseSpawnLocation extends StackedCollisionPassiveBehaviour {

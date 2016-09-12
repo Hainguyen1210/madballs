@@ -6,7 +6,7 @@
 package madballs.multiplayer;
 
 /**
- *
+ * the Data about a Ball picking up a new Weapon
  * @author caval
  */
 public class GetWeaponData extends Data{

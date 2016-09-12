@@ -12,7 +12,7 @@ import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
 /**
- *
+ * the CollisionEffect following the Decorator pattern
  * @author Caval
  */
 public abstract class StackedCollisionEffect implements CollisionEffect, Serializable{

@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- *
+ * the passive collision effect of a GameObject. E.g. how obj B is affected by obj A with CollisionEffect C when they collide
  * @author Caval
  */
 public interface CollisionPassiveBehaviour {

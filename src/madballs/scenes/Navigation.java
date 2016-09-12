@@ -18,7 +18,7 @@ import javafx.stage.Stage;
 /**
  *
  * @author Caval
- * this class handles the navigation of the application
+ * this class handles the navigation of the game
  */
 public class Navigation {
     private static Navigation instance = new Navigation();

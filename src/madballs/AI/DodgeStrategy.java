@@ -10,6 +10,7 @@ import madballs.moveBehaviour.StraightMove;
 import madballs.projectiles.Projectile;
 
 /**
+ * the strategy to avoid projectiles
  * Created by caval on 28/08/2016.
  */
 public class DodgeStrategy extends Strategy {
@@ -34,7 +35,12 @@ public class DodgeStrategy extends Strategy {
         secondsUntilDanger = -1;
     }
 
+    /**
+     * calculate how danger the checking GameObject is to the Ball
+     * @param object
+     */
     private void calculateDanger(GameObject object){
+        // check if the object can damage the Ball
         if (object.getCollisionEffect() == null
                 || (!((StackedCollisionEffect)object.getCollisionEffect()).hasCollisionEffect(DamageEffect.class)
                     && !((StackedCollisionPassiveBehaviour)object.getCollisionPassiveBehaviour()).hasCollisionBehaviour(ExplosiveBehaviour.class))){
@@ -55,12 +61,15 @@ public class DodgeStrategy extends Strategy {
             double objX = object.getTranslateX();
             double objY = object.getTranslateY();
 
+            // check if the Ball is in range of the Projectile
             if (object instanceof Projectile){
                 double distance = Math.sqrt(Math.pow(objX - myX,2) + Math.pow(objY - myY, 2));
                 if (objMovement.getMovedDistance() + distance > ((Projectile)object).getSourceWeapon().getRange() + myRadius) {
                     return;
                 }
             }
+
+            // check if the projectile will hit the Ball
 
             if (Math.abs(velocityY) >= Math.abs(velocityX)){
                 double deltaTime = (myY - objY) / velocityY;
@@ -92,6 +101,11 @@ public class DodgeStrategy extends Strategy {
         }
     }
 
+    /**
+     * save the danger object
+     * @param object
+     * @param deltaTime
+     */
     private void updateDangerObj(GameObject object, double deltaTime){
         if (object == dangerousObj) setImportance(getImportance() + 1);
         dangerousObj = object;
@@ -99,6 +113,11 @@ public class DodgeStrategy extends Strategy {
         isNoDanger= false;
     }
 
+    /**
+     * check if the deltaTime until collision is dangerous and needed to be dodge
+     * @param deltaTime
+     * @return
+     */
     private boolean isDeltaTimeDangerous(double deltaTime){
         if (deltaTime < 0 || deltaTime > REACTION_TIME_LIMIT) {
             return false;
@@ -122,8 +141,7 @@ public class DodgeStrategy extends Strategy {
         }
         StraightMove straightMove = ((StraightMove)getBot().getBall().getMoveBehaviour());
         if (dangerousObj != null){
-//            double myX = getPlayer().getBall().getTranslateX();
-//            double myY = getPlayer().getBall().getTranslateY();
+            // calculate the direction to dodge the dangerous obj
             double dangerX = dangerousObj.getTranslateX();
             double dangerY = dangerousObj.getTranslateY();
             double angleFromDanger = Math.toDegrees(Math.atan2(myY - dangerY, myX - dangerX));
@@ -147,13 +165,10 @@ public class DodgeStrategy extends Strategy {
             if (dodgeAngle < -180){
                 dodgeAngle += 360;
             }
-//            System.out.println("avoid danger" + dodgeAngle);
-//            System.out.println(angleFromDanger);
-//            System.out.println(dangerMovementAngle);
+
+            // dodge the dangerous obj
             double speed = straightMove.getSpeed();
-//            if (dodgeAngle > 180){
-//                dodgeAngle -= 360;
-//            }
+
             if (Math.abs(dodgeAngle) >= 30 && Math.abs(dodgeAngle) <= 150){
                 straightMove.setVelocityY(speed * Math.signum(dodgeAngle));
             }
@@ -164,10 +179,6 @@ public class DodgeStrategy extends Strategy {
                 straightMove.setVelocityX(-speed);
             }
         }
-//        else {
-//            straightMove.setVelocityX(0);
-//            straightMove.setVelocityY(0);
-//        }
     }
 
     @Override

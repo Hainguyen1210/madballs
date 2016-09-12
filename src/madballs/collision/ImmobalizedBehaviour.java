@@ -4,6 +4,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
+ * becomes immobile when collides
  * Created by caval on 01/09/2016.
  */
 public class ImmobalizedBehaviour extends StackedCollisionPassiveBehaviour {

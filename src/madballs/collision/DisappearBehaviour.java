@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- *
+ * disappears when colliding with a PushBack object
  * @author Caval
  */
 public class DisappearBehaviour extends StackedCollisionPassiveBehaviour{

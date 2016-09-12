@@ -35,17 +35,12 @@ public class RespawnMode extends NormalMode {
         super(weaponClassIndex);
         setMode(1);
         this.respawnTime = respawnTime;
-//        try {
-//            this.winningKillsCount = Integer.parseInt(Navigation.getInstance().getTextResponse("New Game", "Respawn Game Mode", "Enter the winning number of kills", "30"));
-//        }
-//        catch (NumberFormatException ex){
-//            this.winningKillsCount = 30;
-//        }
         this.winningKillsCount = 30;
     }
 
     @Override
     public void manage(long now) {
+        // respawn dead balls
         ArrayList<Player> players = MadBalls.getMultiplayerHandler().getPlayers();
         for (Player player: players){
             Ball ball = player.getBall();
@@ -95,6 +90,7 @@ public class RespawnMode extends NormalMode {
             return;
         }
 
+        // check if there is any team's score meets the winning score
         for (Integer teamNum: SceneManager.getInstance().getTeamScoreBoard().keySet()){
             if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum).get() >= winningKillsCount){
                 MadBalls.setGameOver(true);

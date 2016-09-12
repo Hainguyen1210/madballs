@@ -18,7 +18,7 @@ import madballs.scenes.SceneManager;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * can be damaged by DamageEffect
  * @author Caval
  */
 public class VulnerableBehaviour extends StackedCollisionPassiveBehaviour{

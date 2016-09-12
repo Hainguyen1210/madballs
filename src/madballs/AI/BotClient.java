@@ -11,6 +11,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * handles the communication of the BotPlayer and the Server
  * Created by caval on 27/08/2016.
  */
 public class BotClient extends MultiplayerHandler {

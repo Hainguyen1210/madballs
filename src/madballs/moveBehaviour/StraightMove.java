@@ -15,7 +15,7 @@ import madballs.gameFX.SoundStudio;
 import madballs.projectiles.Projectile;
 
 /**
- *
+ * the GameObject with this MoveBehaviour can actively move in a straight line
  * @author Caval
  */
 public class StraightMove extends MoveBehaviour{

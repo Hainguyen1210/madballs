@@ -1,6 +1,7 @@
 package madballs.multiplayer;
 
 /**
+ * the Data about a team's score
  * Created by caval on 26/08/2016.
  */
 public class ScoreData extends Data {

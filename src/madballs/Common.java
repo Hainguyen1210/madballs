@@ -20,7 +20,7 @@ import javafx.scene.paint.Color;
 import javax.imageio.ImageIO;
 
 /**
- * this class stores the attributes and methods that are common throughout the game
+ * this class stores the methods that are common throughout the game
  * @author Caval
  */
 public class Common {

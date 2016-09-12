@@ -8,7 +8,7 @@ package madballs.multiplayer;
 import javafx.scene.input.KeyEvent;
 
 /**
- *
+ * the Data of keyboard input
  * @author caval
  */
 public class KeyInputData extends Data{

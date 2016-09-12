@@ -13,7 +13,7 @@ import madballs.scenes.SceneManager;
 import madballs.multiplayer.MouseInputData;
 
 /**
- *
+ * handle mouse
  * @author Paul
  */
 public class MouseKeyEventHandler implements EventHandler<MouseEvent> {

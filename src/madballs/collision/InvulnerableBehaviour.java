@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- *
+ * does not getAffected at all
  * @author Caval
  */
 public class InvulnerableBehaviour extends StackedCollisionPassiveBehaviour{

@@ -3,6 +3,7 @@ package madballs.multiplayer;
 import madballs.scenes.SceneManager;
 
 /**
+ * the Data of the information to be displayed on the banner of the game Scene
  * Created by caval on 03/09/2016.
  */
 public class BannerData extends Data {

@@ -8,6 +8,7 @@ package madballs.collision;
 import madballs.wearables.Weapon;
 
 /**
+ * can give Weapon to another object
  * @author haing
  */
 public class GiveWeaponEffect extends StackedCollisionEffect {

@@ -10,6 +10,7 @@ import madballs.multiplayer.BindingData;
 import madballs.scenes.SceneManager;
 
 /**
+ * allows the GameObject to bind with another one when they collides
  * Created by caval on 03/09/2016.
  */
 public class BindingBehaviour extends StackedCollisionPassiveBehaviour {

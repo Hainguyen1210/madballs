@@ -3,6 +3,7 @@ package madballs.multiplayer;
 import madballs.player.Player;
 
 /**
+ * the Data carrying the info of a Player
  * Created by caval on 24/08/2016.
  */
 public class PlayerData extends Data {

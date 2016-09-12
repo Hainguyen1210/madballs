@@ -13,7 +13,7 @@ import madballs.buffState.BuffState;
 import madballs.multiplayer.BuffData;
 
 /**
- *
+ * allows a Ball to receive BuffState
  * @author chim-
  */
 public class BuffReceivableBehaviour extends StackedCollisionPassiveBehaviour{

@@ -12,7 +12,8 @@ import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * this class represents the state of a GameObject
+ * a state stores the most basic properties of the GameObject at the time the state is created
  * @author caval
  */
 public class GameObjState implements Serializable{
@@ -21,7 +22,6 @@ public class GameObjState implements Serializable{
     private double translateY;
     private double oldX, oldY;
     private double velocityX, velocityY;
-//    private double targetX, targetY;
     private double direction;
     private double oldDirection;
     private double pivotX, pivotY;
@@ -42,13 +42,6 @@ public class GameObjState implements Serializable{
     public double getFireRate() {
         return fireRate;
     }
-    //    public double getTargetX() {
-//        return targetX;
-//    }
-//
-//    public double getTargetY() {
-//        return targetY;
-//    }
 
     public double getSpeed() {
         return speed;

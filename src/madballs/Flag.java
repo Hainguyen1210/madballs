@@ -16,6 +16,8 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
+ * the objective of a FlagMode game
+ * a Flag has a team number. Enemy Ball (different team num) can carry the non-carrier flag, while ally Ball can return the non-carrier flag to its base
  * Created by caval on 03/09/2016.
  */
 public class Flag extends GameObject {

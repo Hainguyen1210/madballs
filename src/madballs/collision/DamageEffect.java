@@ -14,7 +14,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- * a collision effect that deals damage to the target
+ * a collision effect that deals damage to the target with a time interval
  * @author Caval
  */
 public class DamageEffect extends StackedCollisionEffect{

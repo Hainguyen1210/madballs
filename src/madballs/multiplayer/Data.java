@@ -8,7 +8,7 @@ package madballs.multiplayer;
 import java.io.Serializable;
 
 /**
- *
+ * the Data object to be communicated between Server and Client
  * @author caval
  */
 public class Data implements Serializable{

@@ -11,7 +11,7 @@ import madballs.MadBalls;
 import madballs.gameFX.SoundStudio;
 
 /**
- *
+ * can be affected by PushBackEffect
  * @author Caval
  */
 public class PushableBehaviour extends StackedCollisionPassiveBehaviour{

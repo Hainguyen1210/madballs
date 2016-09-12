@@ -17,7 +17,7 @@ import madballs.wearables.GrenadeLauncher;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * handles the inputs of a player
  * @author caval
  */
 public class Controller {
