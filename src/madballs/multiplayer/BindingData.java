@@ -1,6 +1,7 @@
 package madballs.multiplayer;
 
 /**
+ * the Data informing the binding of one GameObject to another
  * Created by caval on 04/09/2016.
  */
 public class BindingData extends Data {

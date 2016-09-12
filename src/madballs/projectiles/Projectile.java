@@ -13,7 +13,7 @@ import madballs.moveBehaviour.StraightMove;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * the projectile fired by Weapon
  * @author Caval
  */
 public class Projectile extends GameObject {

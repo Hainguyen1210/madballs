@@ -1,6 +1,7 @@
 package madballs.multiplayer;
 
 /**
+ * the Data about latency/ping
  * Created by caval on 15/08/2016.
  */
 public class LatencyData extends Data {

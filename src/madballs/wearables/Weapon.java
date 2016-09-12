@@ -1,10 +1,4 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package madballs.wearables;
-
 
 import javafx.beans.property.*;
 import javafx.scene.paint.Paint;
@@ -20,9 +14,8 @@ import madballs.multiplayer.FireData;
 import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 
-/**
- *
- * @author Caval
+/*
+
  */
 public abstract class Weapon extends GameObject {
     private String projectileImageName;

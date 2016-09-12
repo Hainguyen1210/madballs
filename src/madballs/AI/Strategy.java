@@ -33,8 +33,24 @@ public abstract class Strategy {
         this.bot = bot;
     }
 
+    /**
+     * prepare the required properties needed to process the strategy
+     */
     public abstract void prepare();
+
+    /**
+     * consider how a GameObject affect this strategy
+     * @param obj
+     */
     public abstract void consider(GameObject obj);
+
+    /**
+     * make appropriate actions
+     */
     public abstract void act();
+
+    /**
+     * update how important this strategy is
+     */
     public abstract void updateImportance();
 }

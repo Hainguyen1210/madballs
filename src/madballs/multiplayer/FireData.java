@@ -6,7 +6,7 @@
 package madballs.multiplayer;
 
 /**
- *
+ * the Data to inform the attack of a Weapon
  * @author caval
  */
 public class FireData extends Data{

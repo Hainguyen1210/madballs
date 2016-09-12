@@ -3,6 +3,7 @@ package madballs.multiplayer;
 import madballs.buffState.BuffState;
 
 /**
+ * the Data of a BuffState
  * Created by caval on 18/08/2016.
  */
 public class BuffData extends Data {

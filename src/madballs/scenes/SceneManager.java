@@ -44,7 +44,7 @@ import java.util.Map;
 import java.util.WeakHashMap;
 
 /**
- *
+ * a Singleton class that controls the game scene display
  * @author caval
  */
 public class SceneManager {

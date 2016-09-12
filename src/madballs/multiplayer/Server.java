@@ -23,7 +23,8 @@ import madballs.scenes.controller.GameRoomController;
 import madballs.wearables.Pistol;
 
 /**
- *
+ * the class that handles communication of all Players as a host
+ * the Server has the authority on the state of the game
  * @author Caval
  */
 public class Server extends MultiplayerHandler{

@@ -30,31 +30,8 @@ public class Obstacle extends GameObject{
 
     @Override
     public void setDisplayComponents() {
-//        Rectangle rect = new Rectangle(49, 49, Paint.valueOf("green"));
-//        rect.setArcHeight(15);
-//        rect.setArcWidth(15);
-//        setHitBox(rect);
         setHitBox(new Rectangle(length, height, Paint.valueOf("green")));
         getHitBox().setOpacity(0);
-
-//        double boxSize;if (length<height)boxSize=length;else boxSize=height;
-//        Image background = ImageGenerator.getInstance().getImageView("obstacle/stripebox");
-//        backgroundPane = new Pane();
-//        backgroundPane.setBackground(
-//            new Background(
-//                new BackgroundImage(
-//                    background,
-//                    BackgroundRepeat.REPEAT,
-//                    BackgroundRepeat.REPEAT,
-//                    BackgroundPosition.DEFAULT,
-//                    BackgroundSize.DEFAULT
-//                )
-//            )
-//        );
-//        backgroundPane.setPrefSize(length, height);
-//        getAnimationG().getChildren().addAll(backgroundPane);
-//        setImage(background);
-//        getImageView().setFitWidth(boxSize);getImageView().setFitHeight(boxSize);
     }
 
     @Override

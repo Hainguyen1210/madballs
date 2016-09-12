@@ -48,6 +48,7 @@ public class NormalMode extends GameMode {
         ArrayList<Player> players = MadBalls.getMultiplayerHandler().getPlayers();
         if (MadBalls.isGameOver()){
             if (MadBalls.isHost()){
+                // check if there is only one surviving team
                 int survivingTeamNum = -1;
                 for (Player player : players){
                     if (!player.getBall().isDead()){
@@ -59,20 +60,19 @@ public class NormalMode extends GameMode {
                         }
                     }
                 }
+                // if there is only one team then do not need to check for winner (e.g. testing)
                 if (SceneManager.getInstance().getTeamScoreBoard().size() == 1) return;
-//                System.out.println("survive" + survivingTeamNum);
+                // add score for winning team
                 if (survivingTeamNum != -1){
                     SceneManager.getInstance().addScore(survivingTeamNum, 1);
                 }
+                // new match
                 MadBalls.getMultiplayerHandler().newMatch(players.size() == 1);
             }
             return;
         }
-//        for (Player player : players){
-//            if (player != localPlayer && !player.getBall().isDead()) return;
-//        }
-////        MadBalls.setGameOver(true);
-//        Navigation.getInstance().showInterupt("Victory", "You won!", "It was a glorious victory!", false);
+
+        // check if local player has won or lost
         int teamNum = MadBalls.getMultiplayerHandler().getLocalPlayer().getTeamNum();
         boolean allyAlive = false, enemyAlive = false;
         for (Player player: players){

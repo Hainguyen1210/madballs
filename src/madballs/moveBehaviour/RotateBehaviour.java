@@ -8,7 +8,7 @@ package madballs.moveBehaviour;
 import madballs.GameObject;
 
 /**
- * do not use the variable direction of MoveBehaviour class, use the obj's Rotate angle instead
+ * a GameObject with this MoveBehaviour is able to actively rotate
  * @author Caval
  */
 public class RotateBehaviour extends MoveBehaviour{
@@ -22,22 +22,6 @@ public class RotateBehaviour extends MoveBehaviour{
     public void setNewDirection(double newDirection) {
         this.newDirection = newDirection;
     }
-//
-//    public double getTargetX() {
-//        return targetX;
-//    }
-//
-//    public void setTargetX(double targetX) {
-//        this.targetX = targetX;
-//    }
-//
-//    public double getTargetY() {
-//        return targetY;
-//    }
-//
-//    public void setTargetY(double targetY) {
-//        this.targetY = targetY;
-//    }
 
     public RotateBehaviour(GameObject obj, double speed) {
         super(obj, speed);

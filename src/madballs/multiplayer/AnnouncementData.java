@@ -3,6 +3,7 @@ package madballs.multiplayer;
 import madballs.scenes.SceneManager;
 
 /**
+ * the data of the information to be announced in the top right corner board
  * Created by caval on 03/09/2016.
  */
 public class AnnouncementData extends Data {

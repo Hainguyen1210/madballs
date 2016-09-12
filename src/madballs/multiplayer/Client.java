@@ -22,7 +22,7 @@ import madballs.wearables.Weapon;
 import madballs.wearables.XM1104;
 
 /**
- * Client class handles major socket operations on the client side
+ * Client class handles socket operations on the client side
  * @author Caval
  */
 public class Client extends MultiplayerHandler{

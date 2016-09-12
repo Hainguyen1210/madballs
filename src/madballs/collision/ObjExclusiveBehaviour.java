@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- *
+ * only getAffected when the source is instance of certain Classes
  * @author chim-
  */
 public class ObjExclusiveBehaviour extends StackedCollisionPassiveBehaviour{

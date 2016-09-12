@@ -37,6 +37,8 @@ public class AttackStrategy extends Strategy {
     public void prepare() {
         target = null;
         angleToEnemy = 0;
+
+        // check if weapon can attack
         weapon = getBot().getBall().getWeapon();
         if (weapon.getProjectileCollisionEffect() == null || weapon.getProjectileCollisionBehaviour() == null) {
             weapon = null;
@@ -44,6 +46,7 @@ public class AttackStrategy extends Strategy {
         }
         if (((StackedCollisionEffect)weapon.getProjectileCollisionEffect()).hasCollisionEffect(DamageEffect.class)
                 || ((StackedCollisionPassiveBehaviour)weapon.getProjectileCollisionBehaviour()).hasCollisionBehaviour(ExplosiveBehaviour.class)) {
+            // save weapon current properties
             double[] realCoordinates = weapon.getRealCoordinate();
             weaponX = realCoordinates[0];
             weaponY = realCoordinates[1];
@@ -64,33 +67,46 @@ public class AttackStrategy extends Strategy {
             if (this.target != null && this.target.getHpValue() <= target.getHpValue()){
                 return;
             }
+
+            // prevent attacking allies and healing enemies
             if ((weapon.getDamage() >= 0 && target.getPlayer().getTeamNum() == getBot().getTeamNum())
                     || (weapon.getDamage() < 0 && target.getPlayer().getTeamNum() != getBot().getTeamNum())){
                 return;
             }
 
-            // calculate target shot coordinates
+            // get the coordinates to fire at
             double targetX = target.getTranslateX();
             double targetY = target.getTranslateY();
+
+            // predicting aim mode: aim the target at where it is going to move to
+            // e.g. target A is moving to spot B, then fire at spot B
             if (currentAimMode == 0){
                 StraightMove targetMovement = (StraightMove) target.getMoveBehaviour();
                 double targetSpeed = Math.sqrt(Math.pow(targetMovement.getVelocityX(), 2) + Math.pow(targetMovement.getVelocityY(), 2));
+
                 double baseDiffY = target.getTranslateY() - weaponY;
                 double baseDiffX = target.getTranslateX() - weaponX;
-                double baseSquaredDistance = baseDiffX * baseDiffX + baseDiffY * baseDiffY;
-                double deltaTime = Math.sqrt(baseSquaredDistance / (targetSpeed * targetSpeed + projectileSpeed * projectileSpeed));
+                double baseSquaredDistance = baseDiffX * baseDiffX + baseDiffY * baseDiffY;  // distance to target
+
+                double deltaTime = Math.sqrt(baseSquaredDistance / (targetSpeed * targetSpeed + projectileSpeed * projectileSpeed));  // time until the projectile hit spot B
+
+                // spot B coordinates
                 targetX += targetMovement.getVelocityX() * deltaTime;
                 targetY += targetMovement.getVelocityY() * deltaTime;
             }
 
-
+            // calculate distance and angle to target
             double diffX = targetX - weaponX;
             double diffY = targetY - weaponY;
             double distance = Math.sqrt(diffX * diffX + diffY * diffY);
             double angle = Math.toDegrees(Math.atan2(diffY, diffX));
+
+            // allow the Bot to fire TrapLauncher at close range
             if (weapon instanceof  TrapLauncher){
                 distance -= 35;
             }
+
+            // calculate if the target is in range
             if (weapon.getMaxRange() == -1){
                 if (distance > weapon.getRange()) return;
             }
@@ -103,6 +119,8 @@ public class AttackStrategy extends Strategy {
                 for (Integer id: getBot().getRelevantObjIDs()){
                     GameObject checkingObj = weapon.getEnvironment().getObject(id);
                     if (checkingObj != null) {
+                        // skip the other enemy Balls when the weapon deals damage (when it is OK to mis-hit other enemies)
+                        // skip the other ally Balls when the weapon heals health (when it is OK to mis-hit other allies)
                         if (checkingObj instanceof Ball){
                             if (checkingObj == getBot().getBall()
                                     || (((Ball) checkingObj).getPlayer().getTeamNum() != getBot().getTeamNum() && weapon.getDamage() >= 0)
@@ -110,10 +128,14 @@ public class AttackStrategy extends Strategy {
                                 continue;
                             }
                         }
+                        // does not check objects other than Balls or Obstacles
                         else if (!(checkingObj instanceof Obstacle)){
                             continue;
                         }
 
+                        /* ********* actually check if the obj will block the projectile ******* */
+
+                        // check if the checking obj is on the direction of the projectile
 
                         Bounds checkingBounds = checkingObj.getDisplay().getBoundsInParent();
                         double checkingMinDiffY = checkingBounds.getMinY() - weaponY;
@@ -144,6 +166,8 @@ public class AttackStrategy extends Strategy {
                         else {
                             if (angle > 180) angle -= 360;
                         }
+
+                        // check if the distance to the checking object is less than the distance to the target
                         if ((angle <= checkingMaxAngle && angle >= checkingMinAngle)
                                 || (angle >= checkingMaxAngle && angle <= checkingMinAngle)){
 
@@ -163,7 +187,7 @@ public class AttackStrategy extends Strategy {
                             }
 
                             if (checkingDistance < distance){
-
+                                // if the checking obj gets into this 'if' block -> the obj is blocking the projectile from the target
                                 return;
                             }
                         }
@@ -171,10 +195,12 @@ public class AttackStrategy extends Strategy {
                     }
                 }
             }
+            // for point & click weapons
             else {
                 weapon.setRange(distance);
             }
 
+            // save the valid target
             this.target = target;
             angleToEnemy = Math.toDegrees(Math.atan2(diffY, diffX));
         }
@@ -186,17 +212,24 @@ public class AttackStrategy extends Strategy {
         RotateBehaviour rotateBehaviour = (RotateBehaviour) weapon.getMoveBehaviour();
         if (target != null){
             if (aimedTarget == null || target != aimedTarget) {
+                // record the initial aiming
                 initialAimTime = getBot().getLastThoughtTime();
                 initialHp = target.getHpValue();
                 aimedTarget = target;
             }
             if (target == aimedTarget){
                 if ((getBot().getLastThoughtTime() - initialAimTime) / 1000000000 > 4 + (new Random()).nextInt(3)){
-                    if (target.getHpValue() == initialHp) currentAimMode = currentAimMode == 0 ? 1 : 0;
+                    if (target.getHpValue() == initialHp) {
+                        // if it has been a while since the Bot started aiming and the target has not lost any HP, then change the aiming mode
+                        currentAimMode = currentAimMode == 0 ? 1 : 0;
+                    }
+                    // update the aiming status
                     initialAimTime = getBot().getLastThoughtTime();
                     initialHp = target.getHpValue();
                 }
             }
+
+            // aim and fire
             rotateBehaviour.setNewDirection(Math.toRadians(angleToEnemy));
             rotateBehaviour.setMousePressed(true);
         }

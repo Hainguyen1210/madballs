@@ -8,7 +8,7 @@ package madballs.collision;
 import madballs.buffState.BuffState;
 
 /**
- *
+ * can give BuffState to another GameObject
  * @author haing
  */
 public class GiveBuffEffect extends StackedCollisionEffect{

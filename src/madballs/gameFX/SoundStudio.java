@@ -20,8 +20,6 @@ public class SoundStudio {
     ExecutorService soundPool = Executors.newFixedThreadPool(2);
     private Map<String, AudioClip> audioClipMap = new HashMap<>();
     private Map<String, Map<String, Long>> audioTimerMap = new HashMap<>();
-//    private Map<String, Media> medias = new HashMap<>();
-//    private Map<String, MediaHandler> mediaHandlers = new HashMap<>();
 
     private  SoundStudio(){
         loadSound();
@@ -31,16 +29,29 @@ public class SoundStudio {
         return instance;
     }
 
+    /**
+     * load the sound files into the audioClipMap
+     */
     private void loadSound(){
         for (String name : new String[]{"footstep2", "nutfall", "pistol", "awp", "penetrate", "die1", "speedUp", "plasma", "uzi", "minigun", "shotgun", "explosion", "bazooka", "reload", "m4a1", "ak47"}){
             AudioClip audioClip = new AudioClip(new File("assets/sound/" + name +".mp3").toURI().toString());
             audioClipMap.put(name, audioClip);
-//            MediaHandler mediaHandler = new MediaHandler(new Media(new File("assets/sound/" + name +".mp3").toURI().toString()));
-//            mediaHandlers.put(name, mediaHandler);
         }
     }
 
+    /**
+     * play an audio with a certain interval
+     * @param audioName name of the audio
+     * @param interval interval to play the audio
+     * @param requester the object that request to play the audio
+     * @param now the timestamp of the request
+     * @param x the coordinates of the requester
+     * @param y
+     * @param varianceX the horizontal distance the audio can be heard
+     * @param varianceY the vertical distance the audio can be heard
+     */
     public void playAudio(String audioName, double interval, String requester, long now, double x, double y, double varianceX, double varianceY){
+        // update the timer of the request to play the audio
         if (!audioTimerMap.containsKey(requester)){
             audioTimerMap.put(requester, new HashMap<>());
         }
@@ -51,11 +62,21 @@ public class SoundStudio {
         Long lastPlayTime = timer.get(audioName);
         if ((now - lastPlayTime) / 1000000000 > interval || now == lastPlayTime){
             timer.replace(audioName, now);
+            // if the amount of time since the last play time satisfies the interval
             playAudio(audioName, x, y, varianceX, varianceY);
         }
     }
 
+    /**
+     * play an audio
+     * @param audioName name of the audio
+     * @param x coordinates of the source of the sound
+     * @param y
+     * @param varianceX the horizontal distance the audio can be heard
+     * @param varianceY the vertical distance the audio can be heard
+     */
     public void playAudio(String audioName, double x, double y, double varianceX, double varianceY){
+        // check if the local player can hear the sound
         if (!MadBalls.getMultiplayerHandler().getLocalPlayer().getRelevancy(x,y,varianceX,varianceY)) return;
         Runnable soundPlay = new Runnable() {
             @Override
@@ -65,10 +86,6 @@ public class SoundStudio {
         };
         soundPool.execute(soundPlay);
     }
-
-//    public MediaHandler getMediaHandler(String name){
-//        return mediaHandlers.get(name);
-//    }
 }
 
 

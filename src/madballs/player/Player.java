@@ -34,7 +34,9 @@ import madballs.multiplayer.PlayerData;
 import madballs.scenes.SceneManager;
 
 /**
- *
+ * the class representing players
+ * Each Player has a Socket which hold the connection between the local machine and the server machine
+ * null Socket would mean the Player does not have to transfer data with the server via LAN
  * @author Caval
  */
 public class Player {

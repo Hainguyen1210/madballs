@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package madballs.wearables;
 
 import javafx.scene.paint.Paint;
@@ -12,9 +7,9 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.GameObject;
 
-/**
- *
- * @author Caval
+/*
+Minigun is a six-barrel-rotary machine gun with an insane firerate
+can deal huge damage per seconds
  */
 public class Minigun extends Weapon{
     private final double WIDTH = 40;

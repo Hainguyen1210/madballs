@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- * the effect of a collision
+ * the active collision effect of a GameObject. E.g. the CollisionEffect of obj A would determine how obj A effect obj B when they collide.
  * @author Caval
  */
 public interface CollisionEffect {

@@ -11,7 +11,7 @@ import madballs.GameObject;
 import madballs.gameFX.SoundStudio;
 
 /**
- *
+ * the CollisionPassiveBehaviour following the Decorator pattern
  * @author Caval
  */
 public abstract class StackedCollisionPassiveBehaviour implements CollisionPassiveBehaviour, Serializable{

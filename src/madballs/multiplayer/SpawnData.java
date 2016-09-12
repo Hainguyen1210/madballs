@@ -8,7 +8,7 @@ package madballs.multiplayer;
 import madballs.map.SpawnLocation;
 
 /**
- *
+ * the Data about the spawning of a GameObject
  * @author caval
  */
 public class SpawnData extends Data{

@@ -12,6 +12,7 @@ import madballs.multiplayer.SpawnData;
 import madballs.projectiles.Projectile;
 
 /**
+ * creates an Explosion when colliding with a PushBack obj
  * Created by caval on 16/08/2016.
  */
 public class ExplosiveBehaviour extends StackedCollisionPassiveBehaviour {

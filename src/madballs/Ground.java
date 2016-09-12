@@ -10,7 +10,8 @@ import madballs.collision.InvulnerableBehaviour;
 import madballs.collision.PushBackEffect;
 
 /**
- *
+ * invisible PushBack object that can only be collided forcefully
+ * E.g. a projectile is forced to collide with the Ground when it has moved more than its range
  * @author Caval
  */
 public class Ground extends GameObject{

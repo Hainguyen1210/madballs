@@ -6,7 +6,7 @@
 package madballs.collision;
 
 /**
- *
+ * can push back other objects
  * @author Caval
  */
 public class PushBackEffect extends StackedCollisionEffect{

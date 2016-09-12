@@ -21,7 +21,7 @@ import madballs.scenes.ScenesFactory;
 import madballs.scenes.controller.GameRoomController;
 
 /**
- *
+ * the class that handles the communication between all players of the game
  * @author caval
  */
 public abstract class MultiplayerHandler {

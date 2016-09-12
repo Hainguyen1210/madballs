@@ -19,7 +19,7 @@ import madballs.projectiles.Projectile;
 import madballs.wearables.Weapon;
 
 /**
- *
+ * each GameObject has a StateLoader to save its most recent local Game
  * @author caval
  */
 public class StateLoader {

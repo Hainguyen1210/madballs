@@ -13,8 +13,9 @@ import madballs.projectiles.Projectile;
 
 import java.util.Random;
 
-/**
- * Created by caval on 16/08/2016.
+/*
+XM1104 is a shotgun which can shoot a wide-spread mutiple projectiles at a time
+but only effective within short range.
  */
 public class XM1104 extends Weapon {
     private final double WIDTH = 30;

@@ -12,8 +12,10 @@ import madballs.collision.*;
 import madballs.multiplayer.GetWeaponData;
 import madballs.projectiles.Projectile;
 
-/**
- * Created by caval on 31/08/2016.
+/*
+Shield is a passive weapon because it can't deal any direct damage to other
+players. Although it can't attack, it can reflect others incoming projectile
+back at the shooter. Shield has limited damage it can take before destroyed.
  */
 public class Shield extends Weapon {
     private final double WIDTH = 12;

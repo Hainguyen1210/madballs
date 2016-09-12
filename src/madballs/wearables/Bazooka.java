@@ -5,8 +5,10 @@ import javafx.scene.shape.Rectangle;
 import madballs.GameObject;
 import madballs.collision.*;
 
-/**
- * Created by caval on 16/08/2016.
+/*
+Bazooka is a short range rocket launcher that can shoot big projectile and
+give out big explosion on impact. The explosion can kill any player on impact.
+Bazooka allows owner to see very far.
  */
 public class Bazooka extends Weapon {
     private final double WIDTH = 60;

@@ -7,6 +7,7 @@ import madballs.collision.StackedCollisionEffect;
 import madballs.moveBehaviour.StraightMove;
 
 /**
+ * the strategy to prevent the Ball from being cornered to a Obstacle
  * Created by caval on 29/08/2016.
  */
 public class AvoidObstacleStrategy extends Strategy {
@@ -25,6 +26,7 @@ public class AvoidObstacleStrategy extends Strategy {
 
     @Override
     public void prepare() {
+        // get the Ball's movement and coordinates
         StraightMove straightMove = (StraightMove) getBot().getBall().getMoveBehaviour();
         myX = getBot().getBall().getTranslateX();
         myY = getBot().getBall().getTranslateY();
@@ -42,6 +44,8 @@ public class AvoidObstacleStrategy extends Strategy {
             Bounds objBounds = obj.getDisplay().getBoundsInParent();
             double objX = obj.getTranslateX();
             double objY = obj.getTranslateY();
+
+            // check if the Ball is going to collide with this PushBack obj
 
             if (Math.abs(velocityY) >= Math.abs(velocityX)){
                 if (objY < myY) objY = objBounds.getMaxY();

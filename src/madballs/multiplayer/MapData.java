@@ -8,7 +8,7 @@ package madballs.multiplayer;
 import madballs.map.Map;
 
 /**
- *
+ * the Data about the current game Map
  * @author caval
  */
 public class MapData extends Data{

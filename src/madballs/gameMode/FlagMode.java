@@ -19,6 +19,7 @@ import madballs.scenes.SceneManager;
 import java.util.ArrayList;
 
 /**
+ * the GameMode where players of each team try to get the flag of the other teams and bring to their flag base
  * Created by caval on 03/09/2016.
  */
 public class FlagMode extends RespawnMode {
@@ -32,6 +33,7 @@ public class FlagMode extends RespawnMode {
     @Override
     public void organize() {
         super.organize();
+        // spawn the flags
         if (MadBalls.isHost()) {
             for (SpawnLocation spawnLocation: MadBalls.getMainEnvironment().getMap().getFlagSpawnLocations()){
                 Flag flag = new Flag(MadBalls.getMainEnvironment(), -1, spawnLocation);
@@ -46,6 +48,7 @@ public class FlagMode extends RespawnMode {
     public void checkWinner(long now){
         if (MadBalls.isHost()){
             if (MadBalls.isGameOver()){
+                // new game
                 Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(8), new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
@@ -55,6 +58,7 @@ public class FlagMode extends RespawnMode {
                 timeline.play();
                 return;
             }
+            // check if there is any flag arrived at enemy's base
             Map map = MadBalls.getMainEnvironment().getMap();
             for (Flag flag: flags){
                 if (flag.getCarrierID() != -1){
@@ -69,6 +73,7 @@ public class FlagMode extends RespawnMode {
 
                         int teamNum = spawnLocation.getTypeNumber();
                         if (carrierRow == baseRow && carrierColumn == baseColumn) {
+                            // add score to the team who has captured the flag and announce the capture
                             SceneManager.getInstance().addScore(teamNum, 1);
                             SceneManager.getInstance().announceFlag(flag.getCarrierID(), flag.getID(), "CAPTURED");
                             flag.unbindDisplay();
@@ -87,6 +92,7 @@ public class FlagMode extends RespawnMode {
             if (MadBalls.isGameOver()) return;
         }
 
+        // check if there is any team's score meet the winning score
         for (Integer teamNum: SceneManager.getInstance().getTeamScoreBoard().keySet()){
             if (SceneManager.getInstance().getTeamScoreBoard().get(teamNum).get() >= 5){
                 MadBalls.setGameOver(true);

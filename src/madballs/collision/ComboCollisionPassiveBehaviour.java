@@ -7,6 +7,9 @@ import java.util.Map;
 import java.util.concurrent.Callable;
 
 /**
+ * this Class represents a Map<K,V> of CollisionPassiveBehaviours and their Callbacks.
+ * Each time the GameObject collides, every Callback is checked to see if the corresponding CollisionPassiveBehaviour is affected. If the Callback returns True,
+ * then the CollisionPassiveBehaviour's getAffected() method is called
  * Created by caval on 03/09/2016.
  */
 public class ComboCollisionPassiveBehaviour extends StackedCollisionPassiveBehaviour {

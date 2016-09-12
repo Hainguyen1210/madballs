@@ -1,6 +1,7 @@
 package madballs.multiplayer;
 
 /**
+ * the Data signalling the Player's machine has finished rendering the Environment of a new match
  * Created by caval on 24/08/2016.
  */
 public class ReadyData extends Data {

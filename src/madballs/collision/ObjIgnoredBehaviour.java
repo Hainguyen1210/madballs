@@ -9,7 +9,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
- *
+ * does not getAffected by source belongs to certain Classes
  * @author Caval
  */
 public class ObjIgnoredBehaviour extends StackedCollisionPassiveBehaviour{

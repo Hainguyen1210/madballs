@@ -4,6 +4,7 @@ import javafx.scene.shape.Shape;
 import madballs.GameObject;
 
 /**
+ * disappears self and owner when colliding with a PushBack obj
  * Created by caval on 18/08/2016.
  */
 public class DisappearWithOwnerBehaviour extends DisappearBehaviour {

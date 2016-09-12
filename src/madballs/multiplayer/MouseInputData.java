@@ -5,10 +5,8 @@
  */
 package madballs.multiplayer;
 
-import javafx.scene.input.MouseEvent;
-
 /**
- *
+ * the Data of Mouse input
  * @author caval
  */
 public class MouseInputData extends Data{

@@ -12,6 +12,10 @@ import madballs.collision.PushBackEffect;
 import madballs.collision.PushableBehaviour;
 import madballs.GameObject;
 
+/*
+AWP is a sniper rifle which can deal huge damage but with slow firerate
+Also AWP allows the owner to see further than other players
+ */
 public class Awp extends Weapon{
     private final double WIDTH = 50;
     private final double HEIGHT = 5;

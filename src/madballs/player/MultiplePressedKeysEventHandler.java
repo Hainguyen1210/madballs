@@ -10,7 +10,7 @@ import madballs.moveBehaviour.RotateBehaviour;
 import madballs.multiplayer.KeyInputData;
  
 /**
- *
+ * handle keyboard input
  * @author Paul
  */
 public class MultiplePressedKeysEventHandler implements EventHandler<KeyEvent> {
